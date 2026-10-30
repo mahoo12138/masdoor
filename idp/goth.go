@@ -136,7 +136,7 @@ func NewGothIdProvider(providerType string, clientId string, clientSecret string
 		}
 	case "Auth0":
 		idp = GothIdProvider{
-			Provider: auth0.New(clientId, clientSecret, redirectUrl, "masdoor.auth0.com"),
+			Provider: auth0.New(clientId, clientSecret, redirectUrl, "casdoor.auth0.com"),
 			Session:  &auth0.Session{},
 		}
 	case "BattleNet":

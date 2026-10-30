@@ -287,7 +287,7 @@ The full documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/over
 
 Official SDKs and framework integrations, by language:
 
-- **Go** — [casdoor-go-sdk](https://github.com/mahoo12138/masdoor-go-sdk)
+- **Go** — [casdoor-go-sdk](https://github.com/casdoor/casdoor-go-sdk)
 - **Java** — [casdoor-java-sdk](https://github.com/mahoo12138/masdoor-java-sdk) &middot; [Spring Boot starter](https://github.com/mahoo12138/masdoor-spring-boot-starter)
 - **Python** — [casdoor-python-sdk](https://github.com/mahoo12138/masdoor-python-sdk)
 - **Node.js** — [casdoor-nodejs-sdk](https://github.com/mahoo12138/masdoor-nodejs-sdk)

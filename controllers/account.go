@@ -219,14 +219,6 @@ func (c *ApiController) Signup() {
 	}
 
 	userType := "normal-user"
-	if authForm.Plan != "" && authForm.Pricing != "" {
-		err = object.CheckPricingAndPlan(authForm.Organization, authForm.Pricing, authForm.Plan, c.GetAcceptLanguage())
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
-		userType = "paid-user"
-	}
 
 	user := &object.User{
 		Owner:             authForm.Organization,

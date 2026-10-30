@@ -21,7 +21,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/mahoo12138/masdoor-go-sdk/casdoorsdk"
+	"github.com/casdoor/casdoor-go-sdk/casdoorsdk"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/object"
 )

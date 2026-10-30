@@ -234,8 +234,8 @@ func (invitation *Invitation) isExpired() bool {
 	return time.Now().After(expireTime)
 }
 
-func VerifyInvitation(id string) (payment *Payment, attachInfo map[string]interface{}, err error) {
-	return nil, nil, fmt.Errorf("the invitation: %s does not exist", id)
+func VerifyInvitation(id string) (attachInfo map[string]interface{}, err error) {
+	return nil, fmt.Errorf("the invitation: %s does not exist", id)
 }
 
 func (invitation *Invitation) SimpleCheckInvitationCode(invitationCode string, lang string) (bool, string) {

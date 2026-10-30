@@ -90,7 +90,6 @@ func runServer() {
 	object.InitCleanupCasTickets()
 	object.InitSamlAssertionStore()
 	object.InitExpirePermissions()
-	object.InitUpdateSubscriptionStates()
 
 	object.InitSiteMap()
 	if len(object.SiteMap) != 0 {

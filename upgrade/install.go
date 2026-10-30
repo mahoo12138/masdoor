@@ -129,7 +129,7 @@ func downloadArchive(tag string, assetName string, filePath string, expectedChec
 
 func getBinaryName() string {
 	if runtime.GOOS == "windows" {
-		return "masdoor.exe"
+		return "server.exe"
 	}
 	return "masdoor"
 }

@@ -21,7 +21,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/mahoo12138/masdoor-go-sdk/casdoorsdk"
+	"github.com/casdoor/casdoor-go-sdk/casdoorsdk"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/util"

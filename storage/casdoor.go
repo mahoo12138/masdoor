@@ -6,7 +6,7 @@ import (
 )
 
 func NewCasdoorStorageProvider(providerType string, clientId string, clientSecret string, region string, bucket string, endpoint string, cert string, content string) oss.StorageInterface {
-	sp := masdoor.New(&masdoor.Config{
+	sp := casdoor.New(&casdoor.Config{
 		clientId,
 		clientSecret,
 		endpoint,
