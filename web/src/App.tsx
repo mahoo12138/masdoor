@@ -148,7 +148,7 @@ Auth.initAuthWithConfig({
 
 /**
  * When the organization marks an MFA item as "Required" and the user has not set
- * it up yet, Casdoor parks them on the setup wizard right after sign-in.
+ * it up yet, Masdoor parks them on the setup wizard right after sign-in.
  */
 function useRequiredMfaRedirect() {
   const {account} = useAccount();

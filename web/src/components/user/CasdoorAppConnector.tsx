@@ -11,14 +11,14 @@ export function CasdoorAuthenticatorLink({className}: {className?: string}) {
   return (
     <p className={className ?? "text-sm"}>
       <a href={CasdoorAuthenticatorUrl} target="_blank" rel="noreferrer" className="font-medium text-primary underline underline-offset-4">
-        {i18next.t("mfa:Get the free Casdoor Authenticator app")}
+        {i18next.t("mfa:Get the free Masdoor Authenticator app")}
       </a>
     </p>
   );
 }
 
 /**
- * The deep link the Casdoor Authenticator app scans to take over the account's
+ * The deep link the Masdoor Authenticator app scans to take over the account's
  * MFA entries. Port of web/src/common/CasdoorAppConnector.js.
  */
 export function generateCasdoorAppUrl(accessToken: string | undefined, forQrCode = true) {

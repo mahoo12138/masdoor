@@ -18,7 +18,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/casdoor/casdoor/i18n"
+	"github.com/mahoo12138/masdoor/i18n"
 )
 
 func validateBalanceForTransaction(transaction *Transaction, amount float64, lang string) error {

@@ -90,7 +90,7 @@ export interface SimpleEditPageProps {
 }
 
 /**
- * Config-driven edit page. The Casdoor edit pages are all "load object, render a
+ * Config-driven edit page. The Masdoor edit pages are all "load object, render a
  * list of labelled fields, POST it back", so they are expressed as data here and
  * only the genuinely custom ones (application, user, provider) are hand-written.
  */

@@ -17,13 +17,13 @@ package object
 import (
 	"fmt"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // MobileOneClickGrantType lets a native app sign a user in with the token that the carrier
 // one-click login SDK of Alibaba Cloud PNVS got on the phone, and sign the number up first
 // when the application allows it
-const MobileOneClickGrantType = "urn:casdoor:params:oauth:grant-type:mobile-one-click"
+const MobileOneClickGrantType = "urn:masdoor:params:oauth:grant-type:mobile-one-click"
 
 const pnvsProviderType = "Alibaba Cloud PNVS SMS"
 

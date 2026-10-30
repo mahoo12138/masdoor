@@ -174,7 +174,7 @@ func GetScimServer() scim.Server {
 			ID:          optional.NewString("User"),
 			Name:        "User",
 			Endpoint:    "/Users",
-			Description: optional.NewString("User Account in Casdoor"),
+			Description: optional.NewString("User Account in Masdoor"),
 			Schema:      userSchema,
 			SchemaExtensions: []scim.SchemaExtension{
 				{Schema: userExtension},
@@ -185,7 +185,7 @@ func GetScimServer() scim.Server {
 			ID:          optional.NewString("Group"),
 			Name:        "Group",
 			Endpoint:    "/Groups",
-			Description: optional.NewString("Group in Casdoor"),
+			Description: optional.NewString("Group in Masdoor"),
 			Schema:      groupSchema,
 			SchemaExtensions: []scim.SchemaExtension{
 				{Schema: groupExtension},

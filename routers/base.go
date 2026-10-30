@@ -25,11 +25,11 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/mcpself"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/mcpself"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type Response struct {
@@ -40,7 +40,7 @@ type Response struct {
 }
 
 func isMcpRequest(urlPath string) bool {
-	// "/api/mcp" is Casdoor's own MCP server, "/api/server/:owner/:name" is the MCP server proxy
+	// "/api/mcp" is Masdoor's own MCP server, "/api/server/:owner/:name" is the MCP server proxy
 	return urlPath == "/api/mcp" || strings.HasPrefix(urlPath, "/api/server/")
 }
 
@@ -104,7 +104,7 @@ func denyMcpRequest(ctx *context.Context, message string) {
 		scheme = "http"
 	}
 	resourceMetadataUrl := fmt.Sprintf("%s://%s%s/.well-known/oauth-protected-resource", scheme, host, basePath)
-	ctx.Output.Header("WWW-Authenticate", fmt.Sprintf("Bearer realm=\"casdoor\", resource_metadata=\"%s\"", resourceMetadataUrl))
+	ctx.Output.Header("WWW-Authenticate", fmt.Sprintf("Bearer realm=\"masdoor\", resource_metadata=\"%s\"", resourceMetadataUrl))
 
 	req := mcpself.McpRequest{}
 	err := json.Unmarshal(ctx.Input.RequestBody, &req)
@@ -148,7 +148,7 @@ func getUsernameByClientIdSecret(ctx *context.Context) (string, error) {
 	}
 	if application == nil {
 		if fromBasicAuth {
-			// The Basic Auth credentials may come from a reverse proxy protecting Casdoor with
+			// The Basic Auth credentials may come from a reverse proxy protecting Masdoor with
 			// HTTP Basic Auth. In that case, the username is not an OAuth client ID, so we
 			// silently ignore it instead of returning an error that would break the whole system.
 			return "", nil

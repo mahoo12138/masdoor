@@ -24,7 +24,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/mcp"
+	"github.com/mahoo12138/masdoor/mcp"
 )
 
 const (

@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/amazon"
 	"github.com/markbates/goth/providers/apple"
@@ -136,7 +136,7 @@ func NewGothIdProvider(providerType string, clientId string, clientSecret string
 		}
 	case "Auth0":
 		idp = GothIdProvider{
-			Provider: auth0.New(clientId, clientSecret, redirectUrl, "casdoor.auth0.com"),
+			Provider: auth0.New(clientId, clientSecret, redirectUrl, "masdoor.auth0.com"),
 			Session:  &auth0.Session{},
 		}
 	case "BattleNet":

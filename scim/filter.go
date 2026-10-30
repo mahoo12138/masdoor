@@ -18,8 +18,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/elimity-com/scim/errors"
 	"github.com/scim2/filter-parser/v2"
 	"github.com/xorm-io/builder"

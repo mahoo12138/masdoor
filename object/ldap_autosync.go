@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type LdapAutoSynchronizer struct {

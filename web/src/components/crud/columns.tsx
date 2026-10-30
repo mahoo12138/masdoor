@@ -238,7 +238,7 @@ export function textColumn<T>(options: {
   fixed?: "left" | "right";
   /** turns the cell into a link, keeping the search highlight inside it */
   link?: (value: any, record: T) => string | undefined;
-  /** the link leaves Casdoor, so use an `<a target="_blank">` */
+  /** the link leaves Masdoor, so use an `<a target="_blank">` */
   linkExternal?: boolean;
   mono?: boolean;
   className?: string;

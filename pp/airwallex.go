@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 )
 
 type AirwallexPaymentProvider struct {

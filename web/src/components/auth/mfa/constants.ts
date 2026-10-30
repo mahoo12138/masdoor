@@ -1,4 +1,4 @@
-// MFA type identifiers as the Casdoor backend uses them.
+// MFA type identifiers as the Masdoor backend uses them.
 export const EmailMfaType = "email";
 export const SmsMfaType = "sms";
 export const TotpMfaType = "app";

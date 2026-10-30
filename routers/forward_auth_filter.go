@@ -16,11 +16,11 @@ package routers
 
 import (
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/service"
+	"github.com/mahoo12138/masdoor/service"
 )
 
 // ForwardAuthFilter runs before the other filters: the request is the auth subrequest of a reverse proxy,
-// it carries the cookies and Origin of the protected app, not of Casdoor itself.
+// it carries the cookies and Origin of the protected app, not of Masdoor itself.
 func ForwardAuthFilter(ctx *context.Context) {
 	service.HandleForwardAuth(ctx.ResponseWriter, ctx.Request)
 }

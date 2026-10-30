@@ -19,7 +19,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_DATABASE: casdoor
+          MYSQL_DATABASE: masdoor
           MYSQL_ROOT_PASSWORD: 123456
         ports:
           - 3306:3306
@@ -53,7 +53,7 @@ jobs:
       - run: CI=false yarn run build
         working-directory: ./web
       - name: Upload build artifacts
-        if: github.repository == 'casdoor/casdoor' && github.event_name == 'push'
+        if: github.repository == 'Mahoo12138/masdoor' && github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build-${{ github.run_id }}
@@ -65,7 +65,7 @@ jobs:
     name: Front-end npm package
     runs-on: ubuntu-latest
     needs: [frontend]
-    if: github.repository == 'casdoor/casdoor' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.repository == 'Mahoo12138/masdoor' && github.event_name == 'push' && github.ref == 'refs/heads/master'
     permissions:
       contents: read
       id-token: write
@@ -87,12 +87,12 @@ jobs:
           {
             "name": "casdoor-web",
             "version": "0.0.0-c${GITHUB_SHA}",
-            "description": "The built frontend of Casdoor commit ${GITHUB_SHA}, for serving it from a CDN",
+            "description": "The built frontend of Masdoor commit ${GITHUB_SHA}, for serving it from a CDN",
             "license": "Apache-2.0",
             "homepage": "https://casdoor.org",
             "repository": {
               "type": "git",
-              "url": "git+https://github.com/casdoor/casdoor.git"
+              "url": "git+https://github.com/mahoo12138/masdoor.git"
             }
           }
           EOF
@@ -161,7 +161,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_DATABASE: casdoor
+          MYSQL_DATABASE: masdoor
           MYSQL_ROOT_PASSWORD: 123456
         ports:
           - 3306:3306
@@ -233,7 +233,7 @@ jobs:
     permissions:
       contents: write
     # Releases are cut by hand: push a `vX.Y.Z` tag and this job publishes it.
-    if: github.repository == 'casdoor/casdoor' && startsWith(github.ref, 'refs/tags/v')
+    if: github.repository == 'Mahoo12138/masdoor' && startsWith(github.ref, 'refs/tags/v')
     needs: [frontend, backend, linter, e2e]
     steps:
       - name: Checkout
@@ -283,7 +283,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    if: github.repository == 'casdoor/casdoor' && startsWith(github.ref, 'refs/tags/v')
+    if: github.repository == 'Mahoo12138/masdoor' && startsWith(github.ref, 'refs/tags/v')
     needs: [frontend, backend, linter, e2e]
     steps:
       - name: Checkout
@@ -301,7 +301,7 @@ jobs:
         run: |
           version=${GITHUB_REF_NAME#v}
           echo "version=$version" >> $GITHUB_OUTPUT
-          for image in casdoor casdoor-all-in-one; do
+          for image in masdoor masdoor-all-in-one; do
             tags="casbin/$image:$version,casbin/$image:v$version"
             if [[ "$version" != *-* ]]; then
               tags="$tags,casbin/$image:${version%.*},casbin/$image:${version%%.*},casbin/$image:latest"
@@ -331,7 +331,7 @@ jobs:
           target: STANDARD
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.version.outputs.casdoor }}
+          tags: ${{ steps.version.outputs.masdoor }}
 
       - name: Push All In One Version to Docker Hub
         uses: docker/build-push-action@v3
@@ -340,7 +340,7 @@ jobs:
           target: ALLINONE
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.version.outputs['casdoor-all-in-one'] }}
+          tags: ${{ steps.version.outputs['masdoor-all-in-one'] }}
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -349,18 +349,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # The chart is published as `casdoor` on GHCR, which is what Artifact Hub
+      # The chart is published as `masdoor` on GHCR, which is what Artifact Hub
       # lists. `casbin/casdoor` on Docker Hub is the image and uses the same tags,
       # so Docker Hub keeps the old `casdoor-helm-charts` name for existing installs.
       - name: Package and push Helm chart
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          helm package manifests/casdoor --version "$VERSION" --app-version "$VERSION"
+          helm package manifests/masdoor --version "$VERSION" --app-version "$VERSION"
           helm push casdoor-$VERSION.tgz oci://ghcr.io/casdoor/helm-charts
 
-          sed -i 's/^name: casdoor$/name: casdoor-helm-charts/' manifests/casdoor/Chart.yaml
-          helm package manifests/casdoor --version "$VERSION" --app-version "$VERSION"
+          sed -i 's/^name: masdoor$/name: casdoor-helm-charts/' manifests/masdoor/Chart.yaml
+          helm package manifests/masdoor --version "$VERSION" --app-version "$VERSION"
           helm push casdoor-helm-charts-$VERSION.tgz oci://registry-1.docker.io/casbin
 
       - name: Set up ORAS

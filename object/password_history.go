@@ -17,8 +17,8 @@ package object
 import (
 	"fmt"
 
-	"github.com/casdoor/casdoor/cred"
-	"github.com/casdoor/casdoor/i18n"
+	"github.com/mahoo12138/masdoor/cred"
+	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/xorm-io/core"
 )
 
@@ -33,7 +33,7 @@ type PasswordHistoryEntry struct {
 
 // PasswordHistory lives in its own table on purpose: the `user` table already sits at
 // InnoDB's 8126-byte row-size limit on MySQL 8.4.9+/9.7.0+, so adding any column to it
-// fails there (casdoor/casdoor#5844).
+// fails there (masdoor/casdoor#5844).
 type PasswordHistory struct {
 	Owner   string                  `xorm:"varchar(100) notnull pk" json:"owner"`
 	Name    string                  `xorm:"varchar(255) notnull pk" json:"name"`

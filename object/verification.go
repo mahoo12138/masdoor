@@ -27,9 +27,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 
@@ -120,7 +120,7 @@ func SendVerificationCodeToEmail(organization *Organization, user *User, provide
 	//	code = organization.MasterVerificationCode
 	// }
 
-	// "You have requested a verification code at Casdoor. Here is your code: %s, please enter in 5 minutes."
+	// "You have requested a verification code at Masdoor. Here is your code: %s, please enter in 5 minutes."
 	content := strings.Replace(provider.Content, "%s", code, 1)
 
 	originFrontend, isOriginTrusted := getTrustedOriginFrontend(host)

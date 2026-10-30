@@ -15,7 +15,7 @@
 (function() {
   "use strict";
 
-  // the path Casdoor is served under, like "/casdoor", which the server writes into the page (routers/base_path.go)
+  // the path Masdoor is served under, like "/casdoor", which the server writes into the page (routers/base_path.go)
   var basePath = (function() {
     var meta = document.querySelector("meta[name=\"casdoor-base-path\"]");
     var value = meta ? (meta.getAttribute("content") || "").replace(/^\/+|\/+$/g, "") : "";
@@ -110,7 +110,7 @@
     ADFS: {scope: "openid", endpoint: "http://example.com"},
     Baidu: {scope: "basic", endpoint: "http://openapi.baidu.com/oauth/2.0/authorize"},
     Alipay: {scope: "basic", endpoint: "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm"},
-    Casdoor: {scope: "openid%20profile%20email", endpoint: "http://example.com"},
+    Masdoor: {scope: "openid%20profile%20email", endpoint: "http://example.com"},
     Infoflow: {endpoint: "https://xpc.im.baidu.com/oauth2/authorize"},
     Apple: {scope: "name%20email", endpoint: "https://appleid.apple.com/auth/authorize"},
     AzureAD: {scope: "user.read", endpoint: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"},
@@ -294,12 +294,12 @@
 
       return endpoint + "?app_id=" + provider.clientId + "&redirect_uri=" + redirectUri + "&state=" + state;
     } else if (provider.type === "ADFS") {
-      return provider.domain + "/adfs/oauth2/authorize?client_id=" + provider.clientId + "&redirect_uri=" + redirectUri + "&state=" + state + "&response_type=code&nonce=casdoor&scope=openid";
+      return provider.domain + "/adfs/oauth2/authorize?client_id=" + provider.clientId + "&redirect_uri=" + redirectUri + "&state=" + state + "&response_type=code&nonce=masdoor&scope=openid";
     } else if (provider.type === "Baidu") {
       return endpoint + "?client_id=" + provider.clientId + "&redirect_uri=" + redirectUri + "&state=" + state + "&response_type=code&scope=" + scope + "&display=popup";
     } else if (provider.type === "Alipay") {
       return endpoint + "?app_id=" + provider.clientId + "&scope=auth_user&redirect_uri=" + redirectUri + "&state=" + state + "&response_type=code&scope=" + scope + "&display=popup";
-    } else if (provider.type === "Casdoor") {
+    } else if (provider.type === "Masdoor") {
       return provider.domain + "/login/oauth/authorize?client_id=" + provider.clientId + "&redirect_uri=" + redirectUri + "&state=" + state + "&response_type=code&scope=" + scope;
     } else if (provider.type === "Infoflow") {
       return endpoint + "?appid=" + provider.clientId + "&redirect_uri=" + redirectUri + "?state=" + state;

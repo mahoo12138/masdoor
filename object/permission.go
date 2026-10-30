@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 
@@ -59,7 +59,7 @@ type Permission struct {
 	State       string `xorm:"varchar(100)" json:"state"`
 }
 
-const builtInMaxFields = 6 // Casdoor built-in adapter, use V5 to filter permission, so has 6 max field
+const builtInMaxFields = 6 // Masdoor built-in adapter, use V5 to filter permission, so has 6 max field
 
 func GetPermissionCount(owner, field, value string) (int64, error) {
 	session := GetSession(owner, -1, -1, field, value, "", "")

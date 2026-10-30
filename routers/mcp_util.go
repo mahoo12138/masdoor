@@ -18,8 +18,8 @@ import (
 	"encoding/json"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // applicationStub is a lightweight struct for extracting owner/name from application data

@@ -23,8 +23,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 const (
@@ -87,7 +87,7 @@ func loadSiteIdentity(site *object.Site, accessToken string) (*siteIdentity, err
 	return identity, nil
 }
 
-// getSiteIdentity returns nil if the access token is no longer known to Casdoor.
+// getSiteIdentity returns nil if the access token is no longer known to Masdoor.
 func getSiteIdentity(site *object.Site, accessToken string) (*siteIdentity, error) {
 	key := getSiteIdentityKey(site, accessToken)
 	now := time.Now()

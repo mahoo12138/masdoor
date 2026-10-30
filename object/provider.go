@@ -22,12 +22,12 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/idp"
-	"github.com/casdoor/casdoor/idv"
-	"github.com/casdoor/casdoor/log"
-	"github.com/casdoor/casdoor/pp"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/idp"
+	"github.com/mahoo12138/masdoor/idv"
+	"github.com/mahoo12138/masdoor/log"
+	"github.com/mahoo12138/masdoor/pp"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 
@@ -714,7 +714,7 @@ func FromProviderToIdpInfo(ctx *context.Context, provider *Provider) (*idp.Provi
 			providerInfo.ClientId = provider.ClientId2
 			providerInfo.ClientSecret = provider.ClientSecret2
 		}
-	} else if provider.Type == "ADFS" || provider.Type == "AzureAD" || provider.Type == "AzureADB2C" || provider.Type == "Casdoor" || provider.Type == "Okta" || provider.Type == "OIDC" {
+	} else if provider.Type == "ADFS" || provider.Type == "AzureAD" || provider.Type == "AzureADB2C" || provider.Type == "Masdoor" || provider.Type == "Okta" || provider.Type == "OIDC" {
 		providerInfo.HostUrl = provider.Domain
 	} else if provider.Type == "Alipay" && provider.Cert != "" {
 		cert, err := GetCertEx(util.GetId(provider.Owner, provider.Cert))
@@ -753,7 +753,7 @@ func GetLogProviderFromProvider(provider *Provider) (log.LogProvider, error) {
 		return nil, fmt.Errorf("provider %s category is not Log", provider.Name)
 	}
 
-	if provider.Type == "Casdoor Permission Log" {
+	if provider.Type == "Masdoor Permission Log" {
 		return log.NewPermissionLogProvider(provider.Name, func(owner, createdTime, providerName, message string) error {
 			name := log.GenerateEntryName()
 			entry := &Entry{

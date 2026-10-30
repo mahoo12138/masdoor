@@ -75,7 +75,7 @@ func TestTotpMfaInitiate_WithCustomIssuer(t *testing.T) {
 
 func TestTotpMfaInitiate_WithEmptyIssuer(t *testing.T) {
 	totpMfa := NewTotpMfaUtil(nil)
-	// Test with empty issuer (should default to "Casdoor")
+	// Test with empty issuer (should default to "Masdoor")
 	mfaProps, err := totpMfa.Initiate("test/user", "")
 	if err != nil {
 		t.Errorf("Initiate failed: %v", err)
@@ -86,9 +86,9 @@ func TestTotpMfaInitiate_WithEmptyIssuer(t *testing.T) {
 		return
 	}
 
-	// Verify the URL contains the default issuer "Casdoor"
-	if !strings.Contains(mfaProps.URL, "Casdoor") {
-		t.Errorf("URL should contain default issuer 'Casdoor', got: %s", mfaProps.URL)
+	// Verify the URL contains the default issuer "Masdoor"
+	if !strings.Contains(mfaProps.URL, "Masdoor") {
+		t.Errorf("URL should contain default issuer 'Masdoor', got: %s", mfaProps.URL)
 	}
 }
 

@@ -29,7 +29,7 @@ export interface ColumnFilterOption {
 export interface ColumnDef<T = any> {
   /** unique key, defaults to dataIndex */
   key?: string;
-  /** field of the record, also the `field` sent to the Casdoor list API */
+  /** field of the record, also the `field` sent to the Masdoor list API */
   dataIndex: string;
   title: React.ReactNode;
   width?: number | string;
@@ -61,7 +61,7 @@ export interface ColumnDef<T = any> {
    * is set, which owns the whole cell.
    */
   link?: (value: any, record: T) => string | undefined;
-  /** the link leaves Casdoor, so render an `<a target="_blank">` instead of a router Link */
+  /** the link leaves Masdoor, so render an `<a target="_blank">` instead of a router Link */
   linkExternal?: boolean;
   render?: (value: any, record: T, index: number) => React.ReactNode;
 }

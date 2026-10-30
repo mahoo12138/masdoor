@@ -28,8 +28,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 
@@ -215,7 +215,7 @@ func GetMarketplaceIndex(refresh bool) (*MarketplaceIndex, error) {
 }
 
 // GetMarketplaceIndexForLanguage leaves out the integrations of the Chinese Marketplace, such as sign-in with
-// platforms only used in China, unless the admin uses Casdoor in Chinese.
+// platforms only used in China, unless the admin uses Masdoor in Chinese.
 func GetMarketplaceIndexForLanguage(refresh bool, lang string) (*MarketplaceIndex, error) {
 	index, err := GetMarketplaceIndex(refresh)
 	if err != nil || strings.HasPrefix(lang, "zh") {
@@ -577,7 +577,7 @@ func installThemeIntegration(integration *Integration, item *MarketplaceIntegrat
 		isSafe := isCssSafeFor(theme.FormCss, prefixes) && isCssSafeFor(theme.FormCssMobile, prefixes) &&
 			isHtmlSafeFor(theme.FormSideHtml, prefixes) && isHtmlSafeFor(theme.FooterHtml, prefixes)
 		if !isSafe {
-			return fmt.Errorf("the theme: %s uses HTML or loads files that this Casdoor only lets a global admin set", item.Id)
+			return fmt.Errorf("the theme: %s uses HTML or loads files that this Masdoor only lets a global admin set", item.Id)
 		}
 	}
 

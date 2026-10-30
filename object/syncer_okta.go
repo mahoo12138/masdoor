@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // OktaSyncerProvider implements SyncerProvider for Okta API-based syncers
@@ -192,7 +192,7 @@ func (p *OktaSyncerProvider) getOktaUsers(nextLink string) ([]*OktaUser, string,
 	return users, nextPageLink, nil
 }
 
-// oktaUserToOriginalUser converts Okta user to Casdoor OriginalUser
+// oktaUserToOriginalUser converts Okta user to Masdoor OriginalUser
 func (p *OktaSyncerProvider) oktaUserToOriginalUser(oktaUser *OktaUser) *OriginalUser {
 	user := &OriginalUser{
 		Id:          oktaUser.Id,
@@ -287,7 +287,7 @@ func (p *OktaSyncerProvider) getOktaOriginalUsers() ([]*OriginalUser, error) {
 		nextLink = next
 	}
 
-	// Convert Okta users to Casdoor OriginalUser
+	// Convert Okta users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, oktaUser := range allUsers {
 		originalUser := p.oktaUserToOriginalUser(oktaUser)

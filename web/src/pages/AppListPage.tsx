@@ -57,7 +57,7 @@ export default function AppListPage() {
       );
 
   const items: GridCardItem[] = filtered.map((application: any) => ({
-    // the card opens the application itself, not Casdoor's sign-in page
+    // the card opens the application itself, not Masdoor's sign-in page
     link: application.homepageUrl === "<custom-url>" ? account?.homepage ?? "" : application.homepageUrl,
     name: application.displayName || application.name,
     description: application.description,

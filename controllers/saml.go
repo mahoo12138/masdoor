@@ -21,8 +21,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func (c *ApiController) GetSamlMeta() {
@@ -97,7 +97,7 @@ func (c *ApiController) HandleSamlLogout() {
 
 	samlRequest := c.Ctx.Input.Query("SAMLRequest")
 	if samlRequest == "" {
-		// The SP answers a LogoutRequest of Casdoor
+		// The SP answers a LogoutRequest of Masdoor
 		err = object.CheckSamlLogoutResponse(application, c.Ctx.Input.Query("SAMLResponse"))
 		if err != nil {
 			c.ResponseError(err.Error())

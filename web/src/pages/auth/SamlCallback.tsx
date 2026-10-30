@@ -15,7 +15,7 @@ import * as Setting from "@/lib/setting";
  * Landing page of a sign-in through an external SAML identity provider.
  *
  * Unlike `/callback`, the IdP does not hand back an authorization code: it posts a
- * `samlResponse` plus the base64 `relayState` that Casdoor put into the AuthnRequest.
+ * `samlResponse` plus the base64 `relayState` that Masdoor put into the AuthnRequest.
  * The relay state carries "clientId&state&provider&redirectUri", which is what
  * `/api/login` needs to turn the assertion into a session (or an OAuth code).
  * Ported from `web/src/auth/SamlCallback.js`.
@@ -62,7 +62,7 @@ export default function SamlCallback() {
     const providerName = messages[2];
     const redirectUri = messages[3];
 
-    // Casdoor's own login page does not need an OAuth code, it just needs the session
+    // Masdoor's own login page does not need an OAuth code, it just needs the session
     const getResponseType = (): string => {
       if (redirectUri === "null") {
         return "login";

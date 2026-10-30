@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/i18n"
+	"github.com/mahoo12138/masdoor/i18n"
 )
 
 // Hard-coded thresholds for OTP / verification-code brute force protection (per IP + dest).

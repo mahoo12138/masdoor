@@ -17,7 +17,7 @@ package object
 import (
 	"reflect"
 
-	"github.com/casdoor/casdoor/form"
+	"github.com/mahoo12138/masdoor/form"
 )
 
 func (application *Application) GetProviderByCategory(category string) (*Provider, error) {

@@ -172,7 +172,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           reloadAccount();
         }
         if (exitAfterSave) {
-          // Casdoor can send a user here to complete their profile and hand them
+          // Masdoor can send a user here to complete their profile and hand them
           // back afterwards; without that the user list is admin-only, so a plain
           // user goes home instead.
           if (returnUrl) {
@@ -870,9 +870,9 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     "MFA accounts": (
       <AccountItemRow name="MFA accounts" labelKey="user:MFA accounts" block>
         <div className="space-y-2">
-          {/* the Casdoor Authenticator app takes these over by scanning the QR / opening the link */}
+          {/* the Masdoor Authenticator app takes these over by scanning the QR / opening the link */}
           <p className="text-sm text-muted-foreground">
-            {i18next.t("user:Scan the QR code with Casdoor Authenticator to sync these MFA accounts to your phone")}
+            {i18next.t("user:Scan the QR code with Masdoor Authenticator to sync these MFA accounts to your phone")}
           </p>
           <CasdoorAuthenticatorLink />
           <div className="flex flex-wrap gap-2">

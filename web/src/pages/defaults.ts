@@ -371,7 +371,7 @@ export function newProduct(account: Account) {
     createdTime: now(),
     displayName: `New Product - ${randomName}`,
     image: `${Setting.StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
-    tag: "Casdoor Summit 2022",
+    tag: "Masdoor Summit 2022",
     currency: "USD",
     price: 300,
     quantity: 99,

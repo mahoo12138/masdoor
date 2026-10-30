@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Casdoor will expose its providers as services to SDK
+// Masdoor will expose its providers as services to SDK
 // We are going to implement those services as APIs here
 
 package controllers
@@ -20,8 +20,8 @@ package controllers
 import (
 	"fmt"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // FaceIDSigninBegin

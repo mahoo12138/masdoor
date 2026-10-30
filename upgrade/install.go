@@ -31,7 +31,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 const (
@@ -129,9 +129,9 @@ func downloadArchive(tag string, assetName string, filePath string, expectedChec
 
 func getBinaryName() string {
 	if runtime.GOOS == "windows" {
-		return "casdoor.exe"
+		return "masdoor.exe"
 	}
-	return "casdoor"
+	return "masdoor"
 }
 
 // getArchiveTarget maps an archive entry to the file it is extracted to, only the binary and web/build are wanted,

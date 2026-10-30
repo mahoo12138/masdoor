@@ -20,9 +20,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/casdoor/casdoor/ip"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/ip"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type IpRule struct{}

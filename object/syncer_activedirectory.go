@@ -22,7 +22,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	goldap "github.com/go-ldap/ldap/v3"
 )
 
@@ -299,7 +299,7 @@ func (p *ActiveDirectorySyncerProvider) getActiveDirectoryUsers() ([]*OriginalUs
 	return originalUsers, nil
 }
 
-// adEntryToOriginalUser converts an Active Directory LDAP entry to Casdoor OriginalUser
+// adEntryToOriginalUser converts an Active Directory LDAP entry to Masdoor OriginalUser
 func (p *ActiveDirectorySyncerProvider) adEntryToOriginalUser(entry *goldap.Entry) *OriginalUser {
 	user := &OriginalUser{
 		Address:    []string{},

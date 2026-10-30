@@ -30,7 +30,7 @@ const JWT_ALGORITHMS = [
   {value: "PS512", label: "PS512 (RSASSA-PSS using SHA512 and MGF1 with SHA512)"},
 ];
 
-/** the DNS providers Casdoor can solve the ACME challenge with */
+/** the DNS providers Masdoor can solve the ACME challenge with */
 const SSL_PROVIDERS = ["GoDaddy", "Aliyun"];
 
 export default function CertEditPage() {

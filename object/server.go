@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/casdoor/casdoor/mcp"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/mcp"
+	"github.com/mahoo12138/masdoor/util"
 	mcpsdk "github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/xorm-io/core"
 )

@@ -1,4 +1,4 @@
-# Default values for casdoor.
+# Default values for masdoor.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -6,25 +6,25 @@ replicaCount: 1
 
 image:
   repository: casbin
-  name: casdoor
+  name: masdoor
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
 # ref: https://casdoor.org/docs/basic/server-installation#via-ini-file
 config: |
-  appname = casdoor
+  appname = masdoor
   httpport = {{ .Values.service.port }}
   runmode = dev
   SessionOn = true
   copyrequestbody = true
   driverName = {{ .Values.database.driver }}
-  dataSourceName = {{ include "casdoor.dataSourceName" . }}
-  dbName = {{ include "casdoor.dbName" . }}
+  dataSourceName = {{ include "masdoor.dataSourceName" . }}
+  dbName = {{ include "masdoor.dbName" . }}
   redisEndpoint =
   defaultStorageProvider =
   isCloudIntranet = false
-  authState = "casdoor"
+  authState = "masdoor"
   socks5Proxy = ""
   verificationCodeTimeout = 10
   initScore = 0
@@ -36,18 +36,18 @@ config: |
 # Use secret to mount app.conf file for who don't want user,pass on git  
 # encode base64 on Value.config or create your own secret with anything you prefer
 # if you use your own secret, leave Value.config: ""
-# configFromSecret: casdoor
+# configFromSecret: masdoor
 
 # -- Declarative configuration: organizations, applications, users, providers, roles, permissions, ... in the
 # init data format (https://casdoor.ai/docs/deployment/data-initialization). It is stored in a Secret and applied
-# by Casdoor at startup, and with watchInterval set, a change rolled out by `helm upgrade` is applied again
+# by Masdoor at startup, and with watchInterval set, a change rolled out by `helm upgrade` is applied again
 # without restarting the pods.
 initData:
   enabled: false
   # -- Update the existing objects with only the fields set in the data, the other fields keep the values
   # edited in the web UI. When false, the existing objects are deleted and re-created on every apply.
   merge: true
-  # -- Seconds between the checks of the data for changes, 0 applies it only when Casdoor starts
+  # -- Seconds between the checks of the data for changes, 0 applies it only when Masdoor starts
   watchInterval: 30
   # -- Use an existing Secret instead of `data`
   existingSecret: ""
@@ -77,7 +77,7 @@ database:
   # If port is empty, default port will be used.
   # mysql: 3306, postgres: 5432, cockroachdb: 26257
   port: ""
-  databaseName: casdoor
+  databaseName: masdoor
 
   sslMode: disable
 
@@ -87,7 +87,7 @@ ldap:
     port: 389
 
 imagePullSecrets: []
-nameOverride: casdoor
+nameOverride: masdoor
 fullnameOverride: ""
 
 serviceAccount:
@@ -115,7 +115,7 @@ securityContext: {}
 probe:
   # -- HTTP path the probes request, /api/health needs no sign-in and does not query the database
   path: /api/health
-  # -- Holds off the liveness and readiness probes until Casdoor has started, which can take minutes on the
+  # -- Holds off the liveness and readiness probes until Masdoor has started, which can take minutes on the
   # first start (database migration) or on a busy node: up to failureThreshold * periodSeconds
   startup:
     enabled: true
@@ -185,18 +185,18 @@ gatewayApi:
       - name: http
         protocol: HTTP
         port: 80
-        # hostname: casdoor.example.com
+        # hostname: masdoor.example.com
         allowedRoutes:
           namespaces:
             from: Same
       # - name: https
       #   protocol: HTTPS
       #   port: 443
-      #   hostname: casdoor.example.com
+      #   hostname: masdoor.example.com
       #   tls:
       #     certificateRef:
       #       group: ''
-      #       name: casdoor-tls
+      #       name: masdoor-tls
       #       kind: Secret
       #   allowedRoutes:
       #     namespaces:
@@ -210,7 +210,7 @@ gatewayApi:
   # -- Optional: list of hostnames to match (Host header).
   # If omitted, matches all hostnames accepted by the parent Gateway listener.
   hostnames: []
-    # - casdoor.example.com
+    # - masdoor.example.com
   # -- Routing rules. Each rule can have matches, filters, and backendRefs.
   # If backendRefs is omitted in a rule, traffic is forwarded to the chart's own Service.
   # -- Routing rules. Each entry supports matches, filters, and backendRefs.
@@ -223,7 +223,7 @@ gatewayApi:
             value: /
       # Uncomment to override the default backend (chart's own Service):
       # backendRefs:
-      #   - name: casdoor
+      #   - name: masdoor
       #     port: 8000
       #     weight: 1
       # Uncomment to add request/response filters (e.g. header rewrites):

@@ -21,7 +21,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/audit"
+	"github.com/mahoo12138/masdoor/audit"
 )
 
 var (

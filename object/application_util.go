@@ -22,9 +22,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func getProviderMap(owner string) (m map[string]*Provider, err error) {
@@ -549,7 +549,7 @@ func CheckApplicationCustomHtml(application *Application, oldApplication *Applic
 	}
 
 	if len(unsafeFields) > 0 {
-		return fmt.Errorf("the %s of the application uses HTML or loads files that this Casdoor only lets a global admin set: scripts, forms and event handlers are not allowed, and images and fonts must come from this Casdoor, its storage providers or a URL in formCssAllowedUrls", strings.Join(unsafeFields, ", "))
+		return fmt.Errorf("the %s of the application uses HTML or loads files that this Masdoor only lets a global admin set: scripts, forms and event handlers are not allowed, and images and fonts must come from this Masdoor, its storage providers or a URL in formCssAllowedUrls", strings.Join(unsafeFields, ", "))
 	}
 	return nil
 }
@@ -584,7 +584,7 @@ var (
 	reCssImport = regexp.MustCompile(`@import\s*(?:url\(\s*)?(?:"([^"]*)"|'([^']*)'|([^"'()\s;]+))`)
 )
 
-// getCssUrlPrefixes adds the operator's own places to the built-in ones: this Casdoor's origin, the
+// getCssUrlPrefixes adds the operator's own places to the built-in ones: this Masdoor's origin, the
 // global storage providers and the formCssAllowedUrls setting.
 func getCssUrlPrefixes() []string {
 	prefixes := append([]string{}, cssUrlPrefixes...)

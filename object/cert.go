@@ -18,9 +18,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/casdoor/casdoor/certificate"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/certificate"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 	"golang.org/x/net/publicsuffix"
 )

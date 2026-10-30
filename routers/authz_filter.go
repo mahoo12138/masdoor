@@ -23,14 +23,14 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/controllers"
-	"github.com/casdoor/casdoor/mcpself"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/controllers"
+	"github.com/mahoo12138/masdoor/mcpself"
+	"github.com/mahoo12138/masdoor/object"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/authz"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/authz"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 var orgOwnerObject = []string{
@@ -666,7 +666,7 @@ func checkDynamicClientSession(ctx *context.Context, urlPath string) bool {
 	}
 
 	// otherwise it is the browser, sending only the cookie that the token-authenticated response left behind:
-	// sign that session out and go on as anonymous, so the login page and the rest of Casdoor keep working there
+	// sign that session out and go on as anonymous, so the login page and the rest of Masdoor keep working there
 	err = clearSessionOfToken(ctx)
 	if err != nil {
 		responseError(ctx, err.Error())

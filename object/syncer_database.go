@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/ssh"
 )
@@ -92,12 +92,12 @@ func CheckSyncerDatabaseTarget(syncer *Syncer) error {
 		return nil
 	}
 	if strings.EqualFold(syncer.Database, conf.GetConfigString("dbName")) {
-		return fmt.Errorf("the database: %s of the syncer is Casdoor's own database, which cannot be synced", syncer.Database)
+		return fmt.Errorf("the database: %s of the syncer is Masdoor's own database, which cannot be synced", syncer.Database)
 	}
 	if isTrustedDbHost(syncer.Organization, syncer.Host, syncer.Port) {
 		return nil
 	}
-	return fmt.Errorf("the host: %s:%d of the syncer is Casdoor's own database server, which cannot be synced", syncer.Host, syncer.Port)
+	return fmt.Errorf("the host: %s:%d of the syncer is Masdoor's own database server, which cannot be synced", syncer.Host, syncer.Port)
 }
 
 func isValidSyncerTable(table string) bool {
@@ -214,7 +214,7 @@ func (p *DatabaseSyncerProvider) GetOriginalUsers() ([]*OriginalUser, error) {
 	}
 
 	// Memory leak problem handling
-	// https://github.com/casdoor/casdoor/issues/1256
+	// https://github.com/mahoo12138/masdoor/issues/1256
 	users := p.Syncer.getOriginalUsersFromMap(results)
 	// Clear map contents to help garbage collection
 	for i := range results {

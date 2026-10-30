@@ -19,7 +19,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"golang.org/x/oauth2/google"
 	"golang.org/x/oauth2/jwt"
 	admin "google.golang.org/api/admin/directory/v1"
@@ -149,7 +149,7 @@ func (p *GoogleWorkspaceSyncerProvider) getGoogleWorkspaceUsers(service *admin.S
 	return allUsers, nil
 }
 
-// googleWorkspaceUserToOriginalUser converts Google Workspace user to Casdoor OriginalUser
+// googleWorkspaceUserToOriginalUser converts Google Workspace user to Masdoor OriginalUser
 func (p *GoogleWorkspaceSyncerProvider) googleWorkspaceUserToOriginalUser(gwUser *admin.User) *OriginalUser {
 	user := &OriginalUser{
 		Id:         gwUser.Id,
@@ -211,7 +211,7 @@ func (p *GoogleWorkspaceSyncerProvider) getGoogleWorkspaceOriginalUsers() ([]*Or
 		userGroupsMap = make(map[string][]string)
 	}
 
-	// Convert Google Workspace users to Casdoor OriginalUser
+	// Convert Google Workspace users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, gwUser := range gwUsers {
 		originalUser := p.googleWorkspaceUserToOriginalUser(gwUser)
@@ -299,7 +299,7 @@ func (p *GoogleWorkspaceSyncerProvider) GetOriginalGroups() ([]*OriginalGroup, e
 		return nil, err
 	}
 
-	// Convert Google Workspace groups to Casdoor OriginalGroup
+	// Convert Google Workspace groups to Masdoor OriginalGroup
 	originalGroups := []*OriginalGroup{}
 	for _, gwGroup := range gwGroups {
 		originalGroup := p.googleWorkspaceGroupToOriginalGroup(gwGroup)
@@ -377,7 +377,7 @@ func (p *GoogleWorkspaceSyncerProvider) getGoogleWorkspaceGroups(service *admin.
 	return allGroups, nil
 }
 
-// googleWorkspaceGroupToOriginalGroup converts Google Workspace group to Casdoor OriginalGroup
+// googleWorkspaceGroupToOriginalGroup converts Google Workspace group to Masdoor OriginalGroup
 func (p *GoogleWorkspaceSyncerProvider) googleWorkspaceGroupToOriginalGroup(gwGroup *admin.Group) *OriginalGroup {
 	group := &OriginalGroup{
 		Id:          gwGroup.Id,

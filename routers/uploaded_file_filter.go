@@ -32,7 +32,7 @@ const uploadedFilesPrefix = "/files"
 // document* (one that can run script) when the URL is opened directly.
 // A resource uploaded through /api/upload-resource is served from the public
 // "/files" static path, so without these headers an .svg containing
-// <script> executes in the origin of the Casdoor server itself and can drive
+// <script> executes in the origin of the Masdoor server itself and can drive
 // the whole API with the session cookie of whoever opens the link.
 var activeContentExts = map[string]bool{
 	".htm":   true,
@@ -76,7 +76,7 @@ func lookupUploadedFile(urlPath string) (string, bool) {
 //
 // The headers are chosen so that uploads keep working as images (<img src>
 // ignores both CSP and Content-Disposition, so avatars still render) while a
-// direct navigation to an uploaded file can no longer touch the Casdoor origin:
+// direct navigation to an uploaded file can no longer touch the Masdoor origin:
 //
 //   - "sandbox" puts the document in an opaque origin and, without
 //     "allow-scripts", disables script execution altogether.
@@ -94,7 +94,7 @@ func UploadedFileFilter(ctx *context.Context) {
 	// When the file does not exist, beego skips the static router and the
 	// request falls through to StaticFilter(), which serves the frontend
 	// "index.html". That response has to keep its original headers, otherwise
-	// requesting a missing "/files/xxx.html" would download the Casdoor
+	// requesting a missing "/files/xxx.html" would download the Masdoor
 	// frontend as an attachment instead of rendering it.
 	if _, err := os.Stat(filePath); err != nil {
 		return

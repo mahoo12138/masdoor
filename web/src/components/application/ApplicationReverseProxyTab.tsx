@@ -10,7 +10,7 @@ import type {ApplicationTabProps} from "@/components/application/types";
 
 const SSL_MODES = ["", "HTTP", "HTTPS and HTTP", "HTTPS Only"];
 
-/** The "Reverse Proxy" tab: the domain and certificate Casdoor fronts for this application. */
+/** The "Reverse Proxy" tab: the domain and certificate Masdoor fronts for this application. */
 interface ApplicationReverseProxyTabProps extends ApplicationTabProps {
   certs: SearchableOption[];
 }

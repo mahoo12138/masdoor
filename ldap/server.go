@@ -21,8 +21,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
 	ldap "github.com/casdoor/ldapserver"
 	"github.com/lor00x/goldap/message"
 )
@@ -334,9 +334,9 @@ func buildUserSearchEntry(user *object.User, baseDN string, attrs []string, org 
 	return e
 }
 
-// groupToDN converts a Casdoor group id "owner/name" into the group's LDAP
+// groupToDN converts a Masdoor group id "owner/name" into the group's LDAP
 // entry DN, matching the DN a group search returns (see the posixGroup branch
-// in handleSearch). The Casdoor group id "owner/name" is not a valid LDAP DN,
+// in handleSearch). The Masdoor group id "owner/name" is not a valid LDAP DN,
 // which breaks standard clients that parse memberOf as a DN, so memberOf is
 // always emitted in DN form.
 //

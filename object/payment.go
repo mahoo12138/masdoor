@@ -18,8 +18,8 @@ import (
 	"fmt"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/pp"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/pp"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 

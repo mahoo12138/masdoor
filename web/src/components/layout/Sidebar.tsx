@@ -31,7 +31,7 @@ import {useAccount} from "@/hooks/use-account";
 import {useIsDark} from "@/hooks/use-theme";
 import {cn} from "@/lib/utils";
 
-const OPEN_GROUPS_KEY = "casdoor.openNavGroups";
+const OPEN_GROUPS_KEY = "masdoor.openNavGroups";
 
 function readOpenGroups(): string[] | null {
   try {
@@ -224,7 +224,7 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
           {/* collapsed the organization's favicon fits where its wordmark does not */}
           <img
             src={collapsed ? organization?.favicon || siderLogo : siderLogo}
-            alt={organization?.displayName || "Casdoor"}
+            alt={organization?.displayName || "Masdoor"}
             className={cn("object-contain", collapsed ? "h-6 w-6 rounded" : "h-8 max-w-[160px]")}
           />
         </Link>

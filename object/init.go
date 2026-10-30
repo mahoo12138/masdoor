@@ -22,9 +22,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/xorm-io/core"
 )
@@ -205,7 +205,7 @@ func initBuiltInUser() {
 	}
 
 	if user.Password == "" {
-		fmt.Println("The password of built-in/admin is not set, open Casdoor in the browser to set it, or set initAdminPassword before the first start")
+		fmt.Println("The password of built-in/admin is not set, open Masdoor in the browser to set it, or set initAdminPassword before the first start")
 	}
 }
 
@@ -295,7 +295,7 @@ func initBuiltInApplication() {
 		Owner:          "admin",
 		Name:           "app-built-in",
 		CreatedTime:    util.GetCurrentTime(),
-		DisplayName:    "Casdoor",
+		DisplayName:    "Masdoor",
 		Category:       "Default",
 		Type:           "All",
 		Scopes:         []*ScopeItem{},
@@ -382,7 +382,7 @@ func warnPublicBuiltInCert() {
 	privateKey := strings.TrimSpace(strings.ReplaceAll(cert.PrivateKey, "\r", ""))
 	hash := sha256.Sum256([]byte(privateKey))
 	if hex.EncodeToString(hash[:]) == publicBuiltInPrivateKeySha256 {
-		fmt.Printf("WARNING: the cert: %s signs tokens with the private key published in the Casdoor repository, anyone can forge its tokens, please generate a new key pair for it\n", cert.GetId())
+		fmt.Printf("WARNING: the cert: %s signs tokens with the private key published in the Masdoor repository, anyone can forge its tokens, please generate a new key pair for it\n", cert.GetId())
 	}
 }
 

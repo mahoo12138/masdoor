@@ -18,7 +18,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 )
 
 // ProviderTypeCount holds a provider type label and its count.

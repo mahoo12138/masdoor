@@ -29,7 +29,7 @@ interface EditableTableProps<T> {
 }
 
 /**
- * The inline, editable sub-table used all over the Casdoor edit pages
+ * The inline, editable sub-table used all over the Masdoor edit pages
  * (account items, signup items, MFA items, provider lists, ...).
  */
 export function EditableTable<T>({

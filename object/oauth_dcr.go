@@ -20,7 +20,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // DynamicClientRegistrationRequest represents an RFC 7591 client registration request

@@ -18,7 +18,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 )
 
 var (

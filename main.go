@@ -22,15 +22,15 @@ import (
 	"github.com/beego/beego/v2/server/web"
 	_ "github.com/beego/beego/v2/server/web/session/redis"
 	_ "github.com/beego/beego/v2/server/web/session/redis_cluster"
-	"github.com/casdoor/casdoor/authz"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/ldap"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/proxy"
-	"github.com/casdoor/casdoor/radius"
-	"github.com/casdoor/casdoor/routers"
-	"github.com/casdoor/casdoor/service"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/authz"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/ldap"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/radius"
+	"github.com/mahoo12138/masdoor/routers"
+	"github.com/mahoo12138/masdoor/service"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func main() {
@@ -43,7 +43,7 @@ func main() {
 
 func runServer() {
 	web.BConfig.WebConfig.Session.SessionOn = true
-	web.BConfig.WebConfig.Session.SessionName = "casdoor_session_id"
+	web.BConfig.WebConfig.Session.SessionName = "masdoor_session_id"
 	if redisConfig := conf.GetRedisConfig(); redisConfig == nil {
 		web.BConfig.WebConfig.Session.SessionProvider = routers.FileSessionProvider
 		web.BConfig.WebConfig.Session.SessionProviderConfig = "./tmp"

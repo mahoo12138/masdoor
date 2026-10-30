@@ -16,7 +16,7 @@
 
 package object
 
-import "github.com/casdoor/casdoor/email"
+import "github.com/mahoo12138/masdoor/email"
 
 // TestSmtpServer Test the SMTP server
 func TestSmtpServer(provider *Provider) error {

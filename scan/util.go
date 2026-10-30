@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 func getSiteBaseURLs(site *object.Site) []string {

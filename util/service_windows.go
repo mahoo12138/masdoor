@@ -64,7 +64,7 @@ func RunAsService(run func()) bool {
 		panic(err)
 	}
 
-	err = svc.Run("casdoor", &windowsService{run: run})
+	err = svc.Run("masdoor", &windowsService{run: run})
 	if err != nil {
 		panic(err)
 	}

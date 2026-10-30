@@ -18,9 +18,9 @@ import (
 	"net/http"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 const (
@@ -52,7 +52,7 @@ func setCorsHeadersWithCredentials(ctx *context.Context, origin string, allowCre
 }
 
 func CorsFilter(ctx *context.Context) {
-	// The CORS headers vary by Origin, so caches in front of Casdoor must key on it.
+	// The CORS headers vary by Origin, so caches in front of Masdoor must key on it.
 	ctx.ResponseWriter.Header().Add(headerVary, headerOrigin)
 
 	origin := ctx.Input.Header(headerOrigin)

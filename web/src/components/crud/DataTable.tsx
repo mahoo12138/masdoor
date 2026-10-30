@@ -141,7 +141,7 @@ function ColumnSearch({
 
 /**
  * The header filter menu, antd's `filters` with `filterMultiple: false`. Picking
- * an option filters the list on this column, which the Casdoor list APIs express
+ * an option filters the list on this column, which the Masdoor list APIs express
  * as the same `field`/`value` pair the per-column search uses.
  */
 function ColumnFilter({
@@ -303,7 +303,7 @@ function stickyCell(sticky: StickyOffset | undefined, background: string) {
 }
 
 /**
- * The Casdoor list APIs filter on a single `field`/`value` pair, so at most one
+ * The Masdoor list APIs filter on a single `field`/`value` pair, so at most one
  * column search or filter menu can be in effect. Rather than leave the only clue
  * inside a header icon, it surfaces here as a chip that says what is applied and
  * clears it in one click.

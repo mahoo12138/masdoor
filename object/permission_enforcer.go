@@ -22,8 +22,8 @@ import (
 	"github.com/casbin/casbin/v2/config"
 	"github.com/casbin/casbin/v2/log"
 	"github.com/casbin/casbin/v2/model"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	xormadapter "github.com/casdoor/xorm-adapter/v3"
 )
 
@@ -81,7 +81,7 @@ func (p *Permission) setEnforcerAdapter(enforcer *casbin.Enforcer) error {
 
 		if adapterObj != nil && adapterObj.Table != "" {
 			if !adapterObj.UseSameDb && adapterObj.Owner != "built-in" {
-				return fmt.Errorf("the adapter: %s of permission: %s must use the same DB as Casdoor", adapterObj.GetId(), p.GetId())
+				return fmt.Errorf("the adapter: %s of permission: %s must use the same DB as Masdoor", adapterObj.GetId(), p.GetId())
 			}
 			tableName = adapterObj.Table
 		}

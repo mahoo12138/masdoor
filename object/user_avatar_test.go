@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/casdoor/casdoor/proxy"
+	"github.com/mahoo12138/masdoor/proxy"
 )
 
 func TestSyncPermanentAvatars(t *testing.T) {
@@ -51,7 +51,7 @@ func TestUpdateAvatars(t *testing.T) {
 	InitDefaultStorageProvider()
 	proxy.InitHttpClient()
 
-	users, err := GetUsers("casdoor")
+	users, err := GetUsers("masdoor")
 	if err != nil {
 		panic(err)
 	}

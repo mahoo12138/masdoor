@@ -684,7 +684,7 @@ export default function ProviderEditPage() {
       patch.host = "smtp.example.com";
       patch.port = 465;
       patch.sslMode = "Auto";
-      patch.title = "Casdoor Verification Code";
+      patch.title = "Masdoor Verification Code";
       patch.content = Setting.getDefaultHtmlEmailContent();
       patch.metadata = Setting.getDefaultInvitationHtmlEmailContent();
       patch.receiver = account?.email ?? "";
@@ -719,7 +719,7 @@ export default function ProviderEditPage() {
       patch.templateCode = "RFC 5424";
       patch.state = "Enabled";
     } else if (value === "Log") {
-      defaultType = "Casdoor Permission Log";
+      defaultType = "Masdoor Permission Log";
       patch.host = "";
       patch.port = 0;
       patch.title = "";
@@ -904,7 +904,7 @@ export default function ProviderEditPage() {
           </FormRow>
         </React.Fragment>
       ) : null}
-      {["ADFS", "AzureAD", "AzureADB2C", "Okta", "Nextcloud"].includes(provider.type) || (provider.type === "Casdoor" || provider.category === "Storage") ? (
+      {["ADFS", "AzureAD", "AzureADB2C", "Okta", "Nextcloud"].includes(provider.type) || (provider.type === "Masdoor" || provider.category === "Storage") ? (
         <FormRow
           label={["AzureAD", "AzureADB2C"].includes(provider.type) ? i18next.t("provider:Tenant ID") : i18next.t("provider:Domain")}
           tooltip={["AzureAD", "AzureADB2C"].includes(provider.type) ? i18next.t("provider:Tenant ID - Tooltip") : i18next.t("provider:Domain - Tooltip")}
@@ -1030,7 +1030,7 @@ export default function ProviderEditPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => updateProviderField("content", "You have requested a verification code at Casdoor. Here is your code: %s, please enter in 5 minutes. <reset-link>Or click %link to reset</reset-link>")}
+              onClick={() => updateProviderField("content", "You have requested a verification code at Masdoor. Here is your code: %s, please enter in 5 minutes. <reset-link>Or click %link to reset</reset-link>")}
             >
               {i18next.t("general:Reset to Default")} (Text)
             </Button>
@@ -1064,7 +1064,7 @@ export default function ProviderEditPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => updateProviderField("metadata", "You have invited to join Casdoor. Here is your invitation code: %s, please enter in 5 minutes. Or click %link to signup")}
+              onClick={() => updateProviderField("metadata", "You have invited to join Masdoor. Here is your invitation code: %s, please enter in 5 minutes. Or click %link to signup")}
             >
               {i18next.t("general:Reset to Default")} (Text)
             </Button>
@@ -1546,7 +1546,7 @@ export default function ProviderEditPage() {
 
   const renderPaymentFields = () => (
     <React.Fragment>
-      {["Alipay", "WeChat Pay", "Casdoor"].includes(provider.type) ? (
+      {["Alipay", "WeChat Pay", "Masdoor"].includes(provider.type) ? (
         <FormRow labelKey="general:Cert">
           <SearchableSelect value={provider.cert ?? ""} onChange={(v) => updateProviderField("cert", v)} options={certOptions} />
         </FormRow>
@@ -1571,7 +1571,7 @@ export default function ProviderEditPage() {
 
   const renderStorageFields = () => (
     <React.Fragment>
-      {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology", "Casdoor"].includes(provider.type) ? (
+      {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology", "Masdoor"].includes(provider.type) ? (
         <FormRow label={i18next.t("provider:Endpoint (Intranet)")} tooltip={i18next.t("provider:Region endpoint for Intranet")}>
           <Input value={provider.intranetEndpoint ?? ""} onChange={(e) => updateProviderField("intranetEndpoint", e.target.value)} />
         </FormRow>
@@ -1582,8 +1582,8 @@ export default function ProviderEditPage() {
             <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
           </FormRow>
           <FormRow
-            label={provider.type === "Casdoor" ? i18next.t("general:Provider") : i18next.t("provider:Bucket")}
-            tooltip={provider.type === "Casdoor" ? i18next.t("general:Provider - Tooltip") : i18next.t("provider:Bucket - Tooltip")}
+            label={provider.type === "Masdoor" ? i18next.t("general:Provider") : i18next.t("provider:Bucket")}
+            tooltip={provider.type === "Masdoor" ? i18next.t("general:Provider - Tooltip") : i18next.t("provider:Bucket - Tooltip")}
           >
             <Input value={provider.bucket ?? ""} onChange={(e) => updateProviderField("bucket", e.target.value)} />
           </FormRow>
@@ -1592,7 +1592,7 @@ export default function ProviderEditPage() {
       <FormRow labelKey="provider:Path prefix">
         <Input value={provider.pathPrefix ?? ""} onChange={(e) => updateProviderField("pathPrefix", e.target.value)} />
       </FormRow>
-      {!["Synology", "Casdoor"].includes(provider.type) ? (
+      {!["Synology", "Masdoor"].includes(provider.type) ? (
         <FormRow labelKey="provider:Domain">
           <Input
             value={provider.domain ?? ""}
@@ -1601,15 +1601,15 @@ export default function ProviderEditPage() {
           />
         </FormRow>
       ) : null}
-      {provider.type === "Casdoor" ? (
+      {provider.type === "Masdoor" ? (
         <FormRow labelKey="general:Organization">
           <Input value={provider.content ?? ""} onChange={(e) => updateProviderField("content", e.target.value)} />
         </FormRow>
       ) : null}
-      {["AWS S3", "Tencent Cloud COS", "Qiniu Cloud Kodo", "Casdoor", "CUCloud OSS", "MinIO"].includes(provider.type) ? (
+      {["AWS S3", "Tencent Cloud COS", "Qiniu Cloud Kodo", "Masdoor", "CUCloud OSS", "MinIO"].includes(provider.type) ? (
         <FormRow
-          label={provider.type === "Casdoor" ? i18next.t("general:Application") : i18next.t("provider:Region ID")}
-          tooltip={provider.type === "Casdoor" ? i18next.t("general:Application - Tooltip") : i18next.t("provider:Region ID - Tooltip")}
+          label={provider.type === "Masdoor" ? i18next.t("general:Application") : i18next.t("provider:Region ID")}
+          tooltip={provider.type === "Masdoor" ? i18next.t("general:Application - Tooltip") : i18next.t("provider:Region ID - Tooltip")}
         >
           <Input value={provider.regionId ?? ""} onChange={(e) => updateProviderField("regionId", e.target.value)} />
         </FormRow>

@@ -25,7 +25,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/nyaruka/phonenumbers"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/idtoken"

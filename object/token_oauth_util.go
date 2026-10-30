@@ -25,8 +25,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/xorm-io/core"
 )

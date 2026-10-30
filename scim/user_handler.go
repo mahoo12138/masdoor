@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
 	"github.com/elimity-com/scim"
 	"github.com/elimity-com/scim/errors"
 	"github.com/xorm-io/builder"
@@ -194,7 +194,7 @@ func UpdateScimUserByPatchOperation(req *http.Request, id string, ops []scim.Pat
 		if op.Op == scim.PatchOperationRemove {
 			value = nil
 		}
-		// PatchOperationAdd and PatchOperationReplace is same in Casdoor, just replace the value
+		// PatchOperationAdd and PatchOperationReplace is same in Masdoor, just replace the value
 		switch op.Path.String() {
 		case "userName":
 			user.Name = ToString(value, "")
@@ -219,7 +219,7 @@ func UpdateScimUserByPatchOperation(req *http.Request, id string, ops []scim.Pat
 			user.LastName = ToString(v["familyName"], user.LastName)
 		case "emails":
 			defaultV := AnyArray{AnyMap{"value": ""}}
-			vs := ToAnyArray(value, defaultV) // e.g. [{"value": "test@casdoor"}]
+			vs := ToAnyArray(value, defaultV) // e.g. [{"value": "test@masdoor"}]
 			if len(vs) > 0 {
 				v := ToAnyMap(vs[0])
 				user.Email = ToString(v["value"], user.Email)

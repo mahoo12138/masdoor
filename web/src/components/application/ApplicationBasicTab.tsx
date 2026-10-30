@@ -52,7 +52,7 @@ export function ApplicationBasicTab({
     : "\"ERROR: You must specify at least one Redirect URL in 'Redirect URLs'\"";
   const clientId = application.isShared ? `${application.clientId}-org-${account?.owner}` : application.clientId;
   const signInUrl =
-    `/login/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=read&state=casdoor`;
+    `/login/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=read&state=masdoor`;
   const signUpUrl = Setting.isPasswordEnabled(application)
     ? `/signup/${application.name}`
     : signInUrl.replace("/login/oauth/authorize", "/signup/oauth/authorize");

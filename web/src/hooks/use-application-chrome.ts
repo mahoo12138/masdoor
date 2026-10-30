@@ -66,7 +66,7 @@ function foregroundFor(lightness: number): string {
 
 /**
  * A brand colour picked against a white page is usually far too dark to sit on a
- * dark one — Casdoor's own default, #262626, disappears into the panel it is
+ * dark one — Masdoor's own default, #262626, disappears into the panel it is
  * painted on. antd handled this in its `darkAlgorithm`, which derived a lighter
  * primary from the same hue; this keeps to the one step that matters: a colourful
  * brand is lifted to a usable lightness, and a neutral one (a black or a grey)
@@ -229,7 +229,7 @@ const DEFAULT_FAVICON = "https://cdn.casdoor.com/static/favicon.png";
 
 /**
  * The console's tab title and favicon, which follow the signed-in user's
- * organization. Signed out, the favicon falls back to Casdoor's own — the same
+ * organization. Signed out, the favicon falls back to Masdoor's own — the same
  * two <Helmet> blocks web/src/App.js renders.
  */
 export function useAccountHelmet(account: any) {

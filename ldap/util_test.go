@@ -11,7 +11,7 @@ import (
 	"github.com/lor00x/goldap/message"
 	"github.com/xorm-io/builder"
 
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 func args(exp ...interface{}) []interface{} {

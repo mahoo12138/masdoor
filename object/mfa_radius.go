@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/casdoor/casdoor/radius/authenticator"
+	"github.com/mahoo12138/masdoor/radius/authenticator"
 	"layeh.com/radius"
 	"layeh.com/radius/rfc2865"
 )

@@ -24,9 +24,9 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/form"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/form"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 const (
@@ -411,8 +411,8 @@ func (c *ApiController) Logout() {
 		// "id_token_hint" is only RECOMMENDED (not REQUIRED) by the OIDC RP-Initiated Logout
 		// spec, so when it is absent we log the user out based on the current session. Some
 		// clients (e.g. Gitea) only send "post_logout_redirect_uri" (optionally with
-		// "client_id"), see: https://github.com/casdoor/casdoor/issues/5607
-		// TODO https://github.com/casdoor/casdoor/pull/1494#discussion_r1095675265
+		// "client_id"), see: https://github.com/mahoo12138/masdoor/issues/5607
+		// TODO https://github.com/mahoo12138/masdoor/pull/1494#discussion_r1095675265
 		// Retrieve application and token before clearing the session. Prefer the application
 		// bound to the session, and fall back to the "client_id" hint when available.
 		application := c.GetSessionApplication()
@@ -459,7 +459,7 @@ func (c *ApiController) Logout() {
 		// Propagate logout to external Custom OAuth2 providers
 		object.InvokeCustomProviderLogout(application, sessionToken)
 
-		// "post_logout_redirect_uri" has been made optional, see: https://github.com/casdoor/casdoor/issues/2151
+		// "post_logout_redirect_uri" has been made optional, see: https://github.com/mahoo12138/masdoor/issues/2151
 		if redirectUri != "" {
 			c.redirectToPostLogout(application, redirectUri, state)
 			return
@@ -529,7 +529,7 @@ func (c *ApiController) Logout() {
 		c.ClearUserSession()
 		c.ClearTokenSession()
 
-		// TODO https://github.com/casdoor/casdoor/pull/1494#discussion_r1095675265
+		// TODO https://github.com/mahoo12138/masdoor/pull/1494#discussion_r1095675265
 		if err := c.deleteUserSession(user, beegoSessionId); err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -538,7 +538,7 @@ func (c *ApiController) Logout() {
 		// Propagate logout to external Custom OAuth2 providers
 		object.InvokeCustomProviderLogout(application, token.AccessToken)
 
-		// "post_logout_redirect_uri" has been made optional, see: https://github.com/casdoor/casdoor/issues/2151
+		// "post_logout_redirect_uri" has been made optional, see: https://github.com/mahoo12138/masdoor/issues/2151
 		if redirectUri == "" {
 			c.ResponseOk()
 			return

@@ -23,7 +23,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 )
 
 // frontendCdnUrl is where the frontend build published as an npm package (casdoor-web) is served from, with "{name}"

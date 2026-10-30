@@ -24,7 +24,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // DingtalkSyncerProvider implements SyncerProvider for DingTalk API-based syncers
@@ -396,7 +396,7 @@ func (p *DingtalkSyncerProvider) getDingtalkUsers() ([]*OriginalUser, error) {
 		}
 	}
 
-	// Convert DingTalk users to Casdoor OriginalUser
+	// Convert DingTalk users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, dingtalkUser := range userMap {
 		originalUser := p.dingtalkUserToOriginalUser(dingtalkUser)
@@ -433,7 +433,7 @@ func (p *DingtalkSyncerProvider) getDingtalkUserFieldValue(dingtalkUser *Dingtal
 	}
 }
 
-// dingtalkUserToOriginalUser converts DingTalk user to Casdoor OriginalUser
+// dingtalkUserToOriginalUser converts DingTalk user to Masdoor OriginalUser
 func (p *DingtalkSyncerProvider) dingtalkUserToOriginalUser(dingtalkUser *DingtalkUser) *OriginalUser {
 	user := &OriginalUser{
 		Address:    []string{},
@@ -515,20 +515,20 @@ func (p *DingtalkSyncerProvider) GetOriginalGroups() ([]*OriginalGroup, error) {
 	return originalGroups, nil
 }
 
-// getDingtalkGroupName returns the Casdoor group name of a DingTalk department. The
+// getDingtalkGroupName returns the Masdoor group name of a DingTalk department. The
 // department ID is used as the name because DingTalk department names are not unique.
 func getDingtalkGroupName(deptId int64) string {
 	return fmt.Sprintf("%d", deptId)
 }
 
-// getDingtalkGroupId returns the Casdoor group ID ("organization/name") of a DingTalk
+// getDingtalkGroupId returns the Masdoor group ID ("organization/name") of a DingTalk
 // department. User.Groups holds full group IDs, so a bare department ID would not match
 // any group and the membership would be silently dropped by the group and permission APIs.
 func (p *DingtalkSyncerProvider) getDingtalkGroupId(deptId int64) string {
 	return util.GetId(p.Syncer.Organization, getDingtalkGroupName(deptId))
 }
 
-// dingtalkDepartmentToOriginalGroup converts DingTalk department to Casdoor OriginalGroup
+// dingtalkDepartmentToOriginalGroup converts DingTalk department to Masdoor OriginalGroup
 func (p *DingtalkSyncerProvider) dingtalkDepartmentToOriginalGroup(dept *DingtalkDepartment, hasParent bool) *OriginalGroup {
 	deptIdStr := getDingtalkGroupName(dept.DeptId)
 
@@ -563,7 +563,7 @@ func (p *DingtalkSyncerProvider) GetOriginalUserGroups(userId string) ([]string,
 		return nil, err
 	}
 
-	// Convert department IDs to Casdoor group IDs
+	// Convert department IDs to Masdoor group IDs
 	groupIds := []string{}
 	for _, deptId := range user.Department {
 		groupIds = append(groupIds, p.getDingtalkGroupId(deptId))

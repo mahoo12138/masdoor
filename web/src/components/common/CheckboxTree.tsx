@@ -27,7 +27,7 @@ function collectKeys(node: TreeNode, into: string[] = []): string[] {
 
 /**
  * The shadcn stand-in for antd's `<Tree checkable />`, used by the organization
- * navbar / widget item pickers. It keeps antd's check semantics, which Casdoor's
+ * navbar / widget item pickers. It keeps antd's check semantics, which Masdoor's
  * stored `navItems` depend on: checking a branch checks its whole subtree, and a
  * branch is checked only while every one of its children is.
  */

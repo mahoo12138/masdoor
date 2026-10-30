@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/casdoor/casdoor/proxy"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/go-jose/go-jose/v4"
 	"github.com/golang-jwt/jwt/v5"
 )

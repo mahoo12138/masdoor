@@ -15,7 +15,7 @@
 (function() {
   "use strict";
 
-  // the path Casdoor is served under, like "/casdoor", which the server writes into the page (routers/base_path.go)
+  // the path Masdoor is served under, like "/casdoor", which the server writes into the page (routers/base_path.go)
   var basePath = (function() {
     var meta = document.querySelector("meta[name=\"casdoor-base-path\"]");
     var value = meta ? (meta.getAttribute("content") || "").replace(/^\/+|\/+$/g, "") : "";
@@ -425,7 +425,7 @@
       }
 
       if (casService === "") {
-        setStatus("Logged in successfully. Now you can visit apps protected by Casdoor.", false);
+        setStatus("Logged in successfully. Now you can visit apps protected by Masdoor.", false);
         return;
       }
 

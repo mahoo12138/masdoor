@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/beevik/etree"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/russellhaering/gosaml2/types"
 	dsig "github.com/russellhaering/goxmldsig"
 )
@@ -74,7 +74,7 @@ func ParseSamlLogoutRequest(application *Application, samlRequest string) (*Saml
 	return &request, nil
 }
 
-// CheckSamlLogoutResponse validates the LogoutResponse an SP returns for a LogoutRequest of Casdoor
+// CheckSamlLogoutResponse validates the LogoutResponse an SP returns for a LogoutRequest of Masdoor
 func CheckSamlLogoutResponse(application *Application, samlResponse string) error {
 	data, err := decodeSamlMessage(samlResponse)
 	if err != nil {
@@ -97,7 +97,7 @@ func CheckSamlLogoutResponse(application *Application, samlResponse string) erro
 	return nil
 }
 
-// LogoutBySamlRequest ends the Casdoor sessions an SP-initiated LogoutRequest points to, and tells
+// LogoutBySamlRequest ends the Masdoor sessions an SP-initiated LogoutRequest points to, and tells
 // whether the browser session the request came with is one of them
 func LogoutBySamlRequest(application *Application, request *SamlLogoutRequest, currentUser string, currentSessionId string, host string) (bool, error) {
 	targets := []*SamlSession{}
@@ -149,7 +149,7 @@ func LogoutBySamlRequest(application *Application, request *SamlLogoutRequest, c
 	return isCurrentSession, nil
 }
 
-// logoutUserSession ends one Casdoor session and tells the OIDC and SAML applications signed in with it
+// logoutUserSession ends one Masdoor session and tells the OIDC and SAML applications signed in with it
 func logoutUserSession(user *User, sessionId string, host string) error {
 	tokens, err := GetActiveTokensByUser(user.Owner, user.Name)
 	if err != nil {
@@ -180,7 +180,7 @@ func logoutUserSession(user *User, sessionId string, host string) error {
 }
 
 // SendSamlLogout sends a signed LogoutRequest to the SingleLogoutService of every SAML SP the user
-// signed in to, only for the given Casdoor sessions unless sessionIds is nil. Like the OIDC
+// signed in to, only for the given Masdoor sessions unless sessionIds is nil. Like the OIDC
 // Back-Channel Logout, it is posted from the server and does not go through the browser.
 func SendSamlLogout(owner string, name string, sessionIds []string, host string) {
 	if sessionIds != nil && len(sessionIds) == 0 {

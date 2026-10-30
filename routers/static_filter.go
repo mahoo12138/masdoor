@@ -30,10 +30,10 @@ import (
 
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/controllers"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/controllers"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 var (
@@ -58,19 +58,19 @@ func getWebBuildFolder() string {
 		return path
 	}
 
-	casdoorDir := filepath.Join(filepath.Dir(frontendBaseDir), "casdoor")
-	if util.FileExist(filepath.Join(casdoorDir, "index.html")) {
-		return casdoorDir
+	masdoorDir := filepath.Join(filepath.Dir(frontendBaseDir), "masdoor")
+	if util.FileExist(filepath.Join(masdoorDir, "index.html")) {
+		return masdoorDir
 	}
-	if util.FileExist(filepath.Join(casdoorDir, "web/build", "index.html")) {
-		return filepath.Join(casdoorDir, "web/build")
+	if util.FileExist(filepath.Join(masdoorDir, "web/build", "index.html")) {
+		return filepath.Join(masdoorDir, "web/build")
 	}
 
 	return path
 }
 
 // GetSwaggerFolder finds the swagger folder like getWebBuildFolder(), so an instance whose folder only has its own
-// conf, logs and files can serve the swagger of the shared Casdoor code on the same machine
+// conf, logs and files can serve the swagger of the shared Masdoor code on the same machine
 func GetSwaggerFolder() string {
 	path := "swagger"
 	if util.FileExist(filepath.Join(path, "swagger.json")) || frontendBaseDir == "" {
@@ -79,7 +79,7 @@ func GetSwaggerFolder() string {
 
 	candidates := []string{
 		filepath.Join(frontendBaseDir, "swagger"),
-		filepath.Join(filepath.Dir(frontendBaseDir), "casdoor", "swagger"),
+		filepath.Join(filepath.Dir(frontendBaseDir), "masdoor", "swagger"),
 	}
 	for _, candidate := range candidates {
 		if util.FileExist(filepath.Join(candidate, "swagger.json")) {
@@ -179,7 +179,7 @@ func isFastAutoSigninAllowed(ctx *context.Context, user *object.User, applicatio
 		return false, err
 	}
 
-	// signed in to Casdoor with an account of another organization: show the sign-in page of this application
+	// signed in to Masdoor with an account of another organization: show the sign-in page of this application
 	isUserOfApplication, err := object.IsUserOfApplication(user, application)
 	if err != nil || !isUserOfApplication {
 		return false, err
@@ -310,8 +310,8 @@ func StaticFilter(ctx *context.Context) {
 		}
 		dir = strings.ReplaceAll(dir, "\\", "/")
 		ctx.ResponseWriter.WriteHeader(http.StatusNotFound)
-		errorText := fmt.Sprintf("The Casdoor frontend HTML file: \"index.html\" was not found, it should be placed at: \"%s/web/build/index.html\". For more information, see: https://casdoor.org/docs/basic/server-installation/#frontend-1", dir)
-		http.ServeContent(ctx.ResponseWriter, ctx.Request, "Casdoor frontend has encountered error...", time.Now(), strings.NewReader(errorText))
+		errorText := fmt.Sprintf("The Masdoor frontend HTML file: \"index.html\" was not found, it should be placed at: \"%s/web/build/index.html\". For more information, see: https://casdoor.org/docs/basic/server-installation/#frontend-1", dir)
+		http.ServeContent(ctx.ResponseWriter, ctx.Request, "Masdoor frontend has encountered error...", time.Now(), strings.NewReader(errorText))
 		return
 	}
 

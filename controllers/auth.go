@@ -29,13 +29,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/form"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/idp"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/proxy"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/form"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/idp"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/util"
 	"golang.org/x/oauth2"
 )
 
@@ -687,7 +687,7 @@ func getExistUserByBindingRule(providerItem *object.ProviderItem, application *o
 		// Try to find existing user by username (case-insensitive)
 		// This allows OAuth providers (e.g., Wecom) to automatically associate with
 		// existing users when usernames match, particularly useful for enterprise
-		// scenarios where signup is disabled and users already exist in Casdoor
+		// scenarios where signup is disabled and users already exist in Masdoor
 		if rule == "Name" {
 			user, err = object.GetUserByName(application.Organization, userInfo.Username)
 			if err != nil {
@@ -1516,7 +1516,7 @@ func (c *ApiController) Login() {
 		c.Ctx.Input.SetParam("recordUserId", user.GetId())
 	} else {
 		if c.GetSessionUsername() != "" {
-			// user already signed in to Casdoor, so let the user click the avatar button to do the quick sign-in
+			// user already signed in to Masdoor, so let the user click the avatar button to do the quick sign-in
 			var application *object.Application
 			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
 			if err != nil {
@@ -1659,7 +1659,7 @@ func (c *ApiController) HandleSamlLogin() {
 	}
 	redirectTarget := slice[4]
 	if !object.IsValidSamlRedirectURL(redirectTarget, c.Ctx.Request.Host) {
-		c.ResponseError("invalid redirect URL in RelayState: must point to this Casdoor instance")
+		c.ResponseError("invalid redirect URL in RelayState: must point to this Masdoor instance")
 		return
 	}
 	relayState = url.QueryEscape(relayState)

@@ -220,9 +220,9 @@ func (p *SyslogProvider) formatMessage(event *Event) string {
 
 	var line string
 	if p.settings.format == "RFC 3164" {
-		line = fmt.Sprintf("<%d>%s %s casdoor[%s]: %s", priority, eventTime.Format(time.Stamp), p.hostname, p.procId, message)
+		line = fmt.Sprintf("<%d>%s %s masdoor[%s]: %s", priority, eventTime.Format(time.Stamp), p.hostname, p.procId, message)
 	} else {
-		line = fmt.Sprintf("<%d>1 %s %s casdoor %s %s - %s", priority, eventTime.Format(time.RFC3339), p.hostname, p.procId, getSyslogMsgId(event.Action), message)
+		line = fmt.Sprintf("<%d>1 %s %s masdoor %s %s - %s", priority, eventTime.Format(time.RFC3339), p.hostname, p.procId, getSyslogMsgId(event.Action), message)
 	}
 
 	// TCP and TLS streams are framed by a trailing LF, each UDP datagram carries exactly one message

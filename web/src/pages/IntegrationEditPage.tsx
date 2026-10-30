@@ -22,7 +22,7 @@ import {
 } from "@/lib/integration";
 import * as Setting from "@/lib/setting";
 
-/** An installed integration: what it created, and the rest of the setup with this Casdoor's own values filled in. */
+/** An installed integration: what it created, and the rest of the setup with this Masdoor's own values filled in. */
 export default function IntegrationEditPage() {
   const navigate = useNavigate();
   const {organizationName = "", integrationName = ""} = useParams();
@@ -164,7 +164,7 @@ export default function IntegrationEditPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{i18next.t("integration:Installed in Casdoor")}</CardTitle>
+          <CardTitle className="text-base">{i18next.t("integration:Installed in Masdoor")}</CardTitle>
           <CardDescription>{getInstalledDescription(integration)}</CardDescription>
         </CardHeader>
         <CardContent>

@@ -21,9 +21,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/casdoor/casdoor-go-sdk/casdoorsdk"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor-go-sdk/casdoorsdk"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 func joinPath(a string, b string) string {

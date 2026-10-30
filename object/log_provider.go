@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/casdoor/casdoor/log"
+	"github.com/mahoo12138/masdoor/log"
 )
 
 var (

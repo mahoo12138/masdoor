@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Casdoor will expose its providers as services to SDK
+// Masdoor will expose its providers as services to SDK
 // We are going to implement those services as APIs here
 
 package controllers
@@ -22,9 +22,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type EmailForm struct {
@@ -76,7 +76,7 @@ func (c *ApiController) pinProviderObjectOwner(providerObject *object.Provider) 
 // SendEmail
 // @Title SendEmail
 // @Tag Service API
-// @Description This API is not for Casdoor frontend to call, it is for Casdoor SDKs.
+// @Description This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
 // @Param   clientId    query    string  true        "The clientId of the application"
 // @Param   clientSecret    query    string  true    "The clientSecret of the application"
 // @Param   from    body   controllers.EmailForm    true         "Details of the email request"
@@ -112,7 +112,7 @@ func (c *ApiController) SendEmail() {
 			return
 		}
 	} else {
-		// called by Casdoor SDK via Client ID & Client Secret, so the used Email provider will be the application' Email provider or the default Email provider
+		// called by Masdoor SDK via Client ID & Client Secret, so the used Email provider will be the application' Email provider or the default Email provider
 		provider, err = c.GetProviderFromContext("Email")
 		if err != nil {
 			c.ResponseError(err.Error())
@@ -181,7 +181,7 @@ func (c *ApiController) SendEmail() {
 	}
 
 	code := "123456"
-	// "You have requested a verification code at Casdoor. Here is your code: %s, please enter in 5 minutes."
+	// "You have requested a verification code at Masdoor. Here is your code: %s, please enter in 5 minutes."
 	content = strings.Replace(content, "%s", code, 1)
 	userString := "Hi"
 	if !object.IsAppUser(userId) {
@@ -214,7 +214,7 @@ func (c *ApiController) SendEmail() {
 // SendSms
 // @Title SendSms
 // @Tag Service API
-// @Description This API is not for Casdoor frontend to call, it is for Casdoor SDKs.
+// @Description This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
 // @Param   clientId    query    string  true        "The clientId of the application"
 // @Param   clientSecret    query    string  true    "The clientSecret of the application"
 // @Param   from    body   controllers.SmsForm    true           "Details of the sms request"
@@ -257,7 +257,7 @@ func (c *ApiController) SendSms() {
 // SendNotification
 // @Title SendNotification
 // @Tag Service API
-// @Description This API is not for Casdoor frontend to call, it is for Casdoor SDKs.
+// @Description This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
 // @Param   from    body   controllers.NotificationForm    true         "Details of the notification request"
 // @Success 200 {object} controllers.Response The Response object
 // @router /send-notification [post]

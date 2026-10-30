@@ -18,14 +18,14 @@ import (
 	"encoding/json"
 
 	"github.com/beego/beego/v2/core/utils/pagination"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // GetMarketplaceIndex
 // @Title GetMarketplaceIndex
 // @Tag Integration API
-// @Description get the catalog of the Casdoor Marketplace
+// @Description get the catalog of the Masdoor Marketplace
 // @Param   owner     query    string  true        "The organization of the admin"
 // @Param   refresh   query    string  false       "1 to skip the cached copy"
 // @Success 200 {object} object.MarketplaceIndex The Response object
@@ -45,7 +45,7 @@ func (c *ApiController) GetMarketplaceIndex() {
 // GetMarketplaceBundle
 // @Title GetMarketplaceBundle
 // @Tag Integration API
-// @Description get the manifest and content files of an integration in the Casdoor Marketplace
+// @Description get the manifest and content files of an integration in the Masdoor Marketplace
 // @Param   owner     query    string  true        "The organization of the admin"
 // @Param   integrationId query string  true        "The id of the integration"
 // @Param   version   query    string  false       "The version, the latest one if empty"
@@ -129,7 +129,7 @@ func (c *ApiController) GetIntegration() {
 // InstallIntegration
 // @Title InstallIntegration
 // @Tag Integration API
-// @Description install an integration from the Casdoor Marketplace
+// @Description install an integration from the Masdoor Marketplace
 // @Param   body    body   object.IntegrationInstallRequest  true        "The integration, its variables and where to install it"
 // @Success 200 {object} controllers.Response The Response object
 // @router /install-integration [post]

@@ -28,14 +28,14 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/proxy"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 const (
 	latestReleaseUrl   = "https://api.github.com/repos/casdoor/casdoor/releases/latest"
-	releaseDownloadUrl = "https://github.com/casdoor/casdoor/releases/download"
+	releaseDownloadUrl = "https://github.com/mahoo12138/masdoor/releases/download"
 	checkCacheTtl      = time.Hour
 	checkErrorCacheTtl = 10 * time.Minute
 
@@ -115,7 +115,7 @@ func isSource() bool {
 	return util.FileExist(filepath.Join(rootPath, ".git")) || util.FileExist(".git")
 }
 
-// GetDeploymentType tells how this Casdoor was installed, only the binaries built by the release workflow
+// GetDeploymentType tells how this Masdoor was installed, only the binaries built by the release workflow
 // (util.BuildType set by .goreleaser.yaml) can replace themselves
 func GetDeploymentType() string {
 	if isDocker() {
@@ -183,7 +183,7 @@ func newRequest(url string) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", fmt.Sprintf("casdoor/%s", util.Version))
+	req.Header.Set("User-Agent", fmt.Sprintf("masdoor/%s", util.Version))
 	return req, nil
 }
 
@@ -230,7 +230,7 @@ func getLatestRelease() (*Release, error) {
 	cachedRelease, cachedReleaseErr = fetchLatestRelease()
 	cachedReleaseAt = time.Now()
 	if cachedReleaseErr != nil {
-		logs.Warning("failed to check the latest Casdoor release: %s", cachedReleaseErr.Error())
+		logs.Warning("failed to check the latest Masdoor release: %s", cachedReleaseErr.Error())
 	}
 	return cachedRelease, cachedReleaseErr
 }
@@ -316,7 +316,7 @@ func StartUpgrade(version string, operator string) error {
 	if !info.CanUpgrade {
 		switch {
 		case info.DeploymentType != DeploymentRelease:
-			return fmt.Errorf("only an official release binary can upgrade itself, this Casdoor is deployed as: %s", info.DeploymentType)
+			return fmt.Errorf("only an official release binary can upgrade itself, this Masdoor is deployed as: %s", info.DeploymentType)
 		case info.IsUpgradeDisabled:
 			return fmt.Errorf("upgrading is disabled by disableUpgrade in app.conf")
 		case info.IsCheckDisabled:
@@ -369,7 +369,7 @@ func runUpgrade(release *Release) {
 		logs.Error("restart after the upgrade to %s failed: %s", release.TagName, err.Error())
 		setStatus(func(status *UpgradeStatus) {
 			status.State = StateFailed
-			status.Error = fmt.Sprintf("%s is installed but Casdoor failed to restart, please restart it manually: %s", release.TagName, err.Error())
+			status.Error = fmt.Sprintf("%s is installed but Masdoor failed to restart, please restart it manually: %s", release.TagName, err.Error())
 		})
 	}
 }

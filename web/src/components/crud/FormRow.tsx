@@ -31,7 +31,7 @@ interface FormRowProps {
  * each one to keep a readable measure (~500px at the `xl` breakpoint, where the
  * content area clears 1000px). Below that it stays a single column.
  *
- * The Casdoor edit pages carry 20-60 fields each, so a single column turned them
+ * The Masdoor edit pages carry 20-60 fields each, so a single column turned them
  * into a fifteen-screen scroll while two thirds of the card sat empty.
  */
 export const formGridClass = "grid grid-cols-1 gap-x-10 xl:grid-cols-2";
@@ -41,7 +41,7 @@ export function FormGrid({children, className}: {children: React.ReactNode; clas
 }
 
 /**
- * The label/control row used by every Casdoor edit page.
+ * The label/control row used by every Masdoor edit page.
  *
  * The antd version was a `<Row><Col span={2}>label</Col><Col span={22}>control
  * </Col></Row>`. Here the label sits above its control and the row is a cell of

@@ -17,10 +17,10 @@ package controllers
 import (
 	"fmt"
 
-	"github.com/casdoor/casdoor/captcha"
-	"github.com/casdoor/casdoor/form"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/captcha"
+	"github.com/mahoo12138/masdoor/form"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // verifyAuthFormCaptcha verifies the captcha with the type of the application's provider, a

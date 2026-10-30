@@ -23,8 +23,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/proxy"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func downloadImage(client *http.Client, url string) (*bytes.Buffer, string, error) {

@@ -43,7 +43,7 @@ const isApiType = (type: string) => API_TYPES.includes(type);
 /** Active Directory is LDAP, so it keeps host/port/base DN but has no database schema */
 const hasDatabaseSchema = (type: string) => !isApiType(type) && type !== "Active Directory";
 
-/** SSH tunnelling is only wired up for the databases Casdoor can dial through it */
+/** SSH tunnelling is only wired up for the databases Masdoor can dial through it */
 const needSshFields = (syncer: any) =>
   syncer.type === "Database" && ["mysql", "mssql", "postgres"].includes(syncer.databaseType);
 
@@ -263,7 +263,7 @@ export default function SyncerEditPage() {
             },
             {
               key: "casdoorName",
-              title: i18next.t("syncer:Casdoor column"),
+              title: i18next.t("syncer:Masdoor column"),
               width: 200,
               render: (row: any, _i, patch) => (
                 <SelectField

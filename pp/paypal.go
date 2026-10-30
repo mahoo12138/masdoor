@@ -19,7 +19,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 
 	"github.com/go-pay/gopay"
 	"github.com/go-pay/gopay/paypal"
@@ -66,7 +66,7 @@ func (pp *PaypalPaymentProvider) Pay(r *PayReq) (*PayResp, error) {
 	bm.Set("intent", "CAPTURE")
 	bm.Set("purchase_units", units)
 	bm.SetBodyMap("application_context", func(b gopay.BodyMap) {
-		b.Set("brand_name", "Casdoor")
+		b.Set("brand_name", "Masdoor")
 		b.Set("locale", "en-PT")
 		b.Set("return_url", r.ReturnUrl)
 		b.Set("cancel_url", r.ReturnUrl)

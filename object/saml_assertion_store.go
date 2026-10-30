@@ -21,7 +21,7 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -32,12 +32,12 @@ type samlAssertionStore interface {
 	MarkUsed(id string, ttl time.Duration) (bool, error)
 }
 
-const samlAssertionRedisPrefix = "casdoor:saml_assertion:"
+const samlAssertionRedisPrefix = "masdoor:saml_assertion:"
 
 var SamlAssertionStore samlAssertionStore = &memorySamlAssertionStore{expiries: map[string]time.Time{}}
 
 // InitSamlAssertionStore switches SamlAssertionStore to Redis when it is configured, so
-// that replay detection also holds across multiple Casdoor replicas.
+// that replay detection also holds across multiple Masdoor replicas.
 func InitSamlAssertionStore() {
 	config := conf.GetRedisConfig()
 	if config == nil {

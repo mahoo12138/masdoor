@@ -126,7 +126,7 @@ const authInfo = {
     scope: "basic",
     endpoint: "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm",
   },
-  Casdoor: {
+  Masdoor: {
     scope: "openid%20profile%20email",
     endpoint: "http://example.com",
   },
@@ -532,12 +532,12 @@ export function getAuthUrl(application: any, provider: any, method: string, code
     }
     return `${endpoint}?app_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}`;
   } else if (provider.type === "ADFS") {
-    return `${provider.domain}/adfs/oauth2/authorize?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&nonce=casdoor&scope=openid`;
+    return `${provider.domain}/adfs/oauth2/authorize?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&nonce=masdoor&scope=openid`;
   } else if (provider.type === "Baidu") {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}&display=popup`;
   } else if (provider.type === "Alipay") {
     return `${endpoint}?app_id=${provider.clientId}&scope=auth_user&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}&display=popup`;
-  } else if (provider.type === "Casdoor") {
+  } else if (provider.type === "Masdoor") {
     return `${provider.domain}/login/oauth/authorize?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}`;
   } else if (provider.type === "Infoflow") {
     return `${endpoint}?appid=${provider.clientId}&redirect_uri=${redirectUri}?state=${state}`;

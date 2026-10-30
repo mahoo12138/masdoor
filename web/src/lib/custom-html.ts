@@ -2,7 +2,7 @@ import DOMPurify from "dompurify";
 
 /**
  * Only the built-in organization's applications are edited by global admins; any
- * other organization's admin must not get script running on the Casdoor origin.
+ * other organization's admin must not get script running on the Masdoor origin.
  */
 export function isTrustedApplication(application?: any): boolean {
   return application?.organization === "built-in";

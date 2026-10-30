@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
-  title: Casdoor RESTful API
-  description: Swagger Docs of Casdoor Backend API
+  title: Masdoor RESTful API
+  description: Swagger Docs of Masdoor Backend API
   version: 1.503.0
   contact:
     email: casbin@googlegroups.com
@@ -2920,7 +2920,7 @@ paths:
     get:
       tags:
       - System API
-      description: get version info like Casdoor release version and commit ID
+      description: get version info like Masdoor release version and commit ID
       operationId: ApiController.GetVersionInfo
       responses:
         "200":
@@ -3413,7 +3413,7 @@ paths:
     post:
       tags:
       - Service API
-      description: This API is not for Casdoor frontend to call, it is for Casdoor SDKs.
+      description: This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
       operationId: ApiController.SendEmail
       parameters:
       - in: query
@@ -3466,7 +3466,7 @@ paths:
     post:
       tags:
       - Service API
-      description: This API is not for Casdoor frontend to call, it is for Casdoor SDKs.
+      description: This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
       operationId: ApiController.SendNotification
       parameters:
       - in: body
@@ -3484,7 +3484,7 @@ paths:
     post:
       tags:
       - Service API
-      description: This API is not for Casdoor frontend to call, it is for Casdoor SDKs.
+      description: This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
       operationId: ApiController.SendSms
       parameters:
       - in: query
@@ -6426,7 +6426,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/object.ProductInfo'
-      casdoor:
+      masdoor:
         type: string
       cloudfoundry:
         type: string

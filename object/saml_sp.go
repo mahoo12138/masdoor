@@ -23,15 +23,15 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/idp"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/idp"
 	"github.com/mitchellh/mapstructure"
 	saml2 "github.com/russellhaering/gosaml2"
 	dsig "github.com/russellhaering/goxmldsig"
 )
 
 // IsValidSamlRedirectURL checks that the redirect URL in the SAML RelayState
-// points to the same origin as this Casdoor instance, preventing open redirect attacks.
+// points to the same origin as this Masdoor instance, preventing open redirect attacks.
 func IsValidSamlRedirectURL(redirectURL, host string) bool {
 	if redirectURL == "" {
 		return false

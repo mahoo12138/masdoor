@@ -1,5 +1,5 @@
 apiVersion: v2
-name: casdoor
+name: masdoor
 description: An open-source Agent-first Identity and Access Management (IAM) /LLM MCP & agent gateway and auth server with web UI supporting OpenClaw, MCP, OAuth, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP, MFA, Face ID, Google Workspace, Azure AD
 type: application
 # version and appVersion are set from the release tag by the Docker Release job
@@ -8,7 +8,7 @@ appVersion: 0.0.0
 home: https://casdoor.ai
 icon: https://cdn.casdoor.com/static/favicon.png
 keywords:
-  - casdoor
+  - masdoor
   - iam
   - sso
   - oauth
@@ -17,9 +17,9 @@ keywords:
   - ldap
   - authentication
 sources:
-  - https://github.com/casdoor/casdoor
+  - https://github.com/mahoo12138/masdoor
 maintainers:
-  - name: Casdoor
+  - name: Masdoor
     email: admin@casdoor.org
     url: https://casdoor.ai
 annotations:

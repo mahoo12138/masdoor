@@ -179,7 +179,7 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
 /**
  * The organization can hide navbar entries: `navItems` for admins,
  * `userNavItems` for everyone else. Either being absent, not an array, or
- * containing "all" means "show everything" — the value Casdoor stores by default.
+ * containing "all" means "show everything" — the value Masdoor stores by default.
  */
 function getNavItemFilter(account: Account): string[] | null {
   const organization = account.organization;

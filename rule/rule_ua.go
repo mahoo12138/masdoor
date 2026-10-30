@@ -20,7 +20,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 type UaRule struct{}

@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/casdoor/casdoor/notification"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/notification"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type PushMfa struct {
@@ -50,7 +50,7 @@ func (mfa *PushMfa) SetupVerify(passCode string, lang string) error {
 	return errPushMfaUnverifiable
 }
 
-// errPushMfaUnverifiable: nothing brings the approval of a push notification back to Casdoor
+// errPushMfaUnverifiable: nothing brings the approval of a push notification back to Masdoor
 // yet, so treating the sent notification as a passed factor would let any passcode through
 var errPushMfaUnverifiable = errors.New("push notification MFA cannot verify the approval on the device yet, please use another MFA method or a recovery code")
 

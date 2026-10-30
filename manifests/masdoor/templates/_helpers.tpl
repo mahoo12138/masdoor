@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "casdoor.name" -}}
+{{- define "masdoor.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "casdoor.fullname" -}}
+{{- define "masdoor.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "casdoor.chart" -}}
+{{- define "masdoor.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "casdoor.labels" -}}
-helm.sh/chart: {{ include "casdoor.chart" . }}
-{{ include "casdoor.selectorLabels" . }}
+{{- define "masdoor.labels" -}}
+helm.sh/chart: {{ include "masdoor.chart" . }}
+{{ include "masdoor.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "casdoor.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "casdoor.name" . }}
+{{- define "masdoor.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "masdoor.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "casdoor.serviceAccountName" -}}
+{{- define "masdoor.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "casdoor.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "masdoor.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -64,7 +64,7 @@ Create the name of the service account to use
 {{/*
 Create dataSourceName used in the configmap
 */}}
-{{- define "casdoor.dataSourceName" -}}
+{{- define "masdoor.dataSourceName" -}}
 {{- if eq .Values.database.driver "mysql" -}}
 {{ .Values.database.user }}:{{ .Values.database.password }}@tcp({{ .Values.database.host }}:{{ default "3306" .Values.database.port }})/
 {{- else if eq .Values.database.driver "postgres" -}}
@@ -72,14 +72,14 @@ Create dataSourceName used in the configmap
 {{- else if eq .Values.database.driver "cockroachdb" -}}
 "user={{ .Values.database.user }} password={{ .Values.database.password }} host={{ .Values.database.host }} port={{ default "26257" .Values.database.port }} dbname={{ .Values.database.databaseName }} sslmode={{ .Values.database.sslMode }} serial_normalization=virtual_sequence"
 {{- else -}}
-file:casdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
+file:masdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
 {{- end }}
 {{- end }}
 
 {{/*
 Create dbName used in the configmap
 */}}
-{{- define "casdoor.dbName" -}}
+{{- define "masdoor.dbName" -}}
 {{- if eq .Values.database.driver "mysql" -}}
 {{ .Values.database.databaseName }}
 {{- else if eq .Values.database.driver "postgres" -}}
@@ -94,7 +94,7 @@ Create dbName used in the configmap
 {{/*
 Create EnvfromConfigmap
 */}}
-{{- define "casdoor.envFromConfigmap" -}}
+{{- define "masdoor.envFromConfigmap" -}}
 {{- range . -}}
 - name: {{ .name }}
   valueFrom:
@@ -107,7 +107,7 @@ Create EnvfromConfigmap
 {{/*
 Create EnvfromSecret
 */}}
-{{- define "casdoor.envFromSecret" -}}
+{{- define "masdoor.envFromSecret" -}}
 {{- range . -}}
 - name: {{ .name }}
   valueFrom:
@@ -120,7 +120,7 @@ Create EnvfromSecret
 {{/*
 Create Envfrom
 */}}
-{{- define "casdoor.envFrom" -}}
+{{- define "masdoor.envFrom" -}}
 {{- range . -}}
 {{- if eq .type "configmap" -}}
 - configMapRef:
@@ -136,14 +136,14 @@ Create Envfrom
 {{/*
 Name of the Secret holding the init data
 */}}
-{{- define "casdoor.initDataSecretName" -}}
-{{- .Values.initData.existingSecret | default (printf "%s-init-data" (include "casdoor.fullname" .)) }}
+{{- define "masdoor.initDataSecretName" -}}
+{{- .Values.initData.existingSecret | default (printf "%s-init-data" (include "masdoor.fullname" .)) }}
 {{- end }}
 
 {{/*
 Key of the init data file in its Secret
 */}}
-{{- define "casdoor.initDataKey" -}}
+{{- define "masdoor.initDataKey" -}}
 {{- if .Values.initData.existingSecret }}
 {{- .Values.initData.existingSecretKey }}
 {{- else }}

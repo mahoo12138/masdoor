@@ -10,7 +10,7 @@ COPY ./web .
 RUN NODE_OPTIONS="--max-old-space-size=4096" yarn run build
 
 FROM --platform=$BUILDPLATFORM golang:1.26.10 AS BACK
-WORKDIR /go/src/casdoor
+WORKDIR /go/src/masdoor
 
 # Copy only go.mod and go.sum first for dependency caching
 COPY go.mod go.sum ./
@@ -23,8 +23,8 @@ RUN go test -v -run TestGetVersionInfo ./util/system_test.go ./util/system.go ./
 RUN ./build.sh
 
 FROM alpine:latest AS STANDARD
-LABEL MAINTAINER="https://casdoor.org/"
-ARG USER=casdoor
+LABEL MAINTAINER="https://github.com/Mahoo12138/masdoor"
+ARG USER=masdoor
 ARG TARGETOS
 ARG TARGETARCH
 ENV BUILDX_ARCH="${TARGETOS:-linux}_${TARGETARCH:-amd64}"
@@ -43,9 +43,9 @@ RUN adduser -D $USER -u 1000 \
 
 USER 1000
 WORKDIR /
-COPY --from=BACK --chown=$USER:$USER /go/src/casdoor/server_${BUILDX_ARCH} ./server
-COPY --from=BACK --chown=$USER:$USER /go/src/casdoor/swagger ./swagger
-COPY --from=BACK --chown=$USER:$USER /go/src/casdoor/conf/app.conf ./conf/app.conf
+COPY --from=BACK --chown=$USER:$USER /go/src/masdoor/masdoor_${BUILDX_ARCH} ./server
+COPY --from=BACK --chown=$USER:$USER /go/src/masdoor/swagger ./swagger
+COPY --from=BACK --chown=$USER:$USER /go/src/masdoor/conf/app.conf ./conf/app.conf
 COPY --from=FRONT --chown=$USER:$USER /web/build ./web/build
 
 HEALTHCHECK --interval=10s --timeout=5s --start-period=60s --retries=3 \
@@ -55,7 +55,7 @@ ENTRYPOINT ["/server"]
 
 
 FROM debian:latest AS ALLINONE
-LABEL MAINTAINER="https://casdoor.org/"
+LABEL MAINTAINER="https://github.com/Mahoo12138/masdoor"
 ARG TARGETOS
 ARG TARGETARCH
 ENV BUILDX_ARCH="${TARGETOS:-linux}_${TARGETARCH:-amd64}"
@@ -64,10 +64,10 @@ RUN apt update
 RUN apt install -y ca-certificates lsof curl && update-ca-certificates
 
 WORKDIR /
-COPY --from=BACK /go/src/casdoor/server_${BUILDX_ARCH} ./server
-COPY --from=BACK /go/src/casdoor/swagger ./swagger
-COPY --from=BACK /go/src/casdoor/docker-entrypoint.sh /docker-entrypoint.sh
-COPY --from=BACK /go/src/casdoor/conf/app.conf ./conf/app.conf
+COPY --from=BACK /go/src/masdoor/masdoor_${BUILDX_ARCH} ./server
+COPY --from=BACK /go/src/masdoor/swagger ./swagger
+COPY --from=BACK /go/src/masdoor/docker-entrypoint.sh /docker-entrypoint.sh
+COPY --from=BACK /go/src/masdoor/conf/app.conf ./conf/app.conf
 COPY --from=FRONT /web/build ./web/build
 
 HEALTHCHECK --interval=10s --timeout=5s --start-period=60s --retries=3 \

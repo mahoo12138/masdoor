@@ -32,7 +32,7 @@ function getUrlWithoutQuery() {
   return window.location.toString().replace(window.location.search, "");
 }
 
-// Casdoor supports signing in through query params (accessToken / username+password),
+// Masdoor supports signing in through query params (accessToken / username+password),
 // the same way the antd frontend did. The params are consumed once and then stripped
 // from the address bar so that they are not leaked through the history or a bookmark.
 function consumeQueryCredentials(): string {

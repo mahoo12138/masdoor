@@ -111,7 +111,7 @@ export default function InitAdminPage() {
         }}
       >
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight">{i18next.t("login:Welcome to Casdoor")}</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{i18next.t("login:Welcome to Masdoor")}</h1>
           <p className="text-sm text-muted-foreground">
             {i18next.t("login:Set the password of the administrator admin to finish the setup")}
           </p>

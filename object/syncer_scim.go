@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // SCIMSyncerProvider implements SyncerProvider for SCIM 2.0 API-based syncers
@@ -234,7 +234,7 @@ func (p *SCIMSyncerProvider) getSCIMUsers() ([]*OriginalUser, error) {
 		startIndex += count
 	}
 
-	// Convert SCIM users to Casdoor OriginalUser
+	// Convert SCIM users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, scimUser := range allUsers {
 		originalUser := p.scimUserToOriginalUser(scimUser)
@@ -244,7 +244,7 @@ func (p *SCIMSyncerProvider) getSCIMUsers() ([]*OriginalUser, error) {
 	return originalUsers, nil
 }
 
-// scimUserToOriginalUser converts SCIM user to Casdoor OriginalUser
+// scimUserToOriginalUser converts SCIM user to Masdoor OriginalUser
 func (p *SCIMSyncerProvider) scimUserToOriginalUser(scimUser *SCIMUser) *OriginalUser {
 	user := &OriginalUser{
 		Id:          scimUser.ID,

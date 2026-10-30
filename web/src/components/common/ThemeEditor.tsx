@@ -41,7 +41,7 @@ const THEME_TYPES = [
 
 /**
  * Editor for the `themeData` an organization or application can override.
- * The stored shape is the one Casdoor expects (`Conf.ThemeDefault` plus
+ * The stored shape is the one Masdoor expects (`Conf.ThemeDefault` plus
  * `themeType` / `isCompact`); the antd frontend rendered it with
  * antd-token-previewer, here it is shadcn controls over the same values.
  */

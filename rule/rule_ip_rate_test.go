@@ -18,7 +18,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 func TestIpRateRule_checkRule(t *testing.T) {

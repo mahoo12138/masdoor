@@ -1,5 +1,5 @@
 name: Bug report
-description: Report something in Casdoor that does not work as expected
+description: Report something in Masdoor that does not work as expected
 labels: ["bug"]
 body:
   - type: markdown
@@ -7,11 +7,11 @@ body:
       value: |
         **Please write in English**, so that every maintainer and user can follow the issue.
 
-        Do not report security vulnerabilities here, see the [security policy](https://github.com/casdoor/casdoor/security/policy) instead. For usage questions, read the [documentation](https://casdoor.ai/docs) or ask on [Discord](https://discord.gg/5rPsrAzK7S).
+        Do not report security vulnerabilities here, see the [security policy](https://github.com/mahoo12138/masdoor/security/policy) instead. For usage questions, read the [documentation](https://casdoor.ai/docs) or ask on [Discord](https://discord.gg/5rPsrAzK7S).
   - type: input
     id: version
     attributes:
-      label: Casdoor version
+      label: Masdoor version
       description: The release (e.g. `v4.22.0`) or commit you run, shown on the System Info page (`/sysinfo`) of the admin console
     validations:
       required: true
@@ -23,7 +23,7 @@ body:
         - Docker
         - Binary or built from source
         - Helm / Kubernetes
-        - Casdoor Cloud
+        - Masdoor Cloud
         - Other
     validations:
       required: true
@@ -38,7 +38,7 @@ body:
         - SQL Server
         - CockroachDB
         - Other
-        - Not applicable (Casdoor Cloud)
+        - Not applicable (Masdoor Cloud)
     validations:
       required: true
   - type: textarea
@@ -52,7 +52,7 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
-      description: Starting from a fresh Casdoor or [the demo site](https://door.casdoor.com) if possible, include the relevant organization, application or provider settings
+      description: Starting from a fresh Masdoor or [the demo site](https://door.casdoor.com) if possible, include the relevant organization, application or provider settings
       placeholder: |
         1. Go to ...
         2. Click ...

@@ -24,9 +24,9 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 	goldap "github.com/go-ldap/ldap/v3"
 	"github.com/nyaruka/phonenumbers"
 	"github.com/thanhpk/randstr"
@@ -104,7 +104,7 @@ type LdapGroup struct {
 }
 
 // parsePosixNumber converts a POSIX uid/gid read from an LDAP server into the
-// form Casdoor stores. Anything absent or not a number leaves it unassigned.
+// form Masdoor stores. Anything absent or not a number leaves it unassigned.
 func parsePosixNumber(value string) int {
 	number, err := strconv.Atoi(strings.TrimSpace(value))
 	if err != nil || number < 0 {
@@ -216,7 +216,7 @@ func (l *LdapConn) GetLdapUsers(ldapServer *Ldap) ([]LdapUser, error) {
 	}
 
 	// Some LDAP servers/configs use "{}" as a placeholder (e.g. "(uid={})").
-	// Casdoor doesn't interpolate it. For listing users, interpret it as a wildcard.
+	// Masdoor doesn't interpolate it. For listing users, interpret it as a wildcard.
 	filter := strings.TrimSpace(ldapServer.Filter)
 	if filter == "" {
 		filter = "(objectClass=*)"
@@ -491,8 +491,8 @@ func SyncLdapUsers(owner string, syncUsers []LdapUser, ldapId string, lang strin
 		existUuidSet[uuid] = struct{}{}
 	}
 
-	// Build a set of group names that actually exist in Casdoor for this
-	// organization. memberOf groups that have no matching Casdoor group
+	// Build a set of group names that actually exist in Masdoor for this
+	// organization. memberOf groups that have no matching Masdoor group
 	// (e.g. a CJK group like "项目部" that was not synced) are skipped, so the
 	// user won't end up referencing an empty/non-existent group.
 	existingGroupNameSet := make(map[string]struct{})
@@ -522,7 +522,7 @@ func SyncLdapUsers(owner string, syncUsers []LdapUser, ldapId string, lang strin
 			user.Groups = buildLdapUserGroups(organization.Name, ldap, syncUser.MemberOf, existingGroupNameSet, user.Groups)
 
 			columns := []string{"groups"}
-			// Adopt the LDAP uid without overwriting one already assigned in Casdoor.
+			// Adopt the LDAP uid without overwriting one already assigned in Masdoor.
 			if user.UidNumber == 0 {
 				if uidNumber := parsePosixNumber(syncUser.UidNumber); uidNumber != 0 {
 					user.UidNumber = uidNumber
@@ -645,7 +645,7 @@ func buildLdapUserGroups(owner string, ldap *Ldap, memberOf []string, existingGr
 	}
 
 	// Extract group names from memberOf DNs. Only attach groups that
-	// actually exist in Casdoor, and store them as full "owner/name"
+	// actually exist in Masdoor, and store them as full "owner/name"
 	// IDs (consistent with DefaultGroups) to avoid empty group refs.
 	for _, memberDn := range memberOf {
 		groupName := dnToGroupName(owner, memberDn)
@@ -653,7 +653,7 @@ func buildLdapUserGroups(owner string, ldap *Ldap, memberOf []string, existingGr
 			continue
 		}
 		if _, ok := existingGroupNameSet[groupName]; !ok {
-			// Group not present in Casdoor (e.g. a CJK group that
+			// Group not present in Masdoor (e.g. a CJK group that
 			// wasn't synced); skip to avoid creating an empty group ref.
 			continue
 		}
@@ -663,7 +663,7 @@ func buildLdapUserGroups(owner string, ldap *Ldap, memberOf []string, existingGr
 	return userGroups
 }
 
-// SyncLdapGroups syncs LDAP groups/OUs to Casdoor groups with hierarchy
+// SyncLdapGroups syncs LDAP groups/OUs to Masdoor groups with hierarchy
 func SyncLdapGroups(owner string, ldapGroups []LdapGroup, ldapId string) (newGroups int, updatedGroups int, err error) {
 	if len(ldapGroups) == 0 {
 		return 0, 0, nil
@@ -734,7 +734,7 @@ func SyncLdapGroups(owner string, ldapGroups []LdapGroup, ldapId string) (newGro
 			existingGroup.IsTopGroup = isTopGroup
 			existingGroup.Type = "ldap-synced"
 			existingGroup.UpdatedTime = util.GetCurrentTime()
-			// Adopt the LDAP gid without overwriting one already assigned in Casdoor.
+			// Adopt the LDAP gid without overwriting one already assigned in Masdoor.
 			if existingGroup.GidNumber == 0 {
 				existingGroup.GidNumber = parsePosixNumber(ldapGroup.GidNumber)
 			}
@@ -781,7 +781,7 @@ func SyncLdapGroups(owner string, ldapGroups []LdapGroup, ldapId string) (newGro
 	return newGroups, updatedGroups, nil
 }
 
-// dnToGroupName converts an LDAP DN to a Casdoor group name.
+// dnToGroupName converts an LDAP DN to a Masdoor group name.
 // It uses only the first RDN value (e.g. the CN= part) to preserve the original
 // group name including Unicode/CJK characters. Only '/' is replaced per checkGroupName.
 func dnToGroupName(owner, dn string) string {
@@ -985,7 +985,7 @@ func (ldapUser *LdapUser) GetLdapUuid() string {
 
 func (ldap *Ldap) buildAuthFilterString(user *User) string {
 	// Tolerate configs that use "{}" as a placeholder, e.g. "(uid={})".
-	// Casdoor doesn't interpolate it; treat it as wildcard so the base filter remains valid.
+	// Masdoor doesn't interpolate it; treat it as wildcard so the base filter remains valid.
 	baseFilter := strings.TrimSpace(ldap.Filter)
 	if baseFilter == "" {
 		baseFilter = "(objectClass=*)"

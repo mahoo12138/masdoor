@@ -21,8 +21,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	"gopkg.in/yaml.v3"
 )
 

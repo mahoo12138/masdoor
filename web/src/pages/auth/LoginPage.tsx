@@ -463,7 +463,7 @@ export default function LoginPage({type = "login", application: applicationProp,
   /** An iframe-embedded sign-in reports its progress to the host page. */
   const sendSilentSigninData = (data: string) => {
     if (Setting.inIframe()) {
-      window.parent.postMessage({tag: "Casdoor", type: "SilentSignin", data}, "*");
+      window.parent.postMessage({tag: "Masdoor", type: "SilentSignin", data}, "*");
     }
   };
 
@@ -577,7 +577,7 @@ export default function LoginPage({type = "login", application: applicationProp,
   const handleCasLoginResult = (res: any, casParams: any) => {
     let message = "Logged in successfully. ";
     if (casParams.service === "") {
-      message += "Now you can visit apps protected by Casdoor.";
+      message += "Now you can visit apps protected by Masdoor.";
     }
     Setting.showMessage("success", message);
     if (casParams.service !== "") {
@@ -628,8 +628,8 @@ export default function LoginPage({type = "login", application: applicationProp,
 
     const oAuthParams = Util.getOAuthGetParameters();
     values.type = oAuthParams?.responseType ?? (type === "device" ? "device" : "login");
-    // A code handed to Casdoor's own /callback would be read there as a social-login
-    // round trip and the client's "state" as one of Casdoor's own, so such a request
+    // A code handed to Masdoor's own /callback would be read there as a social-login
+    // round trip and the client's "state" as one of Masdoor's own, so such a request
     // signs the user in instead, the same way AuthCallback treats this redirect URI.
     if (values.type !== "device" && Setting.isSelfRedirectUri(oAuthParams?.redirectUri)) {
       values.type = "login";

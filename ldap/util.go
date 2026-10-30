@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/lor00x/goldap/message"
 
 	ldap "github.com/casdoor/ldapserver"
@@ -211,7 +211,7 @@ func getNameAndOrgFromDN(DN string) (string, string, error) {
 		if kv := strings.SplitN(field, "=", 2); len(kv) == 2 {
 			// Attribute names are case-insensitive in LDAP; normalize the key
 			// so cn=/CN=/Cn= all match. Values stay as-is (org names are
-			// case-sensitive in Casdoor).
+			// case-sensitive in Masdoor).
 			key := strings.ToLower(strings.TrimSpace(kv[0]))
 			params[key] = strings.TrimSpace(kv[1])
 		}
@@ -390,7 +390,7 @@ func (q *userSearchFilter) buildCondition(filter interface{}, conjunctive bool) 
 			var names []string
 			groupId := string(f.AssertionValue())
 			// Accept the DN form (cn=name,ou=owner,...) emitted by memberOf and
-			// map it back to the Casdoor group id "owner/name" for the lookup.
+			// map it back to the Masdoor group id "owner/name" for the lookup.
 			if strings.Contains(strings.ToLower(groupId), "cn=") {
 				if name, org, err := getNameAndOrgFromDN(groupId); err == nil {
 					groupId = util.GetId(org, name)
@@ -588,7 +588,7 @@ func isPosixGroupFilter(filter interface{}) bool {
 }
 
 // getGroupAttributes returns the attributes of the posixGroup entry published
-// for a Casdoor group, keyed by lowercased attribute name.
+// for a Masdoor group, keyed by lowercased attribute name.
 func getGroupAttributes(group *object.Group, memberUids []string) map[string][]string {
 	return map[string][]string{
 		"cn":          {group.Name},

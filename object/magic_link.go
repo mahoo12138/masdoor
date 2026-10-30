@@ -26,9 +26,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // MagicLink is a one-time sign-in link that was mailed to an email address. Only the
@@ -100,7 +100,7 @@ func getMagicLinkOrigin(host string, lang string) (string, error) {
 	return originFrontend, nil
 }
 
-// isValidSigninPath keeps the link on Casdoor's own sign-in pages, the path is the one
+// isValidSigninPath keeps the link on Masdoor's own sign-in pages, the path is the one
 // the browser that asked for the link was on.
 func isValidSigninPath(signinPath string) bool {
 	if signinPath == "" || len(signinPath) > 1000 || strings.ContainsAny(signinPath, "#\\") {
@@ -154,7 +154,7 @@ func getMagicLinkEmailContent(provider *Provider, magicLinkUrl string, user *Use
 // getDefaultMagicLinkEmailContent is the mail an Email provider without a "%link" in
 // its own content falls back to.
 func getDefaultMagicLinkEmailContent() string {
-	return `<p>You have requested a sign-in link at Casdoor.</p>
+	return `<p>You have requested a sign-in link at Masdoor.</p>
 <p><a href="%link">Click here to sign in</a></p>
 <p>Or open this link: %link</p>
 <p>The link can only be used once, in the browser you asked for it, and expires in %expireTime minutes. If you did not request it, you can ignore this email.</p>`

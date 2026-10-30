@@ -32,7 +32,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/beevik/etree"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/golang-jwt/jwt/v5"
 	saml "github.com/russellhaering/gosaml2"
 	dsig "github.com/russellhaering/goxmldsig"
@@ -393,7 +393,7 @@ func (application *Application) isSamlAcsUrlValid(acsUrl string) bool {
 	return false
 }
 
-// getIdpInitiatedAuthnRequest builds the AuthnRequest for IdP-initiated SSO, where the SP doesn't send any AuthnRequest to Casdoor,
+// getIdpInitiatedAuthnRequest builds the AuthnRequest for IdP-initiated SSO, where the SP doesn't send any AuthnRequest to Masdoor,
 // so the ACS URL and the SP's entity ID are taken from the application's SAML config instead
 func getIdpInitiatedAuthnRequest(application *Application) (saml.AuthNRequest, error) {
 	var authnRequest saml.AuthNRequest
@@ -422,7 +422,7 @@ func getIdpInitiatedAuthnRequest(application *Application) (saml.AuthNRequest, e
 
 // GetSamlResponse generates a SAML2.0 response
 // parameter samlRequest is saml request in base64 format, it is empty for IdP-initiated SSO
-// parameter sessionId is the Casdoor session the SP signs in with, SAML Single Logout ends it again
+// parameter sessionId is the Masdoor session the SP signs in with, SAML Single Logout ends it again
 func GetSamlResponse(application *Application, user *User, samlRequest string, host string, sessionId string) (string, string, string, error) {
 	// request type
 	method := "GET"

@@ -6,7 +6,7 @@ import * as Setting from "@/lib/setting";
 
 /**
  * Standalone captcha challenge at /captcha, used when another site delegates its
- * captcha to Casdoor. Ported from web/src/CaptchaPage.js: the solved token is
+ * captcha to Masdoor. Ported from web/src/CaptchaPage.js: the solved token is
  * handed back on the redirect URI as query parameters.
  */
 export default function CaptchaPage() {

@@ -1,4 +1,4 @@
-module github.com/casdoor/casdoor
+module github.com/mahoo12138/masdoor
 
 go 1.26.0
 
@@ -25,7 +25,7 @@ require (
 	github.com/beevik/etree v1.6.0
 	github.com/casbin/casbin/v2 v2.77.2
 	github.com/casbin/lego/v4 v4.5.4
-	github.com/casdoor/casdoor-go-sdk v0.50.0
+	github.com/mahoo12138/masdoor-go-sdk v0.50.0
 	github.com/casdoor/go-sms-sender v0.25.0
 	github.com/casdoor/gomail/v2 v2.2.0
 	github.com/casdoor/ldapserver v1.2.0

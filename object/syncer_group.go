@@ -17,7 +17,7 @@ package object
 import (
 	"fmt"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func (syncer *Syncer) getOriginalGroups() ([]*OriginalGroup, error) {
@@ -53,7 +53,7 @@ func (syncer *Syncer) createGroupFromOriginalGroup(originalGroup *OriginalGroup)
 func (syncer *Syncer) syncGroups() error {
 	fmt.Printf("Running syncGroups()..\n")
 
-	// Get existing groups from Casdoor
+	// Get existing groups from Masdoor
 	groups, err := GetGroups(syncer.Organization)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (syncer *Syncer) syncGroups() error {
 		myGroups[group.Name] = group
 	}
 
-	// Sync groups from external system to Casdoor
+	// Sync groups from external system to Masdoor
 	newGroups := []*Group{}
 	for _, oGroup := range oGroups {
 		if _, ok := myGroups[oGroup.Name]; !ok {

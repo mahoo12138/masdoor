@@ -21,7 +21,7 @@ import (
 	"github.com/casbin/lego/v4/certcrypto"
 	"github.com/casbin/lego/v4/lego"
 	"github.com/casbin/lego/v4/registration"
-	"github.com/casdoor/casdoor/proxy"
+	"github.com/mahoo12138/masdoor/proxy"
 )
 
 type Account struct {

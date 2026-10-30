@@ -22,7 +22,7 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 	"golang.org/x/crypto/md4"
 )
 

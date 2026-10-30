@@ -1,12 +1,12 @@
 <div align="center">
   <a href="https://casdoor.ai">
-    <img src="https://cdn.casbin.org/img/casdoor-logo_1185x256.png" alt="Casdoor" width="500">
+    <img src="https://cdn.casbin.org/img/casdoor-logo_1185x256.png" alt="Masdoor" width="500">
   </a>
 
   <h3>An open-source, self-hosted identity and access management platform</h3>
 
   <p>
-    Casdoor is a single sign-on (SSO) and authentication server with a web console.<br>
+    Masdoor is a single sign-on (SSO) and authentication server with a web console.<br>
     It speaks <strong>OAuth&nbsp;2.0</strong>, <strong>OIDC</strong>, <strong>SAML&nbsp;2.0</strong>, <strong>CAS</strong>, <strong>LDAP</strong>, <strong>SCIM&nbsp;2.0</strong>, <strong>WebAuthn</strong>, <strong>TOTP/MFA</strong> and <strong>MCP</strong>,<br>
     and connects to Google Workspace, Microsoft Entra ID (Azure AD), GitHub and many other identity providers.
   </p>
@@ -15,21 +15,21 @@
     <a href="https://casdoor.ai"><strong>Website</strong></a> &middot;
     <a href="https://casdoor.ai/docs/overview"><strong>Documentation</strong></a> &middot;
     <a href="https://demo.casdoor.com"><strong>Live demo</strong></a> &middot;
-    <a href="https://www.casdoor.com/?utm_source=github&amp;utm_medium=readme&amp;utm_content=header"><strong>Casdoor Cloud</strong></a> &middot;
+    <a href="https://www.casdoor.com/?utm_source=github&amp;utm_medium=readme&amp;utm_content=header"><strong>Masdoor Cloud</strong></a> &middot;
     <a href="https://discord.gg/5rPsrAzK7S"><strong>Discord</strong></a>
   </p>
 
   <p>
-    <a href="https://github.com/casdoor/casdoor/releases/latest">
+    <a href="https://github.com/mahoo12138/masdoor/releases/latest">
       <img src="https://img.shields.io/github/v/release/casdoor/casdoor?style=flat-square&color=blue" alt="Release">
     </a>
     <a href="https://hub.docker.com/r/casbin/casdoor">
       <img src="https://img.shields.io/docker/pulls/casbin/casdoor?style=flat-square&color=brightgreen" alt="Docker Pulls">
     </a>
-    <a href="https://github.com/casdoor/casdoor/actions/workflows/build.yml">
+    <a href="https://github.com/mahoo12138/masdoor/actions/workflows/build.yml">
       <img src="https://img.shields.io/github/actions/workflow/status/casdoor/casdoor/build.yml?style=flat-square&label=build" alt="Build Status">
     </a>
-    <a href="https://github.com/casdoor/casdoor/actions/workflows/golangci-lint.yml">
+    <a href="https://github.com/mahoo12138/masdoor/actions/workflows/golangci-lint.yml">
       <img src="https://img.shields.io/github/actions/workflow/status/casdoor/casdoor/golangci-lint.yml?style=flat-square&label=golangci-lint&logo=go&logoColor=white" alt="golangci-lint">
     </a>
     <a href="https://www.bestpractices.dev/projects/15254">
@@ -38,19 +38,19 @@
     <a href="https://discord.gg/5rPsrAzK7S">
       <img src="https://img.shields.io/discord/1022748306096537660?style=flat-square&logo=discord&label=Discord&color=5865F2" alt="Discord">
     </a>
-    <a href="https://github.com/casdoor/casdoor/blob/master/LICENSE">
+    <a href="https://github.com/mahoo12138/masdoor/blob/master/LICENSE">
       <img src="https://img.shields.io/github/license/casdoor/casdoor?style=flat-square&color=orange" alt="License">
     </a>
   </p>
 
   <p>
-    <a href="https://trendshift.io/repositories/2442" target="_blank"><img src="https://trendshift.io/api/badge/repositories/2442" alt="casdoor%2Fcasdoor | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+    <a href="https://trendshift.io/repositories/2442" target="_blank"><img src="https://trendshift.io/api/badge/repositories/2442" alt="masdoor%2Fcasdoor | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
   </p>
 </div>
 
 <div align="center">
   <a href="https://door.casdoor.com">
-    <img src="https://cdn.casbin.org/img/casdoor-signin.png" alt="Casdoor sign-in page with password, code, WebAuthn and Face ID tabs and social login icons" width="900">
+    <img src="https://cdn.casbin.org/img/casdoor-signin.png" alt="Masdoor sign-in page with password, code, WebAuthn and Face ID tabs and social login icons" width="900">
   </a>
   <p><sub>The sign-in page your users see: password, email/SMS code, WebAuthn and Face ID, plus every social provider you enable.</sub></p>
 </div>
@@ -58,15 +58,15 @@
 <table>
   <tr>
     <td width="33%" valign="top" align="center">
-      <a href="https://door.casdoor.com"><img src="https://cdn.casbin.org/img/casdoor-console.png" alt="Casdoor admin console dashboard with user, application and provider statistics"></a>
+      <a href="https://door.casdoor.com"><img src="https://cdn.casbin.org/img/casdoor-console.png" alt="Masdoor admin console dashboard with user, application and provider statistics"></a>
       <sub><b>Admin console.</b> Users, tokens, organizations and providers at a glance.</sub>
     </td>
     <td width="33%" valign="top" align="center">
-      <a href="https://door.casdoor.com/applications"><img src="https://cdn.casbin.org/img/casdoor-applications.png" alt="Casdoor applications list showing several applications with their organizations and providers"></a>
-      <sub><b>Applications.</b> Every app that delegates login to Casdoor, across all organizations.</sub>
+      <a href="https://door.casdoor.com/applications"><img src="https://cdn.casbin.org/img/casdoor-applications.png" alt="Masdoor applications list showing several applications with their organizations and providers"></a>
+      <sub><b>Applications.</b> Every app that delegates login to Masdoor, across all organizations.</sub>
     </td>
     <td width="33%" valign="top" align="center">
-      <a href="https://door.casdoor.com/applications/admin/app-built-in"><img src="https://cdn.casbin.org/img/casdoor-application-providers.png" alt="Casdoor application settings, Providers tab, with per-provider signup, signin and unlink toggles"></a>
+      <a href="https://door.casdoor.com/applications/admin/app-built-in"><img src="https://cdn.casbin.org/img/casdoor-application-providers.png" alt="Masdoor application settings, Providers tab, with per-provider signup, signin and unlink toggles"></a>
       <sub><b>Application settings.</b> OAuth, SAML, providers and branding — no redeploy, no config file.</sub>
     </td>
   </tr>
@@ -78,7 +78,7 @@
 
 ## 🚀 Try it in 30 seconds
 
-No database and no config file needed. This runs Casdoor on SQLite with sample data:
+No database and no config file needed. This runs Masdoor on SQLite with sample data:
 
 ```bash
 docker run -p 8000:8000 casbin/casdoor-all-in-one
@@ -103,26 +103,26 @@ Prefer not to install anything? Use the hosted demos:
 
 Both accept the same `built-in` / `admin` / `123` credentials.
 
-Want it hosted for production instead? [Casdoor Cloud](https://www.casdoor.com/pricing?utm_source=github&utm_medium=readme&utm_content=try) runs a dedicated Casdoor instance and database for you, kept up to date by the Casdoor team. It is the same open-source Casdoor, so you can move between Cloud and self-hosting at any time. New accounts get $20 in free credit to try it, so you can [start a free trial](https://admin.casdoor.com/signup?from=%2Finstances%2Fnew%3Ftier%3Dbasic%26period%3DPostPaid) without talking to anyone.
+Want it hosted for production instead? [Masdoor Cloud](https://www.casdoor.com/pricing?utm_source=github&utm_medium=readme&utm_content=try) runs a dedicated Masdoor instance and database for you, kept up to date by the Masdoor team. It is the same open-source Masdoor, so you can move between Cloud and self-hosting at any time. New accounts get $20 in free credit to try it, so you can [start a free trial](https://admin.casdoor.com/signup?from=%2Finstances%2Fnew%3Ftier%3Dbasic%26period%3DPostPaid) without talking to anyone.
 
-## 🤔 Why Casdoor
+## 🤔 Why Masdoor
 
-Casdoor is a **complete identity provider**, not an authentication proxy and not a library you embed. It stores your users, issues the tokens, and gives you an admin console to manage all of it — so your applications can delegate login entirely and never handle a password themselves.
+Masdoor is a **complete identity provider**, not an authentication proxy and not a library you embed. It stores your users, issues the tokens, and gives you an admin console to manage all of it — so your applications can delegate login entirely and never handle a password themselves.
 
 - **One server, many protocols.** The same user directory is reachable over OAuth 2.0, OIDC, SAML 2.0, CAS, LDAP and SCIM, so a modern SPA and a legacy CAS-only app can share one set of accounts.
 - **Everything is editable in the UI.** Organizations, applications, providers, sign-in methods, email and SMS templates, and login-page branding are configured in the web console instead of in files you have to redeploy.
 - **Policy-based authorization built in.** Access rules are expressed with [Casbin](https://casbin.apache.org/) — ACL, RBAC, ABAC and custom models — rather than a fixed permission scheme.
 - **Straightforward to self-host.** A single Go binary plus a database. No JVM, no operator, no cluster required.
 
-If all you need is a login screen in front of an existing reverse proxy, a smaller tool may suit you better. Casdoor is for when you want to own the user directory itself.
+If all you need is a login screen in front of an existing reverse proxy, a smaller tool may suit you better. Masdoor is for when you want to own the user directory itself.
 
-Coming from another product? See how Casdoor compares with [Keycloak](https://www.casdoor.com/compare/keycloak?utm_source=github&utm_medium=readme&utm_content=why), [Auth0](https://www.casdoor.com/compare/auth0?utm_source=github&utm_medium=readme&utm_content=why), [Okta](https://www.casdoor.com/compare/okta?utm_source=github&utm_medium=readme&utm_content=why) and [others](https://www.casdoor.com/compare?utm_source=github&utm_medium=readme&utm_content=why).
+Coming from another product? See how Masdoor compares with [Keycloak](https://www.casdoor.com/compare/keycloak?utm_source=github&utm_medium=readme&utm_content=why), [Auth0](https://www.casdoor.com/compare/auth0?utm_source=github&utm_medium=readme&utm_content=why), [Okta](https://www.casdoor.com/compare/okta?utm_source=github&utm_medium=readme&utm_content=why) and [others](https://www.casdoor.com/compare?utm_source=github&utm_medium=readme&utm_content=why).
 
 ## 📦 Installation
 
 Four supported paths, fastest first. All of them end up at <http://localhost:8000>.
 
-> Rather not run the server, database and upgrades yourself? [Casdoor Cloud](https://www.casdoor.com/pricing?utm_source=github&utm_medium=readme&utm_content=install) gives you a dedicated Casdoor instance in the region you choose, with flat monthly pricing and no per-user fees.
+> Rather not run the server, database and upgrades yourself? [Masdoor Cloud](https://www.casdoor.com/pricing?utm_source=github&utm_medium=readme&utm_content=install) gives you a dedicated Masdoor instance in the region you choose, with flat monthly pricing and no per-user fees.
 
 ### Docker — all-in-one (evaluation)
 
@@ -134,30 +134,30 @@ Bundles SQLite and demo data into a single container. Ideal for a first look, bu
 
 Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 
-### Docker Compose — Casdoor with MySQL
+### Docker Compose — Masdoor with MySQL
 
-[`docker-compose.yml`](docker-compose.yml) starts Casdoor next to a MySQL 8 container.
+[`docker-compose.yml`](docker-compose.yml) starts Masdoor next to a MySQL 8 container.
 
 > **Two things to know before running it:**
 >
 > 1. Compose **builds the image from source** (Go backend plus React frontend). The first `docker compose up` takes several minutes, so it is not the quick-trial path — use the all-in-one image above for that.
-> 2. You have to point Casdoor at the bundled database first.
+> 2. You have to point Masdoor at the bundled database first.
 
 Set the MySQL settings in [`conf/app.conf`](conf/app.conf) to match the `db` service:
 
 ```ini
 driverName = mysql
 dataSourceName = root:123456@tcp(localhost:3306)/
-dbName = casdoor
+dbName = masdoor
 ```
 
-Use `localhost` here even though MySQL runs in a separate container: the compose file sets `RUNNING_IN_DOCKER=true`, and Casdoor rewrites `localhost` to the Docker host address at startup (see [`conf/conf.go`](conf/conf.go)). Then start everything:
+Use `localhost` here even though MySQL runs in a separate container: the compose file sets `RUNNING_IN_DOCKER=true`, and Masdoor rewrites `localhost` to the Docker host address at startup (see [`conf/conf.go`](conf/conf.go)). Then start everything:
 
 ```bash
 docker compose up
 ```
 
-The compose entrypoint already passes `--createDatabase=true`, so the `casdoor` database is created for you.
+The compose entrypoint already passes `--createDatabase=true`, so the `masdoor` database is created for you.
 
 Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 
@@ -166,10 +166,10 @@ Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 Requires Helm v3 and a running cluster:
 
 ```bash
-helm install casdoor oci://ghcr.io/casdoor/helm-charts/casdoor
+helm install masdoor oci://ghcr.io/casdoor/helm-charts/casdoor
 ```
 
-The chart does not expose Casdoor outside the cluster by default. To reach it, find the service and forward a port:
+The chart does not expose Masdoor outside the cluster by default. To reach it, find the service and forward a port:
 
 ```bash
 kubectl get svc
@@ -187,19 +187,19 @@ Guide: [Try with Helm](https://casdoor.ai/docs/basic/try-with-helm) &middot; Cha
 
 Organizations, applications, users, providers, roles and permissions can be kept in Git instead of being clicked together in the UI:
 
-- **Init data file**: Casdoor applies a JSON or YAML file at startup, and with `initDataMerge = true` and `initDataWatchInterval = 30` it applies every change to the file again without a restart, only touching the fields the file sets. The Helm chart exposes it as `initData` in its values ([chart README](manifests/casdoor/README.md#declarative-configuration-init-data)). Guide: [Data initialization](https://casdoor.ai/docs/deployment/data-initialization)
+- **Init data file**: Masdoor applies a JSON or YAML file at startup, and with `initDataMerge = true` and `initDataWatchInterval = 30` it applies every change to the file again without a restart, only touching the fields the file sets. The Helm chart exposes it as `initData` in its values ([chart README](manifests/casdoor/README.md#declarative-configuration-init-data)). Guide: [Data initialization](https://casdoor.ai/docs/deployment/data-initialization)
 - **Terraform**: the official [Terraform provider](https://registry.terraform.io/providers/casdoor/casdoor) manages the same objects through the API, with plan, import and drift detection.
 
 ### From source — for development
 
-Use this if you intend to modify Casdoor. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
+Use this if you intend to modify Masdoor. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
 
 ```bash
-git clone https://github.com/casdoor/casdoor.git
-cd casdoor
+git clone https://github.com/mahoo12138/masdoor.git
+cd masdoor
 ```
 
-Set `driverName`, `dataSourceName` and `dbName` in [`conf/app.conf`](conf/app.conf). For MySQL, create the `casdoor` database first, or start the server with `--createDatabase=true`. Then build the frontend and run the server:
+Set `driverName`, `dataSourceName` and `dbName` in [`conf/app.conf`](conf/app.conf). For MySQL, create the `masdoor` database first, or start the server with `--createDatabase=true`. Then build the frontend and run the server:
 
 ```bash
 cd web && yarn install && yarn build && cd .. && go run main.go
@@ -214,7 +214,7 @@ Guide: [Server installation](https://casdoor.ai/docs/basic/server-installation)
 At this point you have a running identity provider with nothing connected to it yet. Next:
 
 1. **Change the `admin` password.** `123` is a demo credential and must not survive contact with production.
-2. **[Connect your first application](https://casdoor.ai/docs/how-to-connect/overview)** — create an Application in the console, copy its Client ID and Client Secret, and point your app's OAuth/OIDC client at Casdoor. For Grafana, GitLab, Nextcloud and other popular apps, open **Marketplace** in the console instead: one click creates the application, and the setup guide shows the app's settings with your values filled in.
+2. **[Connect your first application](https://casdoor.ai/docs/how-to-connect/overview)** — create an Application in the console, copy its Client ID and Client Secret, and point your app's OAuth/OIDC client at Masdoor. For Grafana, GitLab, Nextcloud and other popular apps, open **Marketplace** in the console instead: one click creates the application, and the setup guide shows the app's settings with your values filled in.
 3. **[Add an identity provider](https://casdoor.ai/docs/provider/overview)** if you want Google, GitHub or Entra ID sign-in.
 4. **[Pick an SDK](https://casdoor.ai/docs/category/integrations)** for your language, or call the [Public API](https://casdoor.ai/docs/basic/public-api) directly.
 
@@ -228,7 +228,7 @@ At this point you have a running identity provider with nothing connected to it 
 - **LDAP** — sync from a directory, or serve as one
 - **WebAuthn / passkeys** — passwordless sign-in
 - **TOTP / MFA** — multi-factor authentication, including email and SMS codes
-- **[Casdoor Authenticator](https://app.casdoor.ai)** — open-source TOTP app for Android and iOS that syncs your MFA accounts with Casdoor ([source](https://github.com/casdoor/casdoor-authenticator))
+- **[Masdoor Authenticator](https://app.casdoor.ai)** — open-source TOTP app for Android and iOS that syncs your MFA accounts with Masdoor ([source](https://github.com/mahoo12138/masdoor-authenticator))
 - **Face ID** — biometric sign-in
 
 **🏢 Organizations and access control**
@@ -255,20 +255,20 @@ At this point you have a running identity provider with nothing connected to it 
 
 **🧩 Marketplace**
 
-Install ready-made integrations from the **Marketplace** page of the console. Casdoor creates the objects with your values filled in, and uninstalling removes them or restores what was there before. Browse them at **[marketplace.casdoor.com](https://marketplace.casdoor.com)**; contributions go to [casdoor-integrations](https://github.com/casdoor/casdoor-integrations).
+Install ready-made integrations from the **Marketplace** page of the console. Masdoor creates the objects with your values filled in, and uninstalling removes them or restores what was there before. Browse them at **[marketplace.casdoor.com](https://marketplace.casdoor.com)**; contributions go to [casdoor-integrations](https://github.com/mahoo12138/masdoor-integrations).
 
 - **App integrations** — single sign-on for Grafana, GitLab, Nextcloud, Vaultwarden, Argo CD, Immich, Open WebUI, Portainer, Gitea and Proxmox VE, with a step-by-step guide for the app's side
-- **Identity provider templates** — sign in to Casdoor with Keycloak, authentik, ZITADEL, Authelia or GitLab Self-Managed
+- **Identity provider templates** — sign in to Masdoor with Keycloak, authentik, ZITADEL, Authelia or GitLab Self-Managed
 - **Sign-in themes** — login page designs you can preview on your own application before installing
 
 ## 🧱 Technology stack
 
-Casdoor is a frontend–backend separated application:
+Masdoor is a frontend–backend separated application:
 
-- **Backend** — Go with the [Beego](https://github.com/beego/beego) framework, exposing REST APIs ([repository root](https://github.com/casdoor/casdoor))
+- **Backend** — Go with the [Beego](https://github.com/beego/beego) framework, exposing REST APIs ([repository root](https://github.com/mahoo12138/masdoor))
 - **Frontend** — React 18 with [shadcn/ui](https://ui.shadcn.com/) on Tailwind CSS, built with Vite ([`web/`](web)). The previous Ant Design console is kept for reference at [`web-old/`](web-old) and is no longer built or served.
 - **Database** — MySQL, PostgreSQL, SQLite, SQL Server and others through [XORM](https://xorm.io/)
-- **Cache** — Redis, optional; needed if you run more than one Casdoor replica
+- **Cache** — Redis, optional; needed if you run more than one Masdoor replica
 
 ## 📖 Documentation
 
@@ -276,8 +276,8 @@ The full documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/over
 
 | I want to… | Go to |
 |------------|-------|
-| Install Casdoor | [From source](https://casdoor.ai/docs/basic/server-installation) &middot; [Docker](https://casdoor.ai/docs/basic/try-with-docker) &middot; [Helm](https://casdoor.ai/docs/basic/try-with-helm) |
-| Connect my application | [How to connect to Casdoor](https://casdoor.ai/docs/how-to-connect/overview) |
+| Install Masdoor | [From source](https://casdoor.ai/docs/basic/server-installation) &middot; [Docker](https://casdoor.ai/docs/basic/try-with-docker) &middot; [Helm](https://casdoor.ai/docs/basic/try-with-helm) |
+| Connect my application | [How to connect to Masdoor](https://casdoor.ai/docs/how-to-connect/overview) |
 | Use the API | [Public API](https://casdoor.ai/docs/basic/public-api) &middot; [Swagger UI](https://door.casdoor.com/swagger) |
 | Choose an SDK | [Integrations](https://casdoor.ai/docs/category/integrations) |
 | Deploy to production | [Deployment](https://casdoor.ai/docs/category/deployment) |
@@ -287,35 +287,35 @@ The full documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/over
 
 Official SDKs and framework integrations, by language:
 
-- **Go** — [casdoor-go-sdk](https://github.com/casdoor/casdoor-go-sdk)
-- **Java** — [casdoor-java-sdk](https://github.com/casdoor/casdoor-java-sdk) &middot; [Spring Boot starter](https://github.com/casdoor/casdoor-spring-boot-starter)
-- **Python** — [casdoor-python-sdk](https://github.com/casdoor/casdoor-python-sdk)
-- **Node.js** — [casdoor-nodejs-sdk](https://github.com/casdoor/casdoor-nodejs-sdk)
-- **JavaScript** — [casdoor-js-sdk](https://github.com/casdoor/casdoor-js-sdk) &middot; [React](https://github.com/casdoor/casdoor-react-sdk) &middot; [Vue](https://github.com/casdoor/casdoor-vue-sdk) &middot; [Angular](https://github.com/casdoor/casdoor-angular-sdk)
+- **Go** — [casdoor-go-sdk](https://github.com/mahoo12138/masdoor-go-sdk)
+- **Java** — [casdoor-java-sdk](https://github.com/mahoo12138/masdoor-java-sdk) &middot; [Spring Boot starter](https://github.com/mahoo12138/masdoor-spring-boot-starter)
+- **Python** — [casdoor-python-sdk](https://github.com/mahoo12138/masdoor-python-sdk)
+- **Node.js** — [casdoor-nodejs-sdk](https://github.com/mahoo12138/masdoor-nodejs-sdk)
+- **JavaScript** — [casdoor-js-sdk](https://github.com/mahoo12138/masdoor-js-sdk) &middot; [React](https://github.com/mahoo12138/masdoor-react-sdk) &middot; [Vue](https://github.com/mahoo12138/masdoor-vue-sdk) &middot; [Angular](https://github.com/mahoo12138/masdoor-angular-sdk)
 - **.NET** — [casdoor-dotnet-sdk](https://github.com/casdoor-net/casdoor-dotnet-sdk)
-- **PHP** — [casdoor-php-sdk](https://github.com/casdoor/casdoor-php-sdk)
-- **Rust** — [casdoor-rust-sdk](https://github.com/casdoor/casdoor-rust-sdk)
+- **PHP** — [casdoor-php-sdk](https://github.com/mahoo12138/masdoor-php-sdk)
+- **Rust** — [casdoor-rust-sdk](https://github.com/mahoo12138/masdoor-rust-sdk)
 
-The complete list, including reverse proxies and third-party applications, is in the [Integrations](https://casdoor.ai/docs/category/integrations) documentation. Self-hosted apps with a one-click setup are on the [Casdoor Marketplace](https://marketplace.casdoor.com/apps/).
+The complete list, including reverse proxies and third-party applications, is in the [Integrations](https://casdoor.ai/docs/category/integrations) documentation. Self-hosted apps with a one-click setup are on the [Masdoor Marketplace](https://marketplace.casdoor.com/apps/).
 
 ## 🔒 Security
 
 **Please do not report security vulnerabilities in public GitHub issues.** Email <admin@casdoor.org> instead — [SECURITY.md](SECURITY.md) has the full policy and disclosure process.
 
-Before exposing a Casdoor instance to the internet:
+Before exposing a Masdoor instance to the internet:
 
 - Change the built-in `admin` password. Never ship the demo credential `123`.
-- Serve Casdoor over HTTPS only, and set `origin` in [`conf/app.conf`](conf/app.conf) to your public URL.
+- Serve Masdoor over HTTPS only, and set `origin` in [`conf/app.conf`](conf/app.conf) to your public URL.
 - Review [`conf/app.conf`](conf/app.conf) for values inherited from the sample file, especially `dataSourceName` and any provider secrets.
 - Set `runmode = prod` and keep `showSql = false` in production.
 
 ## 🤝 Community and support
 
 - **Discord** — [join the community](https://discord.gg/5rPsrAzK7S) for questions and help
-- **GitHub Discussions** — [ask and search here](https://github.com/casdoor/casdoor/discussions)
-- **GitHub Issues** — [bug reports and feature requests](https://github.com/casdoor/casdoor/issues)
+- **GitHub Discussions** — [ask and search here](https://github.com/mahoo12138/masdoor/discussions)
+- **GitHub Issues** — [bug reports and feature requests](https://github.com/mahoo12138/masdoor/issues)
 - **Commercial support** — [casdoor.ai/help](https://casdoor.ai/help)
-- **Managed hosting** — [Casdoor Cloud](https://www.casdoor.com/?utm_source=github&utm_medium=readme&utm_content=support) runs and upgrades Casdoor for you
+- **Managed hosting** — [Masdoor Cloud](https://www.casdoor.com/?utm_source=github&utm_medium=readme&utm_content=support) runs and upgrades Masdoor for you
 
 ## 🌍 Contributing
 
@@ -325,9 +325,9 @@ Read the [contribution guidelines](https://casdoor.ai/docs/contributing/) before
 
 **Translations.** User-facing strings in the web console go through [i18next](https://www.i18next.com/). When you add or change one under [`web/`](web), update the English catalog at [`web/src/locales/en/data.json`](web/src/locales/en/data.json). The other languages are translated on [Crowdin](https://crowdin.com/project/casdoor-site) and should not be edited by hand.
 
-## 🙌 Support Casdoor
+## 🙌 Support Masdoor
 
-Casdoor is free and open source. If it saves you time, consider supporting its development on [Open Collective](https://opencollective.com/casdoor). Choosing [Casdoor Cloud](https://www.casdoor.com/?utm_source=github&utm_medium=readme&utm_content=sponsor) for hosting also funds the project directly.
+Masdoor is free and open source. If it saves you time, consider supporting its development on [Open Collective](https://opencollective.com/casdoor). Choosing [Masdoor Cloud](https://www.casdoor.com/?utm_source=github&utm_medium=readme&utm_content=sponsor) for hosting also funds the project directly.
 
 <a href="https://opencollective.com/casdoor#sponsor"><img src="https://opencollective.com/casdoor/tiers/sponsor.svg?avatarHeight=74" alt="Sponsors on Open Collective"></a>
 
@@ -335,16 +335,16 @@ Casdoor is free and open source. If it saves you time, consider supporting its d
 
 ## 📄 License
 
-Casdoor is licensed under the [Apache License 2.0](LICENSE).
+Masdoor is licensed under the [Apache License 2.0](LICENSE).
 
 ---
 
 <div align="center">
 
-If Casdoor is useful to you, a star helps other people find it.
+If Masdoor is useful to you, a star helps other people find it.
 
-<a href="https://github.com/casdoor/casdoor/stargazers"><img src="https://img.shields.io/github/stars/casdoor/casdoor?style=social&logo=github&label=Star" alt="GitHub Stars"></a>
+<a href="https://github.com/mahoo12138/masdoor/stargazers"><img src="https://img.shields.io/github/stars/casdoor/casdoor?style=social&logo=github&label=Star" alt="GitHub Stars"></a>
 
-<sub>© 2026 <a href="https://casdoor.ai">Casdoor</a> &middot; <a href="LICENSE">Apache License 2.0</a></sub>
+<sub>© 2026 <a href="https://casdoor.ai">Masdoor</a> &middot; <a href="LICENSE">Apache License 2.0</a></sub>
 
 </div>

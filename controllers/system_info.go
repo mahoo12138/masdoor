@@ -19,8 +19,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/casdoor/casdoor/upgrade"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/upgrade"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/go-git/go-git/v5"
 )
 
@@ -47,7 +47,7 @@ func (c *ApiController) GetSystemInfo() {
 // GetVersionInfo
 // @Title GetVersionInfo
 // @Tag System API
-// @Description get version info like Casdoor release version and commit ID
+// @Description get version info like Masdoor release version and commit ID
 // @Success 200 {object} util.VersionInfo The Response object
 // @router /get-version-info [get]
 func (c *ApiController) GetVersionInfo() {
@@ -68,7 +68,7 @@ func (c *ApiController) GetVersionInfo() {
 // GetUpgradeInfo
 // @Title GetUpgradeInfo
 // @Tag System API
-// @Description get the latest Casdoor release, how this Casdoor is deployed and the progress of an upgrade
+// @Description get the latest Masdoor release, how this Masdoor is deployed and the progress of an upgrade
 // @Success 200 {object} upgrade.UpgradeInfo The Response object
 // @router /get-upgrade-info [get]
 func (c *ApiController) GetUpgradeInfo() {
@@ -82,7 +82,7 @@ func (c *ApiController) GetUpgradeInfo() {
 // UpgradeSystem
 // @Title UpgradeSystem
 // @Tag System API
-// @Description upgrade an official release binary of Casdoor to the latest release and restart it
+// @Description upgrade an official release binary of Masdoor to the latest release and restart it
 // @Param   body    body   string  true        "The JSON {version}, the release to upgrade to, which must be the latest one"
 // @Success 200 {object} controllers.Response The Response object
 // @router /upgrade-system [post]

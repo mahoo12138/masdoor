@@ -21,9 +21,9 @@ import (
 	"github.com/casbin/lego/v4/certcrypto"
 	"github.com/casbin/lego/v4/lego"
 	"github.com/casbin/lego/v4/registration"
-	"github.com/casdoor/casdoor/certificate"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/proxy"
+	"github.com/mahoo12138/masdoor/certificate"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/proxy"
 )
 
 func getLegoClientAndAccount(email string, privateKey string, devMode bool, useProxy bool) (*lego.Client, *certificate.Account, error) {

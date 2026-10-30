@@ -19,7 +19,7 @@ import * as IntegrationBackend from "@/backend/IntegrationBackend";
 import {IntegrationLogo, IntegrationTypes, ThemePreviewMessage, applyTheme, getIntegrationTypeLabel, getMarketplaceSiteUrl, getLocalized} from "@/lib/integration";
 import * as Setting from "@/lib/setting";
 
-/** The Casdoor Marketplace: browse the catalog and install app integrations, provider templates and themes. */
+/** The Masdoor Marketplace: browse the catalog and install app integrations, provider templates and themes. */
 export default function MarketplacePage() {
   const {account} = useAccount();
   const organizationName = useRequestOrganization();

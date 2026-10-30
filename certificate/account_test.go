@@ -21,8 +21,8 @@ import (
 	"testing"
 
 	"github.com/beego/beego/v2/server/web"
-	"github.com/casdoor/casdoor/proxy"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/stretchr/testify/assert"
 )
 

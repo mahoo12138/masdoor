@@ -14,19 +14,19 @@
 
 // Package routers
 // @APIVersion 1.503.0
-// @Title Casdoor RESTful API
-// @Description Swagger Docs of Casdoor Backend API
+// @Title Masdoor RESTful API
+// @Description Swagger Docs of Masdoor Backend API
 // @Contact casbin@googlegroups.com
 // @SecurityDefinition AccessToken apiKey Authorization header
 // @Schemes https,http
-// @ExternalDocs Find out more about Casdoor
+// @ExternalDocs Find out more about Masdoor
 // @ExternalDocsUrl https://casdoor.org/
 package routers
 
 import (
 	"github.com/beego/beego/v2/server/web"
-	"github.com/casdoor/casdoor/controllers"
-	"github.com/casdoor/casdoor/mcpself"
+	"github.com/mahoo12138/masdoor/controllers"
+	"github.com/mahoo12138/masdoor/mcpself"
 )
 
 func InitAPI() {

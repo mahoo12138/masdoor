@@ -19,7 +19,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type OriginalUser = User
@@ -61,7 +61,7 @@ func (syncer *Syncer) updateUserForOriginalFields(user *User, key string) (bool,
 
 	// key is the snake_cased CasdoorName of the syncer's key column, which an org admin
 	// controls, and it is concatenated into the WHERE clause below, so reject any value
-	// that is not a plain SQL identifier to keep it from injecting SQL into Casdoor's DB.
+	// that is not a plain SQL identifier to keep it from injecting SQL into Masdoor's DB.
 	if !util.FilterSQLIdentifier(key) {
 		return false, fmt.Errorf("object.updateUserForOriginalFields() error: invalid key field: %s", key)
 	}

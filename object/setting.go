@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 
@@ -134,7 +134,7 @@ func initBuiltInSetting() *Setting {
 }
 
 // InitSetting applies the setting at startup, then rereads it every minute so that a change saved on
-// another Casdoor instance sharing the same database also takes effect here
+// another Masdoor instance sharing the same database also takes effect here
 func InitSetting() {
 	initBuiltInSetting().apply()
 

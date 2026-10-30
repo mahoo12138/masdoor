@@ -20,15 +20,15 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/storage"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/storage"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/casdoor/oss"
 )
 
 func deployStaticFiles(provider *object.Provider) {
 	certificate := ""
-	if provider.Category == "Storage" && provider.Type == "Casdoor" {
+	if provider.Category == "Storage" && provider.Type == "Masdoor" {
 		cert, err := object.GetCertEx(util.GetId(provider.Owner, provider.Cert))
 		if err != nil {
 			panic(err)

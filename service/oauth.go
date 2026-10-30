@@ -21,10 +21,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/casdoor/casdoor-go-sdk/casdoorsdk"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor-go-sdk/casdoorsdk"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func getSigninUrl(casdoorClient *casdoorsdk.Client, callbackUrl string, originalPath string) string {
@@ -68,7 +68,7 @@ func getSafeRedirectPath(state string) string {
 func handleAuthCallback(w http.ResponseWriter, r *http.Request) {
 	site := getSiteByDomainWithWww(r.Host)
 	if site == nil {
-		responseError(w, "Casdoor site error: site not found for host: %s", r.Host)
+		responseError(w, "Masdoor site error: site not found for host: %s", r.Host)
 		return
 	}
 
@@ -79,30 +79,30 @@ func handleSiteCallback(w http.ResponseWriter, r *http.Request, site *object.Sit
 	code := query.Get("code")
 	state := query.Get("state")
 	if code == "" {
-		responseError(w, "Casdoor site error: the code should not be empty")
+		responseError(w, "Masdoor site error: the code should not be empty")
 		return
 	} else if state == "" {
-		responseError(w, "Casdoor site error: the state should not be empty")
+		responseError(w, "Masdoor site error: the state should not be empty")
 		return
 	}
 
 	application, err := object.GetApplication(util.GetId(site.Owner, site.CasdoorApplication))
 	if err != nil {
-		responseError(w, "Casdoor site error: casdoorClient.GetOAuthToken() error: %s", err.Error())
+		responseError(w, "Masdoor site error: casdoorClient.GetOAuthToken() error: %s", err.Error())
 		return
 	}
 	if application == nil {
-		responseError(w, "Casdoor site error: the application: %s does not exist", site.CasdoorApplication)
+		responseError(w, "Masdoor site error: the application: %s does not exist", site.CasdoorApplication)
 		return
 	}
 
 	token, tokenError, err := object.GetAuthorizationCodeToken(application, application.ClientSecret, code, "", "", conf.GetAcceptLanguage(r.Header.Get("Accept-Language")))
 	if tokenError != nil {
-		responseError(w, "Casdoor site error: casdoorClient.GetOAuthToken() error: %s", tokenError.Error)
+		responseError(w, "Masdoor site error: casdoorClient.GetOAuthToken() error: %s", tokenError.Error)
 		return
 	}
 	if err != nil {
-		responseError(w, "Casdoor site error: casdoorClient.GetOAuthToken() error: %s", err.Error())
+		responseError(w, "Masdoor site error: casdoorClient.GetOAuthToken() error: %s", err.Error())
 		return
 	}
 
@@ -116,6 +116,6 @@ func handleSiteCallback(w http.ResponseWriter, r *http.Request, site *object.Sit
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	// absolute, since Traefik resolves a relative Location of forward auth against the Casdoor address
+	// absolute, since Traefik resolves a relative Location of forward auth against the Masdoor address
 	http.Redirect(w, r, fmt.Sprintf("%s://%s%s", scheme, host, getSafeRedirectPath(state)), http.StatusFound)
 }

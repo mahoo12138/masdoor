@@ -5,7 +5,7 @@ import * as Conf from "@/Conf";
  * Ported from web/src/common/CustomGithubCorner.js, which wraps
  * `react-github-corner`; the same SVG is inlined here instead.
  */
-export function GithubCorner({href = "https://github.com/casdoor/casdoor", size = 60}: {href?: string; size?: number}) {
+export function GithubCorner({href = "https://github.com/mahoo12138/masdoor", size = 60}: {href?: string; size?: number}) {
   if (!Conf.ShowGithubCorner) {
     return null;
   }

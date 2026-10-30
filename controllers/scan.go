@@ -19,8 +19,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/scan"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/scan"
 )
 
 // Scan

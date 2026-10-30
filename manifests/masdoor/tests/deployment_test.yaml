@@ -42,21 +42,21 @@ tests:
           content:
             name: init-data
             secret:
-              secretName: RELEASE-NAME-casdoor-init-data
+              secretName: RELEASE-NAME-masdoor-init-data
               items:
                 - key: init_data.json
                   path: init_data.json
   - it: reads the init data from an existing secret
     set:
       initData.enabled: true
-      initData.existingSecret: casdoor-init-data
+      initData.existingSecret: masdoor-init-data
     asserts:
       - contains:
           path: spec.template.spec.volumes
           content:
             name: init-data
             secret:
-              secretName: casdoor-init-data
+              secretName: masdoor-init-data
               items:
                 - key: init_data.yaml
                   path: init_data.yaml

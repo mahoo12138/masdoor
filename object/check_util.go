@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/casdoor/casdoor/i18n"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/i18n"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 var reRealName *regexp.Regexp
@@ -54,8 +54,8 @@ func resetUserSigninErrorTimes(user *User) error {
 // "last_signin_time" / "last_signin_ip" claims in the token still hold the
 // previous signin rather than the current one (the current signin time is
 // always available in the token's "iat" claim).
-// See https://github.com/casdoor/casdoor/issues/5646 and
-// https://github.com/casdoor/casdoor/issues/5651
+// See https://github.com/mahoo12138/masdoor/issues/5646 and
+// https://github.com/mahoo12138/masdoor/issues/5651
 func RecordUserSignin(user *User, clientIp string) error {
 	user.LastSigninTime = util.GetCurrentTime()
 	if clientIp != "" {

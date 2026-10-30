@@ -62,7 +62,7 @@ func IsHostIntranet(ip string) bool {
 	return parsedIP.IsPrivate() || parsedIP.IsLoopback() || parsedIP.IsLinkLocalUnicast() || parsedIP.IsLinkLocalMulticast()
 }
 
-// IsCredentialedOrigin reports whether the browser origin may act with the Casdoor session cookie,
+// IsCredentialedOrigin reports whether the browser origin may act with the Masdoor session cookie,
 // the same origins CorsFilter answers with "Access-Control-Allow-Credentials"
 func IsCredentialedOrigin(origin string, originConf string, host string) bool {
 	if origin == originConf {

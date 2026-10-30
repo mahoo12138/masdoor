@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest a new feature or an improvement for Casdoor
+description: Suggest a new feature or an improvement for Masdoor
 labels: ["enhancement"]
 body:
   - type: markdown
@@ -7,12 +7,12 @@ body:
       value: |
         **Please write in English**, so that every maintainer and user can follow the issue.
 
-        Search the [existing issues](https://github.com/casdoor/casdoor/issues) and the [documentation](https://casdoor.ai/docs) first, the feature may already exist or be planned.
+        Search the [existing issues](https://github.com/mahoo12138/masdoor/issues) and the [documentation](https://casdoor.ai/docs) first, the feature may already exist or be planned.
   - type: textarea
     id: problem
     attributes:
       label: Problem
-      description: What you are trying to do and why Casdoor does not support it today
+      description: What you are trying to do and why Masdoor does not support it today
     validations:
       required: true
   - type: textarea

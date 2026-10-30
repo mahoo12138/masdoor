@@ -26,10 +26,10 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/object"
-	"github.com/casdoor/casdoor/rule"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/object"
+	"github.com/mahoo12138/masdoor/rule"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func forwardHandler(targetUrl string, writer http.ResponseWriter, request *http.Request) {
@@ -89,7 +89,7 @@ func forwardHandler(targetUrl string, writer http.ResponseWriter, request *http.
 
 		// Only "Allow-Credentials: true" together with a wildcard or "null" origin is
 		// unsafe, since it would let any site read credentialed responses. A concrete
-		// origin is the upstream's own allowlist decision (Casdoor validates it in
+		// origin is the upstream's own allowlist decision (Masdoor validates it in
 		// CorsFilter), so it must be preserved, otherwise every cross-origin login
 		// through the proxy fails its preflight.
 		if strings.EqualFold(allowCredentials, "true") && (allowOrigin == "*" || strings.EqualFold(allowOrigin, "null")) {
@@ -166,7 +166,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		responseError(w, "Casdoor site error: site not found for host: %s", r.Host)
+		responseError(w, "Masdoor site error: site not found for host: %s", r.Host)
 		return
 	}
 
@@ -190,7 +190,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		responseError(w, "Casdoor site error: ACME HTTP-01 challenge failed, requestUri cannot match with challengeMap, requestUri = %s, challengeMap = %v", r.RequestURI, challengeMap)
+		responseError(w, "Masdoor site error: ACME HTTP-01 challenge failed, requestUri cannot match with challengeMap, requestUri = %s, challengeMap = %v", r.RequestURI, challengeMap)
 		return
 	}
 
@@ -226,7 +226,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			case siteAuthNeedLogin:
 				casdoorClient, err := getCasdoorClientFromSite(site)
 				if err != nil {
-					responseError(w, "Casdoor site error: getCasdoorClientFromSite() error: %s", err.Error())
+					responseError(w, "Masdoor site error: getCasdoorClientFromSite() error: %s", err.Error())
 					return
 				}
 				if _, err = r.Cookie("casdoor_access_token"); err == nil {
@@ -238,7 +238,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 				responseForbidden(w, "Forbidden: %s", msg)
 				return
 			case siteAuthError:
-				responseError(w, "Casdoor site error: %s", msg)
+				responseError(w, "Masdoor site error: %s", msg)
 				return
 			}
 
@@ -248,7 +248,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 
 	host := site.GetHost()
 	if host == "" {
-		responseError(w, "Casdoor site error: targetUrl should not be empty for host: %s, site = %v", r.Host, site)
+		responseError(w, "Masdoor site error: targetUrl should not be empty for host: %s, site = %v", r.Host, site)
 		return
 	}
 
@@ -275,11 +275,11 @@ func evaluateSiteRules(site *object.Site, r *http.Request) (bool, int, string) {
 	case "", "Allow":
 		return true, 0, ""
 	case "Block":
-		return false, result.StatusCode, fmt.Sprintf("Blocked by Casdoor: %s", reason)
+		return false, result.StatusCode, fmt.Sprintf("Blocked by Masdoor: %s", reason)
 	case "Drop":
-		return false, result.StatusCode, fmt.Sprintf("Dropped by Casdoor: %s", reason)
+		return false, result.StatusCode, fmt.Sprintf("Dropped by Masdoor: %s", reason)
 	default:
-		return false, http.StatusInternalServerError, fmt.Sprintf("Casdoor site error: %s", reason)
+		return false, http.StatusInternalServerError, fmt.Sprintf("Masdoor site error: %s", reason)
 	}
 }
 
@@ -364,7 +364,7 @@ func Start() {
 	}
 
 	go func() {
-		fmt.Printf("Casdoor site proxy running on: http://127.0.0.1:%d\n", gatewayHttpPort)
+		fmt.Printf("Masdoor site proxy running on: http://127.0.0.1:%d\n", gatewayHttpPort)
 		err := http.ListenAndServe(fmt.Sprintf(":%d", gatewayHttpPort), serverMux)
 		if err != nil {
 			logs.Error(err)
@@ -372,7 +372,7 @@ func Start() {
 	}()
 
 	go func() {
-		fmt.Printf("Casdoor site proxy running on: https://127.0.0.1:%d\n", gatewayHttpsPort)
+		fmt.Printf("Masdoor site proxy running on: https://127.0.0.1:%d\n", gatewayHttpsPort)
 		server := &http.Server{
 			Handler: serverMux,
 			Addr:    fmt.Sprintf(":%d", gatewayHttpsPort),

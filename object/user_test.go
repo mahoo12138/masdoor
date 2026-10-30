@@ -21,7 +21,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
 
@@ -119,7 +119,7 @@ func TestGetMaskedUsers(t *testing.T) {
 	}{
 		{
 			name: "1",
-			args: args{users: []*User{{Password: "casdoor"}, {Password: "casbin"}}},
+			args: args{users: []*User{{Password: "masdoor"}, {Password: "casbin"}}},
 			want: []*User{{Password: "***"}, {Password: "***"}},
 		},
 	}

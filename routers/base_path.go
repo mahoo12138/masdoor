@@ -21,7 +21,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 )
 
 var (
@@ -29,7 +29,7 @@ var (
 	reRootRelativeUrl = regexp.MustCompile(`\b(src|href|data-casdoor-local)="/([^/"])`)
 )
 
-// BasePathMiddleware lets Casdoor run under a path like "https://example.com/casdoor": the prefix is removed before
+// BasePathMiddleware lets Masdoor run under a path like "https://example.com/casdoor": the prefix is removed before
 // routing, so it works both when the reverse proxy keeps the prefix and when it strips it
 func BasePathMiddleware(next http.Handler) http.Handler {
 	if basePath == "" {

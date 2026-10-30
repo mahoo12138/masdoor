@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/proxy"
+	"github.com/mahoo12138/masdoor/proxy"
 )
 
 const customHttpNotificationTimeout = 30 * time.Second

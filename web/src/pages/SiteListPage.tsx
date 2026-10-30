@@ -128,7 +128,7 @@ export default function SiteListPage() {
     textColumn({dataIndex: "node", title: i18next.t("site:Node"), width: 130}),
     textColumn({dataIndex: "sslMode", title: i18next.t("site:Mode"), width: 130}),
     textColumn({dataIndex: "sslCert", title: i18next.t("application:SSL cert"), width: 160, link: (v) => (v ? `/certs/admin/${v}` : undefined)}),
-    textColumn({dataIndex: "casdoorApplication", title: i18next.t("site:Casdoor app"), width: 170}),
+    textColumn({dataIndex: "casdoorApplication", title: i18next.t("site:Masdoor app"), width: 170}),
   ];
 
   return (

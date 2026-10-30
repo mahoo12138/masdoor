@@ -22,7 +22,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type I18nData map[string]map[string]string

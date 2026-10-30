@@ -20,7 +20,7 @@ import (
 	"net/http"
 
 	"github.com/beego/beego/v2/server/web"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 // MCP JSON-RPC 2.0 structures
@@ -272,7 +272,7 @@ func (c *McpController) handleInitialize(req McpRequest) {
 			},
 		},
 		ServerInfo: McpImplementation{
-			Name:    "Casdoor MCP Server",
+			Name:    "Masdoor MCP Server",
 			Version: "1.0.0",
 		},
 	}

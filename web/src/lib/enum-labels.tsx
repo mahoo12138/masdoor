@@ -4,7 +4,7 @@ import {Badge} from "@/components/ui/badge";
 import type {ColumnDef, ColumnFilterOption} from "@/components/crud/types";
 
 /**
- * Translated labels and colours for the stored enum values Casdoor shows in
+ * Translated labels and colours for the stored enum values Masdoor shows in
  * tables and selects. The antd frontend spelled these out per page as a
  * `switch` returning `Setting.getTag(color, i18next.t(key))`; keeping one map
  * per enum here means a list column and its edit-page select can never drift.

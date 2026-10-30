@@ -27,7 +27,7 @@ interface SelectFieldProps {
 
 /**
  * Drop-in replacement for the antd `<Select options={[{id, name}]} />` pattern
- * that the Casdoor edit pages use everywhere.
+ * that the Masdoor edit pages use everywhere.
  */
 export function SelectField({
   value,

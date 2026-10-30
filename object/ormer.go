@@ -24,8 +24,8 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/server/web"
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	xormadapter "github.com/casdoor/xorm-adapter/v3"
 	_ "github.com/go-sql-driver/mysql"  // db = mysql
 	_ "github.com/lib/pq"               // db = postgres
@@ -96,7 +96,7 @@ func InitAdapter() {
 				panic(err)
 			}
 			dir = strings.ReplaceAll(dir, "\\", "/")
-			panic(fmt.Sprintf("The Casdoor config file: \"app.conf\" was not found, it should be placed at: \"%s/conf/app.conf\"", dir))
+			panic(fmt.Sprintf("The Masdoor config file: \"app.conf\" was not found, it should be placed at: \"%s/conf/app.conf\"", dir))
 		}
 	}
 

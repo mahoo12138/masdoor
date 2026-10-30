@@ -1,6 +1,6 @@
-# web — the Casdoor console
+# web — the Masdoor console
 
-The Casdoor frontend, on **shadcn/ui + Tailwind CSS** and built with Vite. It
+The Masdoor frontend, on **shadcn/ui + Tailwind CSS** and built with Vite. It
 started as a port of the Ant Design console, which is kept for reference at
 `../web-old` and is no longer built or served; both talk to the same Go backend
 over the same REST endpoints.
@@ -66,7 +66,7 @@ spec reaches one column's sort, search or filter control; an open filter menu is
 
 Two things worth knowing when writing a spec:
 
-- Match intercepts on `pathname`, not a URL glob. Casdoor's query string is
+- Match intercepts on `pathname`, not a URL glob. Masdoor's query string is
   `?id=<owner>/<name>`, and the `/` in it makes minimatch read the object name as
   another path segment, so `**/api/get-entry*` never matches.
 - On Windows, Vite binds `localhost` to `::1` only, while Cypress's Node-side
@@ -121,7 +121,7 @@ organization the visitor belongs to first; a visitor already signed in to that
 organization gets a one-click "continue as" panel above the form, which is how
 an OAuth or device request is approved. Sign-up runs the same client-side rules
 the antd Form does — each signup item's own `regex` included — and reports them
-in Casdoor's own wording rather than the browser's.
+in Masdoor's own wording rather than the browser's.
 
 **Captcha** — the full rule handling of the antd frontend (`Never` / `Always` /
 `Dynamic` / `Internet-Only`), as a dialog or inline in the sign-in form, for both
@@ -204,7 +204,7 @@ tickets, LDAP (edit + sync).
 **Branding** — the console takes its tab title and favicon from the signed-in
 user's organization, brands the sidebar with that organization's logo (its
 `logoDark` in dark mode, its favicon when the sidebar is collapsed), and both the
-console and the sign-in pages close with the Casdoor wordmark rather than the
+console and the sign-in pages close with the Masdoor wordmark rather than the
 word — the same footer image the antd frontend renders, and the one
 `Setting.getDefaultFooterContent()` writes into an application's `footerHtml`.
 `index.html` ships the `https://cdn.casbin.org/img/favicon.png` literal that
@@ -249,7 +249,7 @@ marked `Required` gets a warning and the redirect to `/mfa/setup`.
 ## Deliberately not ported
 
 - **Web3** (MetaMask / Web3-Onboard): the whole `Web3` provider category was
-  removed from Casdoor, backend included.
+  removed from Masdoor, backend included.
 
 ## Still to do
 

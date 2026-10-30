@@ -18,12 +18,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // VerificationCodeGrantType lets a native app sign a user in with the code sent to the
 // phone or email, and sign the address up first when the application allows it
-const VerificationCodeGrantType = "urn:casdoor:params:oauth:grant-type:verification-code"
+const VerificationCodeGrantType = "urn:masdoor:params:oauth:grant-type:verification-code"
 
 // IsVerificationCodeSignupEnabled tells whether the verification code grant may create the
 // account of an email or phone that has none, the code proves nothing but the address, so

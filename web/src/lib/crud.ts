@@ -28,7 +28,7 @@ export interface CasdoorResponse<T = any> {
 }
 
 /**
- * Shared "Save" behaviour of every Casdoor edit page: POST to add-x or update-x,
+ * Shared "Save" behaviour of every Masdoor edit page: POST to add-x or update-x,
  * report the outcome and let the caller decide where to navigate afterwards.
  */
 export async function submitEdit<T extends Record<string, any>>(options: {
@@ -58,7 +58,7 @@ export async function submitEdit<T extends Record<string, any>>(options: {
   }
 }
 
-/** Shared "Delete" behaviour of every Casdoor list page. */
+/** Shared "Delete" behaviour of every Masdoor list page. */
 export async function submitDelete<T>(options: {
   record: T;
   remove: (record: T) => Promise<CasdoorResponse>;

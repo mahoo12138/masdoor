@@ -32,7 +32,7 @@ const DEBOUNCE_MS = 250;
 const PER_KIND = 5;
 
 /**
- * Searches the objects a console admin actually navigates by. The Casdoor list
+ * Searches the objects a console admin actually navigates by. The Masdoor list
  * APIs take one `field`/`value` pair, so each kind is one query on its name — the
  * same query a list page's column search sends.
  */

@@ -17,7 +17,7 @@ package email
 import (
 	"crypto/tls"
 
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 	"github.com/casdoor/gomail/v2"
 )
 

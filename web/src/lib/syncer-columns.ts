@@ -1,4 +1,4 @@
-// The default `tableColumns` Casdoor fills in when the syncer type changes, a
+// The default `tableColumns` Masdoor fills in when the syncer type changes, a
 // port of `getSyncerTableColumns()` in web/src/SyncerEditPage.js. "Database"
 // has no default mapping — the columns come from the user's own table.
 

@@ -19,8 +19,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/conf"
+	"github.com/mahoo12138/masdoor/util"
 	xormadapter "github.com/casdoor/xorm-adapter/v3"
 	"github.com/xorm-io/core"
 	"github.com/xorm-io/xorm"
@@ -349,7 +349,7 @@ func CheckSameDbAdapterTable(adapter *Adapter) error {
 		}
 	}
 
-	return fmt.Errorf("the table: %s is already used by Casdoor or another organization", table)
+	return fmt.Errorf("the table: %s is already used by Masdoor or another organization", table)
 }
 
 func CheckAdapterHost(adapter *Adapter) error {

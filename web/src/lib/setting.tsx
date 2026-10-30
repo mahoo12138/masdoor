@@ -14,7 +14,7 @@
 
 // Framework-agnostic helpers shared by the whole app. This is the shadcn port of
 // the legacy web/src/Setting.js: the pure logic is kept identical so that the new
-// UI talks to the Casdoor backend exactly like the antd frontend did, while every
+// UI talks to the Masdoor backend exactly like the antd frontend did, while every
 // antd-specific renderer has been replaced by a shadcn/Tailwind equivalent.
 
 import React from "react";
@@ -83,7 +83,7 @@ export function getFullServerUrl() {
   return `${fullServerUrl}${BasePath}`;
 }
 
-// An OAuth redirect URI on Casdoor's own origin (under its base path) belongs to Casdoor
+// An OAuth redirect URI on Masdoor's own origin (under its base path) belongs to Masdoor
 // itself: that whole path serves the frontend, so no client application can live there.
 // Such a request is signed in directly instead of being answered with a code nobody can collect.
 export function isSelfRedirectUri(redirectUri) {
@@ -211,7 +211,7 @@ export function getClickable(text) {
   );
 }
 
-// Sort order coming from the data table, translated to what the Casdoor API expects.
+// Sort order coming from the data table, translated to what the Masdoor API expects.
 export function toApiSortOrder(order?: "asc" | "desc" | null) {
   if (order === "asc") {
     return "ascend";
@@ -251,7 +251,7 @@ export function getLogo(themes) {
 }
 
 /**
- * Casdoor's own wordmark, which `object/init.go` stores as the built-in
+ * Masdoor's own wordmark, which `object/init.go` stores as the built-in
  * organization's and application's logo. It is nearly black, so it disappears on
  * a dark sidebar — but it has a `_dark` twin, which `getLogo` returns.
  */
@@ -261,7 +261,7 @@ function isDefaultCasdoorLogo(logo: string | undefined | null) {
 
 /**
  * The logo to paint for the current theme: an explicit `logoDark` wins in dark
- * mode, an organization that never replaced Casdoor's default gets the dark
+ * mode, an organization that never replaced Masdoor's default gets the dark
  * twin of it, and a real custom logo is left alone — the deployment chose it.
  */
 export function getThemedLogo(
@@ -429,7 +429,7 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/social_synology.png`,
       url: "https://www.synology.com/en-global/dsm/feature/file_sharing",
     },
-    "Casdoor": {
+    "Masdoor": {
       logo: `${StaticBaseUrl}/img/casdoor.png`,
       url: "https://casdoor.org/docs/provider/storage/overview",
     },
@@ -665,7 +665,7 @@ export const OtherProviderInfo = {
     },
   },
   Log: {
-    "Casdoor Permission Log": {
+    "Masdoor Permission Log": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
       url: "https://casdoor.org",
     },
@@ -701,7 +701,7 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "education", "score", "karma", "ranking", "balance", "balance_credit", "balance_currency", "currency", "is_default_avatar", "is_online",
   "is_forbidden", "is_deleted", "signup_application", "register_type", "register_source", "hash", "pre_hash", "access_token",
   "created_ip", "last_signin_time", "last_signin_ip", "github", "google", "qq", "wechat", "facebook", "dingtalk",
-  "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs", "baidu", "alipay", "casdoor", "infoflow", "apple",
+  "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs", "baidu", "alipay", "masdoor", "infoflow", "apple",
   "azuread", "azureadb2c", "slack", "steam", "bilibili", "okta", "douyin", "kwai", "line", "amazon", "auth0",
   "battlenet", "bitbucket", "box", "cloudfoundry", "dailymotion", "deezer", "digitalocean", "discord", "dropbox",
   "eveonline", "fitbit", "gitea", "heroku", "influxcloud", "instagram", "intercom", "kakao", "lastfm", "mailru",
@@ -1460,7 +1460,7 @@ export function getProviderTypeOptions(category) {
         {id: "ADFS", name: "ADFS"},
         {id: "Baidu", name: "Baidu"},
         {id: "Alipay", name: "Alipay"},
-        {id: "Casdoor", name: "Casdoor"},
+        {id: "Masdoor", name: "Masdoor"},
         {id: "Infoflow", name: "Infoflow"},
         {id: "Apple", name: "Apple"},
         {id: "AzureAD", name: "Azure AD"},
@@ -1581,7 +1581,7 @@ export function getProviderTypeOptions(category) {
         {id: "Qiniu Cloud Kodo", name: "Qiniu Cloud Kodo"},
         {id: "Google Cloud Storage", name: "Google Cloud Storage"},
         {id: "Synology", name: "Synology"},
-        {id: "Casdoor", name: "Casdoor"},
+        {id: "Masdoor", name: "Masdoor"},
         {id: "CUCloud OSS", name: "CUCloud OSS"},
       ]
     );
@@ -1661,7 +1661,7 @@ export function getProviderTypeOptions(category) {
     ]);
   } else if (category === "Log") {
     return ([
-      {id: "Casdoor Permission Log", name: "Casdoor Permission Log"},
+      {id: "Masdoor Permission Log", name: "Masdoor Permission Log"},
       {id: "System Log", name: "System Log"},
       {id: "Agent", name: "Agent"},
       {id: "SELinux Log", name: "SELinux Log"},
@@ -2126,7 +2126,7 @@ export function getUserCommonFields() {
 export function getDefaultFooterContent() {
   // the height is inline rather than an attribute: this HTML is injected into the
   // page, where Tailwind's preflight would otherwise reset it to `height: auto`
-  return `Powered by <a target="_blank" href="https://casdoor.org" rel="noreferrer"><img style="display: inline-block; height: 20px; width: auto; padding-bottom: 3px" alt="Casdoor" src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png"/></a>`;
+  return `Powered by <a target="_blank" href="https://casdoor.org" rel="noreferrer"><img style="display: inline-block; height: 20px; width: auto; padding-bottom: 3px" alt="Masdoor" src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png"/></a>`;
 }
 
 export function getEmptyFooterContent() {
@@ -2158,7 +2158,7 @@ export function getDefaultHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Masdoor Logo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
     <p>Use this code for your transaction. It's valid for 5 minutes</p>
@@ -2174,7 +2174,7 @@ export function getDefaultHtmlEmailContent() {
     <p>Casbin Team</p>
     <hr>
     <div class="footer">
-        <p>Casdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>Masdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
     </div>
 </div>
 </body>
@@ -2201,9 +2201,9 @@ export function getDefaultInvitationHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Masdoor Logo" width="300">
     </div>
-    <p>You have been invited into Casdoor</p>
+    <p>You have been invited into Masdoor</p>
     <div class="code">
         %code
     </div>
@@ -2216,7 +2216,7 @@ export function getDefaultInvitationHtmlEmailContent() {
     <p>Casbin Team</p>
     <hr>
     <div class="footer">
-        <p>Casdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>Masdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
     </div>
 </div>
 </body>
@@ -2501,8 +2501,8 @@ function getOriginalName(name) {
 
 export function getRepoUrl(name) {
   name = getOriginalName(name);
-  if (name === "casdoor") {
-    return "https://github.com/casdoor/casdoor";
+  if (name === "masdoor") {
+    return "https://github.com/mahoo12138/masdoor";
   } else {
     return `https://github.com/casbin/${name}`;
   }

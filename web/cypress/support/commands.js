@@ -79,7 +79,7 @@ Cypress.Commands.add("assertEditPageLoaded", () => {
  * on any database — and covers the list page's own links, which a hard-coded
  * URL never would.
  *
- * Only for lists Casdoor seeds itself: the empty state is a `tbody tr` too, so
+ * Only for lists Masdoor seeds itself: the empty state is a `tbody tr` too, so
  * the name link is what tells a real row from it.
  */
 Cypress.Commands.add("openFirstRow", () => {

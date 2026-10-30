@@ -96,7 +96,7 @@ func ValidateKerberosToken(organization *Organization, spnegoTokenBase64 string)
 	return username, nil
 }
 
-// GetUserByKerberosName looks up a Casdoor user by their Kerberos principal name.
+// GetUserByKerberosName looks up a Masdoor user by their Kerberos principal name.
 // It strips the realm part (e.g., "user@REALM.COM" -> "user") and searches by username.
 func GetUserByKerberosName(organizationName string, kerberosUsername string) (*User, error) {
 	username := kerberosUsername

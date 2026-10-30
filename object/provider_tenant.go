@@ -18,9 +18,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/casdoor/casdoor/email"
-	"github.com/casdoor/casdoor/notification"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/email"
+	"github.com/mahoo12138/masdoor/notification"
+	"github.com/mahoo12138/masdoor/util"
 	notify "github.com/casdoor/notify2"
 )
 

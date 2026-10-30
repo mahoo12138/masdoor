@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
 const webManifestPath = "/manifest.webmanifest"
@@ -36,7 +36,7 @@ var (
 )
 
 // addBrandingToHtml puts the application's name, description, icon and manifest into index.html, so link previews
-// and the home-screen / PWA surface, which read the raw HTML without running the app, show them instead of Casdoor's
+// and the home-screen / PWA surface, which read the raw HTML without running the app, show them instead of Masdoor's
 func addBrandingToHtml(content string, organizationThemeCookie *OrganizationThemeCookie) string {
 	title := html.EscapeString(organizationThemeCookie.DisplayName)
 	description := html.EscapeString(organizationThemeCookie.Description)
@@ -46,7 +46,7 @@ func addBrandingToHtml(content string, organizationThemeCookie *OrganizationThem
 		content = strings.ReplaceAll(content, "https://cdn.casbin.org/img/favicon.png", favicon)
 	}
 	if title != "" {
-		content = strings.ReplaceAll(content, "<title>Casdoor</title>", fmt.Sprintf("<title>%s</title>", title))
+		content = strings.ReplaceAll(content, "<title>Masdoor</title>", fmt.Sprintf("<title>%s</title>", title))
 	}
 	if description != "" {
 		content = reDescriptionMeta.ReplaceAllLiteralString(content, fmt.Sprintf(`<meta name="description" content="%s" />`, description))

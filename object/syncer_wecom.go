@@ -26,7 +26,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // WecomSyncerProvider implements SyncerProvider for WeCom (WeChat Work) API-based syncers
@@ -525,7 +525,7 @@ func (p *WecomSyncerProvider) getWecomUsers() ([]*OriginalUser, error) {
 		userMap = fallbackUserMap
 	}
 
-	// Convert WeCom users to Casdoor OriginalUser
+	// Convert WeCom users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, wecomUser := range userMap {
 		originalUser := p.wecomUserToOriginalUser(wecomUser)
@@ -535,7 +535,7 @@ func (p *WecomSyncerProvider) getWecomUsers() ([]*OriginalUser, error) {
 	return originalUsers, nil
 }
 
-// wecomUserToOriginalUser converts WeCom user to Casdoor OriginalUser
+// wecomUserToOriginalUser converts WeCom user to Masdoor OriginalUser
 func (p *WecomSyncerProvider) wecomUserToOriginalUser(wecomUser *WecomUser) *OriginalUser {
 	user := &OriginalUser{
 		Id:          wecomUser.UserId,
@@ -583,20 +583,20 @@ func (p *WecomSyncerProvider) wecomUserToOriginalUser(wecomUser *WecomUser) *Ori
 	return user
 }
 
-// getWecomGroupName returns the Casdoor group name of a WeCom department. The department
+// getWecomGroupName returns the Masdoor group name of a WeCom department. The department
 // ID is used as the name because WeCom department names are not unique.
 func getWecomGroupName(deptId int) string {
 	return strconv.Itoa(deptId)
 }
 
-// getWecomGroupId returns the Casdoor group ID ("organization/name") of a WeCom department.
+// getWecomGroupId returns the Masdoor group ID ("organization/name") of a WeCom department.
 // User.Groups holds full group IDs, so a bare department ID would not match any group and
 // the membership would be silently dropped by the group and permission APIs.
 func (p *WecomSyncerProvider) getWecomGroupId(deptId int) string {
 	return util.GetId(p.Syncer.Organization, getWecomGroupName(deptId))
 }
 
-// wecomDepartmentToOriginalGroup converts WeCom department to Casdoor OriginalGroup
+// wecomDepartmentToOriginalGroup converts WeCom department to Masdoor OriginalGroup
 func (p *WecomSyncerProvider) wecomDepartmentToOriginalGroup(dept *WecomDepartment, hasParent bool) *OriginalGroup {
 	displayName := dept.Name
 	if displayName == "" {

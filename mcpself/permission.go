@@ -15,10 +15,10 @@
 package mcpself
 
 import (
-	"github.com/casdoor/casdoor/object"
+	"github.com/mahoo12138/masdoor/object"
 )
 
-// BuiltinScopes defines the default scope-to-tool mappings for Casdoor's MCP server
+// BuiltinScopes defines the default scope-to-tool mappings for Masdoor's MCP server
 var BuiltinScopes = []*object.ScopeItem{
 	{
 		Name:        "application:read",

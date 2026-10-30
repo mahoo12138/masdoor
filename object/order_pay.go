@@ -20,9 +20,9 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/idp"
-	"github.com/casdoor/casdoor/pp"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/idp"
+	"github.com/mahoo12138/masdoor/pp"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func checkPricingIsAllowed(owner string, pricingName string, user *User) error {

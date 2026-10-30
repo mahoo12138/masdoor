@@ -70,7 +70,7 @@ export function ApplicationAuthenticationTab({application, updateField}: Applica
         <Switch
           checked={!!application.enableAutoSignin}
           onCheckedChange={(v) => {
-            // auto signin reuses the Casdoor session, so it needs one to exist
+            // auto signin reuses the Masdoor session, so it needs one to exist
             if (v && !application.enableSigninSession) {
               Setting.showMessage(
                 "error",

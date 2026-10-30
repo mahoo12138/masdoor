@@ -30,7 +30,7 @@ import {getSignupItemField, validateSignupItems} from "@/lib/signup-validation";
 import * as Setting from "@/lib/setting";
 import {cn} from "@/lib/utils";
 
-/** The signup items Casdoor can render; anything else falls back to a text input. */
+/** The signup items Masdoor can render; anything else falls back to a text input. */
 const SIMPLE_TEXT_ITEMS: Record<string, string> = {
   "Affiliation": "user:Affiliation",
   "ID card": "user:ID card",

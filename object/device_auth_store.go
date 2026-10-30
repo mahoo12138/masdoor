@@ -23,13 +23,13 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/casdoor/casdoor/conf"
+	"github.com/mahoo12138/masdoor/conf"
 	"github.com/redis/go-redis/v9"
 )
 
 // deviceAuthStore mirrors the sync.Map methods used by the device authorization flow.
 // The default implementation is in-memory; when Redis is configured, a Redis-backed
-// implementation is used so the flow works correctly across multiple Casdoor replicas.
+// implementation is used so the flow works correctly across multiple Masdoor replicas.
 type deviceAuthStore interface {
 	Load(key any) (any, bool)
 	Store(key, value any)
@@ -38,7 +38,7 @@ type deviceAuthStore interface {
 	Range(f func(key, value any) bool)
 }
 
-const deviceAuthRedisPrefix = "casdoor:device_auth:"
+const deviceAuthRedisPrefix = "masdoor:device_auth:"
 
 // InitDeviceAuthStore switches DeviceAuthMap to a Redis-backed store when Redis is
 // configured. It must be called after configuration is loaded and before serving requests.

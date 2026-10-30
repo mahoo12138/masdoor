@@ -34,13 +34,13 @@
 {{- fail (printf "gatewayApi.gateway.listeners listener %q must use protocol HTTPS when gatewayApi.httpsRedirect.enabled=true" .Values.gatewayApi.httpsRedirect.httpsListenerName) -}}
 {{- end -}}
 {{- end -}}
-{{- $gatewayName := default (include "casdoor.fullname" .) .Values.gatewayApi.gateway.name -}}
+{{- $gatewayName := default (include "masdoor.fullname" .) .Values.gatewayApi.gateway.name -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: {{ $gatewayName }}
   labels:
-    {{- include "casdoor.labels" . | nindent 4 }}
+    {{- include "masdoor.labels" . | nindent 4 }}
     {{- with .Values.gatewayApi.gateway.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

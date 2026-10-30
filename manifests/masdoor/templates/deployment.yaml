@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "casdoor.fullname" . }}
+  name: {{ include "masdoor.fullname" . }}
   labels:
-    {{- include "casdoor.labels" . | nindent 4 }}
+    {{- include "masdoor.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "casdoor.selectorLabels" . | nindent 6 }}
+      {{- include "masdoor.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -22,13 +22,13 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "casdoor.selectorLabels" . | nindent 8 }}
+        {{- include "masdoor.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "casdoor.serviceAccountName" . }}
+      serviceAccountName: {{ include "masdoor.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
         {{ if .Values.initContainersEnabled }}
@@ -50,21 +50,21 @@ spec:
               value: "true"
             {{- if .Values.initData.enabled }}
             - name: initDataFile
-              value: {{ printf "/init-data/%s" (include "casdoor.initDataKey" .) | quote }}
+              value: {{ printf "/init-data/%s" (include "masdoor.initDataKey" .) | quote }}
             - name: initDataMerge
               value: {{ .Values.initData.merge | quote }}
             - name: initDataWatchInterval
               value: {{ .Values.initData.watchInterval | quote }}
             {{- end }}
           {{- if .Values.envFromSecret }}
-            {{ include "casdoor.envFromSecret" .Values.envFromSecret | indent 12 | trim }}
+            {{ include "masdoor.envFromSecret" .Values.envFromSecret | indent 12 | trim }}
           {{- end -}}
           {{ if .Values.envFromConfigmap }}
-            {{ include "casdoor.envFromConfigmap" .Values.envFromConfigmap | indent 12 | trim }}
+            {{ include "masdoor.envFromConfigmap" .Values.envFromConfigmap | indent 12 | trim }}
           {{- end }}
           {{- if .Values.envFrom }}
           envFrom:
-            {{ include "casdoor.envFrom" .Values.envFrom | indent 12 | trim }}
+            {{ include "masdoor.envFrom" .Values.envFrom | indent 12 | trim }}
           {{- end }}
           ports:
             - name: http
@@ -121,7 +121,7 @@ spec:
                       path: app.conf
             {{- else }}
               - configMap:
-                  name: {{ printf "%s-config" (include "casdoor.fullname" .) }}
+                  name: {{ printf "%s-config" (include "masdoor.fullname" .) }}
                   items:
                     - key: app.conf
                       path: app.conf
@@ -130,10 +130,10 @@ spec:
         {{- if .Values.initData.enabled }}
         - name: init-data
           secret:
-            secretName: {{ include "casdoor.initDataSecretName" . }}
+            secretName: {{ include "masdoor.initDataSecretName" . }}
             items:
-              - key: {{ include "casdoor.initDataKey" . }}
-                path: {{ include "casdoor.initDataKey" . }}
+              - key: {{ include "masdoor.initDataKey" . }}
+                path: {{ include "masdoor.initDataKey" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}

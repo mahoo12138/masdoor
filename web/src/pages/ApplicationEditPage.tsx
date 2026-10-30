@@ -94,7 +94,7 @@ export default function ApplicationEditPage() {
 
   const save = async(exitAfterSave: boolean) => {
     // a provider row whose provider has since been deleted, or a sign-in method
-    // this Casdoor does not know, would be posted back as a dangling reference
+    // this Masdoor does not know, would be posted back as a dangling reference
     const knownProviders = providerObjs.map((item: any) => item.name);
     const applicationProviders = (application.providers ?? []).filter((item: any) =>
       knownProviders.includes(item.name),

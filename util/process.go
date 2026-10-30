@@ -61,7 +61,7 @@ func isOldInstance(p *process.Process) (bool, string) {
 	}
 
 	name := getExeName(exe)
-	if strings.Contains(name, "casdoor") {
+	if strings.Contains(name, "masdoor") {
 		return true, exe
 	}
 

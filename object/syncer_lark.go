@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // LarkSyncerProvider implements SyncerProvider for Lark API-based syncers
@@ -346,7 +346,7 @@ func (p *LarkSyncerProvider) getLarkUsers() ([]*OriginalUser, error) {
 		}
 	}
 
-	// Convert Lark users to Casdoor OriginalUser
+	// Convert Lark users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, larkUser := range userMap {
 		originalUser := p.larkUserToOriginalUser(larkUser)
@@ -384,7 +384,7 @@ func (p *LarkSyncerProvider) getLarkUserFieldValue(larkUser *LarkUser, field str
 	}
 }
 
-// larkUserToOriginalUser converts Lark user to Casdoor OriginalUser
+// larkUserToOriginalUser converts Lark user to Masdoor OriginalUser
 func (p *LarkSyncerProvider) larkUserToOriginalUser(larkUser *LarkUser) *OriginalUser {
 	// Use user_id as name, fallback to union_id or open_id
 	userName := larkUser.UserId

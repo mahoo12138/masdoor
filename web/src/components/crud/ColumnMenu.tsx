@@ -17,7 +17,7 @@ export const columnKey = (column: ColumnDef) => column.key ?? column.dataIndex;
 
 /**
  * How many optional columns a list shows before the rest move into the column
- * menu. The Casdoor list APIs return every field of the object and the antd
+ * menu. The Masdoor list APIs return every field of the object and the antd
  * tables rendered all of them, which put /users at 23 columns and 3100px wide in
  * a 1130px card. The column arrays are written most-important-first, so keeping
  * the head of each one and parking the tail behind the menu fits the common case

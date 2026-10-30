@@ -29,7 +29,7 @@ export interface UseTableDataResult<T> {
 
 /**
  * Server-side paginated list state, mirroring the semantics of the antd
- * BaseListPage: the Casdoor list APIs take (page, pageSize, field, value,
+ * BaseListPage: the Masdoor list APIs take (page, pageSize, field, value,
  * sortField, sortOrder) and answer with {data, data2: total}.
  */
 export function useTableData<T = any>(

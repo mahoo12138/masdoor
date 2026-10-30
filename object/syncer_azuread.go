@@ -24,7 +24,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // AzureAdSyncerProvider implements SyncerProvider for Azure AD API-based syncers
@@ -212,7 +212,7 @@ func (p *AzureAdSyncerProvider) getAzureAdUsers(accessToken string) ([]*AzureAdU
 	return allUsers, nil
 }
 
-// azureAdUserToOriginalUser converts Azure AD user to Casdoor OriginalUser
+// azureAdUserToOriginalUser converts Azure AD user to Masdoor OriginalUser
 func (p *AzureAdSyncerProvider) azureAdUserToOriginalUser(azureUser *AzureAdUser) *OriginalUser {
 	user := &OriginalUser{
 		Id:          azureUser.Id,
@@ -265,7 +265,7 @@ func (p *AzureAdSyncerProvider) getAzureAdOriginalUsers() ([]*OriginalUser, erro
 		return nil, err
 	}
 
-	// Convert Azure AD users to Casdoor OriginalUser
+	// Convert Azure AD users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, azureUser := range azureUsers {
 		originalUser := p.azureAdUserToOriginalUser(azureUser)

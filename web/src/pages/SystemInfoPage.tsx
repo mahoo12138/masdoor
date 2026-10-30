@@ -117,7 +117,7 @@ function UpgradeCard() {
     const startedAt = Date.now();
     const id = window.setInterval(() => {
       if (Date.now() - startedAt > UPGRADE_TIMEOUT_MS) {
-        setLostMessage(i18next.t("system:Casdoor did not come back with the new version, please check the server logs"));
+        setLostMessage(i18next.t("system:Masdoor did not come back with the new version, please check the server logs"));
         setTarget("");
         return;
       }
@@ -134,7 +134,7 @@ function UpgradeCard() {
               stopped = true;
               window.location.reload();
             } else {
-              setLostMessage(i18next.t("system:Casdoor did not come back with the new version, please check the server logs"));
+              setLostMessage(i18next.t("system:Masdoor did not come back with the new version, please check the server logs"));
               setTarget("");
             }
             return;
@@ -182,7 +182,7 @@ function UpgradeCard() {
 
   const renderProgress = () => {
     if (reconnecting || status.state === "restarting") {
-      return <p className="text-muted-foreground">{i18next.t("system:Restarting, this page reloads when Casdoor is back")}</p>;
+      return <p className="text-muted-foreground">{i18next.t("system:Restarting, this page reloads when Masdoor is back")}</p>;
     }
     if (status.state === "installing") {
       return <p className="text-muted-foreground">{i18next.t("integration:Installing")}...</p>;
@@ -211,7 +211,7 @@ function UpgradeCard() {
       return (
         <div className="space-y-2">
           <p className="text-muted-foreground">
-            {i18next.t("system:Casdoor runs in a container, pull the new image and recreate the container")}:
+            {i18next.t("system:Masdoor runs in a container, pull the new image and recreate the container")}:
           </p>
           <CommandBlock command={`docker pull casbin/casdoor:${latestVersion.replace(/^v/, "")}`} />
         </div>
@@ -221,7 +221,7 @@ function UpgradeCard() {
       return (
         <div className="space-y-2">
           <p className="text-muted-foreground">
-            {i18next.t("system:Casdoor runs from source code, pull the new code, rebuild it and restart")}:
+            {i18next.t("system:Masdoor runs from source code, pull the new code, rebuild it and restart")}:
           </p>
           <CommandBlock command={"git pull\ncd web && yarn install && yarn build && cd ..\ngo build"} />
         </div>
@@ -230,7 +230,7 @@ function UpgradeCard() {
     if (info.deploymentType !== "release") {
       return (
         <p className="text-muted-foreground">
-          {i18next.t("system:This Casdoor was not installed from an official release package, download the new version from GitHub Releases")}
+          {i18next.t("system:This Masdoor was not installed from an official release package, download the new version from GitHub Releases")}
         </p>
       );
     }
@@ -252,7 +252,7 @@ function UpgradeCard() {
         size="sm"
         destructive={false}
         title={`${i18next.t("system:Upgrade to")} ${latestVersion}?`}
-        description={i18next.t("system:Casdoor will download the release from GitHub, verify its SHA-256 checksum, replace its binary and frontend and restart. The current version is kept in the backup folder next to the binary.")}
+        description={i18next.t("system:Masdoor will download the release from GitHub, verify its SHA-256 checksum, replace its binary and frontend and restart. The current version is kept in the backup folder next to the binary.")}
         onConfirm={upgrade}
       >
         {i18next.t("system:Upgrade to")} {latestVersion}
@@ -505,7 +505,7 @@ export default function SystemInfoPage() {
 
       <Card id="about-card">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">{i18next.t("system:About Casdoor")}</CardTitle>
+          <CardTitle className="text-base">{i18next.t("system:About Masdoor")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-1 text-sm">
           <p className="text-muted-foreground">
@@ -513,15 +513,15 @@ export default function SystemInfoPage() {
           </p>
           <div>
             GitHub:{" "}
-            <a href="https://github.com/casdoor/casdoor" target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
-              Casdoor
+            <a href="https://github.com/mahoo12138/masdoor" target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
+              Masdoor
             </a>
           </div>
           <div>
             {i18next.t("system:Version")}:{" "}
             {versionInfo?.version ? (
               <a
-                href={`https://github.com/casdoor/casdoor/releases/tag/${versionInfo.version}`}
+                href={`https://github.com/mahoo12138/masdoor/releases/tag/${versionInfo.version}`}
                 target="_blank"
                 rel="noreferrer"
                 className="underline-offset-4 hover:underline"
@@ -541,7 +541,7 @@ export default function SystemInfoPage() {
           <div>
             {i18next.t("system:Community")}:{" "}
             <a
-              href="https://casdoor.org/#:~:text=Casdoor%20API-,Community,-GitHub"
+              href="https://casdoor.org/#:~:text=Masdoor%20API-,Community,-GitHub"
               target="_blank"
               rel="noreferrer"
               className="underline-offset-4 hover:underline"

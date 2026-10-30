@@ -23,7 +23,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/iam"
-	"github.com/casdoor/casdoor/util"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // AwsIamSyncerProvider implements SyncerProvider for AWS IAM API-based syncers
@@ -146,7 +146,7 @@ func (p *AwsIamSyncerProvider) getAwsIamUsers() ([]*OriginalUser, error) {
 		marker = result.Marker
 	}
 
-	// Convert AWS IAM users to Casdoor OriginalUser
+	// Convert AWS IAM users to Masdoor OriginalUser
 	originalUsers := []*OriginalUser{}
 	for _, iamUser := range allUsers {
 		originalUser, err := p.awsIamUserToOriginalUser(iamUser)
@@ -165,7 +165,7 @@ func (p *AwsIamSyncerProvider) getAwsIamUsers() ([]*OriginalUser, error) {
 	return originalUsers, nil
 }
 
-// awsIamUserToOriginalUser converts AWS IAM user to Casdoor OriginalUser
+// awsIamUserToOriginalUser converts AWS IAM user to Masdoor OriginalUser
 func (p *AwsIamSyncerProvider) awsIamUserToOriginalUser(iamUser *iam.User) (*OriginalUser, error) {
 	if iamUser == nil {
 		return nil, fmt.Errorf("IAM user is nil")
@@ -288,7 +288,7 @@ func (p *AwsIamSyncerProvider) GetOriginalGroups() ([]*OriginalGroup, error) {
 		marker = result.Marker
 	}
 
-	// Convert AWS IAM groups to Casdoor OriginalGroup
+	// Convert AWS IAM groups to Masdoor OriginalGroup
 	originalGroups := []*OriginalGroup{}
 	for _, iamGroup := range allGroups {
 		if iamGroup.GroupId != nil && iamGroup.GroupName != nil {

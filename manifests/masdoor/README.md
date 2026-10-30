@@ -1,9 +1,9 @@
-# Casdoor
+# Masdoor
 
-[Casdoor](https://casdoor.ai) is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This is the official Helm chart, published with every Casdoor release.
+[Masdoor](https://casdoor.ai) is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This is the official Helm chart, published with every Masdoor release.
 
 - Documentation: <https://casdoor.ai/docs/basic/try-with-helm>
-- Source: <https://github.com/casdoor/casdoor/tree/master/manifests/casdoor>
+- Source: <https://github.com/mahoo12138/masdoor/tree/master/manifests/masdoor>
 - Demo: <https://door.casdoor.com>
 
 ## Prerequisites
@@ -14,47 +14,47 @@
 ## Installation
 
 ```shell
-helm install casdoor oci://ghcr.io/casdoor/helm-charts/casdoor --version <version>
+helm install masdoor oci://ghcr.io/masdoor/helm-charts/masdoor --version <version>
 ```
 
 To install with a custom values file:
 
 ```shell
-helm install casdoor oci://ghcr.io/casdoor/helm-charts/casdoor \
+helm install masdoor oci://ghcr.io/masdoor/helm-charts/masdoor \
   --version <version> \
   -f my-values.yaml
 ```
 
-The chart does not expose Casdoor outside the cluster by default. Use `kubectl port-forward svc/<service-name> 8000:8000` to try it, or enable Ingress or the Gateway API below.
+The chart does not expose Masdoor outside the cluster by default. Use `kubectl port-forward svc/<service-name> 8000:8000` to try it, or enable Ingress or the Gateway API below.
 
 ## Upgrading
 
 ```shell
-helm upgrade casdoor oci://ghcr.io/casdoor/helm-charts/casdoor --version <version>
+helm upgrade masdoor oci://ghcr.io/masdoor/helm-charts/masdoor --version <version>
 ```
 
-Charts up to 4.15.0 were published as `oci://registry-1.docker.io/casbin/casdoor-helm-charts`, which still receives every release. Running the `helm upgrade` command above moves an existing release to this chart; resource names stay the same.
+Charts up to 4.15.0 were published as `oci://registry-1.docker.io/casbin/masdoor-helm-charts`, which still receives every release. Running the `helm upgrade` command above moves an existing release to this chart; resource names stay the same.
 
 ## Uninstalling
 
 ```shell
-helm uninstall casdoor
+helm uninstall masdoor
 ```
 
 ## Configuration
 
-Override any value from [values.yaml](https://github.com/casdoor/casdoor/blob/master/manifests/casdoor/values.yaml) using `--set` or a custom values file.
+Override any value from [values.yaml](https://github.com/mahoo12138/masdoor/blob/master/manifests/masdoor/values.yaml) using `--set` or a custom values file.
 
 ### Core parameters
 
 | Parameter | Description | Default |
 |---|---|---|
-| `replicaCount` | Number of Casdoor pods | `1` |
+| `replicaCount` | Number of Masdoor pods | `1` |
 | `image.repository` | Docker image repository | `casbin` |
-| `image.name` | Docker image name | `casdoor` |
+| `image.name` | Docker image name | `masdoor` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `image.tag` | Image tag (defaults to chart appVersion) | `""` |
-| `config` | Casdoor `app.conf` content (Go template) | See values.yaml |
+| `config` | Masdoor `app.conf` content (Go template) | See values.yaml |
 | `configFromSecret` | Name of an existing Secret holding `app.conf` | `""` |
 
 ### Database
@@ -66,7 +66,7 @@ Override any value from [values.yaml](https://github.com/casdoor/casdoor/blob/ma
 | `database.password` | Database password | `""` |
 | `database.host` | Database host | `""` |
 | `database.port` | Database port (empty = driver default) | `""` |
-| `database.databaseName` | Database name | `casdoor` |
+| `database.databaseName` | Database name | `masdoor` |
 | `database.sslMode` | SSL mode for the connection | `disable` |
 
 ### LDAP
@@ -78,7 +78,7 @@ Override any value from [values.yaml](https://github.com/casdoor/casdoor/blob/ma
 
 ### Declarative configuration (init data)
 
-Organizations, applications, users, providers, roles, permissions and the other Casdoor objects can be kept in the values file, in the [init data](https://casdoor.ai/docs/deployment/data-initialization) format. The chart stores them in a Secret, Casdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
+Organizations, applications, users, providers, roles, permissions and the other Masdoor objects can be kept in the values file, in the [init data](https://casdoor.ai/docs/deployment/data-initialization) format. The chart stores them in a Secret, Masdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
 
 ```yaml
 initData:
@@ -104,7 +104,7 @@ initData:
         signupApplication: app-acme
 ```
 
-With `initData.merge: true` (the default), an object that already exists only gets the fields written in the data, its other fields keep the values edited in the web UI. A user's `password` is only used when the user is created, so users can change their own passwords. Objects removed from the data are not deleted from Casdoor.
+With `initData.merge: true` (the default), an object that already exists only gets the fields written in the data, its other fields keep the values edited in the web UI. A user's `password` is only used when the user is created, so users can change their own passwords. Objects removed from the data are not deleted from Masdoor.
 
 | Parameter | Description | Default |
 |---|---|---|
@@ -125,7 +125,7 @@ With `initData.merge: true` (the default), an object that already exists only ge
 
 ### Ingress
 
-Exposes Casdoor via a standard Kubernetes `Ingress` resource.
+Exposes Masdoor via a standard Kubernetes `Ingress` resource.
 
 | Parameter | Description | Default |
 |---|---|---|
@@ -144,19 +144,19 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: casdoor.example.com
+    - host: masdoor.example.com
       paths:
         - path: /
           pathType: Prefix
   tls:
-    - secretName: casdoor-tls
+    - secretName: masdoor-tls
       hosts:
-        - casdoor.example.com
+        - masdoor.example.com
 ```
 
 ### Gateway API
 
-Exposes Casdoor via the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) (`HTTPRoute` + optional `Gateway`). This is the modern successor to Ingress, supported by Istio, Envoy Gateway, Cilium, Kong, NGINX Gateway Fabric, and others.
+Exposes Masdoor via the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) (`HTTPRoute` + optional `Gateway`). This is the modern successor to Ingress, supported by Istio, Envoy Gateway, Cilium, Kong, NGINX Gateway Fabric, and others.
 
 **Requires:** Gateway API CRDs (`gateway.networking.k8s.io/v1`) installed in the cluster and a compatible controller running.
 
@@ -207,7 +207,7 @@ gatewayApi:
       namespace: gateway-system
       sectionName: https
   hostnames:
-    - casdoor.example.com
+    - masdoor.example.com
 ```
 
 #### Example: create a new Gateway (Istio) with HTTP→HTTPS redirect
@@ -217,7 +217,7 @@ gatewayApi:
   enabled: true
   createGateway: true
   hostnames:
-    - casdoor.example.com
+    - masdoor.example.com
   gateway:
     gatewayClassName: istio
     listeners:
@@ -232,7 +232,7 @@ gatewayApi:
         port: 443
         tls:
           certificateRefs:
-            - name: casdoor-tls
+            - name: masdoor-tls
               kind: Secret
         allowedRoutes:
           namespaces:
@@ -268,7 +268,7 @@ gatewayApi:
 | `initContainers` | Init container definitions (YAML string) | `""` |
 | `extraContainersEnabled` | Enable sidecar containers | `false` |
 | `extraContainers` | Sidecar container definitions (YAML string) | `""` |
-| `extraVolumeMounts` | Extra volume mounts for the Casdoor container | `[]` |
+| `extraVolumeMounts` | Extra volume mounts for the Masdoor container | `[]` |
 | `extraVolumes` | Extra volumes for the pod | `[]` |
 | `defaultConfigVolumeEnabled` | Mount the default config volume at `/conf` | `true` |
 
@@ -285,7 +285,7 @@ gatewayApi:
 | Parameter | Description | Default |
 |---|---|---|
 | `probe.path` | HTTP path requested by all probes | `/api/health` |
-| `probe.startup.enabled` | Enable startup probe, which holds off the other probes until Casdoor has started | `true` |
+| `probe.startup.enabled` | Enable startup probe, which holds off the other probes until Masdoor has started | `true` |
 | `probe.startup.initialDelaySeconds` | Seconds before the first startup check | `0` |
 | `probe.startup.periodSeconds` | Seconds between startup checks | `10` |
 | `probe.startup.timeoutSeconds` | Seconds before a startup check times out | `5` |
