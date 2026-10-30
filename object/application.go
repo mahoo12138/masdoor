@@ -73,12 +73,6 @@ type SigninItem struct {
 	IsCustom    bool   `json:"isCustom"`
 }
 
-type SamlItem struct {
-	Name       string `json:"name"`
-	NameFormat string `json:"nameFormat"`
-	Value      string `json:"value"`
-}
-
 type JwtItem struct {
 	Name     string `json:"name"`
 	Category string `json:"category"`
@@ -125,18 +119,9 @@ type Application struct {
 	EnableCodeSignin             bool            `json:"enableCodeSignin"`
 	EnableExclusiveSignin        bool            `json:"enableExclusiveSignin"`
 	MaxSessions                  int             `json:"maxSessions"`
-	EnableSamlCompress           bool            `json:"enableSamlCompress"`
-	EnableSamlC14n10             bool            `json:"enableSamlC14n10"`
-	EnableSamlPostBinding        bool            `json:"enableSamlPostBinding"`
-	DisableSamlAttributes        bool            `json:"disableSamlAttributes"`
-	EnableSamlAssertionSignature bool            `json:"enableSamlAssertionSignature"`
-	UseEmailAsSamlNameId         bool            `json:"useEmailAsSamlNameId"`
-	SamlNameIdTemplate           string          `xorm:"mediumtext" json:"samlNameIdTemplate"`
 	EnableWebAuthn               bool            `json:"enableWebAuthn"`
 	EnableLinkWithEmail          bool            `json:"enableLinkWithEmail"`
 	OrgChoiceMode                string          `json:"orgChoiceMode"`
-	SamlReplyUrl                 string          `xorm:"varchar(500)" json:"samlReplyUrl"`
-	SamlSingleLogoutUrl          string          `xorm:"mediumtext" json:"samlSingleLogoutUrl"`
 	Providers                    []*ProviderItem `xorm:"mediumtext" json:"providers"`
 	SigninMethods                []*SigninMethod `xorm:"varchar(2000)" json:"signinMethods"`
 	SignupItems                  []*SignupItem   `xorm:"varchar(3000)" json:"signupItems"`
@@ -145,9 +130,6 @@ type Application struct {
 	OrganizationObj              *Organization   `xorm:"-" json:"organizationObj"`
 	CertPublicKey                string          `xorm:"-" json:"certPublicKey"`
 	Tags                         []string        `xorm:"mediumtext" json:"tags"`
-	SamlAttributes               []*SamlItem     `xorm:"varchar(1000)" json:"samlAttributes"`
-	SamlHashAlgorithm            string          `xorm:"varchar(20)" json:"samlHashAlgorithm"`
-	SamlC14nPrefix               string          `xorm:"varchar(100)" json:"samlC14nPrefix"`
 	IsShared                     bool            `json:"isShared"`
 	IpRestriction                string          `json:"ipRestriction"`
 

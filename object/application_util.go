@@ -289,14 +289,8 @@ func GetMaskedApplication(application *Application, userId string) *Application 
 	application.EnablePassword = false
 	application.EnableSigninSession = false
 	application.EnableCodeSignin = false
-	application.EnableSamlCompress = false
-	application.EnableSamlC14n10 = false
-	application.EnableSamlPostBinding = false
-	application.DisableSamlAttributes = false
 	application.EnableWebAuthn = false
 	application.EnableLinkWithEmail = false
-	application.SamlReplyUrl = "***"
-	application.SamlSingleLogoutUrl = "***"
 
 	providerItems := []*ProviderItem{}
 	for _, providerItem := range application.Providers {
@@ -305,7 +299,7 @@ func GetMaskedApplication(application *Application, userId string) *Application 
 		}
 
 		category := providerItem.Provider.Category
-		if category == "OAuth" || category == "Captcha" || category == "SAML" || category == "Face ID" {
+		if category == "OAuth" || category == "Captcha" || category == "Face ID" {
 			providerItems = append(providerItems, providerItem)
 		} else if category == "Email" || category == "SMS" {
 			// The login pages need to know whether an Email or SMS provider is available,

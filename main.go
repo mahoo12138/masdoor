@@ -84,7 +84,6 @@ func runServer() {
 	object.InitCleanupTokens()
 	object.InitCleanupRecords()
 	object.InitCleanupDeviceAuthMap()
-	object.InitSamlAssertionStore()
 	object.InitExpirePermissions()
 
 	object.InitSiteMap()

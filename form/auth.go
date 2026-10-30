@@ -57,8 +57,6 @@ type AuthForm struct {
 	AutoSignin bool `json:"autoSignin"`
 
 	RelayState   string `json:"relayState"`
-	SamlRequest  string `json:"samlRequest"`
-	SamlResponse string `json:"samlResponse"`
 
 	CaptchaType  string `json:"captchaType"`
 	CaptchaToken string `json:"captchaToken"`

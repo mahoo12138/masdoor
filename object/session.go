@@ -417,7 +417,6 @@ func EnforceBrowserSessionLimit(user *User, currentSessionId string, limit int, 
 		}
 		sendBackchannelLogoutForTokens(user, sessionTokens, oldId, host)
 	}
-	SendSamlLogout(user.Owner, user.Name, oldIds, host)
 
 	for _, oldId := range oldIds {
 		err = DeleteUserSessionId(user.Owner, user.Name, oldId)

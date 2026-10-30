@@ -16,7 +16,6 @@ package controllers
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -293,18 +292,6 @@ func (c *ApiController) HandleLoggedIn(application *object.Application, user *ob
 		object.DeviceAuthMap.Store(authCacheCast.UserName, deviceAuthCacheDeviceCodeCast)
 
 		resp = &Response{Status: "ok", Msg: "", Data: userId}
-	} else if form.Type == ResponseTypeSaml { // saml flow
-		res, redirectUrl, method, err := object.GetSamlResponse(application, user, form.SamlRequest, c.Ctx.Request.Host, c.Ctx.Input.CruSession.SessionID(context.Background()))
-		if err != nil {
-			c.ResponseError(err.Error(), nil)
-			return
-		}
-		resp = &Response{Status: "ok", Msg: "", Data: res, Data2: map[string]interface{}{"redirectUrl": redirectUrl, "method": method}}
-
-		if application.EnableSigninSession || application.HasPromptPage() {
-			// The prompt page needs the user to be signed in
-			c.SetSessionUsername(userId)
-		}
 	} else {
 		resp = wrapErrorResponse(fmt.Errorf("unknown response type: %s", form.Type))
 	}
@@ -629,10 +616,6 @@ func getUserByProvider(organization string, provider *object.Provider, providerI
 	if object.IsFlexibleCustomProvider(provider.Type) {
 		return object.GetUserByThirdPartyLink(organization, provider.Name, providerId)
 	}
-	if provider.Category == "SAML" {
-		return object.GetUserByFields(organization, providerId)
-	}
-
 	user, err := object.GetUserByField(organization, provider.Type, providerId)
 	if err != nil || user != nil {
 		return user, err
@@ -978,16 +961,7 @@ func (c *ApiController) Login() {
 		}
 		userInfo := &idp.UserInfo{}
 		var token *oauth2.Token
-		if provider.Category == "SAML" {
-			// SAML
-			samlRequestId, _ := c.GetSession(SamlRequestIdSessionKey).(string)
-			userInfo, err = object.ParseSamlResponse(authForm.SamlResponse, provider, c.Ctx.Request.Host, samlRequestId)
-			if err != nil {
-				c.ResponseError(err.Error())
-				return
-			}
-			c.DelSession(SamlRequestIdSessionKey)
-		} else if provider.Category == "OAuth" {
+		if provider.Category == "OAuth" {
 			// OAuth
 			idpInfo, err := object.FromProviderToIdpInfo(c.Ctx, provider)
 			if err != nil {
@@ -1062,14 +1036,7 @@ func (c *ApiController) Login() {
 
 		if authForm.Method == "signup" || authForm.Method == "signin" {
 			user := &object.User{}
-			if provider.Category == "SAML" && !object.IsFlexibleCustomProvider(provider.Type) {
-				// The userInfo.Id is the NameID in SAML response, it could be name / email / phone
-				user, err = object.GetUserByFields(application.Organization, userInfo.Id)
-				if err != nil {
-					c.ResponseError(err.Error())
-					return
-				}
-			} else if provider.Category == "OAuth" || object.IsFlexibleCustomProvider(provider.Type) {
+			if provider.Category == "OAuth" || object.IsFlexibleCustomProvider(provider.Type) {
 				user, err = getUserByProvider(application.Organization, provider, userInfo.Id)
 				if err != nil {
 					c.ResponseError(err.Error())
@@ -1093,7 +1060,7 @@ func (c *ApiController) Login() {
 				resp = c.HandleLoggedIn(application, user, &authForm)
 
 				c.Ctx.Input.SetParam("recordUserId", user.GetId())
-			} else if provider.Category == "OAuth" || provider.Category == "SAML" {
+			} else if provider.Category == "OAuth" {
 				// Sign up via OAuth
 				user, err = getExistUserByBindingRule(providerItem, application, userInfo)
 				if err != nil {
@@ -1276,9 +1243,6 @@ func (c *ApiController) Login() {
 
 				c.Ctx.Input.SetParam("recordUserId", user.GetId())
 				c.Ctx.Input.SetParam("recordSignup", "true")
-			} else if provider.Category == "SAML" {
-				// TODO: since we get the user info from SAML response, we can try to create the user
-				resp = &Response{Status: "error", Msg: fmt.Sprintf(c.T("general:The user: %s doesn't exist"), util.GetId(application.Organization, userInfo.Id))}
 			}
 			// resp = &Response{Status: "ok", Msg: "", Data: res}
 		} else { // authForm.Method == "link"
@@ -1539,46 +1503,8 @@ func (c *ApiController) recordLoginMetric(authForm *form.AuthForm) {
 	object.LoginCounter.WithLabelValues(organizationName, applicationName, result).Inc()
 }
 
-// SamlRequestIdSessionKey holds the ID of the AuthnRequest the browser was sent to the
-// IdP with, so that only the response to it can complete the login.
-const SamlRequestIdSessionKey = "samlRequestId"
 
-func (c *ApiController) GetSamlLogin() {
-	providerId := c.Ctx.Input.Query("id")
-	relayState := c.Ctx.Input.Query("relayState")
-	authURL, method, requestId, err := object.GenerateSamlRequest(providerId, relayState, c.Ctx.Request.Host, c.GetAcceptLanguage())
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	c.SetSession(SamlRequestIdSessionKey, requestId)
-	c.ResponseOk(authURL, method)
-}
 
-func (c *ApiController) HandleSamlLogin() {
-	relayState := c.Ctx.Input.Query("RelayState")
-	samlResponse := c.Ctx.Input.Query("SAMLResponse")
-	decode, err := base64.StdEncoding.DecodeString(relayState)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	slice := strings.Split(string(decode), "&")
-	if len(slice) < 5 {
-		c.ResponseError("invalid RelayState format")
-		return
-	}
-	redirectTarget := slice[4]
-	if !object.IsValidSamlRedirectURL(redirectTarget, c.Ctx.Request.Host) {
-		c.ResponseError("invalid redirect URL in RelayState: must point to this Masdoor instance")
-		return
-	}
-	relayState = url.QueryEscape(relayState)
-	samlResponse = url.QueryEscape(samlResponse)
-	targetUrl := fmt.Sprintf("%s?relayState=%s&samlResponse=%s",
-		redirectTarget, relayState, samlResponse)
-	c.Redirect(targetUrl, http.StatusSeeOther)
-}
 
 // HandleOfficialAccountEvent ...
 // @Tag System API
