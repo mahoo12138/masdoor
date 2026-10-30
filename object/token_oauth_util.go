@@ -1102,3 +1102,14 @@ func createGuestUserToken(application *Application, clientSecret string, verifie
 func generateGuestUsername() string {
 	return fmt.Sprintf("guest_%s", util.GenerateUUID())
 }
+
+// firstNonEmpty returns the first of values that is not blank, or "" when every
+// value is empty or whitespace only.
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			return strings.TrimSpace(value)
+		}
+	}
+	return ""
+}

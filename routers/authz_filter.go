@@ -25,7 +25,6 @@ import (
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/controllers"
-	"github.com/mahoo12138/masdoor/mcpself"
 	"github.com/mahoo12138/masdoor/object"
 
 	"github.com/beego/beego/v2/server/web/context"
@@ -376,23 +375,12 @@ func getObjectFromBody(ctx *context.Context, path string) (string, string) {
 // authorized. Otherwise an org admin can have a request authorized against an object
 // of their own organization and executed against another organization's object.
 func getObjects(ctx *context.Context) ([]Object, error) {
-	path := ctx.Request.URL.Path
-	if path == "/api/mcp" && ctx.Request.Method == http.MethodPost {
-		objects, err := getMcpObjects(ctx)
-		if err != nil {
-			return nil, err
-		}
-		if len(objects) == 0 {
-			objects = []Object{{}}
-		}
-		return objects, nil
-	}
-
 	owner, name, err := getObject(ctx)
 	if err != nil {
 		return nil, err
 	}
 
+	path := ctx.Request.URL.Path
 	objects := []Object{{Owner: owner, Name: name}}
 
 	if ctx.Request.Method == http.MethodGet {
@@ -473,21 +461,6 @@ func getUrlPath(ctx *context.Context) string {
 	return urlPath
 }
 
-func getExtraInfo(ctx *context.Context, urlPath string) map[string]interface{} {
-	var extra map[string]interface{}
-	if urlPath == "/api/mcp" {
-		var req mcpself.McpRequest
-		if err := json.Unmarshal(ctx.Input.RequestBody, &req); err != nil || req.Method == "" {
-			return nil
-		}
-
-		return map[string]interface{}{
-			"detailPathUrl": req.Method,
-		}
-	}
-	return extra
-}
-
 func getImpersonateUser(ctx *context.Context, subOwner, subName, username string) (string, string, string) {
 	impersonateUser, ok := ctx.Input.Session("impersonateUser").(string)
 	impersonateUserCookie := ctx.GetCookie("impersonateUser")
@@ -546,7 +519,7 @@ func ApiFilter(ctx *context.Context) {
 	}
 
 	method := ctx.Request.Method
-	extraInfo := getExtraInfo(ctx, urlPath)
+	var extraInfo map[string]interface{}
 
 	objects := []Object{{}}
 	if urlPath != "/api/get-app-login" && urlPath != "/api/get-resource" {

@@ -15,12 +15,10 @@
 package routers
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/beego/beego/v2/server/web/context"
-	"github.com/mahoo12138/masdoor/mcpself"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/util"
 )
@@ -34,14 +32,6 @@ func AutoSigninFilter(ctx *context.Context) {
 	// application's "registration_access_token", which is not a row in the "token" table.
 	if strings.HasPrefix(urlPath, "/api/oauth/register") {
 		return
-	}
-	if urlPath == "/api/mcp" {
-		var req mcpself.McpRequest
-		if err := json.Unmarshal(ctx.Input.RequestBody, &req); err == nil {
-			if req.Method == "initialize" || req.Method == "notifications/initialized" || req.Method == "ping" || req.Method == "tools/list" {
-				return
-			}
-		}
 	}
 	//if getSessionUser(ctx) != "" {
 	//	return

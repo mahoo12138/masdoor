@@ -26,7 +26,6 @@ package routers
 import (
 	"github.com/beego/beego/v2/server/web"
 	"github.com/mahoo12138/masdoor/controllers"
-	"github.com/mahoo12138/masdoor/mcpself"
 )
 
 func InitAPI() {
@@ -380,8 +379,6 @@ func InitAPI() {
 	web.Router("/cas/:organization/:application/samlValidate", &controllers.RootController{}, "POST:SamlValidate")
 
 	web.Router("/scim/*", &controllers.RootController{}, "*:HandleScim")
-
-	web.Router("/api/mcp", &mcpself.McpController{}, "POST:HandleMcp")
 
 	web.Router("/api/faceid-signin-begin", &controllers.ApiController{}, "GET:FaceIDSigninBegin")
 }

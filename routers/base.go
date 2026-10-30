@@ -16,7 +16,6 @@ package routers
 
 import (
 	stdcontext "context"
-	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
@@ -27,7 +26,6 @@ import (
 	"github.com/beego/beego/v2/server/web/context"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/i18n"
-	"github.com/mahoo12138/masdoor/mcpself"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/util"
 )
@@ -39,10 +37,6 @@ type Response struct {
 	Data2  interface{} `json:"data2"`
 }
 
-func isMcpRequest(urlPath string) bool {
-	// "/api/mcp" is Masdoor's own MCP server, "/api/server/:owner/:name" is the MCP server proxy
-	return urlPath == "/api/mcp" || strings.HasPrefix(urlPath, "/api/server/")
-}
 
 // responseInvalidToken answers 401 with a challenge on the userinfo endpoint (RFC 6750 section 3.1,
 // RFC 9449 section 7.1), other APIs keep answering 200 with the error in the body
@@ -60,12 +54,6 @@ func responseInvalidToken(ctx *context.Context, token *object.Token, errorCode s
 
 func responseError(ctx *context.Context, error string, data ...interface{}) {
 	// ctx.ResponseWriter.WriteHeader(http.StatusForbidden)
-	urlPath := ctx.Request.URL.Path
-	if isMcpRequest(urlPath) {
-		denyMcpRequest(ctx, error)
-		return
-	}
-
 	resp := Response{Status: "error", Msg: error}
 	switch len(data) {
 	case 2:
@@ -93,43 +81,6 @@ func denyRequest(ctx *context.Context) {
 	responseError(ctx, T(ctx, "auth:Unauthorized operation"))
 }
 
-func denyMcpRequest(ctx *context.Context, message string) {
-	// Add WWW-Authenticate header per MCP Authorization spec (RFC 9728), so that the MCP
-	// client knows it should start the OAuth flow instead of treating the error as fatal
-	// Use the same logic as getOriginFromHost to determine the scheme
-	host := ctx.Request.Host
-	scheme := "https"
-	if !strings.Contains(host, ".") {
-		// localhost:8000 or computer-name:80
-		scheme = "http"
-	}
-	resourceMetadataUrl := fmt.Sprintf("%s://%s%s/.well-known/oauth-protected-resource", scheme, host, basePath)
-	ctx.Output.Header("WWW-Authenticate", fmt.Sprintf("Bearer realm=\"masdoor\", resource_metadata=\"%s\"", resourceMetadataUrl))
-
-	req := mcpself.McpRequest{}
-	err := json.Unmarshal(ctx.Input.RequestBody, &req)
-	if err != nil {
-		// the request body is not a JSON-RPC request, e.g., the GET request of the MCP proxy
-		ctx.Output.SetStatus(http.StatusUnauthorized)
-		ctx.Output.Body([]byte{})
-		return
-	}
-
-	if req.ID == nil {
-		ctx.Output.SetStatus(http.StatusAccepted)
-		ctx.Output.Body([]byte{})
-		return
-	}
-
-	resp := mcpself.BuildMcpResponse(req.ID, nil, &mcpself.McpError{
-		Code:    -32001,
-		Message: "Unauthorized",
-		Data:    message,
-	})
-
-	ctx.Output.SetStatus(http.StatusUnauthorized)
-	_ = ctx.Output.JSON(resp, true, false)
-}
 
 func getUsernameByClientIdSecret(ctx *context.Context) (string, error) {
 	clientId, clientSecret, fromBasicAuth := ctx.Request.BasicAuth()

@@ -22,7 +22,6 @@ import (
 
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
-	"github.com/mahoo12138/masdoor/mcpself"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/util"
 )
@@ -378,13 +377,3 @@ func (c *ApiController) Finish() {
 	c.Controller.Finish()
 }
 
-func (c *ApiController) McpResponseError(id interface{}, code int, message string, data interface{}) {
-	resp := mcpself.BuildMcpResponse(id, nil, &mcpself.McpError{
-		Code:    code,
-		Message: message,
-		Data:    data,
-	})
-	c.Ctx.Output.Header("Content-Type", "application/json")
-	c.Data["json"] = resp
-	c.ServeJSON()
-}
