@@ -374,12 +374,6 @@ func (c *ApiController) SendVerificationCode() {
 				return
 			}
 
-			if vform.Method == ForgetVerification {
-				if err = object.CheckLdapPasswordForget(user); err != nil {
-					c.ResponseError(err.Error())
-					return
-				}
-			}
 		} else if vform.Method == MagicLinkVerification {
 			if !application.IsMagicLinkEnabled() {
 				c.ResponseError(c.T("auth:The login method: login with magic link is not enabled for the application"))
@@ -466,12 +460,6 @@ func (c *ApiController) SendVerificationCode() {
 				return
 			}
 
-			if vform.Method == ForgetVerification {
-				if err = object.CheckLdapPasswordForget(user); err != nil {
-					c.ResponseError(err.Error())
-					return
-				}
-			}
 
 			if user != nil {
 				vform.CountryCode = user.GetCountryCode(vform.CountryCode)

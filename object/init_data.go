@@ -32,12 +32,10 @@ type InitData struct {
 	Users         []*User         `json:"users"`
 	Certs         []*Cert         `json:"certs"`
 	Providers     []*Provider     `json:"providers"`
-	Ldaps         []*Ldap         `json:"ldaps"`
 	Models        []*Model        `json:"models"`
 	Permissions   []*Permission   `json:"permissions"`
 	Resources     []*Resource     `json:"resources"`
 	Roles         []*Role         `json:"roles"`
-	Syncers       []*Syncer       `json:"syncers"`
 	Tokens        []*Token        `json:"tokens"`
 	Webhooks      []*Webhook      `json:"webhooks"`
 	Groups        []*Group        `json:"groups"`
@@ -160,9 +158,6 @@ func applyInitData(s string) error {
 	for i, cert := range initData.Certs {
 		initDefinedCert(cert, getInitDataRaw(raws, "certs", i))
 	}
-	for i, ldap := range initData.Ldaps {
-		initDefinedLdap(ldap, getInitDataRaw(raws, "ldaps", i))
-	}
 	for i, model := range initData.Models {
 		initDefinedModel(model, getInitDataRaw(raws, "models", i))
 	}
@@ -171,9 +166,6 @@ func applyInitData(s string) error {
 	}
 	for i, role := range initData.Roles {
 		initDefinedRole(role, getInitDataRaw(raws, "roles", i))
-	}
-	for i, syncer := range initData.Syncers {
-		initDefinedSyncer(syncer, getInitDataRaw(raws, "syncers", i))
 	}
 	for i, token := range initData.Tokens {
 		initDefinedToken(token, getInitDataRaw(raws, "tokens", i))
@@ -293,12 +285,10 @@ func parseInitData(s string) (*InitData, error) {
 		Users:         []*User{},
 		Certs:         []*Cert{},
 		Providers:     []*Provider{},
-		Ldaps:         []*Ldap{},
 		Models:        []*Model{},
 		Permissions:   []*Permission{},
 		Resources:     []*Resource{},
 		Roles:         []*Role{},
-		Syncers:       []*Syncer{},
 		Tokens:        []*Token{},
 		Webhooks:      []*Webhook{},
 		Groups:        []*Group{},
@@ -371,11 +361,6 @@ func parseInitData(s string) (*InitData, error) {
 		}
 		if role.Users == nil {
 			role.Users = []string{}
-		}
-	}
-	for _, syncer := range data.Syncers {
-		if syncer.TableColumns == nil {
-			syncer.TableColumns = []*TableColumn{}
 		}
 	}
 	for _, webhook := range data.Webhooks {
@@ -540,35 +525,6 @@ func initDefinedCert(cert *Cert, raw json.RawMessage) {
 	}
 }
 
-func initDefinedLdap(ldap *Ldap, raw json.RawMessage) {
-	existed, err := GetLdap(ldap.Id)
-	if err != nil {
-		panic(err)
-	}
-
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateLdap(existed)
-			})
-			return
-		}
-		affected, err := DeleteLdap(ldap)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete ldap")
-		}
-	}
-	_, err = AddLdap(ldap)
-	if err != nil {
-		panic(err)
-	}
-}
 
 func initDefinedProvider(provider *Provider, raw json.RawMessage) {
 	existed, err := GetProvider(util.GetId("admin", provider.Name))
@@ -726,36 +682,6 @@ func initDefinedRole(role *Role, raw json.RawMessage) {
 	}
 }
 
-func initDefinedSyncer(syncer *Syncer, raw json.RawMessage) {
-	existed, err := GetSyncer(syncer.GetId())
-	if err != nil {
-		panic(err)
-	}
-
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateSyncer(syncer.GetId(), existed, true, "en")
-			})
-			return
-		}
-		affected, err := DeleteSyncer(syncer)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete role")
-		}
-	}
-	syncer.CreatedTime = util.GetCurrentTime()
-	_, err = AddSyncer(syncer)
-	if err != nil {
-		panic(err)
-	}
-}
 
 func initDefinedToken(token *Token, raw json.RawMessage) {
 	existed, err := GetToken(token.GetId())

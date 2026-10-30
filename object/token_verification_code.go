@@ -281,10 +281,5 @@ func addVerificationCodeUser(application *Application, verifyType string, dest s
 		return nil, fmt.Errorf("failed to add user: %s", user.GetId())
 	}
 
-	err = AddUserToOriginalDatabase(user)
-	if err != nil {
-		return nil, err
-	}
-
 	return user, nil
 }

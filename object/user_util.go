@@ -269,11 +269,6 @@ func SetUserField(user *User, field string, value string) (bool, error) {
 		return false, err
 	}
 
-	err = user.UpdateUserHash()
-	if err != nil {
-		return false, err
-	}
-
 	if user != nil {
 		user.UpdatedTime = util.GetCurrentTime()
 	}

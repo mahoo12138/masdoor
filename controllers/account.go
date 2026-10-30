@@ -35,7 +35,6 @@ const (
 	ResponseTypeToken   = "token"
 	ResponseTypeIdToken = "id_token"
 	ResponseTypeSaml    = "saml"
-	ResponseTypeCas     = "cas"
 	ResponseTypeDevice  = "device"
 )
 
@@ -290,12 +289,6 @@ func (c *ApiController) Signup() {
 
 	if !affected {
 		c.ResponseError(c.T("account:Failed to add user"), util.StructToJson(user))
-		return
-	}
-
-	err = object.AddUserToOriginalDatabase(user)
-	if err != nil {
-		c.ResponseError(err.Error())
 		return
 	}
 

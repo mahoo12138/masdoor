@@ -298,18 +298,14 @@ func GetPasswordToken(application *Application, username string, password string
 		}, nil
 	}
 
-	if user.Ldap != "" {
-		err = CheckLdapUserPassword(user, password, lang)
-	} else {
-		// For OAuth users who don't have a password set, they cannot use password grant type
-		if user.Password == "" {
-			return nil, &TokenError{
-				Error:            InvalidGrant,
-				ErrorDescription: "OAuth users cannot use password grant type, please use authorization code flow",
-			}, nil
-		}
-		err = CheckPassword(user, password, lang)
+	// For OAuth users who don't have a password set, they cannot use password grant type
+	if user.Password == "" {
+		return nil, &TokenError{
+			Error:            InvalidGrant,
+			ErrorDescription: "OAuth users cannot use password grant type, please use authorization code flow",
+		}, nil
 	}
+	err = CheckPassword(user, password, lang)
 	if err != nil {
 		return nil, &TokenError{
 			Error:            InvalidGrant,
@@ -448,17 +444,13 @@ func GetImplicitToken(application *Application, username string, password string
 		}, nil
 	}
 
-	if user.Ldap != "" {
-		err = CheckLdapUserPassword(user, password, lang)
-	} else {
-		if user.Password == "" {
-			return nil, &TokenError{
-				Error:            InvalidGrant,
-				ErrorDescription: "OAuth users cannot use implicit grant type, please use authorization code flow",
-			}, nil
-		}
-		err = CheckPassword(user, password, lang)
+	if user.Password == "" {
+		return nil, &TokenError{
+			Error:            InvalidGrant,
+			ErrorDescription: "OAuth users cannot use implicit grant type, please use authorization code flow",
+		}, nil
 	}
+	err = CheckPassword(user, password, lang)
 	if err != nil {
 		return nil, &TokenError{
 			Error:            InvalidGrant,

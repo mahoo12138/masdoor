@@ -137,17 +137,6 @@ func (c *ApiController) MfaSetupVerify() {
 			return
 		}
 		config.Secret = dest
-	} else if mfaType == object.RadiusType {
-		if dest == "" {
-			c.ResponseError("RADIUS username is missing")
-			return
-		}
-		config.Secret = dest
-		if secret == "" {
-			c.ResponseError("RADIUS provider is missing")
-			return
-		}
-		config.URL = secret
 	} else if mfaType == object.PushType {
 		if dest == "" {
 			c.ResponseError("push notification receiver is missing")
@@ -272,17 +261,6 @@ func (c *ApiController) MfaSetupEnable() {
 			}
 			user.CountryCode = countryCode
 		}
-	} else if mfaType == object.RadiusType {
-		if dest == "" {
-			c.ResponseError("RADIUS username is missing")
-			return
-		}
-		config.Secret = dest
-		if secret == "" {
-			c.ResponseError("RADIUS provider is missing")
-			return
-		}
-		config.URL = secret
 	} else if mfaType == object.PushType {
 		if dest == "" {
 			c.ResponseError("push notification receiver is missing")

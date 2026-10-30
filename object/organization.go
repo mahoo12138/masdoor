@@ -684,13 +684,6 @@ func organizationChangeTrigger(oldName string, newName string) error {
 		return err
 	}
 
-	ldap := new(Ldap)
-	ldap.Owner = newName
-	_, err = session.Where("owner=?", oldName).Update(ldap)
-	if err != nil {
-		return err
-	}
-
 	model := new(Model)
 	model.Owner = newName
 	_, err = session.Where("owner=?", oldName).Update(model)
@@ -711,13 +704,6 @@ func organizationChangeTrigger(oldName string, newName string) error {
 	resource := new(Resource)
 	resource.Owner = newName
 	_, err = session.Where("owner=?", oldName).Update(resource)
-	if err != nil {
-		return err
-	}
-
-	syncer := new(Syncer)
-	syncer.Organization = newName
-	_, err = session.Where("organization=?", oldName).Update(syncer)
 	if err != nil {
 		return err
 	}

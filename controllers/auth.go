@@ -305,28 +305,6 @@ func (c *ApiController) HandleLoggedIn(application *object.Application, user *ob
 			// The prompt page needs the user to be signed in
 			c.SetSessionUsername(userId)
 		}
-	} else if form.Type == ResponseTypeCas {
-		// not oauth but CAS SSO protocol
-		service := c.Ctx.Input.Query("service")
-		resp = wrapErrorResponse(nil)
-		if service != "" {
-			if err = object.CheckCasLogin(application, c.GetAcceptLanguage(), service); err != nil {
-				c.ResponseError(err.Error())
-				return
-			}
-
-			st, err := object.GenerateCasToken(userId, service, application.GetId())
-			if err != nil {
-				resp = wrapErrorResponse(err)
-			} else {
-				resp.Data = st
-			}
-		}
-
-		if application.EnableSigninSession || application.HasPromptPage() {
-			// The prompt page needs the user to be signed in
-			c.SetSessionUsername(userId)
-		}
 	} else {
 		resp = wrapErrorResponse(fmt.Errorf("unknown response type: %s", form.Type))
 	}
@@ -429,7 +407,6 @@ func (c *ApiController) GetApplicationLogin() {
 	scope := c.Ctx.Input.Query("scope")
 	state := c.Ctx.Input.Query("state")
 	nonce := c.Ctx.Input.Query("nonce")
-	id := c.Ctx.Input.Query("id")
 	loginType := c.Ctx.Input.Query("type")
 	userCode := c.Ctx.Input.Query("userCode")
 	organization := c.Ctx.Input.Query("organization")
@@ -442,24 +419,6 @@ func (c *ApiController) GetApplicationLogin() {
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
-		}
-	} else if loginType == "cas" {
-		application, err = object.GetApplication(id)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
-		if application == nil {
-			c.ResponseError(fmt.Sprintf(c.T("auth:The application: %s does not exist"), id))
-			return
-		}
-
-		if redirectUri != "" {
-			err = object.CheckCasLogin(application, c.GetAcceptLanguage(), redirectUri)
-			if err != nil {
-				c.ResponseError(err.Error())
-				return
-			}
 		}
 	} else if loginType == "device" {
 		deviceAuthCache, ok := object.DeviceAuthMap.Load(userCode)
@@ -927,14 +886,6 @@ func (c *ApiController) Login() {
 				}
 			}
 
-			isSigninViaLdap := authForm.SigninMethod == "LDAP"
-			var isPasswordWithLdapEnabled bool
-			if authForm.SigninMethod == "Password" {
-				isPasswordWithLdapEnabled = application.IsPasswordWithLdapEnabled()
-			} else {
-				isPasswordWithLdapEnabled = false
-			}
-
 			if application.IsShared {
 				var resolvedUser *object.User
 				resolvedUser, err = object.GetUserByFieldsForSharedApp(application, authForm.Organization, lookupUsername)
@@ -947,7 +898,7 @@ func (c *ApiController) Login() {
 				}
 			}
 
-			user, err = object.CheckUserPassword(authForm.Organization, lookupUsername, password, c.GetAcceptLanguage(), enableCaptcha, isSigninViaLdap, isPasswordWithLdapEnabled)
+			user, err = object.CheckUserPassword(authForm.Organization, lookupUsername, password, c.GetAcceptLanguage(), enableCaptcha)
 		}
 
 		if err != nil {

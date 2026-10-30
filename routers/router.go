@@ -56,11 +56,6 @@ func InitAPI() {
 	web.Router("/api/userinfo", &controllers.ApiController{}, "GET,POST:GetUserinfo")
 	web.Router("/api/user", &controllers.ApiController{}, "GET:GetUserinfo2")
 	web.Router("/api/unlink", &controllers.ApiController{}, "POST:Unlink")
-	web.Router("/api/get-saml-login", &controllers.ApiController{}, "GET:GetSamlLogin")
-	web.Router("/api/acs", &controllers.ApiController{}, "POST:HandleSamlLogin")
-	web.Router("/api/saml/metadata", &controllers.ApiController{}, "GET:GetSamlMeta")
-	web.Router("/api/saml/redirect/:owner/:application", &controllers.ApiController{}, "*:HandleSamlRedirect")
-	web.Router("/api/saml/logout/:owner/:application", &controllers.ApiController{}, "GET,POST:HandleSamlLogout")
 	web.Router("/api/webhook", &controllers.ApiController{}, "*:HandleOfficialAccountEvent")
 	web.Router("/api/get-qrcode", &controllers.ApiController{}, "GET:GetQRCode")
 	web.Router("/api/get-webhook-event", &controllers.ApiController{}, "GET:GetWebhookEventType")
@@ -69,7 +64,6 @@ func InitAPI() {
 	web.Router("/api/device-auth", &controllers.ApiController{}, "POST:DeviceAuth")
 	web.Router("/api/cancel-device-auth", &controllers.ApiController{}, "POST:CancelDeviceAuth")
 	web.Router("/api/device-auth-complete", &controllers.ApiController{}, "POST:DeviceAuthComplete")
-	web.Router("/api/kerberos-login", &controllers.ApiController{}, "GET:KerberosLogin")
 
 	web.Router("/api/get-organizations", &controllers.ApiController{}, "GET:GetOrganizations")
 	web.Router("/api/get-organization", &controllers.ApiController{}, "GET:GetOrganization")
@@ -282,13 +276,6 @@ func InitAPI() {
 	web.Router("/api/add-form", &controllers.ApiController{}, "POST:AddForm")
 	web.Router("/api/delete-form", &controllers.ApiController{}, "POST:DeleteForm")
 
-	web.Router("/api/get-syncers", &controllers.ApiController{}, "GET:GetSyncers")
-	web.Router("/api/get-syncer", &controllers.ApiController{}, "GET:GetSyncer")
-	web.Router("/api/update-syncer", &controllers.ApiController{}, "POST:UpdateSyncer")
-	web.Router("/api/add-syncer", &controllers.ApiController{}, "POST:AddSyncer")
-	web.Router("/api/delete-syncer", &controllers.ApiController{}, "POST:DeleteSyncer")
-	web.Router("/api/run-syncer", &controllers.ApiController{}, "POST:RunSyncer")
-	web.Router("/api/test-syncer-db", &controllers.ApiController{}, "POST:TestSyncerDb")
 
 	web.Router("/api/get-webhooks", &controllers.ApiController{}, "GET:GetWebhooks")
 	web.Router("/api/get-webhook", &controllers.ApiController{}, "GET:GetWebhook")
@@ -321,13 +308,6 @@ func InitAPI() {
 	web.Router("/api/get-captcha", &controllers.ApiController{}, "GET:GetCaptcha")
 	web.Router("/api/get-verifications", &controllers.ApiController{}, "GET:GetVerifications")
 
-	web.Router("/api/get-ldap-users", &controllers.ApiController{}, "GET:GetLdapUsers")
-	web.Router("/api/get-ldaps", &controllers.ApiController{}, "GET:GetLdaps")
-	web.Router("/api/get-ldap", &controllers.ApiController{}, "GET:GetLdap")
-	web.Router("/api/add-ldap", &controllers.ApiController{}, "POST:AddLdap")
-	web.Router("/api/update-ldap", &controllers.ApiController{}, "POST:UpdateLdap")
-	web.Router("/api/delete-ldap", &controllers.ApiController{}, "POST:DeleteLdap")
-	web.Router("/api/sync-ldap-users", &controllers.ApiController{}, "POST:SyncLdapUsers")
 
 	web.Router("/api/login/oauth/access_token", &controllers.ApiController{}, "POST:GetOAuthToken")
 	web.Router("/api/login/oauth/refresh_token", &controllers.ApiController{}, "POST:RefreshToken")
@@ -369,16 +349,8 @@ func InitAPI() {
 	web.Router("/.well-known/oauth-protected-resource", &controllers.RootController{}, "GET:GetOauthProtectedResourceMetadata")
 	web.Router("/.well-known/:application/oauth-protected-resource", &controllers.RootController{}, "GET:GetOauthProtectedResourceMetadataByApplication")
 
-	web.Router("/cas/:organization/:application/serviceValidate", &controllers.RootController{}, "GET:CasServiceValidate")
-	web.Router("/cas/:organization/:application/proxyValidate", &controllers.RootController{}, "GET:CasProxyValidate")
-	web.Router("/cas/:organization/:application/proxy", &controllers.RootController{}, "GET:CasProxy")
-	web.Router("/cas/:organization/:application/validate", &controllers.RootController{}, "GET:CasValidate")
 
-	web.Router("/cas/:organization/:application/p3/serviceValidate", &controllers.RootController{}, "GET:CasP3ServiceValidate")
-	web.Router("/cas/:organization/:application/p3/proxyValidate", &controllers.RootController{}, "GET:CasP3ProxyValidate")
-	web.Router("/cas/:organization/:application/samlValidate", &controllers.RootController{}, "POST:SamlValidate")
 
-	web.Router("/scim/*", &controllers.RootController{}, "*:HandleScim")
 
 	web.Router("/api/faceid-signin-begin", &controllers.ApiController{}, "GET:FaceIDSigninBegin")
 }

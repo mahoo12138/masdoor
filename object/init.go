@@ -37,7 +37,6 @@ func InitDb() {
 		initBuiltInUser()
 		initBuiltInApplication()
 		initBuiltInCert()
-		initBuiltInLdap()
 	}
 
 	existed = initBuiltInApiModel()
@@ -263,13 +262,9 @@ func SetInitAdminPassword(password string, lang string) (bool, error) {
 	user.UpdateUserPassword(organization)
 	user.LastChangePasswordTime = util.GetCurrentTime()
 	user.UpdatedTime = user.LastChangePasswordTime
-	err = user.UpdateUserHash()
-	if err != nil {
-		return false, err
-	}
 
 	affected, err := ormer.Engine.ID(core.PK{user.Owner, user.Name}).Where("password = ?", "").
-		Cols("password", "password_salt", "password_type", "last_change_password_time", "updated_time", "hash").Update(user)
+		Cols("password", "password_salt", "password_type", "last_change_password_time", "updated_time").Update(user)
 	if err != nil {
 		return false, err
 	}
@@ -381,33 +376,6 @@ func warnPublicBuiltInCert() {
 	}
 }
 
-func initBuiltInLdap() {
-	ldap, err := GetLdap("ldap-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if ldap != nil {
-		return
-	}
-
-	ldap = &Ldap{
-		Id:         "ldap-built-in",
-		Owner:      "built-in",
-		ServerName: "BuildIn LDAP Server",
-		Host:       "example.com",
-		Port:       389,
-		Username:   "cn=buildin,dc=example,dc=com",
-		Password:   "",
-		BaseDn:     "ou=BuildIn,dc=example,dc=com",
-		AutoSync:   0,
-		LastSync:   "",
-	}
-	_, err = AddLdap(ldap)
-	if err != nil {
-		panic(err)
-	}
-}
 
 func initBuiltInProvider() {
 	providers := []*Provider{

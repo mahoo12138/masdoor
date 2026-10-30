@@ -312,7 +312,6 @@ func getUserWithoutThirdIdp(user *User) *UserWithoutThirdIdp {
 		MfaPhoneEnabled:  user.MfaPhoneEnabled,
 		MfaEmailEnabled:  user.MfaEmailEnabled,
 
-		Ldap:       user.Ldap,
 		Properties: user.Properties,
 
 		Roles:       user.Roles,

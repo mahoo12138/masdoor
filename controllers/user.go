@@ -383,7 +383,7 @@ func (c *ApiController) UpdateUser() {
 	isPasswordChanged := false
 	// a password_type column means the caller writes an already hashed password as it is
 	if user.Password != "" && user.Password != "***" && user.Password != oldUser.Password && !util.InSlice(columns, "password_type") {
-		if (!isAdmin && oldUser.Tag != "guest-user") || oldUser.Ldap != "" {
+		if !isAdmin && oldUser.Tag != "guest-user" {
 			c.ResponseError(c.T("user:Please use the set-password API to change the password"))
 			return
 		}
@@ -442,14 +442,6 @@ func (c *ApiController) UpdateUser() {
 
 	if affected && isPasswordChanged && oldUser.Tag != "guest-user" {
 		_, err = object.ExpireTokenByUser(oldUser.Owner, oldUser.Name)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
-	}
-
-	if affected {
-		err = object.UpdateUserToOriginalDatabase(&user)
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -555,11 +547,6 @@ func (c *ApiController) GetEmailAndPhone() {
 		return
 	}
 
-	err = object.CheckLdapPasswordForget(user)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
 
 	respUser := object.User{Name: user.Name}
 	var contentType string
@@ -688,11 +675,6 @@ func (c *ApiController) SetPassword() {
 
 	// code != "" means the request comes from the forgot-password flow
 	if code != "" {
-		err = object.CheckLdapPasswordForget(targetUser)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
 	}
 
 	isAdmin := c.IsAdmin()
@@ -705,12 +687,8 @@ func (c *ApiController) SetPassword() {
 			}
 		}
 	} else if code == "" {
-		if targetUser.Password != "" || user.Ldap != "" {
-			if user.Ldap == "" {
-				err = object.CheckPassword(targetUser, oldPassword, c.GetAcceptLanguage())
-			} else {
-				err = object.CheckLdapUserPassword(targetUser, oldPassword, c.GetAcceptLanguage())
-			}
+		if targetUser.Password != "" {
+			err = object.CheckPassword(targetUser, oldPassword, c.GetAcceptLanguage())
 			if err != nil {
 				c.ResponseError(err.Error())
 				return
@@ -756,12 +734,10 @@ func (c *ApiController) SetPassword() {
 		c.SetSession("verifiedUserId", "")
 	}
 
-	if user.Ldap == "" {
-		err = targetUser.AddPasswordHistory(organization)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
+	err = targetUser.AddPasswordHistory(organization)
+	if err != nil {
+		c.ResponseError(err.Error())
+		return
 	}
 
 	targetUser.Password = newPassword
@@ -769,15 +745,7 @@ func (c *ApiController) SetPassword() {
 	targetUser.NeedUpdatePassword = false
 	targetUser.LastChangePasswordTime = util.GetCurrentTime()
 
-	if user.Ldap == "" {
-		_, err = object.UpdateUser(userId, targetUser, []string{"password", "password_salt", "need_update_password", "password_type", "last_change_password_time"}, false)
-	} else {
-		if isAdmin {
-			err = object.ResetLdapPassword(targetUser, "", newPassword, c.GetAcceptLanguage())
-		} else {
-			err = object.ResetLdapPassword(targetUser, oldPassword, newPassword, c.GetAcceptLanguage())
-		}
-	}
+	_, err = object.UpdateUser(userId, targetUser, []string{"password", "password_salt", "need_update_password", "password_type", "last_change_password_time"}, false)
 
 	if err != nil {
 		c.ResponseError(err.Error())
@@ -859,11 +827,7 @@ func (c *ApiController) CheckUserPassword() {
 		return
 	}
 
-	/*
-	 * Verified password with user as subject, if field ldap not empty,
-	 * then `isPasswordWithLdapEnabled` is true
-	 */
-	_, err = object.CheckUserPassword(user.Owner, user.Name, user.Password, c.GetAcceptLanguage(), false, false, user.Ldap != "")
+	_, err = object.CheckUserPassword(user.Owner, user.Name, user.Password, c.GetAcceptLanguage(), false)
 	if err != nil {
 		c.ResponseError(err.Error())
 	} else {

@@ -180,11 +180,6 @@ func (c *ApiController) addMagicLinkUser(application *object.Application, magicL
 		return nil, errors.New(c.T("account:Failed to add user"))
 	}
 
-	err = object.AddUserToOriginalDatabase(user)
-	if err != nil {
-		return nil, err
-	}
-
 	c.Ctx.Input.SetParam("recordSignup", "true")
 	util.LogInfo(c.Ctx, "API: [%s] is signed up as new user", user.GetId())
 

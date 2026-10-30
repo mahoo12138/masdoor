@@ -24,10 +24,8 @@ import (
 	_ "github.com/beego/beego/v2/server/web/session/redis_cluster"
 	"github.com/mahoo12138/masdoor/authz"
 	"github.com/mahoo12138/masdoor/conf"
-	"github.com/mahoo12138/masdoor/ldap"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/proxy"
-	"github.com/mahoo12138/masdoor/radius"
 	"github.com/mahoo12138/masdoor/routers"
 	"github.com/mahoo12138/masdoor/service"
 	"github.com/mahoo12138/masdoor/util"
@@ -79,7 +77,6 @@ func runServer() {
 
 	object.InitDefaultStorageProvider()
 	object.InitLogProviders()
-	object.InitLdapAutoSynchronizer()
 	proxy.InitHttpClient()
 	authz.InitApi()
 	object.InitUserManager()
@@ -87,7 +84,6 @@ func runServer() {
 	object.InitCleanupTokens()
 	object.InitCleanupRecords()
 	object.InitCleanupDeviceAuthMap()
-	object.InitCleanupCasTickets()
 	object.InitSamlAssertionStore()
 	object.InitExpirePermissions()
 
@@ -96,8 +92,6 @@ func runServer() {
 		object.InitRuleMap()
 		object.StartMonitorSitesLoop()
 	}
-
-	util.SafeGoroutine(func() { object.RunSyncUsersJob() })
 
 	// web.DelStaticPath("/static")
 	// web.SetStaticPath("/assets", "web/build/assets")
@@ -151,8 +145,6 @@ func runServer() {
 		panic(err)
 	}
 
-	go ldap.StartLdapServer()
-	go radius.StartRadiusServer()
 	go object.ClearThroughputPerSecond()
 
 	// Start webhook delivery worker

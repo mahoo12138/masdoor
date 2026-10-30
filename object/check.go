@@ -26,7 +26,6 @@ import (
 	"github.com/mahoo12138/masdoor/form"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
-	goldap "github.com/go-ldap/ldap/v3"
 )
 
 const (
@@ -328,80 +327,11 @@ func CheckPasswordComplexity(user *User, password string, lang string) string {
 	return CheckPasswordComplexityByOrg(organization, password, lang)
 }
 
-func CheckLdapUserPassword(user *User, password string, lang string, options ...bool) error {
-	enableCaptcha := false
-	if len(options) > 0 {
-		enableCaptcha = options[0]
-	}
-
-	// check the login error times
-	if !enableCaptcha {
-		err := checkSigninErrorTimes(user, lang)
-		if err != nil {
-			return err
-		}
-	}
-
-	ldaps, err := GetLdaps(user.Owner)
-	if err != nil {
-		return err
-	}
-
-	ldapLoginSuccess := false
-	hit := false
-
-	for _, ldapServer := range ldaps {
-		conn, err := ldapServer.GetLdapConn()
-		if err != nil {
-			continue
-		}
-
-		searchReq := goldap.NewSearchRequest(ldapServer.BaseDn, goldap.ScopeWholeSubtree, goldap.NeverDerefAliases,
-			0, 0, false, ldapServer.buildAuthFilterString(user), []string{}, nil)
-
-		searchResult, err := conn.Conn.Search(searchReq)
-		if err != nil {
-			conn.Close()
-			return err
-		}
-
-		if len(searchResult.Entries) == 0 {
-			conn.Close()
-			continue
-		}
-		if len(searchResult.Entries) > 1 {
-			conn.Close()
-			return errors.New(i18n.Translate(lang, "check:Multiple accounts with same uid, please check your ldap server"))
-		}
-
-		hit = true
-		dn := searchResult.Entries[0].DN
-		if err = conn.Conn.Bind(dn, password); err == nil {
-			ldapLoginSuccess = true
-			conn.Close()
-			break
-		}
-
-		conn.Close()
-	}
-
-	if !ldapLoginSuccess {
-		if !hit {
-			return fmt.Errorf("user not exist")
-		}
-		return recordSigninErrorInfo(user, lang, enableCaptcha)
-	}
-	return resetUserSigninErrorTimes(user)
-}
 
 func CheckUserPassword(organization string, username string, password string, lang string, options ...bool) (*User, error) {
 	enableCaptcha := false
-	isSigninViaLdap := false
-	isPasswordWithLdapEnabled := false
 	if len(options) > 0 {
 		enableCaptcha = options[0]
-		isSigninViaLdap = options[1]
-		isPasswordWithLdapEnabled = options[2]
 	}
 	user, err := GetUserByFields(organization, username)
 	if err != nil {
@@ -421,36 +351,14 @@ func CheckUserPassword(organization string, username string, password string, la
 		return nil, newSigninError(SigninReasonAccountDisabled, i18n.Translate(lang, "check:Guest users must upgrade their account by setting a username and password before they can sign in directly"))
 	}
 
-	if isSigninViaLdap {
-		if user.Ldap == "" {
-			return nil, fmt.Errorf(i18n.Translate(lang, "check:The user: %s doesn't exist in LDAP server"), username)
-		}
+	err = CheckPassword(user, password, lang, enableCaptcha)
+	if err != nil {
+		return nil, err
 	}
 
-	if user.Ldap != "" {
-		if !isSigninViaLdap && !isPasswordWithLdapEnabled {
-			return nil, errors.New(i18n.Translate(lang, "check:password or code is incorrect"))
-		}
-
-		// only for LDAP users
-		err = CheckLdapUserPassword(user, password, lang, enableCaptcha)
-		if err != nil {
-			if err.Error() == "user not exist" {
-				return nil, fmt.Errorf(i18n.Translate(lang, "check:The user: %s doesn't exist in LDAP server"), username)
-			}
-
-			return nil, err
-		}
-	} else {
-		err = CheckPassword(user, password, lang, enableCaptcha)
-		if err != nil {
-			return nil, err
-		}
-
-		err = checkPasswordExpired(user, lang)
-		if err != nil {
-			return nil, err
-		}
+	err = checkPasswordExpired(user, lang)
+	if err != nil {
+		return nil, err
 	}
 
 	return user, nil

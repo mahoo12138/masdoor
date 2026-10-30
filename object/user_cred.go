@@ -19,29 +19,6 @@ import (
 	"github.com/mahoo12138/masdoor/util"
 )
 
-func calculateHash(user *User) (string, error) {
-	syncer, err := getDbSyncerForUser(user)
-	if err != nil {
-		return "", err
-	}
-
-	if syncer == nil {
-		return "", nil
-	}
-
-	return syncer.calculateHash(user), nil
-}
-
-func (user *User) UpdateUserHash() error {
-	hash, err := calculateHash(user)
-	if err != nil {
-		return err
-	}
-
-	user.Hash = hash
-	return nil
-}
-
 func (user *User) UpdateUserPassword(organization *Organization) {
 	// Don't hash empty passwords (e.g., for OAuth users)
 	if user.Password == "" {

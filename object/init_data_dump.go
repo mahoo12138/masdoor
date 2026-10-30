@@ -46,10 +46,6 @@ func writeInitDataToFile(filePath string) error {
 		return err
 	}
 
-	ldaps, err := GetLdaps("")
-	if err != nil {
-		return err
-	}
 
 	models, err := GetModels("")
 	if err != nil {
@@ -73,10 +69,6 @@ func writeInitDataToFile(filePath string) error {
 		return err
 	}
 
-	syncers, err := GetSyncers("")
-	if err != nil {
-		return err
-	}
 
 	tokens, err := GetTokens("", "")
 	if err != nil {
@@ -138,12 +130,10 @@ func writeInitDataToFile(filePath string) error {
 		Users:         users,
 		Certs:         certs,
 		Providers:     providers,
-		Ldaps:         ldaps,
 		Models:        models,
 		Permissions:   permissions,
 		Resources:     resources,
 		Roles:         roles,
-		Syncers:       syncers,
 		Tokens:        tokens,
 		Webhooks:      webhooks,
 		Groups:        groups,

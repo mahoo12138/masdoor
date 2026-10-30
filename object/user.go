@@ -217,9 +217,6 @@ type User struct {
 	TotpSecret          string                `xorm:"varchar(100)" json:"totpSecret"`
 	MfaPhoneEnabled     bool                  `json:"mfaPhoneEnabled"`
 	MfaEmailEnabled     bool                  `json:"mfaEmailEnabled"`
-	MfaRadiusEnabled    bool                  `json:"mfaRadiusEnabled"`
-	MfaRadiusUsername   string                `xorm:"varchar(100)" json:"mfaRadiusUsername"`
-	MfaRadiusProvider   string                `xorm:"varchar(100)" json:"mfaRadiusProvider"`
 	MfaPushEnabled      bool                  `json:"mfaPushEnabled"`
 	MfaPushReceiver     string                `xorm:"varchar(100)" json:"mfaPushReceiver"`
 	MfaPushProvider     string                `xorm:"varchar(100)" json:"mfaPushProvider"`
@@ -228,7 +225,6 @@ type User struct {
 	InvitationCode      string                `xorm:"varchar(100) index" json:"invitationCode"`
 	FaceIds             []*FaceId             `json:"faceIds"`
 
-	Ldap string `xorm:"ldap varchar(100)" json:"ldap"`
 	// UidNumber is the POSIX uid published by the built-in LDAP server, 0 when unassigned.
 	UidNumber  int               `xorm:"index" json:"uidNumber"`
 	Properties map[string]string `json:"properties"`
@@ -1021,11 +1017,6 @@ func UpdateUser(id string, user *User, columns []string, isAdmin bool) (bool, er
 
 func updateUser(id string, user *User, columns []string) (int64, error) {
 	owner, name := util.GetOwnerAndNameFromIdNoCheck(id)
-	err := user.UpdateUserHash()
-	if err != nil {
-		return 0, err
-	}
-
 	// Ensure hash column is included in updates when columns are specified
 	if len(columns) > 0 && !util.InSlice(columns, "hash") {
 		columns = append(columns, "hash")
@@ -1058,11 +1049,6 @@ func UpdateUserForAllFields(id string, user *User) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-	}
-
-	err = user.UpdateUserHash()
-	if err != nil {
-		return false, err
 	}
 
 	if user.Avatar != oldUser.Avatar && user.Avatar != "" {
@@ -1171,13 +1157,6 @@ func AddUser(user *User, lang string) (bool, error) {
 		user.UpdatedTime = user.CreatedTime
 	}
 
-	err = user.UpdateUserHash()
-	if err != nil {
-		return false, err
-	}
-
-	user.PreHash = user.Hash
-
 	updated, err := user.refreshAvatar()
 	if err != nil {
 		return false, err
@@ -1239,17 +1218,11 @@ func AddUsers(users []*User) (bool, error) {
 			user.UpdatedTime = user.CreatedTime
 		}
 
-		err := user.UpdateUserHash()
+		permanentAvatar, err := getPermanentAvatarUrl(user.Owner, user.Name, user.Avatar, true)
 		if err != nil {
 			return false, err
 		}
-
-		user.PreHash = user.Hash
-
-		user.PermanentAvatar, err = getPermanentAvatarUrl(user.Owner, user.Name, user.Avatar, true)
-		if err != nil {
-			return false, err
-		}
+		user.PermanentAvatar = permanentAvatar
 
 		if user.Groups != nil && len(user.Groups) > 0 {
 			_, err = userEnforcer.UpdateGroupsForUser(user.GetId(), user.Groups)
