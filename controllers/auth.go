@@ -17,10 +17,8 @@ package controllers
 import (
 	"context"
 	"encoding/json"
-	"encoding/xml"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -989,11 +987,6 @@ func (c *ApiController) Login() {
 				return
 			}
 
-			if provider.Type == "WeChat" && !idp.IsWechatTicketOfProvider(authForm.Code, provider.Name) {
-				c.ResponseError(c.T("auth:Invalid token"))
-				return
-			}
-
 			// https://github.com/golang/oauth2/issues/123#issuecomment-103715338
 			token, err = idProvider.GetToken(authForm.Code)
 			if err != nil {
@@ -1506,128 +1499,8 @@ func (c *ApiController) recordLoginMetric(authForm *form.AuthForm) {
 
 
 
-// HandleOfficialAccountEvent ...
-// @Tag System API
-// @Title HandleOfficialAccountEvent
-// @Description Handle WeChat Official Account webhook event
-// @Param   signature query string false "WeChat signature"
-// @Param   timestamp query string false "WeChat timestamp"
-// @Param   nonce     query string false "WeChat nonce"
-// @router /webhook [POST]
-// @Success 200 {object} controllers.Response The Response object
-func (c *ApiController) HandleOfficialAccountEvent() {
-	if c.Ctx.Request.Method == "GET" {
-		s := c.Ctx.Request.FormValue("echostr")
-		echostr, _ := strconv.Atoi(s)
-		c.SetData(echostr)
-		c.ServeJSON()
-		return
-	}
-	respBytes, err := io.ReadAll(c.Ctx.Request.Body)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	signature := c.Ctx.Input.Query("signature")
-	timestamp := c.Ctx.Input.Query("timestamp")
-	nonce := c.Ctx.Input.Query("nonce")
-	var data struct {
-		MsgType      string `xml:"MsgType"`
-		Event        string `xml:"Event"`
-		EventKey     string `xml:"EventKey"`
-		FromUserName string `xml:"FromUserName"`
-		Ticket       string `xml:"Ticket"`
-	}
-	err = xml.Unmarshal(respBytes, &data)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	if strings.ToUpper(data.Event) != "SCAN" && strings.ToUpper(data.Event) != "SUBSCRIBE" {
-		c.Ctx.WriteString("")
-		return
-	}
-	if data.Ticket == "" {
-		c.ResponseError("empty ticket")
-		return
-	}
 
-	providerId := data.EventKey
-	provider, err := object.GetProvider(providerId)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	if provider == nil {
-		c.ResponseError(fmt.Sprintf(c.T("auth:The provider: %s does not exist"), providerId))
-		return
-	}
 
-	if provider.Type != "WeChat" || provider.Content == "" || !idp.VerifyWechatSignature(provider.Content, nonce, timestamp, signature) {
-		c.ResponseError("invalid signature")
-		return
-	}
-
-	idp.Lock.Lock()
-	if idp.WechatCacheMap == nil {
-		idp.WechatCacheMap = make(map[string]idp.WechatCacheMapValue)
-	}
-	idp.WechatCacheMap[data.Ticket] = idp.WechatCacheMapValue{
-		IsScanned:     true,
-		WechatUnionId: data.FromUserName,
-		ProviderName:  provider.Name,
-	}
-	idp.Lock.Unlock()
-
-	c.Ctx.WriteString("")
-}
-
-// GetWebhookEventType ...
-// @Tag System API
-// @Title GetWebhookEventType
-// @router /get-webhook-event [GET]
-// @Param   ticket     query    string  true        "The eventId of QRCode"
-// @Success 200 {object} controllers.Response The Response object
-func (c *ApiController) GetWebhookEventType() {
-	ticket := c.Ctx.Input.Query("ticket")
-
-	idp.Lock.RLock()
-	_, ok := idp.WechatCacheMap[ticket]
-	idp.Lock.RUnlock()
-	if !ok {
-		c.ResponseError("ticket not found")
-		return
-	}
-
-	c.ResponseOk("SCAN", ticket)
-}
-
-// GetQRCode
-// @Tag System API
-// @Title GetWechatQRCode
-// @router /get-qrcode [GET]
-// @Param   id     query    string  true        "The id ( owner/name ) of provider"
-// @Success 200 {object} controllers.Response The Response object
-func (c *ApiController) GetQRCode() {
-	providerId := c.Ctx.Input.Query("id")
-	provider, err := object.GetProvider(providerId)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	if provider == nil {
-		c.ResponseError(fmt.Sprintf(c.T("auth:The provider: %s does not exist"), providerId))
-		return
-	}
-
-	code, ticket, err := idp.GetWechatOfficialAccountQRCode(provider.ClientId2, provider.ClientSecret2, providerId)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-
-	c.ResponseOk(code, ticket)
-}
 
 // GetCaptchaStatus
 // @Title GetCaptchaStatus

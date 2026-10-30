@@ -898,13 +898,13 @@ var userSelfColumns = []string{
 // link and unlink flows or an admin may set them, a user choosing their own would take over
 // the sign-in of whoever owns that provider account
 var userProviderColumns = []string{
-	"github", "google", "qq", "wechat", "facebook", "dingtalk", "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs",
-	"baidu", "alipay", "masdoor", "infoflow", "apple", "azuread", "azureadb2c", "slack", "steam", "bilibili", "okta", "douyin", "kwai", "line", "amazon",
+	"github", "google", "oidc", "custom",
+	"apple", "azuread", "slack", "steam", "line", "amazon",
 	"auth0", "battlenet", "bitbucket", "box", "cloudfoundry", "dailymotion", "deezer", "digitalocean", "discord", "dropbox",
 	"eveonline", "fitbit", "gitea", "heroku", "influxcloud", "instagram", "intercom", "kakao", "lastfm", "mailru", "meetup",
 	"microsoftonline", "naver", "nextcloud", "onedrive", "oura", "patreon", "paypal", "salesforce", "shopify", "soundcloud",
-	"spotify", "strava", "stripe", "telegram", "tiktok", "tumblr", "twitch", "twitter", "typetalk", "uber", "vk", "wepay", "xero", "yahoo",
-	"yammer", "yandex", "zoom", "oidc", "custom",
+	"spotify", "strava", "stripe", "tiktok", "tumblr", "twitch", "typetalk", "uber", "vk", "wepay", "xero", "yahoo",
+	"yammer", "yandex", "zoom",
 }
 
 func GetDefaultUserUpdateColumns(isAdmin bool) []string {

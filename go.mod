@@ -30,7 +30,6 @@ require (
 	github.com/fogleman/gg v1.3.0
 	github.com/go-git/go-git/v5 v5.19.2
 	github.com/go-jose/go-jose/v4 v4.1.4
-	github.com/go-pay/gopay v1.5.115
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/go-webauthn/webauthn v0.10.2
@@ -38,7 +37,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/hsluoyz/modsecurity-go v0.0.7
 	github.com/json-iterator/go v1.1.12
-	github.com/lestrrat-go/jwx v1.2.29
 	github.com/lib/pq v1.10.9
 	github.com/likexian/whois v1.15.1
 	github.com/likexian/whois-parser v1.24.9
@@ -139,9 +137,6 @@ require (
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/go-pay/crypto v0.0.1 // indirect
-	github.com/go-pay/xlog v0.0.3 // indirect
-	github.com/go-pay/xtime v0.0.2 // indirect
 	github.com/go-webauthn/x v0.1.9 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
@@ -170,6 +165,7 @@ require (
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/lestrrat-go/iter v1.0.2 // indirect
+	github.com/lestrrat-go/jwx v1.2.29 // indirect
 	github.com/lestrrat-go/option v1.0.1 // indirect
 	github.com/likexian/gokit v0.25.13 // indirect
 	github.com/line/line-bot-sdk-go v7.8.0+incompatible // indirect
