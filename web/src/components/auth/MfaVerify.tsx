@@ -81,8 +81,7 @@ export function MfaVerify({formValues, authParams, mfaProps, application, onSucc
   const post = (extra: Record<string, any>) => {
     setLoading(true);
     const values = {...formValues, password: "", username: "", mfaType: selected?.mfaType, ...extra};
-    const loginFunction = formValues.type === "cas" ? AuthBackend.loginCas : AuthBackend.login;
-    loginFunction(values, authParams)
+    AuthBackend.login(values, authParams)
       .then((res: any) => {
         if (res.status === "ok") {
           onSuccess(res);

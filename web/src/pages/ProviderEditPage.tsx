@@ -6,7 +6,6 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
 import {Textarea} from "@/components/ui/textarea";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Loading} from "@/components/common/Loading";
 import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
 import {CodeEditor} from "@/components/common/CodeEditor";
@@ -22,7 +21,6 @@ import {useEditRecord} from "@/hooks/use-edit-record";
 import {useOrganizationOptions} from "@/hooks/use-options";
 import * as CertBackend from "@/backend/CertBackend";
 import * as ProviderBackend from "@/backend/ProviderBackend";
-import * as ServerBackend from "@/backend/ServerBackend";
 import {submitEdit} from "@/lib/crud";
 import * as ProviderTest from "@/lib/provider-test";
 import * as Setting from "@/lib/setting";
@@ -59,8 +57,8 @@ const defaultSmsMapping: Record<string, string> = {
 };
 
 const CATEGORIES = [
-  "Audit", "Captcha", "Email", "Face ID", "ID Verification", "Log", "MFA", "Notification",
-  "OAuth", "Payment", "SAML", "Scan", "SMS", "Storage",
+  "Audit", "Captcha", "Email", "Face ID", "ID Verification", "Log", "Notification",
+  "OAuth", "SMS", "Storage",
 ].sort((a, b) => a.localeCompare(b));
 
 const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE"];
@@ -75,10 +73,6 @@ const SYSLOG_FACILITIES = [
   "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7",
 ];
 const SYSLOG_FORMATS = ["RFC 5424", "RFC 3164"];
-
-const SCAN_HOST_OPTIONS = ["127.0.0.1/32", "10.0.0.0/24", "172.16.0.0/24", "192.168.1.0/24"];
-const SCAN_PORT_OPTIONS = ["80", "3000", "8080"];
-const SCAN_PATH_OPTIONS = ["/", "/mcp", "/sse", "/mcp/sse"];
 
 function isDefaultProviderName(name: string) {
   return /^provider_[a-z0-9]+$/.test(name ?? "");
@@ -123,22 +117,6 @@ function getProviderSubTypeOptions(type: string) {
     return [
       {id: "Embed", name: "Embed"},
       {id: "Popup", name: "Popup"},
-    ];
-  } else if (type === "Agent") {
-    return [{id: "OpenClaw", name: "OpenClaw"}];
-  } else if (type === "Security Scan") {
-    return [{id: "Site", name: "Site"}, {id: "Url", name: "Url"}];
-  } else if (type === "MCP Scan") {
-    return [{id: "Intranet Scan", name: "Intranet Scan"}];
-  } else if (type === "WeCom" || type === "Infoflow") {
-    return [
-      {id: "Internal", name: i18next.t("provider:Internal")},
-      {id: "Third-party", name: i18next.t("provider:Third-party")},
-    ];
-  } else if (type === "WeChat") {
-    return [
-      {id: "Web", name: i18next.t("provider:Web")},
-      {id: "Mobile", name: i18next.t("provider:Mobile")},
     ];
   }
   return [];
@@ -211,7 +189,7 @@ function getClientSecretLabel(provider: any): Label {
   } else if (provider.category === "Notification") {
     if (["Line", "Telegram", "Bark", "DingTalk", "Discord", "Slack", "Pushover", "Pushbullet"].includes(provider.type)) {
       return label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"));
-    } else if (["Lark", "Microsoft Teams", "WeCom"].includes(provider.type)) {
+    } else if (["Lark", "Microsoft Teams"].includes(provider.type)) {
       return label(i18next.t("provider:Endpoint"), i18next.t("provider:Endpoint - Tooltip"));
     }
     return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
@@ -232,7 +210,7 @@ function getClientId2Label(provider: any): Label {
     return label(i18next.t("provider:From address"), i18next.t("provider:From address - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
     return label(i18next.t("provider:Scene"), i18next.t("provider:Scene - Tooltip"));
-  } else if (provider.type === "WeChat Pay" || provider.type === "CUCloud") {
+  } else if (provider.type === "CUCloud") {
     return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
   }
   return label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
@@ -247,21 +225,13 @@ function getClientSecret2Label(provider: any): Label {
     return label(i18next.t("provider:From name"), i18next.t("provider:From name - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
     return label(i18next.t("provider:App key"), i18next.t("provider:App key - Tooltip"));
-  } else if (provider.type === "WeChat Pay") {
-    return label(i18next.t("provider:Public key ID"), i18next.t("provider:Public key ID - Tooltip"));
   }
   return label(i18next.t("provider:Client secret 2"), i18next.t("provider:Client secret 2 - Tooltip"));
 }
 
 /** the extra "appId" row, whose meaning depends on the provider — null hides it */
 function getAppIdLabel(provider: any): Label | null {
-  if (provider.category === "OAuth") {
-    if ((provider.type === "WeCom" && provider.subType === "Internal") || provider.type === "Infoflow") {
-      return label(i18next.t("provider:Agent ID"), i18next.t("provider:Agent ID - Tooltip"));
-    } else if (provider.type === "AzureADB2C") {
-      return label(i18next.t("provider:User flow"), i18next.t("provider:User flow - Tooltip"));
-    }
-  } else if (provider.category === "SMS") {
+  if (provider.category === "SMS") {
     if (provider.type === "Twilio SMS" || provider.type === "Azure ACS") {
       return label(i18next.t("provider:Sender number"), i18next.t("provider:Sender number - Tooltip"));
     } else if (provider.type === "Tencent Cloud SMS") {
@@ -309,7 +279,7 @@ function hasClientIdRow(provider: any) {
   if ((provider.category === "Storage" && provider.type === "Google Cloud Storage") ||
       (provider.category === "Email" && ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)) ||
       (provider.category === "Face ID" && provider.type === "Local UniFace") ||
-      (provider.category === "Notification" && ["Line", "Telegram", "Bark", "Discord", "Slack", "Pushbullet", "Pushover", "Lark", "Microsoft Teams", "WeCom"].includes(provider.type))) {
+      (provider.category === "Notification" && ["Line", "Telegram", "Bark", "Discord", "Slack", "Pushbullet", "Pushover", "Lark", "Microsoft Teams"].includes(provider.type))) {
     return false;
   }
   return true;
@@ -317,10 +287,8 @@ function hasClientIdRow(provider: any) {
 
 function hasCredentialRows(provider: any) {
   if ((provider.category === "Captcha" && provider.type === "Default") ||
-      provider.category === "MFA" ||
       provider.category === "Audit" ||
       provider.category === "Log" ||
-      provider.category === "Scan" ||
       (provider.category === "Storage" && provider.type === "Local File System") ||
       (provider.category === "SMS" && provider.type === "Custom HTTP SMS") ||
       (provider.category === "Email" && provider.type === "Custom HTTP Email") ||
@@ -332,46 +300,7 @@ function hasCredentialRows(provider: any) {
 
 function hasCredential2Rows(provider: any) {
   return provider.category === "Email" ||
-    ["WeChat", "Apple", "Aliyun Captcha", "WeChat Pay", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
-}
-
-function parseFindings(provider: any, scanResult: any) {
-  if (Array.isArray(scanResult)) {
-    return scanResult;
-  }
-  if (!provider?.metadata) {
-    return [];
-  }
-  try {
-    const parsed = JSON.parse(provider.metadata);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-function getCveLink(cve: any) {
-  const references = Array.isArray(cve?.references) ? cve.references : [];
-  return references.find((reference: any) => {
-    if (typeof reference !== "string") {
-      return false;
-    }
-    const value = reference.trim();
-    return value.startsWith("http://") || value.startsWith("https://");
-  }) || "";
-}
-
-function getEntryPath(subType: string, owner: string, name: string) {
-  if (!owner || !name) {
-    return "";
-  }
-  if (subType === "Site") {
-    return `/sites/${owner}/${name}`;
-  }
-  if (subType === "Agent") {
-    return `/agents/${owner}/${name}`;
-  }
-  return "";
+    ["Apple", "Aliyun Captcha", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
 }
 
 export default function ProviderEditPage() {
@@ -389,13 +318,7 @@ export default function ProviderEditPage() {
   const [nameNotUserEdited, setNameNotUserEdited] = React.useState(false);
   const [displayNameNotUserEdited, setDisplayNameNotUserEdited] = React.useState(false);
 
-  const [requestUrl, setRequestUrl] = React.useState("");
-  const [metadataLoading, setMetadataLoading] = React.useState(false);
   const [discoveryLoading, setDiscoveryLoading] = React.useState(false);
-
-  const [scanLoading, setScanLoading] = React.useState(false);
-  const [scanResult, setScanResult] = React.useState<any>(null);
-  const [scanServers, setScanServers] = React.useState<any[]>([]);
 
   const transform = React.useCallback((provider: any) => {
     if (provider.type === "Custom HTTP Email") {
@@ -449,21 +372,7 @@ export default function ProviderEditPage() {
     }
   }, [provider]);
 
-  /** WeChat stores the login mode across three coupled fields, see the antd page. */
   const applyProviderRules = (next: any) => {
-    if (next.type === "WeChat") {
-      if (!next.clientId) {
-        next.signName = "media";
-        next.disableSsl = true;
-      }
-      if (!next.clientId2) {
-        next.signName = "open";
-        next.disableSsl = false;
-      }
-      if (!next.disableSsl) {
-        next.signName = "open";
-      }
-    }
     return next;
   };
 
@@ -482,12 +391,8 @@ export default function ProviderEditPage() {
 
   const updateProviderField = React.useCallback((key: string, value: any) => {
     if (key === "owner" && provider !== null && provider.owner !== value) {
-      // the provider changed owner, the cert (and the OpenClaw storage provider) no longer applies
-      const patch: Record<string, any> = {owner: value, cert: ""};
-      if (provider.category === "Log" && provider.type === "Agent" && provider.subType === "OpenClaw") {
-        patch.providerUrl = "";
-      }
-      patchProvider(patch);
+      // the provider changed owner, the cert no longer applies
+      patchProvider({owner: value, cert: ""});
       getProviders(value);
       getCerts(value);
       return;
@@ -552,46 +457,6 @@ export default function ProviderEditPage() {
     setSaving(false);
   };
 
-  const loadSamlConfiguration = (metadata: string) => {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(metadata.replace("\n", ""), "text/xml");
-    const cert = xmlDoc.querySelector("X509Certificate")!.childNodes[0].nodeValue!.replace(" ", "");
-    const endpoint = xmlDoc.querySelector("SingleSignOnService")!.getAttribute("Location");
-    const issuerUrl = xmlDoc.querySelector("EntityDescriptor")!.getAttribute("entityID");
-    patchProvider({idP: cert, endpoint, issuerUrl});
-  };
-
-  const parseSamlMetadata = (metadata: string) => {
-    try {
-      loadSamlConfiguration(metadata);
-      Setting.showMessage("success", i18next.t("provider:Parse metadata successfully"));
-    } catch {
-      Setting.showMessage("error", i18next.t("provider:Can not parse metadata"));
-    }
-  };
-
-  const fetchSamlMetadata = () => {
-    setMetadataLoading(true);
-    fetch(requestUrl, {method: "GET"})
-      .then(res => {
-        if (!res.ok) {
-          return Promise.reject(new Error("error"));
-        }
-        return res.text();
-      })
-      .then(text => {
-        patchProvider({metadata: text});
-        parseSamlMetadata(text);
-        Setting.showMessage("success", i18next.t("general:Successfully added"));
-      })
-      .catch(err => {
-        Setting.showMessage("error", err.message);
-      })
-      .finally(() => {
-        setMetadataLoading(false);
-      });
-  };
-
   const fetchOidcDiscovery = () => {
     setDiscoveryLoading(true);
     ProviderBackend.getIdpDiscovery(provider.domain ?? "")
@@ -616,50 +481,6 @@ export default function ProviderEditPage() {
       })
       .finally(() => {
         setDiscoveryLoading(false);
-      });
-  };
-
-  const submitProviderScan = (target = "") => {
-    if (provider === null) {
-      return;
-    }
-    if (!provider.owner || !provider.name) {
-      Setting.showMessage("error", i18next.t("provider:Provider owner and name are required"));
-      return;
-    }
-
-    const isSecurityUrlScan = provider.type === "Security Scan" && provider.subType === "Url";
-    const rawTarget = isSecurityUrlScan ? (target || provider.content || "") : target;
-
-    setScanLoading(true);
-    const scanApi = provider.type === "Security Scan"
-      ? ServerBackend.scanProvider(provider.owner, provider.name, rawTarget)
-      : ServerBackend.syncIntranetServers(provider.owner, provider.name);
-
-    scanApi
-      .then((res: any) => {
-        setScanLoading(false);
-        if (res.status === "ok") {
-          const result = res.data ?? null;
-          const servers = result?.servers ?? [];
-          patchProvider({metadata: result === null ? "" : JSON.stringify(result)});
-          setScanResult(result);
-          setScanServers(servers);
-
-          if (Array.isArray(result)) {
-            Setting.showMessage("success", `${i18next.t("general:Successfully got")}: ${result.length} finding(s)`);
-          } else if (Array.isArray(servers)) {
-            Setting.showMessage("success", `${i18next.t("general:Successfully got")}: ${servers.length} server(s)`);
-          } else {
-            Setting.showMessage("success", i18next.t("general:Successfully saved"));
-          }
-        } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to get")}: ${res.msg}`);
-        }
-      })
-      .catch((error: any) => {
-        setScanLoading(false);
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
       });
   };
 
@@ -692,21 +513,12 @@ export default function ProviderEditPage() {
       defaultType = "Twilio SMS";
     } else if (value === "Storage") {
       defaultType = "AWS S3";
-    } else if (value === "SAML") {
-      defaultType = "Keycloak";
-    } else if (value === "Payment") {
-      defaultType = "PayPal";
     } else if (value === "Captcha") {
       defaultType = "Default";
     } else if (value === "Notification") {
       defaultType = "Telegram";
     } else if (value === "Face ID") {
       defaultType = "Alibaba Cloud Facebody";
-    } else if (value === "MFA") {
-      defaultType = "RADIUS";
-      patch.host = "";
-      patch.port = 1812;
-      patch.requireMessageAuthenticator = true;
     } else if (value === "ID Verification") {
       defaultType = "Jumio";
       patch.endpoint = "";
@@ -724,12 +536,6 @@ export default function ProviderEditPage() {
       patch.port = 0;
       patch.title = "";
       patch.state = "Enabled";
-    } else if (value === "Scan") {
-      defaultType = "MCP Scan";
-      patch.subType = "Intranet Scan";
-      patch.scopes = "127.0.0.1/32";
-      patch.content = "3000,8080,80";
-      patch.endpoint = "/,/mcp,/sse,/mcp/sse";
     }
 
     if (defaultType) {
@@ -765,19 +571,6 @@ export default function ProviderEditPage() {
     } else if (value === "Custom HTTP") {
       patch.method = "GET";
       patch.title = "";
-    } else if (value === "MCP Scan") {
-      patch.subType = "Intranet Scan";
-      if (!provider.scopes) {
-        patch.scopes = "127.0.0.1/32";
-      }
-      if (!provider.content) {
-        patch.content = "3000,8080,80";
-      }
-      if (!provider.endpoint) {
-        patch.endpoint = "/,/mcp,/sse,/mcp/sse";
-      }
-    } else if (value === "Security Scan") {
-      patch.subType = "Site";
     } else if (value === "Aliyun Captcha") {
       // Popup stays opt-in: only Alibaba Cloud's traceless scenes require it
       patch.subType = "Embed";
@@ -875,60 +668,21 @@ export default function ProviderEditPage() {
       <FormRow labelKey="provider:Enable proxy">
         <Switch checked={!!provider.enableProxy} onCheckedChange={(v) => updateProviderField("enableProxy", v)} />
       </FormRow>
-      {provider.type === "WeChat" ? (
-        <React.Fragment>
-          <FormRow labelKey="provider:Use WeChat Media Platform in PC">
-            <Switch
-              disabled={!provider.clientId}
-              checked={!!provider.disableSsl}
-              onCheckedChange={(v) => updateProviderField("disableSsl", v)}
-            />
-          </FormRow>
-          <FormRow labelKey="token:Access token">
-            <Input
-              value={provider.content ?? ""}
-              disabled={!provider.disableSsl || !provider.clientId2}
-              onChange={(e) => updateProviderField("content", e.target.value)}
-            />
-          </FormRow>
-          <FormRow labelKey="provider:Follow-up action">
-            <SelectField
-              disabled={!provider.disableSsl || !provider.clientId || !provider.clientId2}
-              value={provider.signName}
-              onChange={(v) => updateProviderField("signName", v)}
-              options={[
-                {id: "open", name: i18next.t("provider:Use WeChat Open Platform to login")},
-                {id: "media", name: i18next.t("provider:Use WeChat Media Platform to login")},
-              ]}
-            />
-          </FormRow>
-        </React.Fragment>
-      ) : null}
-      {["ADFS", "AzureAD", "AzureADB2C", "Okta", "Nextcloud"].includes(provider.type) || (provider.type === "Masdoor" || provider.category === "Storage") ? (
+      {["AzureAD", "Nextcloud"].includes(provider.type) || provider.category === "Storage" ? (
         <FormRow
-          label={["AzureAD", "AzureADB2C"].includes(provider.type) ? i18next.t("provider:Tenant ID") : i18next.t("provider:Domain")}
-          tooltip={["AzureAD", "AzureADB2C"].includes(provider.type) ? i18next.t("provider:Tenant ID - Tooltip") : i18next.t("provider:Domain - Tooltip")}
+          label={provider.type === "AzureAD" ? i18next.t("provider:Tenant ID") : i18next.t("provider:Domain")}
+          tooltip={provider.type === "AzureAD" ? i18next.t("provider:Tenant ID - Tooltip") : i18next.t("provider:Domain - Tooltip")}
         >
           <Input value={provider.domain ?? ""} onChange={(e) => updateProviderField("domain", e.target.value)} />
         </FormRow>
       ) : null}
-      {provider.type === "Google" || provider.type === "Lark" ? (
+      {provider.type === "Google" ? (
         <FormRow
-          label={provider.type === "Google" ? i18next.t("provider:Get phone number") : i18next.t("provider:Use global endpoint")}
-          tooltip={provider.type === "Google" ? i18next.t("provider:Get phone number - Tooltip") : i18next.t("provider:Use global endpoint - Tooltip")}
+          label={i18next.t("provider:Get phone number")}
+          tooltip={i18next.t("provider:Get phone number - Tooltip")}
         >
           <Switch disabled={!provider.clientId} checked={!!provider.disableSsl} onCheckedChange={(v) => updateProviderField("disableSsl", v)} />
         </FormRow>
-      ) : null}
-      {provider.type === "Alipay" ? (
-        <React.Fragment>
-          <FormRow labelKey="general:Cert">
-            <SearchableSelect value={provider.cert ?? ""} onChange={(v) => updateProviderField("cert", v)} options={certOptions} />
-          </FormRow>
-          <FormRow labelKey="general:Root cert">
-            <SearchableSelect value={provider.metadata ?? ""} onChange={(v) => updateProviderField("metadata", v)} options={certOptions} />
-          </FormRow>
-        </React.Fragment>
       ) : null}
       {provider.type === "OIDC" ? (
         <FormRow labelKey="provider:Issuer URL">
@@ -1218,23 +972,6 @@ export default function ProviderEditPage() {
     );
   };
 
-  const renderMfaFields = () => (
-    <React.Fragment>
-      <FormRow label={i18next.t("general:Host")} tooltip={i18next.t("provider:Host - Tooltip")}>
-        <Input value={provider.host ?? ""} placeholder="10.10.10.10" onChange={(e) => updateProviderField("host", e.target.value)} />
-      </FormRow>
-      <FormRow label={i18next.t("general:Port")} tooltip={i18next.t("provider:Port - Tooltip")}>
-        <Input type="number" value={provider.port ?? 0} onChange={(e) => updateProviderField("port", e.target.value)} />
-      </FormRow>
-      <FormRow label={i18next.t("provider:Client secret")} tooltip={i18next.t("provider:RADIUS Shared Secret - Tooltip")}>
-        <Input value={provider.clientSecret ?? ""} placeholder="Shared secret" onChange={(e) => updateProviderField("clientSecret", e.target.value)} />
-      </FormRow>
-      <FormRow label={i18next.t("provider:Require Message-Authenticator")} tooltip={i18next.t("provider:Require Message-Authenticator - Tooltip")}>
-        <Switch checked={!!provider.requireMessageAuthenticator} onCheckedChange={(v) => updateProviderField("requireMessageAuthenticator", v)} />
-      </FormRow>
-    </React.Fragment>
-  );
-
   const onChangeSyslogProtocol = (value: string) => {
     const patch: Record<string, any> = {method: value};
     if (value === "TLS" && provider.port === 514) {
@@ -1287,285 +1024,18 @@ export default function ProviderEditPage() {
     </React.Fragment>
   );
 
-  const renderLogFields = () => {
-    const storageProviders = providers.filter((item: any) =>
-      item.category === "Storage" &&
-      (!provider.owner || item.owner === provider.owner) &&
-      (typeof item.state !== "string" || item.state.toLowerCase() !== "disabled"),
-    );
-
-    return (
-      <React.Fragment>
-        {provider.type === "Agent" && provider.subType === "OpenClaw" ? (
-          <React.Fragment>
-            <FormRow label={i18next.t("general:Host")} tooltip={i18next.t("provider:Host - Tooltip")}>
-              <Input value={provider.host ?? ""} onChange={(e) => updateProviderField("host", e.target.value)} />
-            </FormRow>
-            <FormRow labelKey="provider:Agent ID">
-              <Input value={provider.title ?? ""} onChange={(e) => updateProviderField("title", e.target.value)} />
-            </FormRow>
-            <FormRow label={i18next.t("general:Path")}>
-              <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
-            </FormRow>
-            <FormRow label={i18next.t("provider:Storage provider")}>
-              <SearchableSelect
-                value={provider.providerUrl ?? ""}
-                onChange={(v) => updateProviderField("providerUrl", v)}
-                options={[
-                  {value: "", label: i18next.t("general:None")},
-                  ...storageProviders.map((item: any) => ({
-                    value: item.name,
-                    label: item.displayName || item.name,
-                  })),
-                ]}
-              />
-            </FormRow>
-          </React.Fragment>
-        ) : null}
-        <FormRow labelKey="general:State">
-          <SelectField
-            value={provider.state || "Enabled"}
-            onChange={(v) => updateProviderField("state", v)}
-            options={[
-              {id: "Enabled", name: i18next.t("general:Enabled")},
-              {id: "Disabled", name: i18next.t("general:Disabled")},
-            ]}
-          />
-        </FormRow>
-      </React.Fragment>
-    );
-  };
-
-  const renderSamlFields = () => (
+  const renderLogFields = () => (
     <React.Fragment>
-      <FormRow labelKey="provider:Sign request">
-        <Switch checked={!!provider.enableSignAuthnRequest} onCheckedChange={(v) => updateProviderField("enableSignAuthnRequest", v)} />
+      <FormRow labelKey="general:State">
+        <SelectField
+          value={provider.state || "Enabled"}
+          onChange={(v) => updateProviderField("state", v)}
+          options={[
+            {id: "Enabled", name: i18next.t("general:Enabled")},
+            {id: "Disabled", name: i18next.t("general:Disabled")},
+          ]}
+        />
       </FormRow>
-      <FormRow labelKey="provider:Metadata url">
-        <div className="flex flex-wrap items-center gap-2">
-          <Input className="w-96 max-w-full" value={requestUrl} onChange={(e) => setRequestUrl(e.target.value)} />
-          <Button loading={metadataLoading} onClick={fetchSamlMetadata}>
-            {i18next.t("general:Request")}
-          </Button>
-        </div>
-      </FormRow>
-      <FormRow labelKey="provider:Metadata">
-        <div className="space-y-2">
-          <Textarea rows={4} value={provider.metadata ?? ""} onChange={(e) => updateProviderField("metadata", e.target.value)} />
-          <Button onClick={() => parseSamlMetadata(provider.metadata ?? "")}>
-            {i18next.t("provider:Parse")}
-          </Button>
-        </div>
-      </FormRow>
-      <FormRow label={i18next.t("provider:Endpoint")} tooltip={i18next.t("provider:SAML 2.0 Endpoint (HTTP)")}>
-        <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
-      </FormRow>
-      <FormRow label={i18next.t("provider:IdP")} tooltip={i18next.t("provider:IdP certificate")}>
-        <Input value={provider.idP ?? ""} onChange={(e) => updateProviderField("idP", e.target.value)} />
-      </FormRow>
-      <FormRow labelKey="provider:Issuer URL">
-        <Input value={provider.issuerUrl ?? ""} onChange={(e) => updateProviderField("issuerUrl", e.target.value)} />
-      </FormRow>
-      {["provider:SP ACS URL", "provider:SP Entity ID"].map((key) => (
-        <FormRow key={key} labelKey={key}>
-          <div className="flex items-center gap-2">
-            <Input readOnly value={`${authConfig.serverUrl}/api/acs`} />
-            <Button
-              onClick={() => {
-                copy(`${authConfig.serverUrl}/api/acs`);
-                Setting.showMessage("success", i18next.t("general:Copied to clipboard successfully"));
-              }}
-            >
-              {i18next.t("general:Copy")}
-            </Button>
-          </div>
-        </FormRow>
-      ))}
-    </React.Fragment>
-  );
-
-  const renderScanFields = () => {
-    const canScan = mode !== "add";
-    if (provider.type === "MCP Scan" && provider.subType === "Intranet Scan") {
-      return (
-        <React.Fragment>
-          <FormRow label={i18next.t("general:Host")}>
-            <MultiSelect
-              creatable
-              value={toList(provider.scopes)}
-              onChange={(v) => updateProviderField("scopes", normalizeAndJoin(v))}
-              options={SCAN_HOST_OPTIONS.map((item) => ({value: item, label: item}))}
-            />
-          </FormRow>
-          <FormRow label={i18next.t("general:Port")}>
-            <MultiSelect
-              creatable
-              value={toList(provider.content)}
-              onChange={(v) => updateProviderField("content", normalizeAndJoin(v))}
-              options={SCAN_PORT_OPTIONS.map((item) => ({value: item, label: item}))}
-            />
-          </FormRow>
-          <FormRow block label={i18next.t("general:Path")}>
-            <MultiSelect
-              creatable
-              value={toList(provider.endpoint)}
-              onChange={(v) => updateProviderField("endpoint", normalizeAndJoin(v))}
-              options={SCAN_PATH_OPTIONS.map((item) => ({value: item, label: item}))}
-            />
-          </FormRow>
-          <FormRow label="" block>
-            <Button loading={scanLoading} disabled={!canScan} onClick={() => submitProviderScan()}>
-              {i18next.t("server:Scan server")}
-            </Button>
-          </FormRow>
-          {scanResult !== null ? (
-            <FormRow
-              block
-              label={`${i18next.t("server:Scanned hosts")}:${scanResult?.scannedHosts ?? 0}, ${i18next.t("server:Online hosts")}:${scanResult?.onlineHosts?.length ?? 0}, ${i18next.t("server:Found servers")}:${scanServers.length}`}
-            >
-              <div className="rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[140px]">{i18next.t("general:Host")}</TableHead>
-                      <TableHead className="w-[90px]">{i18next.t("general:Port")}</TableHead>
-                      <TableHead className="w-[120px]">{i18next.t("general:Path")}</TableHead>
-                      <TableHead>{i18next.t("general:URL")}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {scanServers.map((server: any, index: number) => (
-                      <TableRow key={`${server.url}-${index}`}>
-                        <TableCell>{server.host}</TableCell>
-                        <TableCell>{server.port}</TableCell>
-                        <TableCell>{server.path}</TableCell>
-                        <TableCell>
-                          {server.url ? (
-                            <a target="_blank" rel="noreferrer" href={server.url} className="underline-offset-4 hover:underline">
-                              {Setting.getShortText(server.url, 60)}
-                            </a>
-                          ) : null}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </FormRow>
-          ) : null}
-        </React.Fragment>
-      );
-    }
-
-    if (provider.type === "Security Scan") {
-      const findings = parseFindings(provider, scanResult);
-      return (
-        <React.Fragment>
-          <FormRow block label={i18next.t("provider:Online list")}>
-            <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
-          </FormRow>
-          {provider.subType === "Url" ? (
-            <FormRow block label={i18next.t("general:URL")}>
-              <Textarea
-                rows={3}
-                value={provider.content ?? ""}
-                placeholder={"https://example.com\nhttps://another.example.com"}
-                onChange={(e) => updateProviderField("content", e.target.value)}
-              />
-            </FormRow>
-          ) : null}
-          <FormRow label="" block>
-            <Button
-              loading={scanLoading}
-              disabled={!canScan}
-              onClick={() => submitProviderScan(provider.subType === "Url" ? provider.content : "")}
-            >
-              {i18next.t("general:Scan")}
-            </Button>
-          </FormRow>
-          {findings.length > 0 ? (
-            <FormRow block label={`${i18next.t("general:Scan")}: ${findings.length}`}>
-              <div className="overflow-x-auto rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="hover:bg-transparent">
-                      <TableHead className="w-[160px]">{i18next.t("general:Name")}</TableHead>
-                      <TableHead className="w-[160px]">{i18next.t("general:Product")}</TableHead>
-                      <TableHead className="w-[160px]">{i18next.t("general:Vendor")}</TableHead>
-                      <TableHead className="w-[140px]">{i18next.t("system:Version")}</TableHead>
-                      <TableHead className="w-[120px]">{i18next.t("general:Severity")}</TableHead>
-                      <TableHead>CVEs</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {findings.map((finding: any, index: number) => {
-                      const entryPath = getEntryPath(provider.subType, provider.owner, finding?.name);
-                      const cves = Array.isArray(finding?.cves) ? finding.cves : [];
-                      return (
-                        <TableRow key={`${finding?.targetUrl}-${finding?.name}-${index}`}>
-                          <TableCell>
-                            {entryPath ? (
-                              <a href={entryPath} className="underline-offset-4 hover:underline">{finding.name}</a>
-                            ) : finding?.name}
-                          </TableCell>
-                          <TableCell>{finding?.product}</TableCell>
-                          <TableCell>{finding?.vendor}</TableCell>
-                          <TableCell>{finding?.version}</TableCell>
-                          <TableCell>{finding?.severity}</TableCell>
-                          <TableCell>
-                            {cves.length === 0 ? "0" : cves.map((cve: any, cveIndex: number) => {
-                              const cveLabel = cve?.code || cve?.name || "-";
-                              const link = getCveLink(cve);
-                              const content = (
-                                <React.Fragment>
-                                  <div>{cveLabel}{cve?.severity ? ` (${cve.severity})` : ""}</div>
-                                  {cve?.summary ? <div className="text-muted-foreground">{cve.summary}</div> : null}
-                                </React.Fragment>
-                              );
-                              return (
-                                <div key={`${cveLabel}-${cveIndex}`} className="mb-2 last:mb-0">
-                                  {link ? <a target="_blank" rel="noreferrer" href={link} className="block">{content}</a> : content}
-                                </div>
-                              );
-                            })}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
-            </FormRow>
-          ) : null}
-        </React.Fragment>
-      );
-    }
-
-    return null;
-  };
-
-  const renderPaymentFields = () => (
-    <React.Fragment>
-      {["Alipay", "WeChat Pay", "Masdoor"].includes(provider.type) ? (
-        <FormRow labelKey="general:Cert">
-          <SearchableSelect value={provider.cert ?? ""} onChange={(v) => updateProviderField("cert", v)} options={certOptions} />
-        </FormRow>
-      ) : null}
-      {provider.type === "WeChat Pay" ? (
-        <FormRow label={i18next.t("provider:Public key")} tooltip={i18next.t("provider:Public key ID - Tooltip")}>
-          <Textarea rows={4} value={provider.content ?? ""} onChange={(e) => updateProviderField("content", e.target.value)} />
-        </FormRow>
-      ) : null}
-      {provider.type === "Alipay" ? (
-        <FormRow labelKey="general:Root cert">
-          <SearchableSelect value={provider.metadata ?? ""} onChange={(v) => updateProviderField("metadata", v)} options={certOptions} />
-        </FormRow>
-      ) : null}
-      {["GC", "FastSpring"].includes(provider.type) ? (
-        <FormRow label={i18next.t("general:Host")} tooltip={i18next.t("provider:Host - Tooltip")}>
-          <Input value={provider.host ?? ""} onChange={(e) => updateProviderField("host", e.target.value)} />
-        </FormRow>
-      ) : null}
     </React.Fragment>
   );
 
@@ -1711,33 +1181,6 @@ export default function ProviderEditPage() {
               options={subTypeOptions}
             />
           </FormRow>
-          {provider.type === "WeCom" ? (
-            <React.Fragment>
-              <FormRow label={i18next.t("general:Method")} tooltip={i18next.t("provider:Method - Tooltip")}>
-                <SelectField
-                  value={provider.method}
-                  onChange={(v) => updateProviderField("method", v)}
-                  options={[
-                    {id: "Normal", name: i18next.t("application:Normal")},
-                    {id: "Silent", name: i18next.t("provider:Silent")},
-                  ]}
-                />
-              </FormRow>
-              <FormRow labelKey="provider:Scope">
-                <SelectField
-                  value={provider.scopes}
-                  onChange={(v) => updateProviderField("scopes", v)}
-                  options={[
-                    {id: "snsapi_userinfo", name: "snsapi_userinfo"},
-                    {id: "snsapi_privateinfo", name: "snsapi_privateinfo"},
-                  ]}
-                />
-              </FormRow>
-              <FormRow labelKey="provider:Use id as name">
-                <Switch checked={!!provider.disableSsl} onCheckedChange={(v) => updateProviderField("disableSsl", v)} />
-              </FormRow>
-            </React.Fragment>
-          ) : null}
         </React.Fragment>
       ) : null}
 
@@ -1782,12 +1225,8 @@ export default function ProviderEditPage() {
       {provider.category === "Notification" ? renderNotificationFields() : null}
       {provider.category === "Email" ? renderEmailFields() : null}
       {provider.category === "SMS" ? renderSmsFields() : null}
-      {provider.category === "MFA" ? renderMfaFields() : null}
       {provider.category === "Audit" ? renderAuditFields() : null}
       {provider.category === "Log" ? renderLogFields() : null}
-      {provider.category === "Scan" ? renderScanFields() : null}
-      {provider.category === "SAML" ? renderSamlFields() : null}
-      {provider.category === "Payment" ? renderPaymentFields() : null}
       {provider.category === "Storage" ? renderStorageFields() : null}
       {provider.category === "Face ID" ? renderEndpointOnlyField() : null}
       {provider.category === "ID Verification" ? renderEndpointOnlyField() : null}

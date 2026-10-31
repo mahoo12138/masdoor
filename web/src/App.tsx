@@ -47,9 +47,6 @@ const ApplicationListPage = React.lazy(() => import("@/pages/ApplicationListPage
 const ApplicationEditPage = React.lazy(() => import("@/pages/ApplicationEditPage"));
 const ProviderListPage = React.lazy(() => import("@/pages/ProviderListPage"));
 const ProviderEditPage = React.lazy(() => import("@/pages/ProviderEditPage"));
-const MarketplacePage = React.lazy(() => import("@/pages/MarketplacePage"));
-const IntegrationListPage = React.lazy(() => import("@/pages/IntegrationListPage"));
-const IntegrationEditPage = React.lazy(() => import("@/pages/IntegrationEditPage"));
 const ResourceListPage = React.lazy(() => import("@/pages/ResourceListPage"));
 const CertListPage = React.lazy(() => import("@/pages/CertListPage"));
 const CertEditPage = React.lazy(() => import("@/pages/CertEditPage"));
@@ -67,14 +64,6 @@ const AdapterEditPage = React.lazy(() => import("@/pages/AdapterEditPage"));
 const EnforcerListPage = React.lazy(() => import("@/pages/EnforcerListPage"));
 const EnforcerEditPage = React.lazy(() => import("@/pages/EnforcerEditPage"));
 
-const AgentListPage = React.lazy(() => import("@/pages/AgentListPage"));
-const AgentEditPage = React.lazy(() => import("@/pages/AgentEditPage"));
-const ServerListPage = React.lazy(() => import("@/pages/ServerListPage"));
-const ServerEditPage = React.lazy(() => import("@/pages/ServerEditPage"));
-const ServerStorePage = React.lazy(() => import("@/pages/ServerStorePage"));
-const EntryListPage = React.lazy(() => import("@/pages/EntryListPage"));
-const EntryEditPage = React.lazy(() => import("@/pages/EntryEditPage"));
-const OpenClawSessionTranscriptPage = React.lazy(() => import("@/pages/OpenClawSessionTranscriptPage"));
 const SiteListPage = React.lazy(() => import("@/pages/SiteListPage"));
 const SiteEditPage = React.lazy(() => import("@/pages/SiteEditPage"));
 const RuleListPage = React.lazy(() => import("@/pages/RuleListPage"));
@@ -86,39 +75,14 @@ const TokenListPage = React.lazy(() => import("@/pages/TokenListPage"));
 const TokenEditPage = React.lazy(() => import("@/pages/TokenEditPage"));
 const VerificationListPage = React.lazy(() => import("@/pages/VerificationListPage"));
 
-const ProductListPage = React.lazy(() => import("@/pages/ProductListPage"));
-const ProductStorePage = React.lazy(() => import("@/pages/ProductStorePage"));
-const ProductBuyPage = React.lazy(() => import("@/pages/ProductBuyPage"));
-const CartListPage = React.lazy(() => import("@/pages/CartListPage"));
-const OrderPayPage = React.lazy(() => import("@/pages/OrderPayPage"));
-const PaymentResultPage = React.lazy(() => import("@/pages/PaymentResultPage"));
-const ProductEditPage = React.lazy(() => import("@/pages/ProductEditPage"));
-const CouponListPage = React.lazy(() => import("@/pages/CouponListPage"));
-const CouponEditPage = React.lazy(() => import("@/pages/CouponEditPage"));
-const OrderListPage = React.lazy(() => import("@/pages/OrderListPage"));
-const OrderEditPage = React.lazy(() => import("@/pages/OrderEditPage"));
-const PaymentListPage = React.lazy(() => import("@/pages/PaymentListPage"));
-const PaymentEditPage = React.lazy(() => import("@/pages/PaymentEditPage"));
-const PlanListPage = React.lazy(() => import("@/pages/PlanListPage"));
-const PlanEditPage = React.lazy(() => import("@/pages/PlanEditPage"));
-const PricingListPage = React.lazy(() => import("@/pages/PricingListPage"));
-const PricingEditPage = React.lazy(() => import("@/pages/PricingEditPage"));
-const SubscriptionListPage = React.lazy(() => import("@/pages/SubscriptionListPage"));
-const SubscriptionEditPage = React.lazy(() => import("@/pages/SubscriptionEditPage"));
-const TransactionListPage = React.lazy(() => import("@/pages/TransactionListPage"));
-const TransactionEditPage = React.lazy(() => import("@/pages/TransactionEditPage"));
 
 const FormListPage = React.lazy(() => import("@/pages/FormListPage"));
 const FormEditPage = React.lazy(() => import("@/pages/FormEditPage"));
-const SyncerListPage = React.lazy(() => import("@/pages/SyncerListPage"));
-const SyncerEditPage = React.lazy(() => import("@/pages/SyncerEditPage"));
 const WebhookListPage = React.lazy(() => import("@/pages/WebhookListPage"));
 const WebhookEditPage = React.lazy(() => import("@/pages/WebhookEditPage"));
 const WebhookEventListPage = React.lazy(() => import("@/pages/WebhookEventListPage"));
 const TicketListPage = React.lazy(() => import("@/pages/TicketListPage"));
 const TicketEditPage = React.lazy(() => import("@/pages/TicketEditPage"));
-const LdapEditPage = React.lazy(() => import("@/pages/LdapEditPage"));
-const LdapSyncPage = React.lazy(() => import("@/pages/LdapSyncPage"));
 
 // ---- public pages ------------------------------------------------------------
 const LoginPage = React.lazy(() => import("@/pages/auth/LoginPage"));
@@ -127,15 +91,9 @@ const ForgetPage = React.lazy(() => import("@/pages/auth/ForgetPage"));
 const UpdatePasswordPage = React.lazy(() => import("@/pages/auth/UpdatePasswordPage"));
 const InitAdminPage = React.lazy(() => import("@/pages/auth/InitAdminPage"));
 const AuthCallback = React.lazy(() => import("@/pages/auth/AuthCallback"));
-const SamlCallback = React.lazy(() => import("@/pages/auth/SamlCallback"));
 const ResultPage = React.lazy(() => import("@/pages/auth/ResultPage"));
 const ConsentPage = React.lazy(() => import("@/pages/auth/ConsentPage"));
-const PricingPage = React.lazy(() => import("@/pages/PricingPage"));
-const QrCodePage = React.lazy(() => import("@/pages/QrCodePage"));
-const ThemePreviewPage = React.lazy(() => import("@/pages/ThemePreviewPage"));
 const PromptPage = React.lazy(() => import("@/pages/auth/PromptPage"));
-const TelegramLogin = React.lazy(() => import("@/pages/auth/TelegramLogin"));
-const CasLogout = React.lazy(() => import("@/pages/auth/CasLogout"));
 const CaptchaPage = React.lazy(() => import("@/pages/auth/CaptchaPage"));
 const OidcDiscoveryPage = React.lazy(() => import("@/pages/auth/OidcDiscoveryPage"));
 
@@ -224,9 +182,6 @@ export default function App() {
         <Route path="/login/:owner" element={<LoginPage type="login" />} />
         <Route path="/login/oauth/authorize" element={<LoginPage type="code" />} />
         <Route path="/login/oauth/device/:userCode" element={<LoginPage type="device" />} />
-        <Route path="/login/saml/authorize/:owner/:applicationName" element={<LoginPage type="saml" />} />
-        <Route path="/cas/:owner/:casApplicationName/login" element={<LoginPage type="cas" />} />
-        <Route path="/cas/:owner/:casApplicationName/logout" element={<CasLogout />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/signup/:applicationName" element={<SignupPage />} />
         <Route path="/signup/oauth/authorize" element={<SignupPage />} />
@@ -236,8 +191,6 @@ export default function App() {
         <Route path="/update-password/:applicationName" element={<UpdatePasswordPage />} />
         <Route path="/init-admin" element={<InitAdminPage />} />
         <Route path="/callback" element={<AuthCallback />} />
-        <Route path="/callback/saml" element={<SamlCallback />} />
-        <Route path="/telegram-login" element={<TelegramLogin />} />
         <Route path="/captcha" element={<CaptchaPage />} />
         <Route path="/.well-known/openid-configuration" element={<OidcDiscoveryPage />} />
         <Route path="/consent/:applicationName" element={<ConsentPage />} />
@@ -245,13 +198,6 @@ export default function App() {
         <Route path="/prompt/:applicationName" element={<PromptPage />} />
         <Route path="/result" element={<ResultPage />} />
         <Route path="/result/:applicationName" element={<ResultPage />} />
-
-        {/* Pricing / checkout pages reachable without the console chrome */}
-        <Route path="/select-plan/:owner/:pricingName" element={<PricingPage />} />
-        <Route path="/buy-plan/:owner/:pricingName" element={<ProductBuyPage />} />
-        <Route path="/buy-plan/:owner/:pricingName/result" element={<PaymentResultPage />} />
-        <Route path="/qrcode/:owner/:paymentName" element={<QrCodePage />} />
-        <Route path="/marketplace/theme-preview" element={<ThemePreviewPage />} />
 
         {/* Console */}
         <Route
@@ -287,9 +233,6 @@ export default function App() {
           <Route path="/applications/:organizationName/:applicationName" element={<ApplicationEditPage />} />
           <Route path="/providers" element={<ProviderListPage />} />
           <Route path="/providers/:organizationName/:providerName" element={<ProviderEditPage />} />
-          <Route path="/marketplace" element={<MarketplacePage />} />
-          <Route path="/integrations" element={<IntegrationListPage />} />
-          <Route path="/integrations/:organizationName/:integrationName" element={<IntegrationEditPage />} />
           <Route path="/resources" element={<ResourceListPage />} />
           <Route path="/certs" element={<CertListPage />} />
           <Route path="/certs/:organizationName/:certName" element={<CertEditPage />} />
@@ -307,14 +250,6 @@ export default function App() {
           <Route path="/enforcers" element={<EnforcerListPage />} />
           <Route path="/enforcers/:organizationName/:enforcerName" element={<EnforcerEditPage />} />
 
-          <Route path="/agents" element={<AgentListPage />} />
-          <Route path="/agents/:organizationName/:agentName" element={<AgentEditPage />} />
-          <Route path="/servers" element={<ServerListPage />} />
-          <Route path="/servers/:organizationName/:serverName" element={<ServerEditPage />} />
-          <Route path="/server-store" element={<ServerStorePage />} />
-          <Route path="/entries" element={<EntryListPage />} />
-          <Route path="/entries/:organizationName/:entryName" element={<EntryEditPage />} />
-          <Route path="/entries/:organizationName/:entryName/transcript" element={<OpenClawSessionTranscriptPage />} />
           <Route path="/sites" element={<SiteListPage />} />
           <Route path="/sites/:organizationName/:siteName" element={<SiteEditPage />} />
           <Route path="/rules" element={<RuleListPage />} />
@@ -326,39 +261,14 @@ export default function App() {
           <Route path="/tokens/:tokenName" element={<TokenEditPage />} />
           <Route path="/verifications" element={<VerificationListPage />} />
 
-          <Route path="/product-store" element={<ProductStorePage />} />
-          <Route path="/products" element={<ProductListPage />} />
-          <Route path="/products/:organizationName/:productName" element={<ProductEditPage />} />
-          <Route path="/products/:organizationName/:productName/buy" element={<ProductBuyPage />} />
-          <Route path="/cart" element={<CartListPage />} />
-          <Route path="/coupons" element={<CouponListPage />} />
-          <Route path="/coupons/:organizationName/:couponName" element={<CouponEditPage />} />
-          <Route path="/orders" element={<OrderListPage />} />
-          <Route path="/orders/:organizationName/:orderName" element={<OrderEditPage />} />
-          <Route path="/orders/:organizationName/:orderName/pay" element={<OrderPayPage />} />
-          <Route path="/payments" element={<PaymentListPage />} />
-          <Route path="/payments/:organizationName/:paymentName" element={<PaymentEditPage />} />
-          <Route path="/payments/:organizationName/:paymentName/result" element={<PaymentResultPage />} />
-          <Route path="/plans" element={<PlanListPage />} />
-          <Route path="/plans/:organizationName/:planName" element={<PlanEditPage />} />
-          <Route path="/pricings" element={<PricingListPage />} />
-          <Route path="/pricings/:organizationName/:pricingName" element={<PricingEditPage />} />
-          <Route path="/subscriptions" element={<SubscriptionListPage />} />
-          <Route path="/subscriptions/:organizationName/:subscriptionName" element={<SubscriptionEditPage />} />
-          <Route path="/transactions" element={<TransactionListPage />} />
-          <Route path="/transactions/:organizationName/:transactionName" element={<TransactionEditPage />} />
 
           <Route path="/forms" element={<FormListPage />} />
           <Route path="/forms/:formName" element={<FormEditPage />} />
-          <Route path="/syncers" element={<SyncerListPage />} />
-          <Route path="/syncers/:organizationName/:syncerName" element={<SyncerEditPage />} />
           <Route path="/webhooks" element={<WebhookListPage />} />
           <Route path="/webhooks/:webhookName" element={<WebhookEditPage />} />
           <Route path="/webhook-events" element={<WebhookEventListPage />} />
           <Route path="/tickets" element={<TicketListPage />} />
           <Route path="/tickets/:organizationName/:ticketName" element={<TicketEditPage />} />
-          <Route path="/ldap/:organizationName/:ldapId" element={<LdapEditPage />} />
-          <Route path="/ldap/sync/:organizationName/:ldapId" element={<LdapSyncPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

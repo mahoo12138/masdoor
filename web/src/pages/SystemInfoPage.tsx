@@ -509,7 +509,7 @@ export default function SystemInfoPage() {
         </CardHeader>
         <CardContent className="space-y-1 text-sm">
           <p className="text-muted-foreground">
-            {i18next.t("system:An Identity and Access Management (IAM) / Single-Sign-On (SSO) platform with web UI supporting OAuth 2.0, OIDC, SAML and CAS")}
+            {i18next.t("system:An Identity and Access Management (IAM) / Single-Sign-On (SSO) platform with web UI supporting OAuth 2.0 and OIDC")}
           </p>
           <div>
             GitHub:{" "}

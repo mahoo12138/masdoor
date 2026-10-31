@@ -36,7 +36,7 @@ export function PasswordModal({user, userName, organization, account, disabled, 
   const [rePassword, setRePassword] = React.useState("");
 
   const passwordOptions: string[] = organization?.passwordOptions ?? [];
-  const hasOldPassword = user.password !== "" || user.ldap !== "";
+  const hasOldPassword = user.password !== "";
   const buttonText = hasOldPassword ? i18next.t("user:Modify password...") : i18next.t("user:Set password...");
   // an admin resetting someone else's password is not asked for the old one
   const needOldPassword = hasOldPassword && !Setting.isLocalAdminUser(account);

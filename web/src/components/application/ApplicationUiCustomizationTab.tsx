@@ -28,17 +28,11 @@ const SIGNIN_METHOD_RULES: Record<string, EnumMap> = {
   },
   "Password": {
     "All": {i18nKey: "general:All"},
-    "Non-LDAP": {i18nKey: "general:Non-LDAP"},
     "Hide password": {i18nKey: "general:Hide password"},
   },
   "Magic link": {
     "Sign in only": {i18nKey: "application:Sign in only"},
     "Sign in or sign up": {i18nKey: "application:Sign in or sign up"},
-  },
-  "WeChat": {
-    "Tab": {i18nKey: "general:Tab"},
-    "Login page": {i18nKey: "general:Login page"},
-    "Corner": {i18nKey: "application:Corner QR code"},
   },
   "Device login": {
     "Tab": {i18nKey: "general:Tab"},
@@ -57,10 +51,8 @@ const SIGNIN_METHOD_NAMES: {name: string; labelKey: string}[] = [
   {name: "Verification code", labelKey: "login:Verification code"},
   {name: "Magic link", labelKey: "login:Magic link"},
   {name: "WebAuthn", labelKey: "login:WebAuthn"},
-  {name: "LDAP", labelKey: "login:LDAP"},
   {name: "Face ID", labelKey: "login:Face ID"},
   {name: "Device login", labelKey: "login:Device login"},
-  {name: "WeChat", labelKey: "login:WeChat"},
 ];
 
 const SIGNUP_ITEM_TYPES: EnumMap = {

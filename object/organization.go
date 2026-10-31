@@ -104,20 +104,6 @@ type Organization struct {
 	AccountItems       []*AccountItem `xorm:"mediumtext" json:"accountItems"`
 
 	DcrPolicy string `xorm:"varchar(100)" json:"dcrPolicy"`
-
-	LdapAttributes     []string `xorm:"mediumtext" json:"ldapAttributes"`
-	EnableLdapPassword bool     `xorm:"bool" json:"enableLdapPassword"`
-	EnableRadius       bool     `xorm:"bool" json:"enableRadius"`
-
-	KerberosRealm       string `xorm:"varchar(200)" json:"kerberosRealm"`
-	KerberosKdcHost     string `xorm:"varchar(200)" json:"kerberosKdcHost"`
-	KerberosKeytab      string `xorm:"mediumtext" json:"kerberosKeytab"`
-	KerberosServiceName string `xorm:"varchar(100)" json:"kerberosServiceName"`
-
-	OrgBalance      float64 `json:"orgBalance"`
-	UserBalance     float64 `json:"userBalance"`
-	BalanceCredit   float64 `json:"balanceCredit"`
-	BalanceCurrency string  `xorm:"varchar(100)" json:"balanceCurrency"`
 }
 
 func GetOrganizationCount(owner, name, field, value string) (int64, error) {
@@ -212,9 +198,6 @@ func GetMaskedOrganization(isAdmin bool, organization *Organization, errs ...err
 	if organization.MasterVerificationCode != "" {
 		organization.MasterVerificationCode = "***"
 	}
-	if organization.KerberosKeytab != "" {
-		organization.KerberosKeytab = "***"
-	}
 	if !isAdmin {
 		if organization.PasswordSalt != "" {
 			organization.PasswordSalt = "***"
@@ -299,12 +282,6 @@ func UpdateOrganization(id string, organization *Organization, isGlobalAdmin boo
 		organization.NavItems = org.NavItems
 		organization.UserNavItems = org.UserNavItems
 		organization.WidgetItems = org.WidgetItems
-		organization.OrgBalance = org.OrgBalance
-		organization.UserBalance = org.UserBalance
-		organization.BalanceCredit = org.BalanceCredit
-		organization.BalanceCurrency = org.BalanceCurrency
-		organization.EnableLdapPassword = org.EnableLdapPassword
-		organization.EnableRadius = org.EnableRadius
 		organization.DcrPolicy = org.DcrPolicy
 	}
 
@@ -318,9 +295,6 @@ func UpdateOrganization(id string, organization *Organization, isGlobalAdmin boo
 	}
 	if organization.MasterVerificationCode == "***" {
 		session.Omit("master_verification_code")
-	}
-	if organization.KerberosKeytab == "***" {
-		session.Omit("kerberos_keytab")
 	}
 	if organization.PasswordSalt == "***" {
 		session.Omit("password_salt")
@@ -374,9 +348,6 @@ func AddOrganization(organization *Organization) (bool, error) {
 	}
 	if organization.MasterVerificationCode == "***" {
 		organization.MasterVerificationCode = ""
-	}
-	if organization.KerberosKeytab == "***" {
-		organization.KerberosKeytab = ""
 	}
 
 	organization.Owner = "admin"

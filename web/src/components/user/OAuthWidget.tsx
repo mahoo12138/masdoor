@@ -1,7 +1,6 @@
 import * as React from "react";
 import i18next from "i18next";
 import {Button} from "@/components/ui/button";
-import {WeChatQrDialog, needsWeChatQrDialog} from "@/components/auth/WeChatQrDialog";
 import * as AuthBackend from "@/backend/AuthBackend";
 import * as Provider from "@/auth/Provider";
 import * as Setting from "@/lib/setting";
@@ -43,15 +42,6 @@ function Row({provider, children}: {provider: any; children: React.ReactNode}) {
   );
 }
 
-/** A SAML provider only shows which user it maps to (web/src/common/SamlWidget.js). */
-function SamlWidget({user, providerItem}: {user: any; providerItem: any}) {
-  return (
-    <Row provider={providerItem.provider}>
-      <span className="text-sm">{user.name}</span>
-    </Row>
-  );
-}
-
 /**
  * One third-party account row of the user page: who it is linked to, plus the
  * Link/Unlink buttons. Ported from web/src/common/OAuthWidget.js — the unlink
@@ -59,7 +49,6 @@ function SamlWidget({user, providerItem}: {user: any; providerItem: any}) {
  */
 function OAuthRow({user, application, providerItem, account, onUnlinked}: WidgetProps) {
   const provider = providerItem.provider;
-  const [wechatOpen, setWechatOpen] = React.useState(false);
 
   let linkedValue: string;
   if (provider.type === "Custom Flexible") {
@@ -86,10 +75,6 @@ function OAuthRow({user, application, providerItem, account, onUnlinked}: Widget
   const isSelf = user.id === account?.id;
 
   const link = () => {
-    if (needsWeChatQrDialog(provider)) {
-      setWechatOpen(true);
-      return;
-    }
     Setting.goToLink(Provider.getAuthUrl(application, provider, "link"));
   };
 
@@ -130,15 +115,6 @@ function OAuthRow({user, application, providerItem, account, onUnlinked}: Widget
           >
             {i18next.t("user:Link")}
           </Button>
-          {wechatOpen ? (
-            <WeChatQrDialog
-              application={application}
-              provider={provider}
-              method="link"
-              open={wechatOpen}
-              onClose={() => setWechatOpen(false)}
-            />
-          ) : null}
         </>
       ) : (
         <Button
@@ -167,20 +143,16 @@ export function ThirdPartyLogins({user, application, account, onUnlinked, filter
 
   return (
     <div className="divide-y divide-border/60">
-      {items.map((providerItem: any) =>
-        providerItem.provider.category === "OAuth" ? (
-          <OAuthRow
-            key={providerItem.name}
-            user={user}
-            application={application}
-            providerItem={providerItem}
-            account={account}
-            onUnlinked={onUnlinked}
-          />
-        ) : (
-          <SamlWidget key={providerItem.name} user={user} providerItem={providerItem} />
-        ),
-      )}
+      {items.map((providerItem: any) => (
+        <OAuthRow
+          key={providerItem.name}
+          user={user}
+          application={application}
+          providerItem={providerItem}
+          account={account}
+          onUnlinked={onUnlinked}
+        />
+      ))}
     </div>
   );
 }

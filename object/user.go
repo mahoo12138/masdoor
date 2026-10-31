@@ -101,18 +101,12 @@ type User struct {
 	Score                int        `json:"score"`
 	Karma                int        `json:"karma"`
 	Ranking              int        `json:"ranking"`
-	Balance              float64    `json:"balance"`
-	BalanceCredit        float64    `json:"balanceCredit"`
-	Currency             string     `xorm:"varchar(100)" json:"currency"`
-	BalanceCurrency      string     `xorm:"varchar(100)" json:"balanceCurrency"`
 	IsDefaultAvatar      bool       `json:"isDefaultAvatar"`
 	IsOnline             bool       `json:"isOnline"`
 	IsAdmin              bool       `json:"isAdmin"`
 	IsForbidden          bool       `json:"isForbidden"`
 	IsDeleted            bool       `json:"isDeleted"`
 	SignupApplication    string     `xorm:"varchar(100)" json:"signupApplication"`
-	Hash                 string     `xorm:"varchar(100)" json:"hash"`
-	PreHash              string     `xorm:"varchar(100)" json:"preHash"`
 	RegisterType         string     `xorm:"varchar(100)" json:"registerType"`
 	RegisterSource       string     `xorm:"varchar(100)" json:"registerSource"`
 	AccessToken          string     `xorm:"mediumtext" json:"accessToken"`
@@ -888,7 +882,7 @@ func getLastUser(owner string) (*User, error) {
 var userSelfColumns = []string{
 	"owner", "display_name", "avatar", "first_name", "last_name",
 	"location", "address", "addresses", "country_code", "region", "language", "affiliation", "title", "id_card_type", "id_card", "homepage", "bio", "tag", "language", "gender", "birthday", "education", "score", "karma", "ranking", "signup_application", "register_type", "register_source",
-	"hash", "is_default_avatar", "properties", "webauthnCredentials", "mfa_items", "last_change_password_time", "managedAccounts", "face_ids", "mfaAccounts",
+	"is_default_avatar", "properties", "webauthnCredentials", "mfa_items", "last_change_password_time", "managedAccounts", "face_ids", "mfaAccounts",
 	"signin_wrong_times", "last_signin_wrong_time", "groups", "mfa_phone_enabled", "mfa_email_enabled",
 	"type", "need_update_password", "ip_whitelist", "mfa_remember_deadline",
 	"cart", "application_scopes",
@@ -910,7 +904,7 @@ var userProviderColumns = []string{
 func GetDefaultUserUpdateColumns(isAdmin bool) []string {
 	columns := append([]string{}, userSelfColumns...)
 	if isAdmin {
-		columns = append(columns, "name", "id", "email", "phone", "country_code", "type", "balance", "balance_credit", "balance_currency", "mfa_items", "register_type", "register_source",
+		columns = append(columns, "name", "id", "email", "phone", "country_code", "type", "mfa_items", "register_type", "register_source",
 			"is_admin", "is_forbidden", "is_deleted", "uid_number", "email_verified", "is_verified")
 		columns = append(columns, userProviderColumns...)
 	}
@@ -1017,10 +1011,6 @@ func UpdateUser(id string, user *User, columns []string, isAdmin bool) (bool, er
 
 func updateUser(id string, user *User, columns []string) (int64, error) {
 	owner, name := util.GetOwnerAndNameFromIdNoCheck(id)
-	// Ensure hash column is included in updates when columns are specified
-	if len(columns) > 0 && !util.InSlice(columns, "hash") {
-		columns = append(columns, "hash")
-	}
 
 	affected, err := ormer.Engine.ID(core.PK{owner, name}).Cols(columns...).Update(user)
 	if err != nil {
@@ -1127,14 +1117,6 @@ func AddUser(user *User, lang string) (bool, error) {
 
 	if organization.Name == "built-in" && !organization.HasPrivilegeConsent && user.Name != "admin" {
 		return false, errors.New(i18n.Translate(lang, "organization:adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Masdoor. Refer to the docs: https://casdoor.org/docs/basic/core-concepts#how-does-casdoor-manage-itself. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option."))
-	}
-
-	if user.BalanceCurrency == "" {
-		if organization.BalanceCurrency != "" {
-			user.BalanceCurrency = organization.BalanceCurrency
-		} else {
-			user.BalanceCurrency = "USD"
-		}
 	}
 
 	if user.Avatar == "" {

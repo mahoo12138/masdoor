@@ -438,78 +438,6 @@ export const OtherProviderInfo = {
       url: "https://www.cucloud.cn/product/oss.html",
     },
   },
-  SAML: {
-    "Aliyun IDaaS": {
-      logo: `${StaticBaseUrl}/img/social_aliyun.png`,
-      url: "https://aliyun.com/product/idaas",
-    },
-    "Keycloak": {
-      logo: `${StaticBaseUrl}/img/social_keycloak.png`,
-      url: "https://www.keycloak.org/",
-    },
-    "Custom": {
-      logo: `${StaticBaseUrl}/img/social_custom.png`,
-      url: "https://door.casdoor.com/",
-    },
-    "Custom Flexible": {
-      logo: `${StaticBaseUrl}/img/social_custom.png`,
-      url: "https://door.casdoor.com/",
-    },
-  },
-  Payment: {
-    "Dummy": {
-      logo: `${StaticBaseUrl}/img/payment_paypal.png`,
-      url: "",
-    },
-    "Balance": {
-      logo: `${StaticBaseUrl}/img/payment_balance.svg`,
-      url: "",
-    },
-    "Alipay": {
-      logo: `${StaticBaseUrl}/img/payment_alipay.png`,
-      url: "https://www.alipay.com/",
-    },
-    "WeChat Pay": {
-      logo: `${StaticBaseUrl}/img/payment_wechat_pay.png`,
-      url: "https://pay.weixin.qq.com/",
-    },
-    "PayPal": {
-      logo: `${StaticBaseUrl}/img/payment_paypal.png`,
-      url: "https://www.paypal.com/",
-    },
-    "Stripe": {
-      logo: `${StaticBaseUrl}/img/social_stripe.png`,
-      url: "https://stripe.com/",
-    },
-    "AirWallex": {
-      logo: `${StaticBaseUrl}/img/payment_airwallex.svg`,
-      url: "https://airwallex.com/",
-    },
-    "GC": {
-      logo: `${StaticBaseUrl}/img/payment_gc.png`,
-      url: "https://gc.org",
-    },
-    "Polar": {
-      logo: `${StaticBaseUrl}/img/payment_polar.png`,
-      url: "https://polar.sh/",
-    },
-    "Paddle": {
-      logo: `${StaticBaseUrl}/img/payment_paddle.png`,
-      url: "https://www.paddle.com/",
-    },
-    "FastSpring": {
-      logo: `${StaticBaseUrl}/img/payment_fastspring.png`,
-      url: "https://fastspring.com/",
-    },
-    "Lemon Squeezy": {
-      logo: `${StaticBaseUrl}/img/payment_lemonsqueezy.jpg`,
-      url: "https://www.lemonsqueezy.com/",
-    },
-    "Adyen": {
-      logo: `${StaticBaseUrl}/img/payment_adyen.svg`,
-      url: "https://www.adyen.com/",
-    },
-  },
   Captcha: {
     "Default": {
       logo: `${StaticBaseUrl}/img/captcha_default.png`,
@@ -542,12 +470,6 @@ export const OtherProviderInfo = {
     "Cloudflare Turnstile": {
       logo: `${StaticBaseUrl}/img/social_cloudflare.png`,
       url: "https://www.cloudflare.com/products/turnstile/",
-    },
-  },
-  AI: {
-    "OpenAI API - GPT": {
-      logo: `${StaticBaseUrl}/img/social_openai.svg`,
-      url: "https://platform.openai.com",
     },
   },
   Notification: {
@@ -642,12 +564,6 @@ export const OtherProviderInfo = {
       url: "https://github.com/yakhyo/uniface",
     },
   },
-  "MFA": {
-    "RADIUS": {
-      logo: `${StaticBaseUrl}/img/mfa_radius.png`,
-      url: "",
-    },
-  },
   "ID Verification": {
     "Jumio": {
       logo: `${StaticBaseUrl}/img/social_jumio.png`,
@@ -673,23 +589,9 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/social_default.png`,
       url: "https://en.wikipedia.org/wiki/Syslog",
     },
-    "Agent": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "",
-    },
     "SELinux Log": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
       url: "https://github.com/SELinuxProject/selinux",
-    },
-  },
-  Scan: {
-    "Security Scan": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "",
-    },
-    "MCP Scan": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "",
     },
   },
 };
@@ -698,8 +600,8 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "is_admin", "homepage", "birthday", "gender", "password_type", "password_salt", "external_id", "avatar", "first_name", "last_name",
   "avatar_type", "permanent_avatar", "email_verified", "region", "location", "address",
   "affiliation", "title", "id_card_type", "id_card", "real_name", "is_verified", "bio", "tag", "language",
-  "education", "score", "karma", "ranking", "balance", "balance_credit", "balance_currency", "currency", "is_default_avatar", "is_online",
-  "is_forbidden", "is_deleted", "signup_application", "register_type", "register_source", "hash", "pre_hash", "access_token",
+  "education", "score", "karma", "ranking", "is_default_avatar", "is_online",
+  "is_forbidden", "is_deleted", "signup_application", "register_type", "register_source", "access_token",
   "created_ip", "last_signin_time", "last_signin_ip", "github", "google", "qq", "wechat", "facebook", "dingtalk",
   "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs", "baidu", "alipay", "masdoor", "infoflow", "apple",
   "azuread", "azureadb2c", "slack", "steam", "bilibili", "okta", "douyin", "kwai", "line", "amazon", "auth0",
@@ -709,7 +611,7 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "soundcloud", "spotify", "strava", "stripe", "tiktok", "tumblr", "twitch", "twitter", "typetalk", "uber", "vk",
   "wepay", "xero", "yahoo", "yammer", "yandex", "zoom", "oidc", "custom", "webauthnCredentials",
   "preferred_mfa_type", "recovery_codes", "totp_secret", "mfa_phone_enabled", "mfa_email_enabled", "invitation",
-  "invitation_code", "face_ids", "ldap", "properties", "roles", "permissions", "groups", "last_change_password_time",
+  "invitation_code", "face_ids", "properties", "roles", "permissions", "groups", "last_change_password_time",
   "last_signin_wrong_time", "signin_wrong_times", "managedAccounts", "mfaAccounts", "mfaItems", "need_update_password",
   "created_time", "updated_time", "deleted_time",
   "ip_whitelist"];
@@ -933,16 +835,7 @@ export function isProviderVisible(providerItem) {
     return false;
   }
 
-  if (!["OAuth", "SAML"].includes(providerItem.provider.category)) {
-    return false;
-  }
-
-  if (providerItem.provider.type === "WeChatMiniProgram") {
-    return false;
-  }
-
-  // inside WeChat only the Official Account (clientId2) can sign in, the QR code needs another device
-  if (providerItem.provider.type === "WeChat" && !providerItem.provider.clientId2 && navigator.userAgent.includes("MicroMessenger")) {
+  if (providerItem.provider.category !== "OAuth") {
     return false;
   }
 
@@ -1446,31 +1339,10 @@ export function getProviderTypeOptions(category) {
       [
         {id: "Google", name: "Google"},
         {id: "GitHub", name: "GitHub"},
-        {id: "QQ", name: "QQ"},
-        {id: "WeChat", name: "WeChat"},
-        {id: "WeChatMiniProgram", name: "WeChat Mini Program"},
-        {id: "Facebook", name: "Facebook"},
-        {id: "DingTalk", name: "DingTalk"},
-        {id: "Weibo", name: "Weibo"},
-        {id: "Gitee", name: "Gitee"},
-        {id: "LinkedIn", name: "LinkedIn"},
-        {id: "WeCom", name: "WeCom"},
-        {id: "Lark", name: "Lark"},
-        {id: "GitLab", name: "GitLab"},
-        {id: "ADFS", name: "ADFS"},
-        {id: "Baidu", name: "Baidu"},
-        {id: "Alipay", name: "Alipay"},
-        {id: "Masdoor", name: "Masdoor"},
-        {id: "Infoflow", name: "Infoflow"},
         {id: "Apple", name: "Apple"},
         {id: "AzureAD", name: "Azure AD"},
-        {id: "AzureADB2C", name: "Azure AD B2C"},
         {id: "Slack", name: "Slack"},
         {id: "Steam", name: "Steam"},
-        {id: "Bilibili", name: "Bilibili"},
-        {id: "Okta", name: "Okta"},
-        {id: "Douyin", name: "Douyin"},
-        {id: "Kwai", name: "Kwai"},
         {id: "Line", name: "Line"},
         {id: "Amazon", name: "Amazon"},
         {id: "Auth0", name: "Auth0"},
@@ -1507,11 +1379,9 @@ export function getProviderTypeOptions(category) {
         {id: "Spotify", name: "Spotify"},
         {id: "Strava", name: "Strava"},
         {id: "Stripe", name: "Stripe"},
-        {id: "Telegram", name: "Telegram"},
         {id: "TikTok", name: "TikTok"},
         {id: "Tumblr", name: "Tumblr"},
         {id: "Twitch", name: "Twitch"},
-        {id: "Twitter", name: "Twitter"},
         {id: "Typetalk", name: "Typetalk"},
         {id: "Uber", name: "Uber"},
         {id: "VK", name: "VK"},
@@ -1585,29 +1455,6 @@ export function getProviderTypeOptions(category) {
         {id: "CUCloud OSS", name: "CUCloud OSS"},
       ]
     );
-  } else if (category === "SAML") {
-    return ([
-      {id: "Aliyun IDaaS", name: "Aliyun IDaaS"},
-      {id: "Keycloak", name: "Keycloak"},
-      {id: "Custom", name: "Custom"},
-      {id: "Custom Flexible", name: "Custom Flexible"},
-    ]);
-  } else if (category === "Payment") {
-    return ([
-      {id: "Dummy", name: "Dummy"},
-      {id: "Balance", name: "Balance"},
-      {id: "Alipay", name: "Alipay"},
-      {id: "WeChat Pay", name: "WeChat Pay"},
-      {id: "PayPal", name: "PayPal"},
-      {id: "Stripe", name: "Stripe"},
-      {id: "AirWallex", name: "AirWallex"},
-      {id: "GC", name: "GC"},
-      {id: "Polar", name: "Polar"},
-      {id: "Paddle", name: "Paddle"},
-      {id: "FastSpring", name: "FastSpring"},
-      {id: "Lemon Squeezy", name: "Lemon Squeezy"},
-      {id: "Adyen", name: "Adyen"},
-    ]);
   } else if (category === "Captcha") {
     return ([
       {id: "Default", name: "Default"},
@@ -1646,10 +1493,6 @@ export function getProviderTypeOptions(category) {
       {id: "Alibaba Cloud Facebody", name: "Alibaba Cloud Facebody"},
       {id: "Local UniFace", name: "Local UniFace"},
     ]);
-  } else if (category === "MFA") {
-    return ([
-      {id: "RADIUS", name: "RADIUS"},
-    ]);
   } else if (category === "ID Verification") {
     return ([
       {id: "Jumio", name: "Jumio"},
@@ -1665,11 +1508,6 @@ export function getProviderTypeOptions(category) {
       {id: "System Log", name: "System Log"},
       {id: "Agent", name: "Agent"},
       {id: "SELinux Log", name: "SELinux Log"},
-    ]);
-  } else if (category === "Scan") {
-    return ([
-      {id: "Security Scan", name: "Security Scan"},
-      {id: "MCP Scan", name: "MCP Scan"},
     ]);
   } else {
     return [];
@@ -1753,21 +1591,21 @@ export function getProvidersRule(application, item) {
     return item.rule;
   }
   const showForm = isPasswordEnabled(application) || isCodeSigninEnabled(application) ||
-    isWebAuthnEnabled(application) || isLdapEnabled(application);
+    isWebAuthnEnabled(application);
   return showForm ? "small" : "big";
 }
 
 // The login page offers a credential form, the sign-in providers or a QR panel; without any of them it has nothing to sign in with.
 export function hasAnySigninMethod(application) {
   if (isPasswordEnabled(application) || isCodeSigninEnabled(application) || isWebAuthnEnabled(application) ||
-    isLdapEnabled(application) || isFaceIdEnabled(application) || isMagicLinkEnabled(application)) {
+    isFaceIdEnabled(application) || isMagicLinkEnabled(application)) {
     return true;
   }
   const providersShown = (application?.signinItems ?? []).some(item => item.name === "Providers" && item.visible);
   if (providersShown && (application?.providers ?? []).some(item => isProviderVisibleForSignIn(item))) {
     return true;
   }
-  return (application?.signinMethods ?? []).some(item => (item.name === "WeChat" || item.name === "Device login") && item.rule === "Login page");
+  return (application?.signinMethods ?? []).some(item => item.name === "Device login" && item.rule === "Login page");
 }
 
 export function getAutoSigninDefaultValue(application) {
@@ -1792,10 +1630,6 @@ export function isCodeSigninEnabled(application) {
 
 export function isWebAuthnEnabled(application) {
   return isSigninMethodEnabled(application, "WebAuthn");
-}
-
-export function isLdapEnabled(application) {
-  return isSigninMethodEnabled(application, "LDAP");
 }
 
 export function isFaceIdEnabled(application) {
@@ -2117,10 +1951,10 @@ export function getPriceDisplay(price, currency) {
 export function getUserCommonFields() {
   return ["Owner", "Name", "CreatedTime", "UpdatedTime", "DeletedTime", "Id", "ExternalId", "Type", "Password", "PasswordSalt", "PasswordType", "DisplayName", "FirstName", "LastName", "Avatar", "AvatarType", "PermanentAvatar",
     "Email", "EmailVerified", "Phone", "CountryCode", "Location", "Address", "Affiliation", "Title", "IdCardType", "IdCard", "RealName", "IsVerified", "Homepage", "Bio", "Tag", "Region",
-    "Language", "Gender", "Birthday", "Education", "UidNumber", "Score", "Karma", "Ranking", "Balance", "BalanceCredit", "Currency", "BalanceCurrency", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
+    "Language", "Gender", "Birthday", "Education", "UidNumber", "Score", "Karma", "Ranking", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
     "SignupApplication", "RegisterType", "RegisterSource", "CreatedIp", "LastSigninTime", "LastSigninIp",
-    "PreferredMfaType", "TotpSecret", "RecoveryCodes", "MfaPhoneEnabled", "MfaEmailEnabled", "MfaRadiusEnabled", "MfaRadiusUsername", "MfaRadiusProvider", "MfaPushEnabled", "MfaPushReceiver", "MfaPushProvider",
-    "WebauthnCredentials", "FaceIds", "Invitation", "InvitationCode", "Ldap", "Properties", "Groups"];
+    "PreferredMfaType", "TotpSecret", "RecoveryCodes", "MfaPhoneEnabled", "MfaEmailEnabled", "MfaPushEnabled", "MfaPushReceiver", "MfaPushProvider",
+    "WebauthnCredentials", "FaceIds", "Invitation", "InvitationCode", "Properties", "Groups"];
 }
 
 export function getDefaultFooterContent() {
@@ -2378,26 +2212,18 @@ export function getFormTypeItems(formType) {
 
 
 export function getApiPaths() {
-  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "permission", "model", "adapter", "enforcer", "session", "token", "product", "payment", "plan", "pricing", "subscription", "syncer", "webhook", "form", "invitation", "ldap", "order", "ticket", "transaction"];
+  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "permission", "model", "adapter", "enforcer", "session", "token", "webhook", "form", "invitation"];
   const res = [];
 
   // Auth and user session APIs
   res.push("signup", "login", "logout", "sso-logout", "unlink");
   res.push("new-user"); // Custom event for new user creation
-  res.push("new-user-ldap"); // Custom event for new user creation via LDAP sync
-  res.push("new-user-syncer"); // Custom event for new user creation via syncer
 
   // CRUD operations for objects
   objects.forEach(obj => {
     ["add", "update", "delete"].forEach(action => {
       res.push(`${action}-${obj}`);
     });
-    if (obj === "payment") {
-      res.push("invoice-payment", "notify-payment");
-    }
-    if (obj === "order") {
-      res.push("place-order", "cancel-order", "pay-order");
-    }
     if (obj === "user") {
       res.push("remove-user-from-group", "upload-users");
       res.push("check-user-password", "set-password", "reset-email-or-phone");
@@ -2417,15 +2243,6 @@ export function getApiPaths() {
     }
     if (obj === "invitation") {
       res.push("send-invitation", "verify-invitation");
-    }
-    if (obj === "ticket") {
-      res.push("add-ticket-message");
-    }
-    if (obj === "syncer") {
-      res.push("run-syncer", "test-syncer-db");
-    }
-    if (obj === "ldap") {
-      res.push("sync-ldap-users");
     }
     if (obj === "enforcer") {
       res.push("enforce", "batch-enforce");
@@ -2453,9 +2270,6 @@ export function getApiPaths() {
   // Verification and communication APIs
   res.push("send-verification-code", "verify-code", "verify-captcha");
   res.push("send-email", "send-sms", "send-notification");
-
-  // SAML APIs
-  res.push("acs", "saml/metadata");
 
   // Monitoring and health APIs
   res.push("health", "metrics");

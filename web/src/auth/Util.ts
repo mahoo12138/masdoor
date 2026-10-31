@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Query-string helpers for the sign-in flows (OAuth / CAS / SAML), ported
+// Query-string helpers for the sign-in flows (OAuth / OIDC), ported
 // verbatim from web/src/auth/Util.js minus its antd renderers.
 
 import * as AuthBackend from "@/backend/AuthBackend";
@@ -51,42 +51,6 @@ function getRawGetParameter(key) {
   return res;
 }
 
-export function getCasLoginParameters(owner, name) {
-  const queries = new URLSearchParams(window.location.search);
-  // CAS service
-  let service = getRawGetParameter("service");
-  if (service === "") {
-    service = getRefinedValue(queries.get("service"));
-  }
-  return {
-    id: `${owner}/${encodeURIComponent(name)}`, // application ID,
-    service: service,
-    type: "cas",
-  };
-}
-
-// the SAML HTTP-Redirect and HTTP-POST bindings spell "SAMLRequest" differently
-export function getParameterIgnoreCase(params: URLSearchParams, key: string): string | null {
-  const target = key.toLowerCase();
-  let result: string | null = null;
-  params.forEach((val, name) => {
-    if (result === null && name.toLowerCase() === target) {
-      result = val;
-    }
-  });
-  return result;
-}
-
-// getRelayState returns the RelayState in the URL, it is used by the SAML IdP-initiated SSO,
-// where there is no SAMLRequest and getOAuthGetParameters() returns null
-export function getRelayState() {
-  const queries = new URLSearchParams(window.location.search);
-  const lowercaseQueries = {};
-  queries.forEach((val, key) => {lowercaseQueries[key.toLowerCase()] = val;});
-
-  return getRefinedValue(lowercaseQueries["RelayState".toLowerCase()]);
-}
-
 export function getOAuthGetParameters(params?: any): any {
   const queries = (params !== undefined) ? params : new URLSearchParams(window.location.search);
   const lowercaseQueries = {};
@@ -114,15 +78,13 @@ export function getOAuthGetParameters(params?: any): any {
   const challengeMethod = getRefinedValue(queries.get("code_challenge_method"));
   const codeChallenge = getRefinedValue(queries.get("code_challenge"));
   const responseMode = getRefinedValue(queries.get("response_mode"));
-  const samlRequest = getRefinedValue(lowercaseQueries["samlRequest".toLowerCase()]);
-  const relayState = getRefinedValue(lowercaseQueries["RelayState".toLowerCase()]);
   const noRedirect = getRefinedValue(lowercaseQueries["noRedirect".toLowerCase()]);
   const resource = getRefinedValue(queries.get("resource"));
   const prompt = getRefinedValue(queries.get("prompt"));
   const maxAge = getRefinedValue(queries.get("max_age"));
   const organization = getRefinedValue(queries.get("organization"));
 
-  if (clientId === "" && samlRequest === "") {
+  if (clientId === "") {
     // login
     return null;
   } else {
@@ -137,8 +99,6 @@ export function getOAuthGetParameters(params?: any): any {
       challengeMethod: challengeMethod,
       codeChallenge: codeChallenge,
       responseMode: responseMode,
-      samlRequest: samlRequest,
-      relayState: relayState,
       noRedirect: noRedirect,
       resource: resource,
       prompt: prompt,
@@ -255,15 +215,3 @@ export function getQueryParamsFromState(state) {
   }
 }
 
-/**
- * Polls the WeChat official account for the scan event and, once the user has
- * scanned (or subscribed), continues into the normal OAuth redirect with the
- * code the backend handed back. Ported from web/src/auth/Util.js.
- */
-export function getEvent(application, provider, ticket, method) {
-  return AuthBackend.getWechatMessageEvent(ticket).then((res: any) => {
-    if (res.data === "SCAN" || res.data === "subscribe") {
-      Setting.goToLink(Provider.getAuthUrl(application, provider, method ?? "signup", res.data2));
-    }
-  });
-}

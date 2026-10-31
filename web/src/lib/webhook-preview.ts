@@ -16,7 +16,6 @@ const applicationTemplate = {
   disableSignin: false,
   enableSigninSession: false,
   enableCodeSignin: false,
-  enableSamlCompress: false,
 };
 
 const previewTemplate = {
@@ -68,10 +67,6 @@ const userTemplate = {
     "fileQuota": "50",
     "location": "",
     "no": "22",
-    "oauth_QQ_displayName": "",
-    "oauth_QQ_verifiedTime": "",
-    "oauth_WeChat_displayName": "",
-    "oauth_WeChat_verifiedTime": "",
     "onlineStatus": "false",
     "phoneVerifiedTime": "",
     "renameQuota": "3",

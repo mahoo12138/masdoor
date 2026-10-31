@@ -142,12 +142,6 @@ export const PROVIDER_BINDING_RULES: EnumMap = {
   "Phone": {i18nKey: "general:Phone"},
 };
 
-export const LDAP_PASSWORD_TYPES: EnumMap = {
-  "Plain": {i18nKey: "general:Plain"},
-  "SSHA": {i18nKey: "SSHA"},
-  "MD5": {i18nKey: "MD5"},
-};
-
 /**
  * The label for a stored value. Values with no entry (and keys with no
  * namespace, such as "GET") fall through to the text itself, which is what the

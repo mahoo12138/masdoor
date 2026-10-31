@@ -18,11 +18,7 @@ import {GoogleOneTap} from "@/components/auth/GoogleOneTap";
 import {FaceRecognitionCommonModal} from "@/components/common/FaceRecognitionCommonModal";
 import {FaceRecognitionModal} from "@/components/common/FaceRecognitionModal";
 import {ProviderButtons, getVisibleProviders} from "@/components/auth/ProviderButtons";
-import {WeChatLoginPanel} from "@/components/auth/WeChatLoginPanel";
-import {QrCornerSwitch, WeChatQrConnectPanel} from "@/components/auth/WeChatQrConnectPanel";
-import {needsWeChatQrDialog} from "@/components/auth/WeChatQrDialog";
 import {OrganizationSelect} from "@/components/common/OrganizationSelect";
-import {RedirectForm} from "@/components/auth/RedirectForm";
 import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
 import {PasswordInput} from "@/components/common/PasswordInput";
 import {useSendCode, type CaptchaValues} from "@/components/auth/SendCodeInput";
@@ -41,8 +37,8 @@ import * as UserBackend from "@/backend/UserBackend";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
 import * as Setting from "@/lib/setting";
 
-type LoginType = "login" | "code" | "cas" | "saml" | "device";
-type LoginMethod = "password" | "verificationCode" | "verificationCodeEmail" | "verificationCodePhone" | "ldap" | "webAuthn" | "wechat" | "faceId" | "magicLink" | "device";
+type LoginType = "login" | "code" | "device";
+type LoginMethod = "password" | "verificationCode" | "verificationCodeEmail" | "verificationCodePhone" | "webAuthn" | "faceId" | "magicLink" | "device";
 
 function getDefaultLoginMethod(application: any): LoginMethod {
   const first = application?.signinMethods?.[0];
@@ -59,8 +55,6 @@ function getDefaultLoginMethod(application: any): LoginMethod {
       return "verificationCodePhone";
     }
     break;
-  case "LDAP":
-    return "ldap";
   case "WebAuthn":
     return "webAuthn";
   case "Face ID":
@@ -70,11 +64,6 @@ function getDefaultLoginMethod(application: any): LoginMethod {
   case "Device login":
     if (first?.rule === "Tab") {
       return "device";
-    }
-    break;
-  case "WeChat":
-    if (first?.rule === "Tab" || first?.rule === "None") {
-      return "wechat";
     }
     break;
   }
@@ -87,16 +76,12 @@ function getDefaultLoginMethod(application: any): LoginMethod {
  */
 const SIGNIN_METHOD_KEYS = new Map<string, LoginMethod>([
   ["Password-All", "password"],
-  ["Password-Non-LDAP", "password"],
   ["Verification code-All", "verificationCode"],
   ["Verification code-Email only", "verificationCodeEmail"],
   ["Verification code-Phone only", "verificationCodePhone"],
   ["WebAuthn-None", "webAuthn"],
-  ["LDAP-None", "ldap"],
   ["Face ID-None", "faceId"],
   ["Device login-Tab", "device"],
-  ["WeChat-Tab", "wechat"],
-  ["WeChat-None", "wechat"],
 ]);
 
 function getSigninMethods(application: any, type: string) {
@@ -132,8 +117,6 @@ function getSigninMethodLabel(method: LoginMethod) {
   switch (method) {
   case "password":
     return i18next.t("general:Password");
-  case "ldap":
-    return i18next.t("login:LDAP");
   case "webAuthn":
     return i18next.t("login:WebAuthn");
   case "faceId":
@@ -142,8 +125,6 @@ function getSigninMethodLabel(method: LoginMethod) {
     return i18next.t("login:Magic link");
   case "device":
     return i18next.t("login:Device login");
-  case "wechat":
-    return i18next.t("login:WeChat");
   default:
     return i18next.t("login:Verification code");
   }
@@ -157,8 +138,6 @@ function getUsernameRequiredMessage(method: LoginMethod | undefined) {
     return i18next.t("login:Please input your Email!");
   case "verificationCodePhone":
     return i18next.t("login:Please input your Phone!");
-  case "ldap":
-    return i18next.t("login:Please input your LDAP username!");
   default:
     return i18next.t("login:Please input your Email or Phone!");
   }
@@ -173,8 +152,6 @@ function getUsernameLabel(method: LoginMethod | undefined) {
     return i18next.t("general:Email");
   case "verificationCodePhone":
     return i18next.t("general:Phone");
-  case "ldap":
-    return i18next.t("login:LDAP username, Email or phone");
   default:
     return i18next.t("login:username, Email or phone");
   }
@@ -209,9 +186,6 @@ function getSigninMethodName(method: LoginMethod) {
   }
   if (method.startsWith("verificationCode")) {
     return "Verification code";
-  }
-  if (method === "ldap") {
-    return "LDAP";
   }
   if (method === "webAuthn") {
     return "WebAuthn";
@@ -321,11 +295,9 @@ export default function LoginPage({type = "login", application: applicationProp,
   const [captchaVisible, setCaptchaVisible] = React.useState(false);
   const [pendingValues, setPendingValues] = React.useState<any>(null);
   const [agreed, setAgreed] = React.useState(true);
-  const [wechatQrShown, setWechatQrShown] = React.useState(false);
   const [faceValues, setFaceValues] = React.useState<any>(null);
   const [captchaValues, setCaptchaValues] = React.useState<CaptchaValues | undefined>(undefined);
   const captchaRef = React.useRef<CaptchaHandle | null>(null);
-  const [saml, setSaml] = React.useState<{response: string; redirectUrl: string; relayState: string} | null>(null);
   // the device-code flow ends on the page itself: "" while it runs, then the outcome
   const [userCodeStatus, setUserCodeStatus] = React.useState<"" | "expired" | "canceled" | "success">("");
   // the magic-link method ends on "check your email" instead of signing in right away
@@ -372,13 +344,11 @@ export default function LoginPage({type = "login", application: applicationProp,
       };
     }
 
-    if (type === "code" || type === "cas" || type === "device") {
+    if (type === "code" || type === "device") {
       const loginParams =
-        type === "cas"
-          ? Util.getCasLoginParameters("admin", params.casApplicationName)
-          : type === "device"
-            ? {userCode: params.userCode, type}
-            : Util.getOAuthGetParameters();
+        type === "device"
+          ? {userCode: params.userCode, type}
+          : Util.getOAuthGetParameters();
       AuthBackend.getApplicationLogin(loginParams)
         .then((res: any) => {
           if (res.status === "ok") {
@@ -395,7 +365,7 @@ export default function LoginPage({type = "login", application: applicationProp,
           setApplication(null);
           setMsg(`${i18next.t("general:Failed to connect to server")}: ${error}`);
         });
-    } else if (owner && type !== "saml") {
+    } else if (owner) {
       OrganizationBackend.getDefaultApplication("admin", owner)
         .then((res: any) => {
           if (res.status === "ok") {
@@ -560,30 +530,6 @@ export default function LoginPage({type = "login", application: applicationProp,
         return;
       }
       Util.sendOAuthResponse(authParams, Util.getTokenResponsePayload(responseType, res));
-    } else if (responseType === "saml") {
-      if (res.data2?.method === "POST") {
-        setSaml({response: res.data, redirectUrl: res.data2.redirectUrl, relayState: values["relayState"] ?? ""});
-      } else {
-        const redirectUri = res.data2.redirectUrl;
-        Setting.goToLink(
-          `${redirectUri}${redirectUri.includes("?") ? "&" : "?"}SAMLResponse=${encodeURIComponent(
-            res.data,
-          )}&RelayState=${encodeURIComponent(values["relayState"] ?? "")}`,
-        );
-      }
-    }
-  };
-
-  const handleCasLoginResult = (res: any, casParams: any) => {
-    let message = "Logged in successfully. ";
-    if (casParams.service === "") {
-      message += "Now you can visit apps protected by Masdoor.";
-    }
-    Setting.showMessage("success", message);
-    if (casParams.service !== "") {
-      const newUrl = new URL(casParams.service);
-      newUrl.searchParams.append("ticket", res.data);
-      Setting.goToLink(newUrl.toString());
     }
   };
 
@@ -600,14 +546,6 @@ export default function LoginPage({type = "login", application: applicationProp,
     }],
     // hand over every enabled factor: MfaVerify starts on the preferred one and lets the user switch
     [NextMfa, (res, values, authParams) => setMfa({props: res.data2, values: {...values, providerBack: values.provider, provider: ""}, authParams})],
-    ["SelectPlan", (res, values) => {
-      const pricing = res.data2;
-      Setting.goToLink(`/select-plan/${pricing.owner}/${pricing.name}?user=${values.username}`);
-    }],
-    ["BuyPlanResult", (res) => {
-      const sub = res.data2;
-      Setting.goToLink(`/buy-plan/${sub.owner}/${sub.pricing}/result?subscription=${sub.name}`);
-    }],
   ]);
 
   const checkMfa = (res: any, values: any, authParams: any, onDone: (res: any) => void) => {
@@ -619,13 +557,8 @@ export default function LoginPage({type = "login", application: applicationProp,
     }
   };
 
-  /** Stamps the payload with what the current request is: CAS, SAML, OAuth or a plain login. */
+  /** Stamps the payload with what the current request is: OAuth, device or a plain login. */
   const applyRequestType = (values: Record<string, any>) => {
-    if (type === "cas") {
-      values.type = type;
-      return values;
-    }
-
     const oAuthParams = Util.getOAuthGetParameters();
     values.type = oAuthParams?.responseType ?? (type === "device" ? "device" : "login");
     // A code handed to Masdoor's own /callback would be read there as a social-login
@@ -636,15 +569,6 @@ export default function LoginPage({type = "login", application: applicationProp,
     }
     if (params.userCode) {
       values.userCode = params.userCode;
-    }
-    if (oAuthParams?.samlRequest) {
-      values.samlRequest = oAuthParams.samlRequest;
-      values.type = "saml";
-      values.relayState = oAuthParams.relayState;
-    } else if (type === "saml") {
-      values.samlRequest = "";
-      values.type = "saml";
-      values.relayState = Util.getRelayState();
     }
     return values;
   };
@@ -671,7 +595,7 @@ export default function LoginPage({type = "login", application: applicationProp,
       language: Setting.getLanguage(),
     };
 
-    if (loginMethod === "password" || loginMethod === "ldap") {
+    if (loginMethod === "password") {
       const organization = application.organizationObj;
       const [cipher, errorMessage] = Obfuscator.encryptByPasswordObfuscator(
         organization?.passwordObfuscatorType,
@@ -722,7 +646,7 @@ export default function LoginPage({type = "login", application: applicationProp,
       found.username = i18next.t("login:The input is not valid Email!");
     }
 
-    if ((loginMethod === "password" || loginMethod === "ldap") && password === "") {
+    if (loginMethod === "password" && password === "") {
       found.password = i18next.t("login:Please input your password!");
     }
     if (isCodeMethod && codeSentTo !== "" && code.length < VerificationCodeLength) {
@@ -745,14 +669,6 @@ export default function LoginPage({type = "login", application: applicationProp,
     if (clientId) {
       searchParams.set("client_id", `${clientId.split("-org-")[0]}-org-${name}`);
       Setting.goToLink(`/login/oauth/authorize?${searchParams.toString()}`);
-      return;
-    }
-    if (Setting.getRoutePath().startsWith("/login/saml/authorize")) {
-      Setting.goToLink(`/login/saml/authorize/${name}/${application.name}-org-${name}?${searchParams.toString()}`);
-      return;
-    }
-    if (Setting.getRoutePath().startsWith("/cas")) {
-      Setting.goToLink(`/cas/${application.name}-org-${name}/${name}/login?${searchParams.toString()}`);
       return;
     }
     searchParams.set("orgChoiceMode", "None");
@@ -838,21 +754,6 @@ export default function LoginPage({type = "login", application: applicationProp,
         refreshInlineCaptcha();
       }
     };
-
-    if (type === "cas") {
-      const casParams = Util.getCasParameters();
-      AuthBackend.loginCas(values, casParams)
-        .then((res: any) => {
-          if (res.status === "ok") {
-            checkMfa(res, values, casParams, (ok) => handleCasLoginResult(ok, casParams));
-          } else {
-            Setting.showMessage("error", `${i18next.t("application:Failed to sign in")}: ${res.msg}`);
-            onRejected();
-          }
-        })
-        .finally(() => setLoading(false));
-      return;
-    }
 
     const oAuthParams = Util.getOAuthGetParameters();
     AuthBackend.login(values, oAuthParams)
@@ -989,9 +890,9 @@ export default function LoginPage({type = "login", application: applicationProp,
       return;
     }
 
-    // Password/LDAP sign-in may need a captcha first; the code flow is already
+    // Password sign-in may need a captcha first; the code flow is already
     // rate-limited by the code itself.
-    if (loginMethod === "password" || loginMethod === "ldap") {
+    if (loginMethod === "password") {
       const captchaRule = Setting.getCaptchaRule(application);
       if (Setting.isInlineCaptchaEnabled(application)) {
         if (captchaRule === Setting.CaptchaRule.Always && !captchaValues?.captchaToken) {
@@ -1143,11 +1044,11 @@ export default function LoginPage({type = "login", application: applicationProp,
     if (!application || preview === "auto" || preview === "theme" || promptNone || application.disableSignin || application.organizationObj?.disableSignin) {
       return null;
     }
-    if (Setting.isPasswordEnabled(application) || Setting.isCodeSigninEnabled(application) || Setting.isWebAuthnEnabled(application) || Setting.isLdapEnabled(application) || Setting.isMagicLinkEnabled(application)) {
+    if (Setting.isPasswordEnabled(application) || Setting.isCodeSigninEnabled(application) || Setting.isWebAuthnEnabled(application) || Setting.isMagicLinkEnabled(application)) {
       return null;
     }
     const visibleOAuthProviderItems = (application.providers ?? []).filter(
-      (item: any) => Setting.isProviderVisibleForSignIn(item) && item.provider?.category !== "SAML",
+      (item: any) => Setting.isProviderVisibleForSignIn(item),
     );
     if (visibleOAuthProviderItems.length !== 1) {
       return null;
@@ -1194,10 +1095,6 @@ export default function LoginPage({type = "login", application: applicationProp,
       Setting.setLanguage(forcedLanguage);
     }
   }, [forcedLanguage]);
-
-  if (saml !== null) {
-    return <RedirectForm samlResponse={saml.response} redirectUrl={saml.redirectUrl} relayState={saml.relayState} />;
-  }
 
   if (userCodeStatus === "expired") {
     return (
@@ -1256,9 +1153,7 @@ export default function LoginPage({type = "login", application: applicationProp,
           application={application}
           onSuccess={(res) =>
             checkMfa(res, mfa.values, mfa.authParams, (doneRes) =>
-              type === "cas"
-                ? handleCasLoginResult(doneRes, mfa.authParams)
-                : handleLoginResult(doneRes, mfa.values, mfa.authParams),
+              handleLoginResult(doneRes, mfa.values, mfa.authParams),
             )
           }
         />
@@ -1299,7 +1194,6 @@ export default function LoginPage({type = "login", application: applicationProp,
   const captchaProvider = getCaptchaProvider(application);
   const passwordEnabled = Setting.isPasswordEnabled(application);
   const codeEnabled = Setting.isCodeSigninEnabled(application);
-  const ldapEnabled = Setting.isLdapEnabled(application);
   const webAuthnEnabled = Setting.isWebAuthnEnabled(application);
   const faceIdEnabled = Setting.isFaceIdEnabled(application);
   const magicLinkEnabled = Setting.isMagicLinkEnabled(application);
@@ -1318,23 +1212,13 @@ export default function LoginPage({type = "login", application: applicationProp,
   // each block of the form can be hidden from "Signin items" in the application
   const isVisible = (name: string) => Setting.isSigninItemVisible(application, name);
   // the QR panels replace the credential form entirely
-  const isPanelMethod = loginMethod === "wechat" || loginMethod === "device";
+  const isPanelMethod = loginMethod === "device";
   // device login is offered next to the form when the application asks for it
   const deviceLoginOnLoginPage = type !== "device" && (application.signinMethods ?? []).some(
     (item: any) => item.name === "Device login" && item.rule === "Login page",
   );
-  // the WeChat QR code can sit next to the form instead of replacing it
-  const wechatOnLoginPage = (application.signinMethods ?? []).some(
-    (item: any) => item.name === "WeChat" && item.rule === "Login page",
-  );
-  // or behind the panel's corner, from the open platform website app; a phone cannot scan its own screen
-  const wechatCornerItem = (application.signinMethods ?? []).some((item: any) => item.name === "WeChat" && item.rule === "Corner") &&
-    !navigator.userAgent.includes("MicroMessenger") && !window.matchMedia("(hover: none) and (pointer: coarse)").matches
-    ? getVisibleProviders(application, "signin").find((item: any) => item.provider?.type === "WeChat" && !needsWeChatQrDialog(item.provider))
-    : undefined;
-  const showWechatQr = wechatQrShown && !!wechatCornerItem;
   // without any credential method there is no form, only the providers
-  const showForm = passwordEnabled || codeEnabled || webAuthnEnabled || ldapEnabled || faceIdEnabled || magicLinkEnabled;
+  const showForm = passwordEnabled || codeEnabled || webAuthnEnabled || faceIdEnabled || magicLinkEnabled;
 
   if (singleProviderAuthUrl !== null) {
     return <AuthLoading application={application} preview={!!preview} />;
@@ -1444,9 +1328,6 @@ export default function LoginPage({type = "login", application: applicationProp,
         </div>
       );
     case "Username":
-      if (loginMethod === "wechat") {
-        return <WeChatLoginPanel key={key} application={application} />;
-      }
       if (loginMethod === "device") {
         return <DeviceLoginPanel key={key} application={application} onSuccess={completeDeviceLogin} />;
       }
@@ -1646,13 +1527,6 @@ export default function LoginPage({type = "login", application: applicationProp,
             method="signin"
             rule={Setting.getProvidersRule(application, item)}
             onBeforeClick={checkAgreement}
-            onProvider={(providerItem) => {
-              if (providerItem.provider?.name !== wechatCornerItem?.provider?.name) {
-                return false;
-              }
-              setWechatQrShown(true);
-              return true;
-            }}
           />
         </div>
       );
@@ -1667,11 +1541,9 @@ export default function LoginPage({type = "login", application: applicationProp,
       application={application}
       hideLogo={!isVisible("Logo")}
       hideLanguages={!isVisible("Languages") || forcedLanguage !== ""}
-      corner={wechatCornerItem ? <QrCornerSwitch showingQr={showWechatQr} onClick={() => setWechatQrShown(!showWechatQr)} /> : null}
     >
-      {showWechatQr ? <WeChatQrConnectPanel application={application} provider={wechatCornerItem.provider} /> : null}
       {/* hidden rather than unmounted, so what the visitor typed is still there on the way back */}
-      <div className="space-y-6" hidden={showWechatQr}>
+      <div className="space-y-6">
         {/* each item styles itself; a "Text N" item holds HTML, not CSS */}
         {signinItems.map((item: any) =>
           Setting.isCustomFormItem(item) ? null : <CustomStyle key={`css-${item.name}`} css={item.customCss} />,
@@ -1744,12 +1616,6 @@ export default function LoginPage({type = "login", application: applicationProp,
           </div>
         )}
 
-        {wechatOnLoginPage ? (
-          <div className="space-y-4">
-            <AuthDivider />
-            <WeChatLoginPanel application={application} showHint />
-          </div>
-        ) : null}
 
         {deviceLoginOnLoginPage ? (
           <div className="space-y-4">

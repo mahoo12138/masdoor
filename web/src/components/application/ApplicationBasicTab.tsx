@@ -13,7 +13,7 @@ import type {ApplicationTabProps, MenuMode} from "@/components/application/types
 import * as Setting from "@/lib/setting";
 
 const APPLICATION_CATEGORIES = ["Default", "Agent"];
-const APPLICATION_TYPES = ["All", "OIDC", "OAuth", "SAML", "CAS"];
+const APPLICATION_TYPES = ["All", "OIDC", "OAuth"];
 const AGENT_APPLICATION_TYPES = ["MCP", "A2A"];
 
 interface ApplicationBasicTabProps extends ApplicationTabProps {

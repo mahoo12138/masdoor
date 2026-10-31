@@ -1,9 +1,8 @@
 import * as React from "react";
 import i18next from "i18next";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Link as LinkIcon} from "lucide-react";
 import {UnauthorizedPage} from "@/components/common/UnauthorizedPage";
-import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -23,11 +22,8 @@ import {useEditRecord} from "@/hooks/use-edit-record";
 import {getModeTitleKey, submitEdit} from "@/lib/crud";
 import * as Obfuscator from "@/auth/Obfuscator";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
-import * as LdapBackend from "@/backend/LdapBackend";
 import {ConfirmButton} from "@/components/common/ConfirmButton";
-import {TransactionTable} from "@/components/user/TransactionTable";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
-import * as TransactionBackend from "@/backend/TransactionBackend";
 import * as Setting from "@/lib/setting";
 
 const PASSWORD_TYPES = ["plain", "salt", "sha512-salt", "md5-salt", "bcrypt", "pbkdf2-salt", "argon2id", "pbkdf2-django"];
@@ -61,8 +57,6 @@ export default function OrganizationEditPage() {
   const {account} = useAccount();
   const [saving, setSaving] = React.useState(false);
   const [applications, setApplications] = React.useState<any[]>([]);
-  const [ldaps, setLdaps] = React.useState<any[] | null>(null);
-  const [transactions, setTransactions] = React.useState<any[]>([]);
 
   const {record: organization, setRecord, updateField, loading, denied, mode, setMode} = useEditRecord<any>({
     fetch: () => OrganizationBackend.getOrganization("admin", organizationName),
@@ -76,37 +70,14 @@ export default function OrganizationEditPage() {
         setApplications(res.data ?? []);
       }
     });
-    LdapBackend.getLdaps(organizationName).then((res: any) => {
-      setLdaps(res.status === "ok" ? res.data ?? [] : []);
-    });
-    TransactionBackend.getTransactions(organizationName).then((res: any) => {
-      if (res.status === "ok") {
-        setTransactions(res.data ?? []);
-      } else {
-        Setting.showMessage("error", `${i18next.t("general:Failed to load")}: ${res.msg}`);
-      }
-    });
   }, [organizationName]);
 
   React.useEffect(() => {
     if (mode === "add") {
-      setLdaps([]);
       return;
     }
     loadRelated();
   }, [mode, loadRelated]);
-
-  const deleteLdap = (ldap: any) =>
-    LdapBackend.deleteLdap(ldap)
-      .then((res: any) => {
-        if (res.status === "ok") {
-          Setting.showMessage("success", i18next.t("general:Successfully deleted"));
-          setLdaps((prev) => (prev ?? []).filter((item) => item.id !== ldap.id));
-        } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to delete")}: ${res.msg}`);
-        }
-      })
-      .catch((error) => Setting.showMessage("error", `${i18next.t("general:Failed to delete")}: ${error}`));
 
   if (denied) {
     return <UnauthorizedPage />;
@@ -571,20 +542,6 @@ export default function OrganizationEditPage() {
               onChange={(e) => update("initScore", Setting.myParseInt(e.target.value))}
             />
           </FormRow>
-          <FormRow labelKey="organization:Balance currency">
-            <SelectField
-              value={organization.balanceCurrency || "USD"}
-              onChange={(value) => update("balanceCurrency", value)}
-              options={(Setting.CurrencyOptions as any[]).map((item) => ({id: item.id, name: item.name}))}
-            />
-          </FormRow>
-          <FormRow labelKey="organization:Balance credit">
-            <Input
-              type="number"
-              value={organization.balanceCredit ?? 0}
-              onChange={(e) => update("balanceCredit", Number(e.target.value))}
-            />
-          </FormRow>
           <FormRow labelKey="organization:Record retention days">
             <Input
               type="number"
@@ -599,17 +556,6 @@ export default function OrganizationEditPage() {
               onChange={(e) => update("tokenRetentionDays", Setting.myParseInt(e.target.value))}
             />
           </FormRow>
-          <FormRow labelKey="organization:Org balance">
-            <Input
-              type="number"
-              value={organization.orgBalance ?? 0}
-              onChange={(e) => update("orgBalance", Number(e.target.value))}
-            />
-          </FormRow>
-          <FormRow block labelKey="organization:User balance">
-            {/* maintained by the backend, the antd page shows it read-only too */}
-            <Input type="number" value={organization.userBalance ?? 0} disabled />
-          </FormRow>
           <FormRow block labelKey="organization:Account menu">
             <SelectField
               value={organization.accountMenu || "Horizontal"}
@@ -618,40 +564,6 @@ export default function OrganizationEditPage() {
                 {id: "Horizontal", name: i18next.t("application:Horizontal")},
                 {id: "Vertical", name: i18next.t("application:Vertical")},
               ]}
-            />
-          </FormRow>
-          <FormRow block labelKey="organization:LDAP attributes">
-            <MultiSelect
-              creatable
-              value={organization.ldapAttributes ?? []}
-              onChange={(value) => update("ldapAttributes", value)}
-              options={Setting.getUserCommonFields().map((item: string) => ({value: item, label: item}))}
-            />
-          </FormRow>
-          <FormRow labelKey="organization:Enable LDAP password">
-            {organization.enableLdapPassword || !Setting.isAdminUser(account) ? (
-              <Switch
-                checked={!!organization.enableLdapPassword}
-                disabled={!Setting.isAdminUser(account)}
-                onCheckedChange={(v) => update("enableLdapPassword", v)}
-              />
-            ) : (
-              <ConfirmButton
-                variant="ghost"
-                size="iconSm"
-                destructive={false}
-                title={i18next.t("organization:Enable LDAP password warning")}
-                onConfirm={() => update("enableLdapPassword", true)}
-              >
-                <Switch checked={false} className="pointer-events-none" />
-              </ConfirmButton>
-            )}
-          </FormRow>
-          <FormRow labelKey="organization:Enable RADIUS">
-            <Switch
-              checked={!!organization.enableRadius}
-              disabled={!Setting.isAdminUser(account)}
-              onCheckedChange={(v) => update("enableRadius", v)}
             />
           </FormRow>
           <FormRow labelKey="organization:Enable dynamic client registration">
@@ -682,113 +594,9 @@ export default function OrganizationEditPage() {
               onCheck={(value) => update("widgetItems", value)}
             />
           </FormRow>
-          <FormRow block labelKey="organization:Kerberos realm">
-            <Input
-              value={organization.kerberosRealm ?? ""}
-              onChange={(e) => update("kerberosRealm", e.target.value)}
-            />
-          </FormRow>
-          <FormRow block labelKey="organization:Kerberos KDC host">
-            <Input
-              value={organization.kerberosKdcHost ?? ""}
-              onChange={(e) => update("kerberosKdcHost", e.target.value)}
-            />
-          </FormRow>
-          <FormRow block labelKey="organization:Kerberos service name">
-            <Input
-              value={organization.kerberosServiceName ?? ""}
-              onChange={(e) => update("kerberosServiceName", e.target.value)}
-            />
-          </FormRow>
-          <FormRow block labelKey="organization:Kerberos keytab">
-            <Input
-              value={organization.kerberosKeytab ?? ""}
-              onChange={(e) => update("kerberosKeytab", e.target.value)}
-            />
-          </FormRow>
           <FormRow labelKey="theme:Customize theme" block>
             <ThemeEditor themeData={organization.themeData} onChange={(next) => update("themeData", next)} />
           </FormRow>
-          <FormRow labelKey="general:LDAPs" block>
-            <div className="space-y-2">
-              <div className="rounded-lg border">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b text-xs uppercase text-muted-foreground">
-                      <th className="px-3 py-2 text-left">{i18next.t("ldap:Server name")}</th>
-                      <th className="px-3 py-2 text-left">{i18next.t("ldap:Server")}</th>
-                      <th className="px-3 py-2 text-left">{i18next.t("ldap:Base DN")}</th>
-                      <th className="px-3 py-2 text-left">{i18next.t("ldap:Auto Sync")}</th>
-                      <th className="px-3 py-2 text-left">{i18next.t("ldap:Last Sync")}</th>
-                      <th className="px-3 py-2 text-left">{i18next.t("general:Action")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(ldaps ?? []).length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="px-3 py-6 text-center text-muted-foreground">
-                          {i18next.t("general:No data")}
-                        </td>
-                      </tr>
-                    ) : (
-                      (ldaps ?? []).map((ldap: any) => (
-                        <tr key={ldap.id} className="border-b last:border-0">
-                          <td className="px-3 py-2">
-                            <Link
-                              to={`/ldap/${organization.name}/${ldap.id}`}
-                              className="underline-offset-4 hover:underline"
-                            >
-                              {ldap.serverName}
-                            </Link>
-                          </td>
-                          <td className="px-3 py-2">
-                            {ldap.host}:{ldap.port}
-                          </td>
-                          <td className="px-3 py-2">{ldap.baseDn}</td>
-                          <td className="px-3 py-2">
-                            {ldap.autoSync === 0 ? (
-                              <span className="text-warning">{i18next.t("general:Disable")}</span>
-                            ) : (
-                              <span className="text-success">{ldap.autoSync} mins</span>
-                            )}
-                          </td>
-                          <td className="px-3 py-2">{ldap.lastSync}</td>
-                          <td className="px-3 py-2">
-                            <div className="flex flex-wrap gap-1">
-                              <Button variant="outline" size="sm" asChild>
-                                <Link to={`/ldap/sync/${organization.name}/${ldap.id}`}>{i18next.t("general:Sync")}</Link>
-                              </Button>
-                              <Button variant="outline" size="sm" asChild>
-                                <Link to={`/ldap/${organization.name}/${ldap.id}`}>{i18next.t("general:Edit")}</Link>
-                              </Button>
-                              <ConfirmButton
-                                variant="destructive"
-                                size="sm"
-                                description={`${ldap.serverName ?? ""}`}
-                                onConfirm={() => deleteLdap(ldap)}
-                              >
-                                {i18next.t("general:Delete")}
-                              </ConfirmButton>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-              {mode !== "add" ? (
-                <Button variant="outline" size="sm" onClick={() => navigate(`/ldap/${organization.name}/new`)}>
-                  {i18next.t("general:Add")}
-                </Button>
-              ) : null}
-            </div>
-          </FormRow>
-          {mode !== "add" && transactions.length > 0 ? (
-            <FormRow labelKey="general:Transactions" block>
-              <TransactionTable transactions={transactions} includeTag includeUser />
-            </FormRow>
-          ) : null}
         </TabsContent>
       </Tabs>
     </EditPageShell>

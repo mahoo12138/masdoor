@@ -20,7 +20,7 @@ import {
 import * as Setting from "@/lib/setting";
 
 /** the provider kinds a user account can be linked to */
-const LINKABLE_PROVIDER_CATEGORIES = ["OAuth", "SAML"];
+const LINKABLE_PROVIDER_CATEGORIES = ["OAuth"];
 
 /** the methods an Email or SMS provider row can be picked for, "All" being the absence of one */
 const CODE_PROVIDER_METHODS = Object.keys(PROVIDER_CODE_RULES).filter((rule) => rule !== "all");

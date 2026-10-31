@@ -6,9 +6,6 @@ import * as CertBackend from "@/backend/CertBackend";
 import * as GroupBackend from "@/backend/GroupBackend";
 import * as ModelBackend from "@/backend/ModelBackend";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
-import * as PlanBackend from "@/backend/PlanBackend";
-import * as ProductBackend from "@/backend/ProductBackend";
-import * as PricingBackend from "@/backend/PricingBackend";
 import * as ProviderBackend from "@/backend/ProviderBackend";
 import * as RuleBackend from "@/backend/RuleBackend";
 import * as RoleBackend from "@/backend/RoleBackend";
@@ -83,7 +80,7 @@ export function useUserNameOptions(organizationName: string): SearchableOption[]
 }
 
 /**
- * The groups themselves, not just their options: the user and LDAP pages have to
+ * The groups themselves, not just their options: the user pages have to
  * look at each group's `type`, because only one Physical group may be picked.
  */
 export function useGroupList(organizationName: string): any[] {
@@ -105,7 +102,7 @@ export function useGroupNameOptions(organizationName: string): SearchableOption[
 
 /**
  * Keeps at most one Physical group in a selection, the rule both the antd user
- * page and LDAP page enforce. Returns null when the selection is fine as it is.
+ * pages enforce. Returns null when the selection is fine as it is.
  */
 export function dropExtraPhysicalGroups(values: string[], groups: any[]): string[] | null {
   const isPhysical = (value: string) =>
@@ -178,26 +175,8 @@ export function useCertOptions(organizationName: string, scope?: string): Search
   );
 }
 
-export function usePlanOptions(organizationName: string): SearchableOption[] {
-  const items = useList(() => (organizationName ? PlanBackend.getPlans(organizationName, 1, PAGE_SIZE) : null), [organizationName]);
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
 
-export function useProductOptions(organizationName: string): SearchableOption[] {
-  const items = useList(
-    () => (organizationName ? ProductBackend.getProducts(organizationName, 1, PAGE_SIZE) : null),
-    [organizationName],
-  );
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
 
-export function usePricingOptions(organizationName: string): SearchableOption[] {
-  const items = useList(
-    () => (organizationName ? PricingBackend.getPricings(organizationName, 1, PAGE_SIZE) : null),
-    [organizationName],
-  );
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
 
 export function useRuleOptions(organizationName: string): SearchableOption[] {
   // the rules API paginates but takes no filter arguments

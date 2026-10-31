@@ -5,7 +5,6 @@ import {PoweredBy} from "@/components/layout/PoweredBy";
 import {Button} from "@/components/ui/button";
 import {LanguageSelect} from "@/components/common/LanguageSelect";
 import {ThemeToggle} from "@/components/common/ThemeToggle";
-import {ThemeShowcaseBar} from "@/components/common/ThemeShowcaseBar";
 import {CustomHtml, CustomStyle} from "@/components/common/CustomHtml";
 import {Loading} from "@/components/common/Loading";
 import {getSafeHtml, isTrustedApplication} from "@/lib/custom-html";
@@ -18,7 +17,6 @@ import {
 import {useIsMobile} from "@/hooks/use-mobile";
 import {useForcedTheme, useIsDark} from "@/hooks/use-theme";
 import * as Setting from "@/lib/setting";
-import {useShowcaseApplication, useShowcaseBundle} from "@/lib/theme-showcase";
 import {cn} from "@/lib/utils";
 
 const PHONE_QUERY = "(max-width: 639.98px)";
@@ -165,8 +163,7 @@ function getPanelBackground(css: string | undefined | null): string | null {
  * reads it from the organizationTheme cookie the backend set on this page.
  */
 export function AuthLoading({application, preview}: {application?: any; preview?: boolean}) {
-  const shown = useShowcaseApplication(application, !preview);
-  useApplicationTheme(shown, !preview);
+  useApplicationTheme(application, !preview);
   return <Loading className="min-h-screen" />;
 }
 
@@ -192,9 +189,7 @@ export function AuthLayout({
   preview,
 }: AuthLayoutProps) {
   const themePreview = preview === "theme";
-  // on a demo site the Marketplace themes take turns on every entry page
-  const application = useShowcaseApplication(ownApplication, !preview);
-  const showcased = !!useShowcaseBundle(!preview);
+  const application = ownApplication;
   useApplicationTheme(application, !preview || themePreview);
   // an application that hides the theme switch is painted light, or dark when its theme says so
   const themeLocked = !Setting.isSigninItemVisible(application, "Theme");
@@ -228,7 +223,7 @@ export function AuthLayout({
 
   // the customized form styling is meant for the standalone page, an embedded
   // one keeps the host page's own look, as the antd pages did, unless the host asked for a theme
-  const embedded = Setting.inIframe() && !themePreview && !showcased;
+  const embedded = Setting.inIframe() && !themePreview;
   const backgroundUrl = embedded
     ? undefined
     : (isMobile ? application?.formBackgroundUrlMobile : application?.formBackgroundUrl);
@@ -370,7 +365,6 @@ export function AuthLayout({
         </footer>
       )}
 
-      {preview ? null : <ThemeShowcaseBar />}
     </div>
   );
 }

@@ -1,7 +1,5 @@
 import i18next from "i18next";
 import {
-  Bot,
-  DollarSign,
   Home,
   LayoutGrid,
   Lock,
@@ -71,8 +69,6 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     items: [
       {key: "/applications", label: i18next.t("general:Applications")},
       {key: "/providers", label: i18next.t("application:Providers")},
-      {key: "/marketplace", label: i18next.t("general:Marketplace")},
-      {key: "/integrations", label: i18next.t("general:Integrations")},
       {key: "/resources", label: i18next.t("general:Resources")},
       {key: "/certs", label: i18next.t("general:Certs")},
       {key: "/keys", label: i18next.t("general:Keys")},
@@ -96,20 +92,6 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     ),
   });
 
-  groups.push({
-    key: "/gateway",
-    label: i18next.t("general:LLM AI"),
-    icon: Bot,
-    to: "/sites",
-    items: [
-      {key: "/agents", label: i18next.t("general:Agents")},
-      {key: "/servers", label: i18next.t("general:MCP Servers")},
-      {key: "/server-store", label: i18next.t("general:MCP Store")},
-      {key: "/entries", label: i18next.t("general:Entries")},
-      {key: "/sites", label: i18next.t("general:Sites")},
-      {key: "/rules", label: i18next.t("general:Rules")},
-    ],
-  });
 
   groups.push({
     key: "/logs",
@@ -124,24 +106,6 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     ],
   });
 
-  groups.push({
-    key: "/business",
-    label: i18next.t("general:Business"),
-    icon: DollarSign,
-    to: "/products",
-    items: [
-      {key: "/product-store", label: i18next.t("general:Product Store")},
-      {key: "/products", label: i18next.t("general:Products")},
-      {key: "/coupons", label: i18next.t("general:Coupons")},
-      {key: "/cart", label: i18next.t("general:Cart")},
-      {key: "/orders", label: i18next.t("general:Orders")},
-      {key: "/payments", label: i18next.t("general:Payments")},
-      {key: "/plans", label: i18next.t("general:Plans")},
-      {key: "/pricings", label: i18next.t("general:Pricings")},
-      {key: "/subscriptions", label: i18next.t("general:Subscriptions")},
-      {key: "/transactions", label: i18next.t("general:Transactions")},
-    ],
-  });
 
   const adminItems: NavItem[] = [];
   if (Setting.isAdminUser(account)) {
@@ -151,8 +115,9 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     );
   }
   adminItems.push(
+    {key: "/sites", label: i18next.t("general:Sites")},
+    {key: "/rules", label: i18next.t("general:Rules")},
     {key: "/forms", label: i18next.t("general:Forms")},
-    {key: "/syncers", label: i18next.t("general:Syncers")},
     {key: "/webhooks", label: i18next.t("general:Webhooks")},
     {key: "/webhook-events", label: i18next.t("general:Webhook Events")},
     {key: "/tickets", label: i18next.t("general:Tickets")},
@@ -169,7 +134,7 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     key: "/admin",
     label: i18next.t("general:Admin"),
     icon: Settings,
-    to: Setting.isAdminUser(account) ? "/sysinfo" : "/syncers",
+    to: Setting.isAdminUser(account) ? "/sysinfo" : "/forms",
     items: adminItems,
   });
 

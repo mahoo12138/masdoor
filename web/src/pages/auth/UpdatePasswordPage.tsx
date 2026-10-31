@@ -68,7 +68,7 @@ export default function UpdatePasswordPage() {
   // password from an account that has none or from a local admin
   const organization = account.organization ?? application?.organizationObj;
   const passwordOptions: string[] = organization?.passwordOptions ?? [];
-  const needOldPassword = (account.password !== "" || account.ldap !== "") && !Setting.isLocalAdminUser(account);
+  const needOldPassword = account.password !== "" && !Setting.isLocalAdminUser(account);
 
   const submit = () => {
     if (password === "" || confirm === "") {

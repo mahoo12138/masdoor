@@ -66,73 +66,6 @@ const authInfo = {
     scope: "user:email+read:user",
     endpoint: "https://github.com/login/oauth/authorize",
   },
-  QQ: {
-    scope: "get_user_info",
-    endpoint: "https://graph.qq.com/oauth2.0/authorize",
-  },
-  WeChat: {
-    scope: "snsapi_login",
-    endpoint: "https://open.weixin.qq.com/connect/qrconnect",
-    mpScope: "snsapi_userinfo",
-    mpEndpoint: "https://open.weixin.qq.com/connect/oauth2/authorize",
-  },
-  WeChatMiniProgram: {
-    endpoint: "https://mp.weixin.qq.com/",
-  },
-  Facebook: {
-    scope: "email,public_profile",
-    endpoint: "https://www.facebook.com/dialog/oauth",
-  },
-  DingTalk: {
-    scope: "openid",
-    endpoint: "https://login.dingtalk.com/oauth2/auth",
-  },
-  Weibo: {
-    scope: "email",
-    endpoint: "https://api.weibo.com/oauth2/authorize",
-  },
-  Gitee: {
-    scope: "user_info%20emails",
-    endpoint: "https://gitee.com/oauth/authorize",
-  },
-  LinkedIn: {
-    scope: "r_liteprofile%20r_emailaddress",
-    endpoint: "https://www.linkedin.com/oauth/v2/authorization",
-  },
-  WeCom: {
-    scope: "snsapi_userinfo",
-    endpoint: "https://login.work.weixin.qq.com/wwlogin/sso/login",
-    silentEndpoint: "https://open.weixin.qq.com/connect/oauth2/authorize",
-    internalEndpoint: "https://login.work.weixin.qq.com/wwlogin/sso/login",
-  },
-  Lark: {
-    // scope: "email",
-    endpoint: "https://open.feishu.cn/open-apis/authen/v1/index",
-    endpoint2: "https://accounts.larksuite.com/open-apis/authen/v1/authorize",
-  },
-  GitLab: {
-    scope: "read_user+profile",
-    endpoint: "https://gitlab.com/oauth/authorize",
-  },
-  ADFS: {
-    scope: "openid",
-    endpoint: "http://example.com",
-  },
-  Baidu: {
-    scope: "basic",
-    endpoint: "http://openapi.baidu.com/oauth/2.0/authorize",
-  },
-  Alipay: {
-    scope: "basic",
-    endpoint: "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm",
-  },
-  Masdoor: {
-    scope: "openid%20profile%20email",
-    endpoint: "http://example.com",
-  },
-  Infoflow: {
-    endpoint: "https://xpc.im.baidu.com/oauth2/authorize",
-  },
   Apple: {
     scope: "name%20email",
     endpoint: "https://appleid.apple.com/auth/authorize",
@@ -141,10 +74,6 @@ const authInfo = {
     scope: "user.read",
     endpoint: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
   },
-  AzureADB2C: {
-    scope: "openid",
-    endpoint: "https://tenant.b2clogin.com/tenant.onmicrosoft.com/userflow/oauth2/v2.0/authorize",
-  },
   Slack: {
     scope: "users:read",
     endpoint: "https://slack.com/oauth/authorize",
@@ -152,23 +81,8 @@ const authInfo = {
   Steam: {
     endpoint: "https://steamcommunity.com/openid/login",
   },
-  Okta: {
-    scope: "openid%20profile%20email",
-    endpoint: "http://example.com",
-  },
-  Douyin: {
-    scope: "user_info",
-    endpoint: "https://open.douyin.com/platform/oauth/connect",
-  },
-  Kwai: {
-    scope: "user_info",
-    endpoint: "https://open.kuaishou.com/oauth2/connect",
-  },
   Custom: {
     endpoint: "https://example.com/",
-  },
-  Bilibili: {
-    endpoint: "https://passport.bilibili.com/register/pc_oauth2.html",
   },
   Line: {
     scope: "profile%20openid%20email",
@@ -326,14 +240,6 @@ const authInfo = {
     scope: "user_read",
     endpoint: "https://id.twitch.tv/oauth2/authorize",
   },
-  Twitter: {
-    scope: "users.read%20tweet.read",
-    endpoint: "https://twitter.com/i/oauth2/authorize",
-  },
-  Telegram: {
-    scope: "",
-    endpoint: "https://core.telegram.org/widgets/login",
-  },
   Typetalk: {
     scope: "my",
     endpoint: "https://typetalk.com/oauth2/authorize",
@@ -396,33 +302,6 @@ export function getProviderUrl(provider) {
   }
 }
 
-// WeChat's QR page takes a stylesheet (href) when it is framed: the code is centered and the open
-// platform app's name is left out, as it is not the name of the site the visitor is on. The title
-// goes too where the sign-in page shows its own, see getWechatQrConnectUrl
-function getWechatQrCssHref(withTitle: boolean) {
-  const css = "html,body{height:100%;margin:0;background:#fff}" +
-    ".impowerBox{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;width:auto;padding:0;margin:0}" +
-    (withTitle ? ".impowerBox .title{font-size:22px;font-weight:600;color:#171717;margin:0 0 20px}" : ".impowerBox .title{display:none}") +
-    ".impowerBox .qrcode{width:220px;height:220px;margin:0;border:1px solid #ecebe6;border-radius:16px;padding:12px}" +
-    ".impowerBox .info{width:auto}.impowerBox .status{padding:0;text-align:center}" +
-    ".impowerBox .status_browser p:nth-child(2){display:none}.impowerBox .status p{font-size:14px;color:#666}";
-  return `data:text/css;base64,${btoa(css)}`;
-}
-
-// the frame's name attribute tells /callback it is that frame, see AuthCallback and AuthCallbackHandler.js
-export const WECHAT_QR_FRAME_NAME = "casdoor-wechat-qr";
-
-/**
- * The WeChat QR code (open platform website app) for a frame on the sign-in page. self_redirect keeps
- * the scan's redirect in that frame, where AuthCallback hands it to the page around it.
- */
-export function getWechatQrConnectUrl(application: any, provider: any) {
-  const url = new URL(getAuthUrl(application, provider, "signin"));
-  url.searchParams.set("self_redirect", "true");
-  url.searchParams.set("href", getWechatQrCssHref(false));
-  return url.toString();
-}
-
 export function getAuthUrl(application: any, provider: any, method: string, code?: string) {
   if (application === null || provider === null) {
     return "";
@@ -436,13 +315,11 @@ export function getAuthUrl(application: any, provider: any, method: string, code
   if (provider.scopes && provider.scopes.trim() !== "") {
     scope = provider.scopes;
   }
-  const isTelegramOIDC = provider.type === "Telegram" || (provider.type === "Custom" && provider.customAuthUrl && provider.customAuthUrl.includes("oauth.telegram.org"));
-  const isShortState = (provider.type === "WeChat" && navigator.userAgent.includes("MicroMessenger") && provider.clientId2) || (provider.type === "Twitter") || isTelegramOIDC;
   let applicationName = application.name;
   if (application?.isShared) {
     applicationName = `${application.name}-org-${application.organization}`;
   }
-  const state = Util.getStateFromQueryParams(applicationName, provider.name, method, isShortState);
+  const state = Util.getStateFromQueryParams(applicationName, provider.name, method, false);
 
   // Generate PKCE code verifier and challenge dynamically
   const codeVerifier = generateCodeVerifier();
@@ -461,12 +338,10 @@ export function getAuthUrl(application: any, provider: any, method: string, code
     if (provider.domain) {
       endpoint = `${provider.domain}/apps/oauth2/authorize`;
     }
-  } else if (provider.type === "Lark" && provider.disableSsl) {
-    endpoint = authInfo[provider.type].endpoint2;
   }
 
-  if (provider.type === "Google" || provider.type === "GitHub" || provider.type === "Facebook"
-    || provider.type === "Weibo" || provider.type === "Gitee" || provider.type === "LinkedIn" || provider.type === "GitLab" || provider.type === "AzureAD"
+  if (provider.type === "Google" || provider.type === "GitHub"
+    || provider.type === "AzureAD"
     || provider.type === "Slack" || provider.type === "Line" || provider.type === "Amazon" || provider.type === "Auth0" || provider.type === "BattleNet"
     || provider.type === "Bitbucket" || provider.type === "Box" || provider.type === "CloudFoundry" || provider.type === "Dailymotion"
     || provider.type === "DigitalOcean" || provider.type === "Discord" || provider.type === "Dropbox" || provider.type === "EveOnline" || provider.type === "Gitea"
@@ -477,80 +352,12 @@ export function getAuthUrl(application: any, provider: any, method: string, code
     || provider.type === "Twitch" || provider.type === "Typetalk" || provider.type === "Uber" || provider.type === "VK" || provider.type === "Wepay"
     || provider.type === "Xero" || provider.type === "Yahoo" || provider.type === "Yammer" || provider.type === "Yandex" || provider.type === "Zoom") {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}`;
-  } else if (provider.type === "QQ") {
-    return `${endpoint}?response_type=code&client_id=${provider.clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(scope)}`;
-  } else if (provider.type === "AzureADB2C") {
-    return `https://${provider.domain}.b2clogin.com/${provider.domain}.onmicrosoft.com/${provider.appId}/oauth2/v2.0/authorize?client_id=${provider.clientId}&nonce=defaultNonce&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code&state=${state}&prompt=login`;
-  } else if (provider.type === "DingTalk") {
-    return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&prompt=login%20consent&state=${state}`;
-  } else if (provider.type === "WeChat") {
-    if (navigator.userAgent.includes("MicroMessenger")) {
-      // Inside WeChat's built-in browser, only the Official Account (clientId2) OAuth flow can
-      // sign in without scanning. The QR-code (open platform) flow needs a second device to scan,
-      // so it is useless here. When clientId2 is missing, guide the user instead of building an
-      // OAuth URL with an empty appid (which triggers WeChat error 10012).
-      if (!provider.clientId2) {
-        Setting.showMessage("error", i18next.t("login:Please open the login page in an external browser to sign in with WeChat, or ask the administrator to configure a WeChat Official Account"));
-        return "#";
-      }
-      return `${authInfo[provider.type].mpEndpoint}?appid=${provider.clientId2}&redirect_uri=${redirectUri}&state=${state}&scope=${authInfo[provider.type].mpScope}&response_type=code#wechat_redirect`;
-    } else {
-      if (provider.clientId2 && provider?.disableSsl && provider?.signName === "media") {
-        return `${redirectOrigin}/callback?state=${state}&code=${"wechat_oa:" + code}`;
-      }
-      // framed in another site, the scan comes back in the frame: a cross-origin frame may not move the page around it
-      const framed = Setting.inIframe() ? `&self_redirect=true&href=${encodeURIComponent(getWechatQrCssHref(true))}` : "";
-      return `${endpoint}?appid=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}${framed}#wechat_redirect`;
-    }
-  } else if (provider.type === "WeCom") {
-    if (provider.subType === "Internal") {
-      if (provider.method === "Silent") {
-        endpoint = authInfo[provider.type].silentEndpoint;
-        return `${endpoint}?appid=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}&response_type=code&agentid=${provider.appId}#wechat_redirect`;
-      } else if (provider.method === "Normal") {
-        endpoint = authInfo[provider.type].internalEndpoint;
-        return `${endpoint}?login_type=CorpApp&appid=${provider.clientId}&agentid=${provider.appId}&redirect_uri=${redirectUri}&state=${state}`;
-      } else {
-        return `https://error:not-supported-provider-method:${provider.method}`;
-      }
-    } else if (provider.subType === "Third-party") {
-      if (provider.method === "Silent") {
-        endpoint = authInfo[provider.type].silentEndpoint;
-        return `${endpoint}?appid=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}&response_type=code&agentid=${provider.appId}#wechat_redirect`;
-      } else if (provider.method === "Normal") {
-        endpoint = authInfo[provider.type].endpoint;
-        return `${endpoint}?login_type=ServiceApp&appid=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}`;
-      } else {
-        return `https://error:not-supported-provider-method:${provider.method}`;
-      }
-    } else {
-      return `https://error:not-supported-provider-sub-type:${provider.subType}`;
-    }
-  } else if (provider.type === "Lark") {
-    if (provider.disableSsl) {
-      redirectUri = encodeURIComponent(redirectUri);
-    }
-    return `${endpoint}?app_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}`;
-  } else if (provider.type === "ADFS") {
-    return `${provider.domain}/adfs/oauth2/authorize?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&nonce=masdoor&scope=openid`;
-  } else if (provider.type === "Baidu") {
-    return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}&display=popup`;
-  } else if (provider.type === "Alipay") {
-    return `${endpoint}?app_id=${provider.clientId}&scope=auth_user&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}&display=popup`;
-  } else if (provider.type === "Masdoor") {
-    return `${provider.domain}/login/oauth/authorize?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}`;
-  } else if (provider.type === "Infoflow") {
-    return `${endpoint}?appid=${provider.clientId}&redirect_uri=${redirectUri}?state=${state}`;
   } else if (provider.type === "Apple") {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code%20id_token&scope=${scope}&response_mode=form_post`;
   } else if (provider.type === "Steam") {
     return `${endpoint}?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=${redirectOrigin}&openid.return_to=${redirectUri}?state=${state}`;
-  } else if (provider.type === "Okta") {
-    return `${provider.domain}/v1/authorize?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}`;
-  } else if (provider.type === "Douyin" || provider.type === "TikTok") {
+  } else if (provider.type === "TikTok") {
     return `${endpoint}?client_key=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}`;
-  } else if (provider.type === "Kwai") {
-    return `${endpoint}?app_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}`;
   } else if (type === "Custom") {
     if (/\{[a-zA-Z_][a-zA-Z0-9_]*\}/.test(provider.customAuthUrl ?? "")) {
       const values: Record<string, string> = {clientId: provider.clientId, redirectUri, scope: provider.scopes ?? "", state, codeChallenge};
@@ -561,20 +368,14 @@ export function getAuthUrl(application: any, provider: any, method: string, code
       authUrl += `&code_challenge=${codeChallenge}&code_challenge_method=S256`;
     }
     return authUrl;
-  } else if (provider.type === "Bilibili") {
-    return `${endpoint}#/?client_id=${provider.clientId}&return_url=${redirectUri}&state=${state}&response_type=code`;
   } else if (provider.type === "Deezer") {
     return `${endpoint}?app_id=${provider.clientId}&redirect_uri=${redirectUri}&perms=${scope}`;
   } else if (provider.type === "Lastfm") {
     return `${endpoint}?api_key=${provider.clientId}&cb=${redirectUri}`;
   } else if (provider.type === "Shopify") {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&grant_options[]=per-user`;
-  } else if (provider.type === "Twitter" || provider.type === "Fitbit") {
+  } else if (provider.type === "Fitbit") {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&state=${state}&response_type=code&scope=${scope}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
-  } else if (provider.type === "Telegram") {
-    // Telegram uses widget-based authentication
-    // Redirect to a page that displays the Telegram login widget
-    return `${redirectOrigin}/telegram-login?state=${state}`;
   }
 }
 

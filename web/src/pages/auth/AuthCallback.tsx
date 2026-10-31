@@ -5,7 +5,6 @@ import {Alert, AlertDescription} from "@/components/ui/alert";
 import {Loading} from "@/components/common/Loading";
 import {AuthLayout} from "@/components/auth/AuthLayout";
 import {MfaVerify, NextMfa} from "@/components/auth/MfaVerify";
-import {RedirectForm} from "@/components/auth/RedirectForm";
 import * as Provider from "@/auth/Provider";
 import * as Util from "@/auth/Util";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
@@ -13,7 +12,7 @@ import * as AuthBackend from "@/backend/AuthBackend";
 import * as Setting from "@/lib/setting";
 
 /**
- * Landing page of the OAuth/OIDC/SAML/CAS round trip. It re-posts the provider's
+ * Landing page of the OAuth/OIDC round trip. It re-posts the provider's
  * code to /api/login and then performs whatever redirect the original request asked
  * for — the same contract the antd AuthCallback implemented.
  */
@@ -34,8 +33,7 @@ interface ReactFallbackPayload {
   search: string;
   res: any;
   body?: Record<string, any>;
-  flow?: "cas" | "oauth";
-  casService?: string;
+  flow?: "oauth";
   responseType?: string;
   /** the decoded `state` query string, so the payload survives a lost sessionStorage entry */
   innerParams?: string;
@@ -84,7 +82,6 @@ export default function AuthCallback() {
   const location = useLocation();
   const navigate = useNavigate();
   const [msg, setMsg] = React.useState<string | null>(null);
-  const [saml, setSaml] = React.useState<{response: string; redirectUrl: string; relayState: string} | null>(null);
   // The provider's authorization code is single-use, so the second factor has to
   // be collected here; sending the user back to /login would drop the pending
   // login and leave them unable to finish.
@@ -97,13 +94,6 @@ export default function AuthCallback() {
       return;
     }
     startedRef.current = true;
-
-    // the WeChat QR code on the sign-in page comes back here inside its frame: finish in the page itself
-    // (the frame's own name does not survive WeChat's page, its element's does; a cross-origin parent hides it)
-    if (window.frameElement?.getAttribute("name") === Provider.WECHAT_QR_FRAME_NAME) {
-      window.parent.location.replace(window.location.href);
-      return;
-    }
 
     const params = new URLSearchParams(location.search);
     const state = params.get("state") ?? "";
@@ -118,14 +108,6 @@ export default function AuthCallback() {
         }
         const realRedirectUri = innerParams.get("redirect_uri");
         if (realRedirectUri === null) {
-          const samlRequest = Util.getParameterIgnoreCase(innerParams, "SAMLRequest");
-          const casService = innerParams.get("service");
-          if (samlRequest) {
-            return "saml";
-          }
-          if (casService) {
-            return "cas";
-          }
           return "login";
         }
         if (Setting.isSelfRedirectUri(realRedirectUri)) {
@@ -147,22 +129,8 @@ export default function AuthCallback() {
       code = location.search;
     }
 
-    // Telegram passes the auth data as individual query params.
-    const telegramId = params.get("id");
-    if (telegramId !== null && !code) {
-      const telegramAuthData: Record<string, any> = {id: parseInt(telegramId, 10)};
-      ["hash", "auth_date", "first_name", "last_name", "username", "photo_url"].forEach((field) => {
-        const value = params.get(field);
-        if (value) {
-          telegramAuthData[field] = value;
-        }
-      });
-      code = JSON.stringify(telegramAuthData);
-    }
-
     const responseType = getResponseType();
     const applicationName = innerParams.get("application");
-    const casService = innerParams.get("service") ?? "";
     const codeVerifier = Provider.getCodeVerifier(state);
 
     const body: Record<string, any> = {
@@ -170,7 +138,6 @@ export default function AuthCallback() {
       application: applicationName,
       provider: innerParams.get("provider"),
       code,
-      samlRequest: Util.getParameterIgnoreCase(innerParams, "SAMLRequest"),
       state: applicationName,
       callbackState: state,
       invitationCode: innerParams.get("invitationCode") || "",
@@ -234,17 +201,6 @@ export default function AuthCallback() {
           from += `?oauth=${oauth}`;
         }
         navigate(from);
-      } else if (type === "saml") {
-        if (res.data2?.method === "POST") {
-          setSaml({response: res.data, redirectUrl: res.data2.redirectUrl, relayState: oAuthParams.relayState});
-        } else {
-          const redirectUri = res.data2.redirectUrl;
-          Setting.goToLink(
-            `${redirectUri}${redirectUri.includes("?") ? "&" : "?"}SAMLResponse=${encodeURIComponent(res.data)}&RelayState=${
-              oAuthParams.relayState
-            }`,
-          );
-        }
       }
     };
 
@@ -269,27 +225,8 @@ export default function AuthCallback() {
           authParams,
           onSuccess: (mfaRes: any) => checkMfa(mfaRes, authParams, onDone),
         });
-      } else if (res.data === "SelectPlan") {
-        const pricing = res.data2;
-        Setting.goToLink(`/select-plan/${pricing.owner}/${pricing.name}?user=${body.username}`);
-      } else if (res.data === "BuyPlanResult") {
-        const sub = res.data2;
-        Setting.goToLink(`/buy-plan/${sub.owner}/${sub.pricing}/result?subscription=${sub.name}`);
       } else {
         onDone(res);
-      }
-    };
-
-    const handleCas = (ok: any, service: string) => {
-      let message = "Logged in successfully.";
-      if (service === "") {
-        message += " Now you can visit apps protected by Masdoor.";
-      }
-      Setting.showMessage("success", message);
-      if (service !== "") {
-        const newUrl = new URL(service);
-        newUrl.searchParams.append("ticket", ok.data);
-        Setting.goToLink(newUrl.toString());
       }
     };
 
@@ -297,29 +234,13 @@ export default function AuthCallback() {
     // answer over, so continue from it instead of signing in again.
     const fallback = consumeReactFallbackPayload(location.search);
     if (fallback !== null) {
-      if (fallback.flow === "cas") {
-        const service = fallback.casService ?? casService;
-        checkMfa(fallback.res, {service}, (ok) => handleCas(ok, service));
-      } else {
-        const fallbackParams = new URLSearchParams(
-          fallback.innerParams || Util.getQueryParamsFromState(state),
-        );
-        const fallbackType = fallback.responseType || responseType;
-        checkMfa(fallback.res, Util.getOAuthGetParameters(fallbackParams), (ok) =>
-          handleOAuth(ok, fallbackParams, fallbackType),
-        );
-      }
-      return;
-    }
-
-    if (responseType === "cas") {
-      AuthBackend.loginCas(body, {service: casService}).then((res: any) => {
-        if (res.status === "ok") {
-          checkMfa(res, {service: casService}, (ok) => handleCas(ok, casService));
-        } else {
-          setMsg(res.msg);
-        }
-      });
+      const fallbackParams = new URLSearchParams(
+        fallback.innerParams || Util.getQueryParamsFromState(state),
+      );
+      const fallbackType = fallback.responseType || responseType;
+      checkMfa(fallback.res, Util.getOAuthGetParameters(fallbackParams), (ok) =>
+        handleOAuth(ok, fallbackParams, fallbackType),
+      );
       return;
     }
 
@@ -340,10 +261,6 @@ export default function AuthCallback() {
       .catch((error) => setMsg(`${i18next.t("general:Failed to connect to server")}: ${error}`));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (saml !== null) {
-    return <RedirectForm samlResponse={saml.response} redirectUrl={saml.redirectUrl} relayState={saml.relayState} />;
-  }
 
   if (mfa !== null) {
     return (

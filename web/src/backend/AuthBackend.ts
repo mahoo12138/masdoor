@@ -71,10 +71,6 @@ export function getEmailAndPhone(organization, username) {
   }).then((res) => res.json());
 }
 
-export function casLoginParamsToQuery(casParams) {
-  return `?type=${casParams?.type}&id=${casParams?.id}&redirectUri=${casParams?.service}`;
-}
-
 export function oAuthParamsToQuery(oAuthParams) {
   // login
   if (oAuthParams === null || oAuthParams === undefined) {
@@ -102,9 +98,7 @@ export function oAuthParamsToQuery(oAuthParams) {
 
 export function getApplicationLogin(params) {
   let queryParams = "";
-  if (params?.type === "cas") {
-    queryParams = casLoginParamsToQuery(params);
-  } else if (params?.type === "device") {
+  if (params?.type === "device") {
     queryParams = `?userCode=${params.userCode}&type=device`;
   } else {
     queryParams = oAuthParamsToQuery(params);
@@ -170,18 +164,6 @@ export function login(values, oAuthParams) {
   }).then(res => res.json());
 }
 
-export function loginCas(values, params) {
-  return fetch(`${authConfig.serverUrl}/api/login?service=${params.service}`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
-}
-
 export function logout() {
   return fetch(`${authConfig.serverUrl}/api/logout`, {
     method: "POST",
@@ -199,48 +181,6 @@ export function unlink(values) {
     body: JSON.stringify(values),
     headers: {
       "Content-Type": "application/json",
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
-}
-
-export function getSamlLogin(providerId, relayState) {
-  return fetch(`${authConfig.serverUrl}/api/get-saml-login?id=${providerId}&relayState=${relayState}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
-}
-
-export function loginWithSaml(values, param) {
-  return fetch(`${authConfig.serverUrl}/api/login${param}`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
-}
-
-export function getWechatMessageEvent(ticket) {
-  return fetch(`${Setting.ServerUrl}/api/get-webhook-event?ticket=${ticket}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
-}
-
-export function getWechatQRCode(providerId) {
-  return fetch(`${Setting.ServerUrl}/api/get-qrcode?id=${providerId}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
   }).then(res => res.json());

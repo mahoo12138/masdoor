@@ -120,8 +120,6 @@ type UserWithoutThirdIdp struct {
 	IsForbidden       bool     `json:"isForbidden"`
 	IsDeleted         bool     `json:"isDeleted"`
 	SignupApplication string   `xorm:"varchar(100)" json:"signupApplication"`
-	Hash              string   `xorm:"varchar(100)" json:"hash"`
-	PreHash           string   `xorm:"varchar(100)" json:"preHash"`
 	RegisterType      string   `xorm:"varchar(100)" json:"registerType"`
 	RegisterSource    string   `xorm:"varchar(100)" json:"registerSource"`
 
@@ -284,8 +282,6 @@ func getUserWithoutThirdIdp(user *User) *UserWithoutThirdIdp {
 		IsForbidden:       user.IsForbidden,
 		IsDeleted:         user.IsDeleted,
 		SignupApplication: user.SignupApplication,
-		Hash:              user.Hash,
-		PreHash:           user.PreHash,
 		RegisterType:      user.RegisterType,
 		RegisterSource:    user.RegisterSource,
 
@@ -538,8 +534,6 @@ func getTokenAttributeClaims(user *User, tokenAttributes []*JwtItem) map[string]
 func clearUserSecrets(user *User) {
 	user.Password = ""
 	user.PasswordSalt = ""
-	user.Hash = ""
-	user.PreHash = ""
 	user.TotpSecret = ""
 	user.RecoveryCodes = nil
 	user.FaceIds = nil

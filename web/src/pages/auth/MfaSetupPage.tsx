@@ -71,7 +71,7 @@ export default function MfaSetupPage() {
     if (!account) {
       return;
     }
-    // LDAP-synced users can have an empty "signupApplication", so fall back to
+    // imported users can have an empty "signupApplication", so fall back to
     // the user-aware endpoint.
     const applicationName = account.signupApplication ?? localStorage.getItem("applicationName") ?? "";
     const promise = applicationName

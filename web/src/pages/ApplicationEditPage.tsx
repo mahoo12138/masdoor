@@ -11,7 +11,6 @@ import {ApplicationBasicTab} from "@/components/application/ApplicationBasicTab"
 import {ApplicationOidcOauthTab} from "@/components/application/ApplicationOidcOauthTab";
 import {ApplicationProvidersTab} from "@/components/application/ApplicationProvidersTab";
 import {ApplicationReverseProxyTab} from "@/components/application/ApplicationReverseProxyTab";
-import {ApplicationSamlTab} from "@/components/application/ApplicationSamlTab";
 import {ApplicationSecurityTab} from "@/components/application/ApplicationSecurityTab";
 import {ApplicationUiCustomizationTab} from "@/components/application/ApplicationUiCustomizationTab";
 import type {MenuMode} from "@/components/application/types";
@@ -30,7 +29,6 @@ const TAB_KEYS = [
   "basic",
   "authentication",
   "oidc-oauth",
-  "saml",
   "providers",
   "ui-customization",
   "security",
@@ -65,19 +63,6 @@ export default function ApplicationEditPage() {
     setActiveTab(key);
     window.location.hash = key;
   };
-  const [samlMetadata, setSamlMetadata] = React.useState("");
-  const enableSamlPostBinding = !!application?.enableSamlPostBinding;
-
-  React.useEffect(() => {
-    // the metadata is generated from the saved application, so it needs it to exist
-    if (mode === "add" || !applicationName) {
-      return;
-    }
-    ApplicationBackend.getSamlMetadata("admin", applicationName, enableSamlPostBinding).then((data: any) => {
-      setSamlMetadata(data?.toString() ?? "");
-    });
-  }, [mode, applicationName, enableSamlPostBinding]);
-
   if (denied) {
     return <UnauthorizedPage />;
   }
@@ -85,12 +70,6 @@ export default function ApplicationEditPage() {
   if (loading || application === null) {
     return <Loading />;
   }
-
-  const idpInitiatedSsoUrl =
-    `${Setting.getOriginUrl()}/login/saml/authorize/${application.owner}/${encodeURIComponent(applicationName)}`;
-  const samlMetadataUrl =
-    `${Setting.getOriginUrl()}/api/saml/metadata?application=admin/${encodeURIComponent(applicationName)}` +
-    `&enablePostBinding=${enableSamlPostBinding}`;
 
   const save = async(exitAfterSave: boolean) => {
     // a provider row whose provider has since been deleted, or a sign-in method
@@ -100,7 +79,7 @@ export default function ApplicationEditPage() {
       knownProviders.includes(item.name),
     );
     const signinMethods = (application.signinMethods ?? []).filter((item: any) =>
-      ["Password", "Verification code", "Magic link", "WebAuthn", "LDAP", "Face ID", "Device login", "WeChat"].includes(item.name),
+      ["Password", "Verification code", "Magic link", "WebAuthn", "Face ID", "Device login"].includes(item.name),
     );
     // a row added but never given a name would show up on the signup page as a text box
     const signinItems = application.signinItems?.filter((item: any) => !item.name?.startsWith("Please select a signin item"));
@@ -187,7 +166,6 @@ export default function ApplicationEditPage() {
           <TabsTrigger value="basic">{i18next.t("application:Basic")}</TabsTrigger>
           <TabsTrigger value="authentication">{i18next.t("application:Authentication")}</TabsTrigger>
           <TabsTrigger value="oidc-oauth">OIDC/OAuth</TabsTrigger>
-          <TabsTrigger value="saml">SAML</TabsTrigger>
           <TabsTrigger value="providers">{i18next.t("application:Providers")}</TabsTrigger>
           <TabsTrigger value="ui-customization">{i18next.t("application:UI Customization")}</TabsTrigger>
           <TabsTrigger value="security">{i18next.t("application:Security")}</TabsTrigger>
@@ -212,17 +190,6 @@ export default function ApplicationEditPage() {
 
         <TabsContent value="oidc-oauth" className={tabClassName}>
           <ApplicationOidcOauthTab application={application} updateField={updateField} />
-        </TabsContent>
-
-        <TabsContent value="saml" className={tabClassName}>
-          <ApplicationSamlTab
-            application={application}
-            updateField={updateField}
-            mode={mode}
-            samlMetadata={samlMetadata}
-            samlMetadataUrl={samlMetadataUrl}
-            idpInitiatedSsoUrl={idpInitiatedSsoUrl}
-          />
         </TabsContent>
 
         <TabsContent value="providers" className={tabClassName}>
