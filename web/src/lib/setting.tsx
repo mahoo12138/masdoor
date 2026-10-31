@@ -586,7 +586,7 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "is_admin", "homepage", "birthday", "gender", "password_type", "password_salt", "external_id", "avatar", "first_name", "last_name",
   "avatar_type", "permanent_avatar", "email_verified", "region", "location", "address",
   "affiliation", "title", "id_card_type", "id_card", "real_name", "is_verified", "bio", "tag", "language",
-  "education", "score", "karma", "ranking", "is_default_avatar", "is_online",
+  "education", "is_default_avatar", "is_online",
   "is_forbidden", "is_deleted", "signup_application", "register_type", "register_source", "access_token",
   "created_ip", "last_signin_time", "last_signin_ip", "github", "google", "qq", "wechat", "facebook", "dingtalk",
   "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs", "baidu", "alipay", "masdoor", "infoflow", "apple",
@@ -647,15 +647,7 @@ export const GetTranslatedUserItems = () => {
     {name: "Gender", label: i18next.t("user:Gender")},
     {name: "Birthday", label: i18next.t("user:Birthday")},
     {name: "Education", label: i18next.t("user:Education")},
-    {name: "Balance", label: i18next.t("user:Balance")},
-    {name: "Balance currency", label: i18next.t("organization:Balance currency")},
-    {name: "Balance credit", label: i18next.t("organization:Balance credit")},
-    {name: "Cart", label: i18next.t("general:Cart")},
-    {name: "Transactions", label: i18next.t("general:Transactions")},
     {name: "UID number", label: i18next.t("general:UID number")},
-    {name: "Score", label: i18next.t("user:Score")},
-    {name: "Karma", label: i18next.t("user:Karma")},
-    {name: "Ranking", label: i18next.t("user:Ranking")},
     {name: "Signup application", label: i18next.t("general:Signup application")},
     {name: "Register type", label: i18next.t("user:Register type")},
     {name: "Register source", label: i18next.t("user:Register source")},
@@ -1758,179 +1750,10 @@ export function builtInObject(obj) {
 }
 
 
-export const CurrencyOptions = [
-  {id: "USD", name: "USD"},
-  {id: "CNY", name: "CNY"},
-  {id: "EUR", name: "EUR"},
-  {id: "JPY", name: "JPY"},
-  {id: "GBP", name: "GBP"},
-  {id: "AUD", name: "AUD"},
-  {id: "CAD", name: "CAD"},
-  {id: "CHF", name: "CHF"},
-  {id: "HKD", name: "HKD"},
-  {id: "SGD", name: "SGD"},
-  {id: "BRL", name: "BRL"},
-  {id: "PLN", name: "PLN"},
-  {id: "KRW", name: "KRW"},
-  {id: "INR", name: "INR"},
-  {id: "RUB", name: "RUB"},
-  {id: "MXN", name: "MXN"},
-  {id: "ZAR", name: "ZAR"},
-  {id: "TRY", name: "TRY"},
-  {id: "SEK", name: "SEK"},
-  {id: "NOK", name: "NOK"},
-  {id: "DKK", name: "DKK"},
-  {id: "THB", name: "THB"},
-  {id: "MYR", name: "MYR"},
-  {id: "TWD", name: "TWD"},
-  {id: "CZK", name: "CZK"},
-  {id: "HUF", name: "HUF"},
-];
-
-export function getCurrencySymbol(currency) {
-  if (currency === "USD" || currency === "usd") {
-    return "$";
-  } else if (currency === "CNY" || currency === "cny") {
-    return "¥";
-  } else if (currency === "EUR" || currency === "eur") {
-    return "€";
-  } else if (currency === "JPY" || currency === "jpy") {
-    return "¥";
-  } else if (currency === "GBP" || currency === "gbp") {
-    return "£";
-  } else if (currency === "AUD" || currency === "aud") {
-    return "A$";
-  } else if (currency === "CAD" || currency === "cad") {
-    return "C$";
-  } else if (currency === "CHF" || currency === "chf") {
-    return "CHF";
-  } else if (currency === "HKD" || currency === "hkd") {
-    return "HK$";
-  } else if (currency === "SGD" || currency === "sgd") {
-    return "S$";
-  } else if (currency === "BRL" || currency === "brl") {
-    return "R$";
-  } else if (currency === "PLN" || currency === "pln") {
-    return "zł";
-  } else if (currency === "KRW" || currency === "krw") {
-    return "₩";
-  } else if (currency === "INR" || currency === "inr") {
-    return "₹";
-  } else if (currency === "RUB" || currency === "rub") {
-    return "₽";
-  } else if (currency === "MXN" || currency === "mxn") {
-    return "$";
-  } else if (currency === "ZAR" || currency === "zar") {
-    return "R";
-  } else if (currency === "TRY" || currency === "try") {
-    return "₺";
-  } else if (currency === "SEK" || currency === "sek") {
-    return "kr";
-  } else if (currency === "NOK" || currency === "nok") {
-    return "kr";
-  } else if (currency === "DKK" || currency === "dkk") {
-    return "kr";
-  } else if (currency === "THB" || currency === "thb") {
-    return "฿";
-  } else if (currency === "MYR" || currency === "myr") {
-    return "RM";
-  } else if (currency === "TWD" || currency === "twd") {
-    return "NT$";
-  } else if (currency === "CZK" || currency === "czk") {
-    return "Kč";
-  } else if (currency === "HUF" || currency === "huf") {
-    return "Ft";
-  } else {
-    return currency;
-  }
-}
-
-export function getCurrencyCountryCode(currency) {
-  const currencyToCountry = {
-    USD: "US",
-    CNY: "CN",
-    EUR: "EU",
-    JPY: "JP",
-    GBP: "GB",
-    AUD: "AU",
-    CAD: "CA",
-    CHF: "CH",
-    HKD: "HK",
-    SGD: "SG",
-    BRL: "BR",
-    PLN: "PL",
-    KRW: "KR",
-    INR: "IN",
-    RUB: "RU",
-    MXN: "MX",
-    ZAR: "ZA",
-    TRY: "TR",
-    SEK: "SE",
-    NOK: "NO",
-    DKK: "DK",
-    THB: "TH",
-    MYR: "MY",
-    TWD: "TW",
-    CZK: "CZ",
-    HUF: "HU",
-  };
-
-  return currencyToCountry[currency?.toUpperCase()] || null;
-}
-
-export function getCurrencyFlag(currency) {
-  const countryCode = getCurrencyCountryCode(currency);
-  if (!countryCode) {
-    return null;
-  }
-
-  return (
-    // Tailwind's preflight sets `img { height: auto }`, which beats the `height`
-    // attribute the antd frontend relies on — so the size has to be a class
-    <img
-      src={`${StaticBaseUrl}/flag-icons/${countryCode}.svg`}
-      alt={`${currency} flag`}
-      className="mr-1.5 inline-block h-5 w-auto align-text-bottom"
-    />
-  );
-}
-
-export function getCurrencyWithFlag(currency) {
-  const translationKey = `currency:${currency}`;
-  const translatedText = i18next.t(translationKey);
-  const currencyText = translatedText === translationKey ? currency : translatedText;
-
-  const countryCode = getCurrencyCountryCode(currency);
-  if (!countryCode) {
-    return currencyText;
-  }
-
-  return (
-    <span>
-      <img
-        src={`${StaticBaseUrl}/flag-icons/${countryCode}.svg`}
-        alt={`${currency} flag`}
-        className="mr-1.5 inline-block h-5 w-auto align-text-bottom"
-      />
-      {currencyText}
-    </span>
-  );
-}
-
-export function getPriceDisplay(price, currency) {
-  const priceValue = price || 0;
-  const currencyValue = currency || "USD";
-  return (
-    <>
-      {getCurrencyFlag(currencyValue)} {getCurrencySymbol(currencyValue)}{priceValue} ({getCurrencyText(currencyValue)})
-    </>
-  );
-}
-
 export function getUserCommonFields() {
   return ["Owner", "Name", "CreatedTime", "UpdatedTime", "DeletedTime", "Id", "ExternalId", "Type", "Password", "PasswordSalt", "PasswordType", "DisplayName", "FirstName", "LastName", "Avatar", "AvatarType", "PermanentAvatar",
     "Email", "EmailVerified", "Phone", "CountryCode", "Location", "Address", "Affiliation", "Title", "IdCardType", "IdCard", "RealName", "IsVerified", "Homepage", "Bio", "Tag", "Region",
-    "Language", "Gender", "Birthday", "Education", "UidNumber", "Score", "Karma", "Ranking", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
+    "Language", "Gender", "Birthday", "Education", "UidNumber", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
     "SignupApplication", "RegisterType", "RegisterSource", "CreatedIp", "LastSigninTime", "LastSigninIp",
     "PreferredMfaType", "TotpSecret", "RecoveryCodes", "MfaPhoneEnabled", "MfaEmailEnabled", "MfaPushEnabled", "MfaPushReceiver", "MfaPushProvider",
     "WebauthnCredentials", "FaceIds", "Invitation", "InvitationCode", "Properties", "Groups"];
@@ -2034,64 +1857,6 @@ export function getDefaultInvitationHtmlEmailContent() {
 </div>
 </body>
 </html>`;
-}
-
-export function getCurrencyText(currency) {
-  if (currency === "USD") {
-    return i18next.t("currency:USD");
-  } else if (currency === "CNY") {
-    return i18next.t("currency:CNY");
-  } else if (currency === "EUR") {
-    return i18next.t("currency:EUR");
-  } else if (currency === "JPY") {
-    return i18next.t("currency:JPY");
-  } else if (currency === "GBP") {
-    return i18next.t("currency:GBP");
-  } else if (currency === "AUD") {
-    return i18next.t("currency:AUD");
-  } else if (currency === "CAD") {
-    return i18next.t("currency:CAD");
-  } else if (currency === "CHF") {
-    return i18next.t("currency:CHF");
-  } else if (currency === "HKD") {
-    return i18next.t("currency:HKD");
-  } else if (currency === "SGD") {
-    return i18next.t("currency:SGD");
-  } else if (currency === "BRL") {
-    return i18next.t("currency:BRL");
-  } else if (currency === "PLN") {
-    return i18next.t("currency:PLN");
-  } else if (currency === "KRW") {
-    return i18next.t("currency:KRW");
-  } else if (currency === "INR") {
-    return i18next.t("currency:INR");
-  } else if (currency === "RUB") {
-    return i18next.t("currency:RUB");
-  } else if (currency === "MXN") {
-    return i18next.t("currency:MXN");
-  } else if (currency === "ZAR") {
-    return i18next.t("currency:ZAR");
-  } else if (currency === "TRY") {
-    return i18next.t("currency:TRY");
-  } else if (currency === "SEK") {
-    return i18next.t("currency:SEK");
-  } else if (currency === "NOK") {
-    return i18next.t("currency:NOK");
-  } else if (currency === "DKK") {
-    return i18next.t("currency:DKK");
-  } else if (currency === "THB") {
-    return i18next.t("currency:THB");
-  } else if (currency === "MYR") {
-    return i18next.t("currency:MYR");
-  } else if (currency === "TWD") {
-    return i18next.t("currency:TWD");
-  } else if (currency === "CZK") {
-    return i18next.t("currency:CZK");
-  } else if (currency === "HUF") {
-    return i18next.t("currency:HUF");
-  } else {
-    return "(Unknown currency)";
-  }
 }
 
 export function isDarkTheme(themeAlgorithm) {

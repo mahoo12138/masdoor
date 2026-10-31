@@ -357,7 +357,6 @@ func GetMaskedApplication(application *Application, userId string) *Application 
 		application.OrganizationObj.PasswordType = "***"
 		application.OrganizationObj.PasswordSalt = "***"
 		application.OrganizationObj.IpWhitelist = "***"
-		application.OrganizationObj.InitScore = -1
 		application.OrganizationObj.EnableSoftDeletion = false
 
 		if !isOrgUser {

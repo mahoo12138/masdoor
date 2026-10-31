@@ -7,7 +7,7 @@ RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 # Copy source files and build
 COPY ./web .
-RUN NODE_OPTIONS="--max-old-space-size=4096" yarn run build
+RUN rm -rf build build-old build-temp && NODE_OPTIONS="--max-old-space-size=4096" yarn run build
 
 FROM --platform=$BUILDPLATFORM golang:1.26.10 AS BACK
 # 国内网络默认走 goproxy.cn；海外构建可 --build-arg GOPROXY=https://proxy.golang.org,direct

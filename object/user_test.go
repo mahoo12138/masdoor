@@ -91,23 +91,6 @@ func TestSyncIds(t *testing.T) {
 	}
 }
 
-func TestSyncHashes(t *testing.T) {
-	InitConfig()
-
-	users, _ := GetGlobalUsers()
-	for _, user := range users {
-		if user.Hash != "" {
-			continue
-		}
-
-		err := user.UpdateUserHash()
-		if err != nil {
-			panic(err)
-		}
-		updateUserColumn("hash", user)
-	}
-}
-
 func TestGetMaskedUsers(t *testing.T) {
 	type args struct {
 		users []*User

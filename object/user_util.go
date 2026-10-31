@@ -842,33 +842,6 @@ func CheckPermissionForUpdateUser(oldUser, newUser *User, isAdmin bool, allowDis
 		}
 	}
 
-	if oldUser.Score != newUser.Score {
-		item := GetAccountItemByName("Score", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.Score = oldUser.Score
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
-	if oldUser.Karma != newUser.Karma {
-		item := GetAccountItemByName("Karma", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.Karma = oldUser.Karma
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
-	if oldUser.Ranking != newUser.Ranking {
-		item := GetAccountItemByName("Ranking", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.Ranking = oldUser.Ranking
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
 	if oldUser.SignupApplication != newUser.SignupApplication {
 		item := GetAccountItemByName("Signup application", organization)
 		if !userVisible(isAdmin, item) {

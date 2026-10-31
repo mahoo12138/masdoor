@@ -5442,9 +5442,6 @@ definitions:
         type: string
       hasPrivilegeConsent:
         type: boolean
-      initScore:
-        type: integer
-        format: int64
       ipRestriction:
         type: string
       ipWhitelist:
@@ -6552,9 +6549,6 @@ definitions:
         type: boolean
       kakao:
         type: string
-      karma:
-        type: integer
-        format: int64
       kwai:
         type: string
       language:
@@ -6668,9 +6662,6 @@ definitions:
           type: string
       qq:
         type: string
-      ranking:
-        type: integer
-        format: int64
       realName:
         type: string
       recoveryCodes:
@@ -6689,9 +6680,6 @@ definitions:
           $ref: '#/definitions/object.Role'
       salesforce:
         type: string
-      score:
-        type: integer
-        format: int64
       shopify:
         type: string
       signinWrongTimes:

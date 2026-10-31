@@ -52,8 +52,6 @@ const userTemplate = {
   "address": null,
   "affiliation": "",
   "title": "",
-  "score": 10000,
-  "ranking": 10,
   "isOnline": false,
   "isAdmin": true,
   "isForbidden": false,

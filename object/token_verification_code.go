@@ -225,11 +225,6 @@ func addVerificationCodeUser(application *Application, verifyType string, dest s
 		return nil, err
 	}
 
-	initScore, err := organization.GetInitScore()
-	if err != nil {
-		return nil, err
-	}
-
 	user := &User{
 		Owner:             application.Organization,
 		Name:              id,
@@ -238,7 +233,6 @@ func addVerificationCodeUser(application *Application, verifyType string, dest s
 		Type:              "normal-user",
 		Avatar:            organization.DefaultAvatar,
 		Address:           []string{},
-		Score:             initScore,
 		SignupApplication: application.Name,
 		Properties:        map[string]string{},
 		RegisterType:      "Application Signup",

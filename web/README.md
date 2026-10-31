@@ -174,32 +174,27 @@ two-level "category → type" menu. A read the backend refuses with "Unauthorize
 operation" replaces the page with the 403 `UnauthorizedPage`, as `BaseListPage`
 did, rather than showing an empty table; the same check drives the read-only
 demo site's "go to the writable demo" prompt in `lib/fetch-filter.ts`. Stored
-enum values (ticket and subscription states, permission
-actions and effects, coupon discount types, ...) render as translated badges from
-one map per enum in `lib/enum-labels.tsx`, and the billing objects (coupons,
-orders, payments, plans, pricings, products, subscriptions) open read-only for
-anyone who is not a local admin — "View" instead of "Edit", no Add, no Delete, a
-locked form and no Save. Edit pages title themselves "New X" / "View X" /
+enum values (ticket states, permission
+actions and effects, ...) render as translated badges from
+one map per enum in `lib/enum-labels.tsx`. Edit pages title themselves "New X" / "View X" /
 "Edit X" after their mode.
 
 The per-page actions are there too: duplicating an application, uploading the
 Terms of Use HTML, resetting the footer HTML, previewing a webhook's payload,
-copying a pricing page URL, the "Test buy page" link, the save-time checks on
-permissions and products, the block on deleting a group that still has
+copying a URL, the save-time checks on
+permissions, the block on deleting a group that still has
 subgroups, "Show all" on the group tree, and the LDAP sync page's synced /
 unsynced marks, group ids and per-user results. A record opens in a drawer with
 its whole response and object, because the row is far too wide to read in the
-table; a payment links to its result page; a transaction can be a "Recharge",
-which is POSTed before the edit page opens it under that title; and a Client IP
+table; and a Client IP
 links to db-ip.com, as in the antd tables.
 
 Dashboard, apps, shortcuts, my account, system info, breadcrumbs,
 and list + edit pages for: organizations, users, groups (incl. tree), invitations,
 applications, providers, resources, certs, keys, roles, permissions, models,
-adapters, enforcers, agents, MCP servers, entries, sites, rules, sessions,
-records, tokens, verifications, products, coupons, orders, payments, plans,
-pricings, subscriptions, transactions, forms, syncers, webhooks, webhook events,
-tickets, LDAP (edit + sync).
+adapters, enforcers, sites, rules, sessions,
+records, tokens, verifications, forms, webhooks, webhook events,
+tickets.
 
 **Branding** — the console takes its tab title and favicon from the signed-in
 user's organization, brands the sidebar with that organization's logo (its

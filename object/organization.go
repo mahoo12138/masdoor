@@ -16,10 +16,8 @@ package object
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
-	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/cred"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
@@ -84,7 +82,6 @@ type Organization struct {
 	MasterVerificationCode string     `xorm:"varchar(100)" json:"masterVerificationCode"`
 	IpWhitelist            string     `xorm:"varchar(200)" json:"ipWhitelist"`
 	TrustedDbHosts         string     `xorm:"varchar(500)" json:"trustedDbHosts"`
-	InitScore              int        `json:"initScore"`
 	EnableSoftDeletion     bool       `json:"enableSoftDeletion"`
 	IsProfilePublic        bool       `json:"isProfilePublic"`
 	UseEmailAsUsername     bool       `json:"useEmailAsUsername"`
@@ -769,13 +766,5 @@ func IsNeedPromptMfa(org *Organization, user *User) bool {
 		}
 	}
 	return false
-}
-
-func (org *Organization) GetInitScore() (int, error) {
-	if org != nil {
-		return org.InitScore, nil
-	} else {
-		return strconv.Atoi(conf.GetConfigString("initScore"))
-	}
 }
 

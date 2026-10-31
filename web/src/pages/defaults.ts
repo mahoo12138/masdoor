@@ -37,20 +37,6 @@ export function newAdapter(account: Account) {
   };
 }
 
-export function newAgent(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `agent_${randomName}`,
-    createdTime: now(),
-    displayName: `New Agent - ${randomName}`,
-    url: "",
-    token: "",
-    application: "",
-  };
-}
-
 export function newApplication(account: Account) {
   const randomName = Setting.getRandomName();
   const organizationName = Setting.getRequestOrganization(account);
@@ -123,33 +109,6 @@ export function newCert(account: Account, ownerOverride?: string) {
   };
 }
 
-export function newCoupon(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `coupon_${randomName}`,
-    createdTime: now(),
-    displayName: `New Coupon - ${randomName}`,
-    description: "",
-    code: `CODE_${randomName}`.toUpperCase(),
-    discountType: "percentage",
-    discount: 10,
-    maxDiscount: 0,
-    scope: "universal",
-    products: [],
-    users: [],
-    quantity: 100,
-    usedCount: 0,
-    maxUsagePerUser: 1,
-    startTime: now(),
-    expireTime: dayjs().add(30, "days").format(),
-    minOrderAmount: 0,
-    currency: "USD",
-    state: "Active",
-  };
-}
-
 export function newEnforcer(account: Account) {
   const randomName = Setting.getRandomName();
   const owner = Setting.getRequestOrganization(account);
@@ -158,23 +117,6 @@ export function newEnforcer(account: Account) {
     name: `enforcer_${randomName}`,
     createdTime: now(),
     displayName: `New Enforcer - ${randomName}`,
-  };
-}
-
-export function newEntry(account: Account) {
-  const randomHex = Math.random().toString(16).slice(2, 18);
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: randomHex,
-    createdTime: now(),
-    displayName: randomHex,
-    provider: "",
-    application: "",
-    type: "",
-    clientIp: "",
-    userAgent: "",
-    message: "",
   };
 }
 
@@ -261,45 +203,6 @@ export function newModel(account: Account) {
   };
 }
 
-export function newOrder(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `order_${randomName}`,
-    createdTime: now(),
-    displayName: `New Order - ${randomName}`,
-    products: [],
-    user: "",
-    payment: "",
-    state: "Created",
-    message: "",
-  };
-}
-
-export function newPayment(account: Account) {
-  const randomName = Setting.getRandomName();
-  const organizationName = Setting.getRequestOrganization(account);
-  return {
-    owner: organizationName,
-    name: `payment_${randomName}`,
-    createdTime: now(),
-    displayName: `New Payment - ${randomName}`,
-    provider: "provider_pay_paypal",
-    type: "PayPal",
-    user: "admin",
-    products: [],
-    productsDisplayName: "",
-    detail: "This is a payment",
-    tag: "Promotion-1",
-    currency: "USD",
-    price: 300.0,
-    payUrl: "https://pay.com/pay.php",
-    state: "Paid",
-    message: "",
-  };
-}
-
 export function newPermission(account: Account) {
   const randomName = Setting.getRandomName();
   const owner = Setting.getRequestOrganization(account);
@@ -321,63 +224,6 @@ export function newPermission(account: Account) {
     approver: "",
     approveTime: "",
     state: Setting.isLocalAdminUser(account) ? "Approved" : "Pending",
-  };
-}
-
-export function newPlan(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `plan_${randomName}`,
-    createdTime: now(),
-    displayName: `New Plan - ${randomName}`,
-    description: "",
-    price: 10,
-    currency: "USD",
-    period: "Monthly",
-    isEnabled: true,
-    autoRenew: false,
-    paymentProviders: [],
-    role: "",
-    options: [],
-  };
-}
-
-export function newPricing(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `pricing_${randomName}`,
-    createdTime: now(),
-    plans: [],
-    displayName: `New Pricing - ${randomName}`,
-    isEnabled: true,
-    isInviteOnly: false,
-    users: [],
-    trialDuration: 7,
-  };
-}
-
-export function newProduct(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `product_${randomName}`,
-    createdTime: now(),
-    displayName: `New Product - ${randomName}`,
-    image: `${Setting.StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
-    tag: "Masdoor Summit 2022",
-    currency: "USD",
-    price: 300,
-    quantity: 99,
-    sold: 10,
-    isRecharge: false,
-    providers: [],
-    state: "Published",
-    properties: {},
   };
 }
 
@@ -431,19 +277,6 @@ export function newRule(account: Account) {
   };
 }
 
-export function newServer(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `server_${randomName}`,
-    createdTime: now(),
-    displayName: `New Server - ${randomName}`,
-    url: "",
-    application: "",
-  };
-}
-
 export function newSite(account: Account) {
   const randomName = Setting.getRandomName();
   const owner = Setting.getRequestOrganization(account);
@@ -474,51 +307,6 @@ export function newSite(account: Account) {
     nodes: [],
     casdoorApplication: "",
     organizations: [],
-  };
-}
-
-export function newSubscription(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `sub_${randomName}`,
-    createdTime: now(),
-    displayName: `New Subscription - ${randomName}`,
-    startTime: now(),
-    endTime: dayjs().add(30, "d").format(),
-    period: "Monthly",
-    description: "",
-    user: "",
-    group: "",
-    plan: "",
-    state: "Active",
-    autoRenew: false,
-  };
-}
-
-export function newSyncer(account: Account) {
-  const randomName = Setting.getRandomName();
-  const organizationName = Setting.getRequestOrganization(account);
-  return {
-    owner: "admin",
-    name: `syncer_${randomName}`,
-    createdTime: now(),
-    organization: organizationName,
-    type: "Database",
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "123456",
-    databaseType: "mysql",
-    database: "dbName",
-    table: "table_name",
-    tableColumns: [],
-    affiliationTable: "",
-    avatarBaseUrl: "",
-    syncInterval: 10,
-    isReadOnly: false,
-    isEnabled: false,
   };
 }
 
@@ -556,53 +344,6 @@ export function newToken(account: Account) {
   };
 }
 
-export function newTransaction(account: Account) {
-  const organizationName = Setting.getRequestOrganization(account);
-  const randomName = Setting.getRandomName();
-  return {
-    owner: organizationName,
-    // the real name is generated by the server when the transaction is added
-    name: `transaction_${randomName}`,
-    createdTime: now(),
-    application: Conf.DefaultApplication,
-    domain: "https://ai-admin.casibase.com",
-    category: "",
-    type: "chat_id",
-    subtype: "message_id",
-    provider: "provider_chatgpt",
-    user: "admin",
-    tag: "AI message",
-    amount: 0.1,
-    currency: "USD",
-    payment: "payment_paypal_001",
-    state: "Paid",
-  };
-}
-
-/**
- * The object the transaction list's "Recharge" button POSTs straight away: a
- * paid top-up for the signed-in user, which the backend names and hands back so
- * the edit page can open it in recharge mode.
- */
-export function newRechargeTransaction(account: Account) {
-  return {
-    owner: Setting.getRequestOrganization(account),
-    createdTime: now(),
-    application: account.signupApplication || "",
-    domain: "",
-    category: "Recharge",
-    type: "",
-    subtype: "",
-    provider: "",
-    user: account.name || "",
-    tag: "User",
-    amount: 100,
-    currency: "USD",
-    payment: "",
-    state: "Paid",
-  };
-}
-
 export function newUser(account: Account, organization: Record<string, any>, organizationName: string, groupName?: string) {
   const randomName = Setting.getRandomName();
   const owner =
@@ -633,13 +374,11 @@ export function newUser(account: Account, organization: Record<string, any>, org
     isVerified: false,
     isAdmin: owner === "built-in",
     isForbidden: false,
-    score: organization?.initScore,
     isDeleted: false,
     properties: {},
     signupApplication: organization?.defaultApplication,
     registerType: "Add User",
     registerSource: `${account.owner}/${account.name}`,
-    balanceCurrency: organization?.balanceCurrency || "USD",
   };
 }
 

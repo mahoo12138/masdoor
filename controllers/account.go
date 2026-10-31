@@ -210,12 +210,6 @@ func (c *ApiController) Signup() {
 		}
 	}
 
-	initScore, err := organization.GetInitScore()
-	if err != nil {
-		c.ResponseError(fmt.Errorf(c.T("account:Get init score failed, error: %w"), err).Error())
-		return
-	}
-
 	userType := "normal-user"
 
 	user := &object.User{
@@ -239,13 +233,11 @@ func (c *ApiController) Signup() {
 		Affiliation:       authForm.Affiliation,
 		IdCard:            authForm.IdCard,
 		Region:            authForm.Region,
-		Score:             initScore,
 		IsAdmin:           false,
 		IsForbidden:       false,
 		IsDeleted:         false,
 		SignupApplication: application.Name,
 		Properties:        map[string]string{},
-		Karma:             0,
 		Invitation:        invitationName,
 		InvitationCode:    authForm.InvitationCode,
 		EmailVerified:     userEmailVerified,

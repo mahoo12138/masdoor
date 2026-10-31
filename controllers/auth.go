@@ -1140,12 +1140,6 @@ func (c *ApiController) Login() {
 					}
 
 					properties["no"] = strconv.Itoa(int(count + 2))
-					var initScore int
-					initScore, err = organization.GetInitScore()
-					if err != nil {
-						c.ResponseError(fmt.Errorf(c.T("account:Get init score failed, error: %w"), err).Error())
-						return
-					}
 
 					userId := userInfo.Id
 					if userId == "" {
@@ -1167,7 +1161,6 @@ func (c *ApiController) Login() {
 						CountryCode:       userInfo.CountryCode,
 						Region:            userInfo.CountryCode,
 						Language:          authForm.Language,
-						Score:             initScore,
 						IsAdmin:           false,
 						IsForbidden:       false,
 						IsDeleted:         false,

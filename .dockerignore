@@ -1,1 +1,8 @@
 web/node_modules/
+web/build/
+web/build-old/
+web/build-temp/
+masdoor-dev.db*
+.workbuddy/
+logs/
+exe/

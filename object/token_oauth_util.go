@@ -1002,14 +1002,6 @@ func createGuestUserToken(application *Application, clientSecret string, verifie
 		}, nil
 	}
 
-	initScore, err := organization.GetInitScore()
-	if err != nil {
-		return nil, &TokenError{
-			Error:            EndpointError,
-			ErrorDescription: fmt.Sprintf("failed to get init score: %s", err.Error()),
-		}, nil
-	}
-
 	newUserId, idErr := GenerateIdForNewUser(application)
 	if idErr != nil {
 		newUserId = util.GenerateId()
@@ -1028,7 +1020,6 @@ func createGuestUserToken(application *Application, clientSecret string, verifie
 		Address:           []string{},
 		Email:             "",
 		Phone:             "",
-		Score:             initScore,
 		IsAdmin:           false,
 		IsForbidden:       false,
 		IsDeleted:         false,
