@@ -76,7 +76,6 @@ func runServer() {
 	}
 
 	object.InitDefaultStorageProvider()
-	object.InitLogProviders()
 	proxy.InitHttpClient()
 	authz.InitApi()
 	object.InitUserManager()

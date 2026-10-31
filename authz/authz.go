@@ -61,8 +61,6 @@ p, *, *, POST, /api/userinfo, *, *
 p, *, *, GET, /api/user, *, *
 p, *, *, GET, /api/health, *, *
 p, *, *, *, /api/webhook, *, *
-p, *, *, GET, /api/get-qrcode, *, *
-p, *, *, GET, /api/get-webhook-event, *, *
 p, *, *, GET, /api/get-captcha-status, *, *
 p, *, *, *, /api/login/oauth, *, *
 p, *, *, *, /api/oauth/register, *, *
@@ -267,7 +265,7 @@ func dropNonUserSelfObject(subOwner string, subName string, urlPath string, objO
 
 func isAllowedInDemoMode(subOwner string, subName string, method string, urlPath string, objOwner string, objName string) bool {
 	if method == "POST" {
-		if strings.HasPrefix(urlPath, "/api/login") || urlPath == "/api/logout" || urlPath == "/api/sso-logout" || urlPath == "/api/signup" || urlPath == "/api/callback" || urlPath == "/api/send-verification-code" || urlPath == "/api/send-email" || urlPath == "/api/verify-captcha" || urlPath == "/api/verify-code" || urlPath == "/api/check-user-password" || strings.HasPrefix(urlPath, "/api/mfa/") || urlPath == "/api/webhook" || urlPath == "/api/get-qrcode" {
+		if strings.HasPrefix(urlPath, "/api/login") || urlPath == "/api/logout" || urlPath == "/api/sso-logout" || urlPath == "/api/signup" || urlPath == "/api/callback" || urlPath == "/api/send-verification-code" || urlPath == "/api/send-email" || urlPath == "/api/verify-captcha" || urlPath == "/api/verify-code" || urlPath == "/api/check-user-password" || strings.HasPrefix(urlPath, "/api/mfa/") || urlPath == "/api/webhook" {
 			return true
 		} else if urlPath == "/api/update-user" {
 			// Allow ordinary users to update their own information
@@ -275,7 +273,7 @@ func isAllowedInDemoMode(subOwner string, subName string, method string, urlPath
 				return true
 			}
 			return false
-		} else if urlPath == "/api/upload-resource" || urlPath == "/api/add-transaction" {
+		} else if urlPath == "/api/upload-resource" {
 			if subOwner == "app" && subName == "app-casibase" {
 				return true
 			}

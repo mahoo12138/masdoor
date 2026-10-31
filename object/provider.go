@@ -25,7 +25,6 @@ import (
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/idp"
 	"github.com/mahoo12138/masdoor/idv"
-	"github.com/mahoo12138/masdoor/log"
 	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
@@ -332,7 +331,6 @@ func UpdateProvider(id string, provider *Provider) (bool, error) {
 	}
 
 	if affected != 0 {
-		refreshLogProviderRuntime(util.GetId(owner, name), provider)
 		stopAuditProvider(util.GetId(owner, name))
 	}
 
@@ -369,9 +367,6 @@ func AddProvider(provider *Provider) (bool, error) {
 		return false, err
 	}
 
-	if affected != 0 {
-		refreshLogProviderRuntime("", provider)
-	}
 
 	return affected != 0, nil
 }
@@ -383,7 +378,6 @@ func DeleteProvider(provider *Provider) (bool, error) {
 	}
 
 	if affected != 0 {
-		stopLogProviderRuntime(provider.GetId())
 		stopAuditProvider(provider.GetId())
 	}
 
@@ -624,33 +618,6 @@ func GetIdvProviderFromProvider(provider *Provider) idv.IdvProvider {
 		return nil
 	}
 	return idv.GetIdvProvider(provider.Type, provider.ClientId, provider.ClientSecret, provider.Endpoint)
-}
-
-func GetLogProviderFromProvider(provider *Provider) (log.LogProvider, error) {
-	if provider.Category != "Log" {
-		return nil, fmt.Errorf("provider %s category is not Log", provider.Name)
-	}
-
-	if provider.Type == "Masdoor Permission Log" {
-		return log.NewPermissionLogProvider(provider.Name, func(owner, createdTime, providerName, message string) error {
-			name := log.GenerateEntryName()
-			entry := &Entry{
-				Owner:       owner,
-				Name:        name,
-				CreatedTime: createdTime,
-				UpdatedTime: createdTime,
-				DisplayName: name,
-				Provider:    providerName,
-				Application: CasdoorApplication,
-				Message:     message,
-			}
-			_, err := AddEntry(entry)
-			return err
-		}), nil
-	}
-
-
-	return log.GetLogProvider(provider.Type, provider.Host, provider.Port, provider.Title)
 }
 
 // InvokeCustomProviderLogout iterates through the application's Custom OAuth2 providers

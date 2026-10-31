@@ -31,7 +31,6 @@ config: |
   logPostOnly = true
   origin =
   enableGzip = true
-  ldapServerPort = 10389
 
 # Use secret to mount app.conf file for who don't want user,pass on git  
 # encode base64 on Value.config or create your own secret with anything you prefer
@@ -80,11 +79,6 @@ database:
   databaseName: masdoor
 
   sslMode: disable
-
-ldap:
-  enabled: false
-  service:
-    port: 389
 
 imagePullSecrets: []
 nameOverride: masdoor

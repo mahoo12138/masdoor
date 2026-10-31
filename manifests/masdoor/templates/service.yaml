@@ -18,11 +18,5 @@ spec:
       nodePort: {{ .Values.service.nodePort }}
     {{- end }}
       name: http
-    {{- if .Values.ldap.enabled }}
-    - port: {{ .Values.ldap.service.port }}
-      targetPort: 10389
-      protocol: TCP
-      name: ldap
-    {{- end }}
   selector:
     {{- include "masdoor.selectorLabels" . | nindent 4 }}

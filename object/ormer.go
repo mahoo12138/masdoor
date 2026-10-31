@@ -418,7 +418,6 @@ func (a *Ormer) createTable() {
 		panic(err)
 	}
 
-	err = a.Engine.Sync2(new(Integration))
 	if err != nil {
 		panic(err)
 	}
@@ -463,7 +462,6 @@ func (a *Ormer) createTable() {
 		panic(err)
 	}
 
-	err = a.Engine.Sync2(new(Entry))
 	if err != nil {
 		panic(err)
 	}

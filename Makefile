@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-REGISTRY ?= casbin
+REGISTRY ?= mahoo12138
 IMG ?= masdoor
 IMG_TAG ?=$(shell git --no-pager log -1 --format="%ad" --date=format:"%Y%m%d")-$(shell git describe --tags --always --dirty --abbrev=6)
 NAMESPACE ?= masdoor

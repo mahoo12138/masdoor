@@ -13,8 +13,6 @@ keywords:
   - sso
   - oauth
   - oidc
-  - saml
-  - ldap
   - authentication
 sources:
   - https://github.com/mahoo12138/masdoor

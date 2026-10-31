@@ -70,11 +70,6 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-            {{- if .Values.ldap.enabled }}
-            - name: ldap
-              containerPort: 10389
-              protocol: TCP
-            {{- end }}
           {{- range $name := list "startup" "liveness" "readiness" }}
           {{- with index $.Values.probe $name }}
           {{- if .enabled }}

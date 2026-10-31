@@ -73,8 +73,6 @@ Override any value from [values.yaml](https://github.com/mahoo12138/masdoor/blob
 
 | Parameter | Description | Default |
 |---|---|---|
-| `ldap.enabled` | Enable the built-in LDAP server | `false` |
-| `ldap.service.port` | LDAP service port | `389` |
 
 ### Declarative configuration (init data)
 

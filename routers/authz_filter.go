@@ -34,7 +34,6 @@ import (
 
 var orgOwnerObject = []string{
 	"-organization",
-	"-syncer",
 	"-webhook",
 	"-application",
 	"-token",
@@ -46,9 +45,6 @@ var orgOwnerObject = []string{
 var organizationParamObject = []string{
 	"/api/get-applications",
 	"/api/get-organization-applications",
-	"/api/get-syncers",
-	"/api/get-syncer",
-	"/api/run-syncer",
 	"/api/get-tokens",
 	"/api/get-token",
 	"/api/get-webhooks",
@@ -178,10 +174,6 @@ func isCrossOriginCookieRequest(ctx *context.Context) bool {
 	if method == http.MethodGet || method == http.MethodHead || method == http.MethodOptions {
 		return false
 	}
-	if strings.HasPrefix(ctx.Request.URL.Path, "/api/saml/logout/") {
-		return false
-	}
-
 	origin := ctx.Request.Header.Get("Origin")
 	if origin == "" || util.IsCredentialedOrigin(origin, conf.GetConfigString("origin"), ctx.Request.Host) {
 		return false
@@ -203,14 +195,6 @@ func getSubject(ctx *context.Context) (string, string) {
 		panic(err)
 	}
 	return owner, name
-}
-
-func getRunSyncerObject(ctx *context.Context) (string, string, error) {
-	_, name, err := util.GetOwnerAndNameFromIdWithError(ctx.Input.Query("id"))
-	if err != nil {
-		return "", "", err
-	}
-	return ctx.Input.Query("organization"), name, nil
 }
 
 func getObject(ctx *context.Context) (string, string, error) {
@@ -258,7 +242,7 @@ func getObject(ctx *context.Context) (string, string, error) {
 			organization = ctx.Input.Query("organization")
 		}
 
-		if !(strings.HasPrefix(ctx.Request.URL.Path, "/api/get-") && strings.HasSuffix(ctx.Request.URL.Path, "s")) || ctx.Request.URL.Path == "/api/get-ldap-users" {
+		if !(strings.HasPrefix(ctx.Request.URL.Path, "/api/get-") && strings.HasSuffix(ctx.Request.URL.Path, "s")) {
 			// query == "?id=built-in/admin"
 			id := ctx.Input.Query("id")
 			if id != "" {
@@ -287,10 +271,6 @@ func getObject(ctx *context.Context) (string, string, error) {
 
 		return "", "", nil
 	} else {
-		if path == "/api/run-syncer" {
-			return getRunSyncerObject(ctx)
-		}
-
 		if path == "/api/add-policy" || path == "/api/remove-policy" || path == "/api/update-policy" || path == "/api/send-invitation" {
 			id := ctx.Input.Query("id")
 			if id != "" {
@@ -430,14 +410,6 @@ func willLog(subOwner string, subName string, method string, urlPath string, obj
 func getUrlPath(ctx *context.Context) string {
 	urlPath := ctx.Request.URL.Path
 
-	if strings.HasPrefix(urlPath, "/cas") && (strings.HasSuffix(urlPath, "/serviceValidate") || strings.HasSuffix(urlPath, "/proxy") || strings.HasSuffix(urlPath, "/proxyValidate") || strings.HasSuffix(urlPath, "/validate") || strings.HasSuffix(urlPath, "/p3/serviceValidate") || strings.HasSuffix(urlPath, "/p3/proxyValidate") || strings.HasSuffix(urlPath, "/samlValidate")) {
-		return "/cas"
-	}
-
-	if strings.HasPrefix(urlPath, "/scim") {
-		return "/scim"
-	}
-
 	if strings.HasPrefix(urlPath, "/api/login/oauth") {
 		return "/api/login/oauth"
 	}
@@ -448,14 +420,6 @@ func getUrlPath(ctx *context.Context) string {
 
 	if strings.HasPrefix(urlPath, "/api/webauthn") {
 		return "/api/webauthn"
-	}
-
-	if strings.HasPrefix(urlPath, "/api/saml/redirect") {
-		return "/api/saml/redirect"
-	}
-
-	if strings.HasPrefix(urlPath, "/api/saml/logout") {
-		return "/api/saml/logout"
 	}
 
 	return urlPath
@@ -532,10 +496,6 @@ func ApiFilter(ctx *context.Context) {
 	}
 	objOwner, objName := objects[0].Owner, objects[0].Name
 
-	if strings.HasPrefix(urlPath, "/api/notify-payment") {
-		urlPath = "/api/notify-payment"
-	}
-
 	isAllowed := true
 	for _, obj := range objects {
 		allowed, err := authz.IsAllowed(subOwner, subName, method, urlPath, obj.Owner, obj.Name, extraInfo)
@@ -553,7 +513,6 @@ func ApiFilter(ctx *context.Context) {
 
 	if method != "GET" && !strings.HasSuffix(urlPath, "-entry") {
 		util.SafeGoroutine(func() {
-			writePermissionLog(objOwner, subOwner, subName, method, urlPath, isAllowed)
 		})
 	}
 
@@ -603,7 +562,6 @@ func ApiFilter(ctx *context.Context) {
 var dynamicClientApis = []string{
 	"/api/userinfo",
 	"/api/user",
-	"/api/mcp",
 	"/api/login/oauth",
 }
 
@@ -666,7 +624,7 @@ func isClientSessionApiAllowed(application *object.Application, userId string, u
 		return util.InSlice(crossOrgClientApis, urlPath)
 	}
 	if application.IsDynamicClient() {
-		return util.InSlice(dynamicClientApis, urlPath) || strings.HasPrefix(urlPath, "/api/server/")
+		return util.InSlice(dynamicClientApis, urlPath)
 	}
 	return true
 }
@@ -677,34 +635,6 @@ func isCrossOrgClient(application *object.Application, userId string) bool {
 	}
 	owner, _ := util.GetOwnerAndNameFromIdNoCheck(userId)
 	return owner != application.Organization
-}
-
-func writePermissionLog(objOwner, subOwner, subName, method, urlPath string, allowed bool) {
-	providers, err := object.GetProvidersByCategory(objOwner, "Log")
-	if err != nil {
-		return
-	}
-
-	severity := "info"
-	if !allowed {
-		severity = "warning"
-	}
-	message := fmt.Sprintf("sub=%s/%s method=%s url=%s objOwner=%s allowed=%v", subOwner, subName, method, urlPath, objOwner, allowed)
-
-	for _, provider := range providers {
-		// System Log is a pull-based collector; it does not accept Write calls.
-		if provider.Type == "System Log" {
-			continue
-		}
-		if provider.State == "Disabled" {
-			continue
-		}
-		logProvider, err := object.GetLogProviderFromProvider(provider)
-		if err != nil {
-			continue
-		}
-		_ = logProvider.Write(severity, message)
-	}
 }
 
 func formatExtraInfo(extra map[string]interface{}) string {

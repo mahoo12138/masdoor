@@ -580,20 +580,6 @@ export const OtherProviderInfo = {
       url: "https://datatracker.ietf.org/doc/html/rfc5424",
     },
   },
-  Log: {
-    "Masdoor Permission Log": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://casdoor.org",
-    },
-    "System Log": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://en.wikipedia.org/wiki/Syslog",
-    },
-    "SELinux Log": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://github.com/SELinuxProject/selinux",
-    },
-  },
 };
 
 export const UserFields = ["owner", "name", "password", "display_name", "id", "type", "email", "phone", "country_code",
@@ -1501,13 +1487,6 @@ export function getProviderTypeOptions(category) {
   } else if (category === "Audit") {
     return ([
       {id: "Syslog", name: "Syslog"},
-    ]);
-  } else if (category === "Log") {
-    return ([
-      {id: "Masdoor Permission Log", name: "Masdoor Permission Log"},
-      {id: "System Log", name: "System Log"},
-      {id: "Agent", name: "Agent"},
-      {id: "SELinux Log", name: "SELinux Log"},
     ]);
   } else {
     return [];

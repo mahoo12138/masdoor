@@ -1,4 +1,4 @@
-# this is only an EXAMPLE of deploying casddor in kubernetes
+# this is only an EXAMPLE of deploying Masdoor in kubernetes
 # please modify this file according to your requirements
 apiVersion: v1
 kind: Service
@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: masdoor-container
-          image: casbin/masdoor:latest
+          image: mahoo12138/masdoor:latest  # EDIT IT: build your own image or use this fork's registry
           imagePullPolicy: Always
           ports:
             - containerPort: 8000

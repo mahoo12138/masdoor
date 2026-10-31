@@ -57,7 +57,7 @@ const defaultSmsMapping: Record<string, string> = {
 };
 
 const CATEGORIES = [
-  "Audit", "Captcha", "Email", "Face ID", "ID Verification", "Log", "Notification",
+  "Audit", "Captcha", "Email", "Face ID", "ID Verification", "Notification",
   "OAuth", "SMS", "Storage",
 ].sort((a, b) => a.localeCompare(b));
 
