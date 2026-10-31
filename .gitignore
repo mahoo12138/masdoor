@@ -34,6 +34,12 @@ commentsRouter*.go
 casdoor
 /server
 
+# dev.sh local artifacts
+masdoor-dev.db*
+
+# WorkBuddy local workspace data
+.workbuddy/
+
 # include helm-chart, but not its packaged output
 !manifests/casdoor
 *.tgz

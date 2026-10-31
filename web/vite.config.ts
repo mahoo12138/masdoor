@@ -9,8 +9,6 @@ const proxyPaths = [
   "/swagger",
   "/files",
   "/.well-known/openid-configuration",
-  "/scim",
-  "/cas",
 ];
 
 export default defineConfig({

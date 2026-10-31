@@ -26,6 +26,22 @@ Everything above is configured in the web console — no config-file edits or re
 
 ## Quick start
 
+### One-command local environment
+
+[`dev.sh`](dev.sh) wraps the common flows:
+
+```bash
+./dev.sh dev      # local development: SQLite backend (go run) + Vite hot reload, zero deps
+./dev.sh test     # Docker test env: STANDARD image + MySQL 8, smoke-verified
+./dev.sh smoke    # quick smoke test: ALLINONE image (SQLite) in a single container
+./dev.sh down     # stop test/smoke
+./dev.sh clean    # remove containers, volumes, images and local build artifacts
+```
+
+`./dev.sh dev` serves the frontend at <http://localhost:7001> (API proxied to the backend on `:8000`).
+`./dev.sh test` and `./dev.sh smoke` verify `/api/health` and the login page before printing the URL.
+Ports are overridable via `BACKEND_PORT` / `SMOKE_PORT` / `FRONTEND_PORT` / `DB_PORT` environment variables.
+
 ### All-in-one (evaluation)
 
 Build and run the `ALLINONE` image — it bundles SQLite and starts with zero configuration:
@@ -39,21 +55,16 @@ Open <http://localhost:8000> and sign in with organization `built-in`, username 
 
 ### Docker Compose (recommended)
 
-[`docker-compose.yml`](docker-compose.yml) starts Masdoor next to MySQL 8. Set the database settings in [`conf/app.conf`](conf/app.conf) to match the `db` service:
-
-```ini
-driverName = mysql
-dataSourceName = root:123456@tcp(localhost:3306)/
-dbName = masdoor
-```
-
-Then:
+[`docker-compose.yml`](docker-compose.yml) starts Masdoor next to MySQL 8. The compose file overrides
+the database settings through environment variables (`dataSourceName: root:123456@tcp(db:3306)/`), so no
+config edits are needed — `./dev.sh test` or:
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
-The compose entrypoint passes `--createDatabase=true`, so the database is created for you. For a single-machine deployment SQLite also works:
+The compose entrypoint passes `--createDatabase=true`, so the database is created for you.
+The MySQL data lives in the `mysql-data` volume. For a single-machine deployment SQLite also works:
 
 ```ini
 driverName = sqlite

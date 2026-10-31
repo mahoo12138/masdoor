@@ -17,6 +17,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
@@ -134,7 +135,12 @@ func runServer() {
 		panic(err)
 	}
 
-	port := web.AppConfig.DefaultInt("httpport", 8000)
+	port := 8000
+	if v := conf.GetConfigString("httpport"); v != "" {
+		if p, err := strconv.Atoi(v); err == nil && p > 0 {
+			port = p
+		}
+	}
 	// logs.SetLevel(logs.LevelInformational)
 	logs.SetLogFuncCall(false)
 
