@@ -1,10 +1,8 @@
 #!/bin/bash
 
-if [ -z "${driverName:-}" ]; then
-  export driverName=sqlite
-fi
-if [ -z "${dataSourceName:-}" ]; then
-  export dataSourceName="file:masdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)"
-fi
+# conf/app.conf already defaults to SQLite (file:data/masdoor.db), so no env
+# defaults are needed here — database settings can still be overridden via
+# environment variables (driverName / dataSourceName / dbName) or by mounting
+# a custom conf/app.conf.
 
 exec /server

@@ -267,6 +267,11 @@ func (adapter *Adapter) InitAdapter() error {
 	}
 
 	dataSourceName = conf.ReplaceDataSourceNameByDocker(dataSourceName)
+	if driverName == "sqlite" {
+		if err := ensureSqliteParentDir(dataSourceName); err != nil {
+			return err
+		}
+	}
 	engine, err := xorm.NewEngine(driverName, dataSourceName)
 	if err != nil {
 		return err

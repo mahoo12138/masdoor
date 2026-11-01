@@ -41,8 +41,8 @@ RUN apk add ca-certificates && update-ca-certificates
 RUN adduser -D $USER -u 1000 \
     && echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER \
     && chmod 0440 /etc/sudoers.d/$USER \
-    && mkdir logs \
-    && chown -R $USER:$USER logs
+    && mkdir logs data \
+    && chown -R $USER:$USER logs data
 
 USER 1000
 WORKDIR /

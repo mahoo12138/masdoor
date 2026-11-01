@@ -27,7 +27,6 @@ config: |
   authState = "masdoor"
   socks5Proxy = ""
   verificationCodeTimeout = 10
-  initScore = 0
   logPostOnly = true
   origin =
   enableGzip = true

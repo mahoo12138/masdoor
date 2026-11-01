@@ -19,6 +19,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
@@ -238,7 +239,9 @@ func createDatabaseForPostgres(driverName string, dataSourceName string, dbName 
 }
 
 func (a *Ormer) CreateDatabase() error {
-	if a.driverName == "postgres" {
+	if a.driverName != "mysql" {
+		// CREATE DATABASE ... syntax is MySQL-specific; sqlite stores everything
+		// in a single file and postgres is created in createDatabaseForPostgres.
 		return nil
 	}
 
@@ -275,6 +278,23 @@ func setPostgresSchema(engine *xorm.Engine, dataSourceName string) error {
 	return nil
 }
 
+// ensureSqliteParentDir creates the parent directory of a sqlite database file
+// so the driver can create the database file itself (e.g. the "data/" directory
+// for "file:data/masdoor.db"). In-memory databases are skipped.
+func ensureSqliteParentDir(dataSourceName string) error {
+	path, _ := strings.CutPrefix(dataSourceName, "file:")
+	path, _, _ = strings.Cut(path, "?")
+	if path == "" || path == ":memory:" {
+		return nil
+	}
+
+	dir := filepath.Dir(path)
+	if dir == "" || dir == "." {
+		return nil
+	}
+	return os.MkdirAll(dir, 0o755)
+}
+
 func (a *Ormer) open() error {
 	dataSourceName := a.dataSourceName + a.dbName
 	if a.driverName != "mysql" {
@@ -284,6 +304,11 @@ func (a *Ormer) open() error {
 	driverName := a.driverName
 	if driverName == "sqlite3" {
 		driverName = "sqlite"
+	}
+	if driverName == "sqlite" {
+		if err := ensureSqliteParentDir(dataSourceName); err != nil {
+			return err
+		}
 	}
 	engine, err := xorm.NewEngine(driverName, dataSourceName)
 	if err != nil {

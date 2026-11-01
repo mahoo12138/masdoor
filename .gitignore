@@ -27,6 +27,11 @@ tmpFiles/
 *.tmp
 logs/
 files/
+data/
+*.db
+*.db-shm
+*.db-wal
+init_data_dump.json
 lastupdate.tmp
 commentsRouter*.go
 

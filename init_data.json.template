@@ -60,7 +60,6 @@
       ],
       "masterPassword": "",
       "defaultPassword": "",
-      "initScore": 2000,
       "enableSoftDeletion": false,
       "isProfilePublic": true,
       "disableSignin": false,

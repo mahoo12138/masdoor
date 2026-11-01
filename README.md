@@ -31,11 +31,12 @@ Everything above is configured in the web console — no config-file edits or re
 [`dev.sh`](dev.sh) wraps the common flows:
 
 ```bash
-./dev.sh dev      # local development: SQLite backend (go run) + Vite hot reload, zero deps
-./dev.sh test     # Docker test env: STANDARD image + MySQL 8, smoke-verified
-./dev.sh smoke    # quick smoke test: ALLINONE image (SQLite) in a single container
-./dev.sh down     # stop test/smoke
-./dev.sh clean    # remove containers, volumes, images and local build artifacts
+./dev.sh dev         # local development: SQLite backend (go run) + Vite hot reload, zero deps
+./dev.sh test        # Docker test env: STANDARD image + SQLite, smoke-verified
+./dev.sh test mysql  # same, but with MySQL 8 (docker-compose.mysql.yml overlay)
+./dev.sh smoke       # quick smoke test: ALLINONE image (SQLite) in a single container
+./dev.sh down        # stop test/smoke
+./dev.sh clean       # remove containers, volumes, images and local build artifacts
 ```
 
 `./dev.sh dev` serves the frontend at <http://localhost:7001> (API proxied to the backend on `:8000`).
@@ -55,20 +56,26 @@ Open <http://localhost:8000> and sign in with organization `built-in`, username 
 
 ### Docker Compose (recommended)
 
-[`docker-compose.yml`](docker-compose.yml) starts Masdoor next to MySQL 8. The compose file overrides
-the database settings through environment variables (`dataSourceName: root:123456@tcp(db:3306)/`), so no
-config edits are needed — `./dev.sh test` or:
+[`docker-compose.yml`](docker-compose.yml) starts Masdoor with SQLite by default — no database
+server needed. The SQLite file lives in the `masdoor-data` volume (mounted at `/data`):
 
 ```bash
 docker compose up --build
 ```
 
-The compose entrypoint passes `--createDatabase=true`, so the database is created for you.
-The MySQL data lives in the `mysql-data` volume. For a single-machine deployment SQLite also works:
+Prefer MySQL 8? Add the [`docker-compose.mysql.yml`](docker-compose.mysql.yml) overlay:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.mysql.yml up --build
+```
+
+The compose entrypoint passes `--createDatabase=true`, so the MySQL database is created for you
+(MySQL data lives in the `mysql-data` volume; root password `123456`). To run without Docker,
+[`conf/app.conf`](conf/app.conf) already defaults to SQLite at `data/masdoor.db`:
 
 ```ini
 driverName = sqlite
-dataSourceName = file:masdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
+dataSourceName = file:data/masdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
 ```
 
 ### Kubernetes — Helm
