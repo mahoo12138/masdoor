@@ -69,10 +69,8 @@ var sessionPkIdObject = []string{
 // act on the signed-in user's organization (false) or on the user themselves (true),
 // which makes that the object to authorize against.
 var sessionObject = map[string]bool{
-	"/api/upload-groups":                false,
-	"/api/upload-roles":                 false,
-	"/api/upload-permissions":           false,
-	"/api/get-permissions-by-submitter": true,
+	"/api/upload-groups": false,
+	"/api/upload-roles":  false,
 }
 
 func getSessionObject(ctx *context.Context, withName bool) (string, string, error) {
@@ -218,21 +216,6 @@ func getObject(ctx *context.Context) (string, string, error) {
 			return ctx.Input.Query("owner"), "", nil
 		}
 
-		if ctx.Request.URL.Path == "/api/get-policies" {
-			// GetPolicies() works on the adapter as soon as "adapterId" is given and
-			// falls back to the enforcer of "id", so authorize the same way.
-			adapterId := ctx.Input.Query("adapterId")
-			if adapterId != "" {
-				return util.GetOwnerAndNameFromIdWithError(adapterId)
-			}
-
-			// query == "?id=built-in/admin"
-			id := ctx.Input.Query("id")
-			if id != "" && id != "/" {
-				return util.GetOwnerAndNameFromIdWithError(id)
-			}
-		}
-
 		// The "organization" query param may decide the authorized object only for the
 		// APIs whose controllers really scope the operation by it. Anywhere else it is
 		// an unverified claim that would let a client get a request authorized against
@@ -271,19 +254,10 @@ func getObject(ctx *context.Context) (string, string, error) {
 
 		return "", "", nil
 	} else {
-		if path == "/api/add-policy" || path == "/api/remove-policy" || path == "/api/update-policy" || path == "/api/send-invitation" {
+		if path == "/api/send-invitation" {
 			id := ctx.Input.Query("id")
 			if id != "" {
 				return util.GetOwnerAndNameFromIdWithError(id)
-			}
-		}
-
-		if path == "/api/enforce" || path == "/api/batch-enforce" {
-			// the body is the casbin request, the object is the permission, model or enforcer
-			for _, param := range []string{"permissionId", "modelId", "enforcerId"} {
-				if id := ctx.Input.Query(param); id != "" {
-					return util.GetOwnerAndNameFromIdWithError(id)
-				}
 			}
 		}
 

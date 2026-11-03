@@ -25,9 +25,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/xorm-io/core"
 )
 
@@ -501,7 +501,7 @@ func GetOAuthCode(userId string, clientId string, provider string, signinMethod 
 		}, nil
 	}
 
-	err = ExtendUserWithRolesAndPermissions(user)
+	err = ExtendUserWithRoles(user)
 	if err != nil {
 		return nil, err
 	}
@@ -692,7 +692,7 @@ func RefreshToken(application *Application, grantType string, refreshToken strin
 		return tokenError, nil
 	}
 
-	err = ExtendUserWithRolesAndPermissions(user)
+	err = ExtendUserWithRoles(user)
 	if err != nil {
 		return nil, err
 	}
@@ -1043,7 +1043,7 @@ func createGuestUserToken(application *Application, clientSecret string, verifie
 		}, nil
 	}
 
-	err = ExtendUserWithRolesAndPermissions(guestUser)
+	err = ExtendUserWithRoles(guestUser)
 	if err != nil {
 		return nil, &TokenError{
 			Error:            EndpointError,

@@ -12,32 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package authz guards the /api/* surface: routers/authz_filter.go builds a
+// (subject, method, path, object) tuple for every request and this package
+// decides whether the tuple is allowed.
+//
+// The rules used to live in a Casbin enforcer, but they were never editable at
+// runtime: InitApi() wiped the policy and reloaded the same hard-coded table on
+// every start, so the database rows were only a mirror. The table below is the
+// whole policy, matched directly instead of through an enforcer, an adapter and
+// two database tables.
 package authz
 
 import (
+	"regexp"
 	"strings"
 
-	"github.com/casbin/casbin/v2"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/util"
-	stringadapter "github.com/qiangmzsx/string-adapter/v2"
 )
 
-var Enforcer *casbin.Enforcer
+// apiRule is one row of the API policy: the six fields a request is matched
+// against, "*" meaning "any".
+type apiRule struct {
+	subOwner string
+	subName  string
+	method   string
+	urlPath  string
+	objOwner string
+	objName  string
+}
 
-func InitApi() {
-	e, err := object.GetInitializedEnforcer(util.GetId("built-in", "api-enforcer-built-in"))
-	if err != nil {
-		panic(err)
-	}
-
-	Enforcer = e.Enforcer
-	Enforcer.ClearPolicy()
-
-	// if len(Enforcer.GetPolicy()) == 0 {
-	if true {
-		ruleText := `
+// apiPolicyText is the API policy, one rule per line, fields comma separated.
+const apiPolicyText = `
 p, built-in, *, *, *, *, *
 p, app-dcr, *, *, /api/login/oauth/*, *, *
 p, app-dcr, *, *, /api/get-oauth-token, *, *
@@ -129,9 +136,6 @@ p, *, *, GET, /api/get-transaction, *, *
 p, *, *, GET, /api/get-provider, *, *
 p, *, *, GET, /api/get-organization-names, *, *
 p, *, *, GET, /api/get-organizations, *, *
-p, *, *, GET, /api/get-all-objects, *, *
-p, *, *, GET, /api/get-all-actions, *, *
-p, *, *, GET, /api/get-all-roles, *, *
 p, *, *, GET, /api/get-invitation-info, *, *
 p, *, *, GET, /api/faceid-signin-begin, *, *
 p, *, *, GET, /api/kerberos-login, *, *
@@ -139,21 +143,91 @@ p, *, *, POST, /api/grant-consent, *, *
 p, *, *, POST, /api/revoke-consent, *, *
 `
 
-		sa := stringadapter.NewAdapter(ruleText)
-		// load all rules from string adapter to enforcer's memory
-		err = sa.LoadPolicy(Enforcer.GetModel())
-		if err != nil {
-			panic(err)
+var (
+	apiRules []apiRule
+	paramRe  = regexp.MustCompile(`:[^/]+`)
+)
+
+// InitApi parses the policy table. The rules travel with the binary, so there is
+// no database, no file and no runtime state to load: the only failure mode is a
+// malformed line, which panics on start instead of silently widening access.
+func InitApi() {
+	rules := []apiRule{}
+	for _, line := range strings.Split(apiPolicyText, "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
 		}
 
-		// save all rules from enforcer's memory to Xorm adapter (DB)
-		// same as:
-		// a.SavePolicy(Enforcer.GetModel())
-		err = Enforcer.SavePolicy()
-		if err != nil {
-			panic(err)
+		fields := strings.Split(line, ",")
+		if len(fields) != 7 {
+			panic("authz: invalid API policy line: " + line)
+		}
+
+		rule := apiRule{
+			subOwner: strings.TrimSpace(fields[1]),
+			subName:  strings.TrimSpace(fields[2]),
+			method:   strings.TrimSpace(fields[3]),
+			urlPath:  strings.TrimSpace(fields[4]),
+			objOwner: strings.TrimSpace(fields[5]),
+			objName:  strings.TrimSpace(fields[6]),
+		}
+		rules = append(rules, rule)
+	}
+
+	apiRules = rules
+}
+
+// match reports whether the rule covers the request.
+func (rule *apiRule) match(subOwner, subName, method, urlPath, objOwner, objName string) bool {
+	if !fieldMatch(rule.subOwner, subOwner) || !fieldMatch(rule.subName, subName) {
+		return false
+	}
+	if rule.subName == "!anonymous" && subName == "anonymous" {
+		return false
+	}
+	if !fieldMatch(rule.method, method) {
+		return false
+	}
+	if rule.urlPath != "*" && !keyMatch2(urlPath, rule.urlPath) {
+		return false
+	}
+	if !fieldMatch(rule.objOwner, objOwner) || !fieldMatch(rule.objName, objName) {
+		return false
+	}
+	return true
+}
+
+func fieldMatch(pattern string, value string) bool {
+	return pattern == "*" || pattern == value
+}
+
+// keyMatch2 matches a concrete path against a pattern that may hold ":param"
+// segments (each standing for one path segment) and a trailing "/*".
+func keyMatch2(path string, pattern string) bool {
+	pattern = strings.ReplaceAll(pattern, "/*", "/.*")
+	pattern = paramRe.ReplaceAllString(pattern, "[^/]+")
+
+	matched, err := regexp.MatchString("^"+pattern+"$", path)
+	if err != nil {
+		return false
+	}
+	return matched
+}
+
+// enforce is the former Casbin matcher: a rule covers the request, or the
+// subject is the object it wants to act on.
+func enforce(subOwner, subName, method, urlPath, objOwner, objName string) bool {
+	if subOwner == objOwner && subName == objName {
+		return true
+	}
+
+	for i := range apiRules {
+		if apiRules[i].match(subOwner, subName, method, urlPath, objOwner, objName) {
+			return true
 		}
 	}
+	return false
 }
 
 func IsAllowed(subOwner string, subName string, method string, urlPath string, objOwner string, objName string, extraInfo map[string]interface{}) (bool, error) {
@@ -209,19 +283,7 @@ func IsAllowed(subOwner string, subName string, method string, urlPath string, o
 	objOwner, objName = dropAnonymousSelfObject(subOwner, subName, objOwner, objName)
 	objName = dropNonUserSelfObject(subOwner, subName, urlPath, objOwner, objName)
 
-	res, err := Enforcer.Enforce(subOwner, subName, method, urlPath, objOwner, objName)
-	if err != nil {
-		return false, err
-	}
-
-	if !res {
-		res, err = object.CheckApiPermission(util.GetId(subOwner, subName), objOwner, urlPath, method)
-		if err != nil {
-			return false, err
-		}
-	}
-
-	return res, nil
+	return enforce(subOwner, subName, method, urlPath, objOwner, objName), nil
 }
 
 func dropAnonymousSelfObject(subOwner string, subName string, objOwner string, objName string) (string, string) {
@@ -252,7 +314,6 @@ var userObjectApis = []string{
 	"/api/add-session",
 	"/api/update-session",
 	"/api/delete-session",
-	"/api/get-permissions-by-submitter",
 	"/api/delete-resource",
 }
 

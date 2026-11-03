@@ -543,14 +543,6 @@ func organizationChangeTrigger(oldName string, newName string) error {
 		if err != nil {
 			return err
 		}
-		_, err = userEnforcer.DeleteGroupsForUser(user.GetId())
-		if err != nil {
-			return err
-		}
-		_, err = userEnforcer.UpdateGroupsForUser(util.GetId(newName, user.Name), user.Groups)
-		if err != nil {
-			return err
-		}
 	}
 
 	user := new(User)
@@ -595,66 +587,6 @@ func organizationChangeTrigger(oldName string, newName string) error {
 		}
 	}
 	_, err = session.Where("owner=?", oldName).Cols("owner").Update(&Role{Owner: newName})
-	if err != nil {
-		return err
-	}
-
-	var permissions []*Permission
-	err = ormer.Engine.Find(&permissions)
-	if err != nil {
-		return err
-	}
-	for _, permission := range permissions {
-		changed := false
-		permission.Users, changed = replaceIdOwner(permission.Users, oldName, newName, changed)
-		permission.Groups, changed = replaceIdOwner(permission.Groups, oldName, newName, changed)
-		permission.Roles, changed = replaceIdOwner(permission.Roles, oldName, newName, changed)
-		permission.Model, changed = replaceIdOwnerInId(permission.Model, oldName, newName, changed)
-		if !changed {
-			continue
-		}
-		_, err = session.Where("owner=?", permission.Owner).And("name=?", permission.Name).Cols("users", "groups", "roles", "model").Update(permission)
-		if err != nil {
-			return err
-		}
-	}
-	_, err = session.Where("owner=?", oldName).Cols("owner").Update(&Permission{Owner: newName})
-	if err != nil {
-		return err
-	}
-
-	var enforcers []*Enforcer
-	err = ormer.Engine.Find(&enforcers)
-	if err != nil {
-		return err
-	}
-	for _, enforcer := range enforcers {
-		changed := false
-		enforcer.Model, changed = replaceIdOwnerInId(enforcer.Model, oldName, newName, changed)
-		enforcer.Adapter, changed = replaceIdOwnerInId(enforcer.Adapter, oldName, newName, changed)
-		if !changed {
-			continue
-		}
-		_, err = session.Where("owner=?", enforcer.Owner).And("name=?", enforcer.Name).Cols("model", "adapter").Update(enforcer)
-		if err != nil {
-			return err
-		}
-	}
-	_, err = session.Where("owner=?", oldName).Cols("owner").Update(&Enforcer{Owner: newName})
-	if err != nil {
-		return err
-	}
-
-	adapter := new(Adapter)
-	adapter.Owner = newName
-	_, err = session.Where("owner=?", oldName).Update(adapter)
-	if err != nil {
-		return err
-	}
-
-	model := new(Model)
-	model.Owner = newName
-	_, err = session.Where("owner=?", oldName).Update(model)
 	if err != nil {
 		return err
 	}
@@ -757,9 +689,6 @@ func IsNeedPromptMfa(org *Organization, user *User) bool {
 			if item.Name == EmailType && !user.MfaEmailEnabled {
 				return true
 			}
-			if item.Name == SmsType && !user.MfaPhoneEnabled {
-				return true
-			}
 			if item.Name == TotpType && user.TotpSecret == "" {
 				return true
 			}
@@ -767,4 +696,3 @@ func IsNeedPromptMfa(org *Organization, user *User) bool {
 	}
 	return false
 }
-

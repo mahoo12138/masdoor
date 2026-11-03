@@ -17,7 +17,6 @@ package controllers
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -28,7 +27,6 @@ import (
 
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/form"
-	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/idp"
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/proxy"
@@ -154,7 +152,6 @@ func (c *ApiController) HandleLoggedIn(application *object.Application, user *ob
 	authTime := c.getAuthTime()
 	responseType, isResponseType := object.ParseResponseType(form.Type)
 	var err error
-
 
 	// Revoke the tokens of the displaced login before the response is built, otherwise the
 	// token that this login creates below would be revoked too
@@ -625,25 +622,6 @@ func getUserByProvider(organization string, provider *object.Provider, providerI
 	return nil, nil
 }
 
-func checkUserFace(user *object.User, authForm *form.AuthForm, faceIdProvider *object.Provider, lang string) error {
-	if faceIdProvider == nil {
-		return object.CheckFaceId(user, authForm.FaceId, lang)
-	}
-
-	if !user.HasFaceIdImage() {
-		return errors.New(i18n.Translate(lang, "check:Face data does not exist, cannot log in"))
-	}
-
-	ok, err := user.CheckUserFace(authForm.FaceIdImage, faceIdProvider)
-	if err != nil {
-		return err
-	}
-	if !ok {
-		return errors.New(i18n.Translate(lang, "check:Face data mismatch"))
-	}
-	return nil
-}
-
 func linkUserByProvider(user *object.User, provider *object.Provider, providerId string) (bool, error) {
 	if object.IsFlexibleCustomProvider(provider.Type) {
 		return object.LinkFlexibleCustomAccount(user, provider.Name, providerId)
@@ -691,43 +669,6 @@ func (c *ApiController) Login() {
 			if err == nil {
 				verificationType = "email"
 			}
-		} else if authForm.SigninMethod == "Face ID" {
-			var application *object.Application
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
-			if err != nil {
-				c.ResponseError(err.Error(), nil)
-				return
-			}
-
-			if application == nil {
-				c.ResponseError(fmt.Sprintf(c.T("auth:The application: %s does not exist"), authForm.Application))
-				return
-			}
-
-			if user, err = object.GetUserByFieldsForSharedApp(application, authForm.Organization, authForm.Username); err != nil {
-				c.ResponseError(err.Error(), nil)
-				return
-			} else if user == nil {
-				c.ResponseError(fmt.Sprintf(c.T("general:The user: %s doesn't exist"), util.GetId(authForm.Organization, authForm.Username)))
-				return
-			}
-
-			if !application.IsFaceIdEnabled() {
-				c.ResponseError(c.T("auth:The login method: login with face is not enabled for the application"))
-				return
-			}
-
-			faceIdProvider, err := object.GetFaceIdProviderByApplication(util.GetId(application.Owner, application.Name), "false", c.GetAcceptLanguage())
-			if err != nil {
-				c.ResponseError(err.Error())
-				return
-			}
-
-			err = object.CheckFaceIdWithLimit(user, func() error { return checkUserFace(user, &authForm, faceIdProvider, c.GetAcceptLanguage()) }, c.GetAcceptLanguage())
-			if err != nil {
-				c.ResponseError(err.Error(), nil)
-				return
-			}
 		} else if authForm.Password == "" {
 			var application *object.Application
 			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
@@ -751,26 +692,16 @@ func (c *ApiController) Login() {
 			}
 
 			verificationCodeType := object.GetVerifyType(authForm.Username)
-			if verificationCodeType == object.VerifyTypeEmail && !application.IsCodeSigninViaEmailEnabled() {
+			if verificationCodeType != object.VerifyTypeEmail {
+				c.ResponseError("signing in with a verification code is only supported by email")
+				return
+			}
+			if !application.IsCodeSigninViaEmailEnabled() {
 				c.ResponseError(c.T("auth:The login method: login with email is not enabled for the application"))
 				return
 			}
-			if verificationCodeType == object.VerifyTypePhone && !application.IsCodeSigninViaSmsEnabled() {
-				c.ResponseError(c.T("auth:The login method: login with SMS is not enabled for the application"))
-				return
-			}
 
-			var checkDest string
-			if verificationCodeType == object.VerifyTypePhone {
-				authForm.CountryCode = user.GetCountryCode(authForm.CountryCode)
-				var ok bool
-				if checkDest, ok = util.GetE164Number(authForm.Username, authForm.CountryCode); !ok {
-					c.ResponseError(fmt.Sprintf(c.T("verification:Phone number is invalid in your region %s"), authForm.CountryCode))
-					return
-				}
-			} else if verificationCodeType == object.VerifyTypeEmail {
-				checkDest = authForm.Username
-			}
+			checkDest := authForm.Username
 
 			if !object.IsUserVerifyDest(user, checkDest, authForm.CountryCode) {
 				c.ResponseError(fmt.Sprintf(c.T("general:The user: %s doesn't exist"), util.GetId(authForm.Organization, authForm.Username)))
@@ -791,17 +722,13 @@ func (c *ApiController) Login() {
 				return
 			}
 
-			if verificationCodeType == object.VerifyTypePhone {
-				verificationType = "sms"
-			} else {
-				verificationType = "email"
-				if !user.EmailVerified {
-					user.EmailVerified = true
-					_, err = object.UpdateUser(user.GetId(), user, []string{"email_verified"}, false)
-					if err != nil {
-						c.ResponseError(err.Error(), nil)
-						return
-					}
+			verificationType = "email"
+			if !user.EmailVerified {
+				user.EmailVerified = true
+				_, err = object.UpdateUser(user.GetId(), user, []string{"email_verified"}, false)
+				if err != nil {
+					c.ResponseError(err.Error(), nil)
+					return
 				}
 			}
 		} else {
@@ -1488,12 +1415,6 @@ func (c *ApiController) recordLoginMetric(authForm *form.AuthForm) {
 
 	object.LoginCounter.WithLabelValues(organizationName, applicationName, result).Inc()
 }
-
-
-
-
-
-
 
 // GetCaptchaStatus
 // @Title GetCaptchaStatus

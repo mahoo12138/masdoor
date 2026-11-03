@@ -498,7 +498,6 @@ func (c *ApiController) Logout() {
 		// replaces CruSession's id, so reading it afterwards would miss the id stored in the DB.
 		beegoSessionId := c.Ctx.Input.CruSession.SessionID(context.Background())
 
-
 		c.ClearUserSession()
 		c.ClearTokenSession()
 
@@ -690,14 +689,13 @@ func (c *ApiController) GetAccount() {
 		}
 	}
 
-	err = object.ExtendUserWithRolesAndPermissions(user)
+	err = object.ExtendUserWithRoles(user)
 	if err != nil {
 		c.ResponseError(err.Error())
 		return
 	}
 
 	if user != nil {
-		user.Permissions = object.GetMaskedPermissions(user.Permissions)
 		user.Roles = object.GetMaskedRoles(user.Roles)
 		user.MultiFactorAuths = object.GetAllMfaProps(user, true)
 	}

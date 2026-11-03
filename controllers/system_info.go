@@ -17,8 +17,8 @@ package controllers
 import (
 	"errors"
 
-	"github.com/mahoo12138/masdoor/util"
 	"github.com/go-git/go-git/v5"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // GetSystemInfo
@@ -61,8 +61,6 @@ func (c *ApiController) GetVersionInfo() {
 
 	c.ResponseOk(util.GetBuiltInVersionInfo())
 }
-
-
 
 // Health
 // @Title Health

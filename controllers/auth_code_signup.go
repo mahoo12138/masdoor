@@ -37,26 +37,9 @@ func (c *ApiController) answerCodeSigninSignup(application *object.Application, 
 	dest := strings.TrimSpace(authForm.Username)
 	checkDest := dest
 	countryCode := authForm.CountryCode
-	if verifyType == object.VerifyTypePhone {
-		// a national number is the one of the organization's first region, as
-		// /api/send-verification-code resolves it for an address with no account
-		if countryCode == "" && !strings.HasPrefix(dest, "+") {
-			organization, err := object.GetOrganization(util.GetId("admin", application.Organization))
-			if err != nil {
-				c.ResponseError(err.Error())
-				return
-			}
-			if organization != nil && len(organization.CountryCodes) > 0 {
-				countryCode = organization.CountryCodes[0]
-			}
-		}
-
-		var ok bool
-		if checkDest, ok = util.GetE164Number(dest, countryCode); !ok {
-			c.ResponseError(fmt.Sprintf(c.T("verification:Phone number is invalid in your region %s"), countryCode))
-			return
-		}
-		dest, countryCode = util.ParseE164Phone(checkDest)
+	if verifyType != object.VerifyTypeEmail {
+		c.ResponseError("signing in with a verification code is only supported by email")
+		return
 	}
 
 	clientIp := util.GetClientIpFromRequest(c.Ctx.Request)

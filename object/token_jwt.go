@@ -24,8 +24,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mahoo12138/masdoor/util"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // OidcIdTokenClaims are the ID token claims that depend on how the user signed in and on the
@@ -141,16 +141,14 @@ type UserWithoutThirdIdp struct {
 	PreferredMfaType string   `xorm:"varchar(100)" json:"preferredMfaType"`
 	RecoveryCodes    []string `xorm:"varchar(1000)" json:"recoveryCodes"`
 	TotpSecret       string   `xorm:"varchar(100)" json:"totpSecret"`
-	MfaPhoneEnabled  bool     `json:"mfaPhoneEnabled"`
 	MfaEmailEnabled  bool     `json:"mfaEmailEnabled"`
 	// MultiFactorAuths    []*MfaProps           `xorm:"-" json:"multiFactorAuths,omitempty"`
 
 	Ldap       string            `xorm:"ldap varchar(100)" json:"ldap"`
 	Properties map[string]string `json:"properties"`
 
-	Roles       []*Role       `json:"roles"`
-	Permissions []*Permission `json:"permissions"`
-	Groups      []string      `xorm:"groups varchar(1000)" json:"groups"`
+	Roles  []*Role  `json:"roles"`
+	Groups []string `xorm:"groups varchar(1000)" json:"groups"`
 
 	LastSigninWrongTime string `xorm:"varchar(100)" json:"lastSigninWrongTime"`
 	SigninWrongTimes    int    `json:"signinWrongTimes"`
@@ -299,14 +297,12 @@ func getUserWithoutThirdIdp(user *User) *UserWithoutThirdIdp {
 		PreferredMfaType: user.PreferredMfaType,
 		RecoveryCodes:    user.RecoveryCodes,
 		TotpSecret:       user.TotpSecret,
-		MfaPhoneEnabled:  user.MfaPhoneEnabled,
 		MfaEmailEnabled:  user.MfaEmailEnabled,
 
 		Properties: user.Properties,
 
-		Roles:       user.Roles,
-		Permissions: user.Permissions,
-		Groups:      user.Groups,
+		Roles:  user.Roles,
+		Groups: user.Groups,
 
 		LastSigninWrongTime: user.LastSigninWrongTime,
 		SigninWrongTimes:    user.SigninWrongTimes,
@@ -358,14 +354,6 @@ func getUserFieldValue(user *User, fieldName string) (interface{}, bool) {
 	switch fieldName {
 	case "Roles":
 		return getUserRoleNames(user), true
-	case "Permissions":
-		return getUserPermissionNames(user), true
-	case "permissionNames":
-		permissionNames := []string{}
-		for _, val := range user.Permissions {
-			permissionNames = append(permissionNames, val.Name)
-		}
-		return permissionNames, true
 	}
 
 	// Handle Properties fields (e.g., Properties.my_field)
@@ -471,12 +459,6 @@ func getClaimsCustom(claims Claims, tokenField []string, tokenAttributes []*JwtI
 				res[fieldName] = finalField.Interface()
 			}
 
-		} else if field == "permissionNames" {
-			permissionNames := []string{}
-			for _, val := range claims.User.Permissions {
-				permissionNames = append(permissionNames, val.Name)
-			}
-			res[util.SnakeToCamel(util.CamelToSnakeCase(field))] = permissionNames
 		} else { // Use selected user field as claims.
 			userField := userValue.FieldByName(field)
 			if userField.IsValid() {
@@ -530,7 +512,6 @@ func clearUserSecrets(user *User) {
 	user.PasswordSalt = ""
 	user.TotpSecret = ""
 	user.RecoveryCodes = nil
-	user.FaceIds = nil
 
 	if user.ManagedAccounts != nil {
 		managedAccounts := make([]ManagedAccount, len(user.ManagedAccounts))
@@ -562,9 +543,6 @@ func refineUser(user *User) *User {
 	}
 	if user.Roles == nil {
 		user.Roles = []*Role{}
-	}
-	if user.Permissions == nil {
-		user.Permissions = []*Permission{}
 	}
 	if user.Groups == nil {
 		user.Groups = []string{}

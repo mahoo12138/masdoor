@@ -15,25 +15,20 @@
 package object
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/url"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
-	"time"
 
-	"github.com/casbin/casbin/v2"
+	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/mahoo12138/masdoor/conf"
-	"github.com/mahoo12138/masdoor/faceId"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/xorm-io/builder"
 	"github.com/xorm-io/core"
 )
@@ -43,20 +38,7 @@ const (
 	UserPropertiesWechatOpenId  = "wechatOpenId"
 )
 
-const UserEnforcerId = "built-in/user-enforcer-built-in"
-
 const RequiredUpdatePassword = "RequiredUpdatePassword"
-
-var userEnforcer *UserGroupEnforcer
-
-func InitUserManager() {
-	enforcer, err := GetInitializedEnforcer(UserEnforcerId)
-	if err != nil {
-		panic(err)
-	}
-
-	userEnforcer = NewUserGroupEnforcer(&casbin.SyncedEnforcer{Enforcer: enforcer.Enforcer})
-}
 
 type User struct {
 	Owner       string `xorm:"varchar(100) notnull pk" json:"owner"`
@@ -206,7 +188,6 @@ type User struct {
 	PreferredMfaType    string                `xorm:"varchar(100)" json:"preferredMfaType"`
 	RecoveryCodes       []string              `xorm:"mediumtext" json:"recoveryCodes"`
 	TotpSecret          string                `xorm:"varchar(100)" json:"totpSecret"`
-	MfaPhoneEnabled     bool                  `json:"mfaPhoneEnabled"`
 	MfaEmailEnabled     bool                  `json:"mfaEmailEnabled"`
 	MfaPushEnabled      bool                  `json:"mfaPushEnabled"`
 	MfaPushReceiver     string                `xorm:"varchar(100)" json:"mfaPushReceiver"`
@@ -214,7 +195,6 @@ type User struct {
 	MultiFactorAuths    []*MfaProps           `xorm:"-" json:"multiFactorAuths,omitempty"`
 	Invitation          string                `xorm:"varchar(100) index" json:"invitation"`
 	InvitationCode      string                `xorm:"varchar(100) index" json:"invitationCode"`
-	FaceIds             []*FaceId             `json:"faceIds"`
 
 	// UidNumber is the POSIX uid published by the built-in LDAP server, 0 when unassigned.
 	UidNumber  int               `xorm:"index" json:"uidNumber"`
@@ -222,9 +202,8 @@ type User struct {
 
 	ThirdPartyLinks []*ThirdPartyLink `xorm:"-" json:"thirdPartyLinks,omitempty"`
 
-	Roles       []*Role       `json:"roles"`
-	Permissions []*Permission `json:"permissions"`
-	Groups      []string      `xorm:"mediumtext" json:"groups"`
+	Roles  []*Role  `json:"roles"`
+	Groups []string `xorm:"mediumtext" json:"groups"`
 
 	LastChangePasswordTime string `xorm:"varchar(100)" json:"lastChangePasswordTime"`
 	LastSigninWrongTime    string `xorm:"varchar(100)" json:"lastSigninWrongTime"`
@@ -255,7 +234,6 @@ type Userinfo struct {
 	IsVerified    bool         `json:"is_verified,omitempty"`
 	Groups        []string     `json:"groups,omitempty"`
 	Roles         []string     `json:"roles,omitempty"`
-	Permissions   []string     `json:"permissions,omitempty"`
 
 	CustomClaims map[string]interface{} `json:"-"`
 }
@@ -302,12 +280,6 @@ type Address struct {
 	State   string `xorm:"varchar(100)" json:"state"`
 	ZipCode string `xorm:"varchar(100)" json:"zipCode"`
 	Region  string `xorm:"varchar(100)" json:"region"`
-}
-
-type FaceId struct {
-	Name       string    `xorm:"varchar(100) notnull pk" json:"name"`
-	FaceIdData []float64 `json:"faceIdData"`
-	ImageUrl   string    `json:"imageUrl"`
 }
 
 func GetUserFieldStringValue(user *User, fieldName string) (bool, string, error) {
@@ -734,7 +706,6 @@ func GetMaskedUser(user *User, isAdminOrSelf bool, errs ...error) (*User, error)
 		if user.OriginalRefreshToken != "" {
 			user.OriginalRefreshToken = "***"
 		}
-		user.FaceIds = nil
 		// Mask per-provider OAuth tokens in Properties
 		if user.Properties != nil {
 			for key := range user.Properties {
@@ -957,10 +928,6 @@ func UpdateUser(id string, user *User, columns []string, isAdmin bool) (bool, er
 		user.Password = oldUser.Password
 	}
 
-	if user.FaceIds == nil {
-		user.FaceIds = oldUser.FaceIds
-	}
-
 	if user.Id != oldUser.Id && user.Id == "" {
 		user.Id = oldUser.Id
 	}
@@ -981,13 +948,6 @@ func UpdateUser(id string, user *User, columns []string, isAdmin bool) (bool, er
 
 	if len(user.DeletedTime) > 0 {
 		columns = append(columns, "deleted_time")
-	}
-
-	if util.InSlice(columns, "groups") {
-		_, err := userEnforcer.UpdateGroupsForUser(user.GetId(), user.Groups)
-		if err != nil {
-			return false, err
-		}
 	}
 
 	affected, err := updateUser(id, user, columns)
@@ -1046,13 +1006,6 @@ func UpdateUserForAllFields(id string, user *User) (bool, error) {
 	}
 
 	user.UpdatedTime = util.GetCurrentTime()
-
-	if len(user.Groups) > 0 {
-		_, err = userEnforcer.UpdateGroupsForUser(user.GetId(), user.Groups)
-		if err != nil {
-			return false, err
-		}
-	}
 
 	affected, err := ormer.Engine.ID(core.PK{owner, name}).AllCols().Update(user)
 	if err != nil {
@@ -1113,7 +1066,7 @@ func AddUser(user *User, lang string) (bool, error) {
 	}
 
 	if organization.Name == "built-in" && !organization.HasPrivilegeConsent && user.Name != "admin" {
-		return false, errors.New(i18n.Translate(lang, "organization:adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Masdoor. Refer to the docs: https://casdoor.org/docs/basic/core-concepts#how-does-casdoor-manage-itself. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option."))
+		return false, errors.New(i18n.Translate(lang, "organization:adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Masdoor. Refer to the docs: https://github.com/mahoo12138/masdoor. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option."))
 	}
 
 	if user.Avatar == "" {
@@ -1143,13 +1096,6 @@ func AddUser(user *User, lang string) (bool, error) {
 
 	if updated && user.PermanentAvatar != "*" {
 		user.PermanentAvatar, err = getPermanentAvatarUrl(user.Owner, user.Name, user.Avatar, false)
-		if err != nil {
-			return false, err
-		}
-	}
-
-	if user.Groups != nil && len(user.Groups) > 0 {
-		_, err = userEnforcer.UpdateGroupsForUser(user.GetId(), user.Groups)
 		if err != nil {
 			return false, err
 		}
@@ -1193,13 +1139,6 @@ func AddUsers(users []*User) (bool, error) {
 			return false, err
 		}
 		user.PermanentAvatar = permanentAvatar
-
-		if user.Groups != nil && len(user.Groups) > 0 {
-			_, err = userEnforcer.UpdateGroupsForUser(user.GetId(), user.Groups)
-			if err != nil {
-				return false, err
-			}
-		}
 
 		user.Name = strings.TrimSpace(user.Name)
 		if isUsernameLowered {
@@ -1326,11 +1265,6 @@ func DeleteUser(user *User) (bool, error) {
 		return false, err
 	}
 
-	_, err = userEnforcer.DeleteGroupsForUser(user.GetId())
-	if err != nil {
-		return false, err
-	}
-
 	_, err = DeleteThirdPartyLinksByUser(user.Owner, user.Name)
 	if err != nil {
 		return false, err
@@ -1409,24 +1343,15 @@ func GetUserInfo(user *User, scope string, aud string, host string) (*Userinfo, 
 			resp.Groups = groups
 		}
 
-		if allowed("Roles") || allowed("Permissions") {
-			err := ExtendUserWithRolesAndPermissions(user)
+		if allowed("Roles") {
+			err := ExtendUserWithRoles(user)
 			if err != nil {
 				return nil, err
 			}
 
-			if allowed("Roles") {
-				resp.Roles = []string{}
-				for _, role := range user.Roles {
-					resp.Roles = append(resp.Roles, role.Name)
-				}
-			}
-
-			if allowed("Permissions") {
-				resp.Permissions = []string{}
-				for _, permission := range user.Permissions {
-					resp.Permissions = append(resp.Permissions, permission.Name)
-				}
+			resp.Roles = []string{}
+			for _, role := range user.Roles {
+				resp.Roles = append(resp.Roles, role.Name)
 			}
 		}
 	}
@@ -1458,7 +1383,7 @@ func GetUserInfo(user *User, scope string, aud string, host string) (*Userinfo, 
 
 	if application != nil && application.TokenFormat == "JWT-Custom" && len(application.TokenAttributes) > 0 {
 		tokenUser := *user
-		err = ExtendUserWithRolesAndPermissions(&tokenUser)
+		err = ExtendUserWithRoles(&tokenUser)
 		if err != nil {
 			return nil, err
 		}
@@ -1527,12 +1452,12 @@ func isUserIdGlobalAdmin(userId string) (bool, error) {
 	return appUser.IsGlobalAdmin(), nil
 }
 
-func ExtendUserWithRolesAndPermissions(user *User) (err error) {
+func ExtendUserWithRoles(user *User) (err error) {
 	if user == nil {
 		return
 	}
 
-	user.Permissions, user.Roles, err = getPermissionsAndRolesByUser(user.GetId())
+	user.Roles, err = getRolesByUser(user.GetId())
 	if err != nil {
 		return err
 	}
@@ -1559,7 +1484,7 @@ func DeleteGroupForUser(user string, group string) (bool, error) {
 		return false, err
 	}
 
-	return userEnforcer.DeleteGroupForUser(user, group)
+	return true, nil
 }
 
 func userChangeTrigger(owner string, oldName string, newName string) error {
@@ -1599,37 +1524,6 @@ func userChangeTrigger(owner string, oldName string, newName string) error {
 		}
 	}
 
-	var permissions []*Permission
-	err = ormer.Engine.Find(&permissions)
-	if err != nil {
-		return err
-	}
-	for _, permission := range permissions {
-		changed := false
-		for j, u := range permission.Users {
-			if u == "*" {
-				continue
-			}
-
-			// u = organization/username
-			permOwner, permName, err := util.GetOwnerAndNameFromIdWithError(u)
-			if err != nil {
-				return err
-			}
-			if permOwner == owner && permName == oldName {
-				permission.Users[j] = util.GetId(permOwner, newName)
-				changed = true
-			}
-		}
-		if !changed {
-			continue
-		}
-		_, err = session.Where("name=?", permission.Name).And("owner=?", permission.Owner).Update(permission)
-		if err != nil {
-			return err
-		}
-	}
-
 	_, err = session.Where(fmt.Sprintf("owner = ? AND %s = ?", quoteColumn("user")), owner, oldName).Cols("user").Update(&Resource{User: newName})
 	if err != nil {
 		return err
@@ -1650,23 +1544,29 @@ func userChangeTrigger(owner string, oldName string, newName string) error {
 		return err
 	}
 
-	err = userEnforcer.RenameUser(util.GetId(owner, oldName), util.GetId(owner, newName))
-	if err != nil {
-		return err
-	}
-
 	return session.Commit()
+}
+
+// isSupportedMfaType reports whether this build can still verify the factor: the
+// SMS factor was removed, so a user who had it preferred must not be asked for a
+// code that can no longer be sent
+func isSupportedMfaType(mfaType string) bool {
+	switch mfaType {
+	case EmailType, TotpType, PushType:
+		return true
+	}
+	return false
 }
 
 func (user *User) IsMfaEnabled() bool {
 	if user == nil {
 		return false
 	}
-	return user.PreferredMfaType != ""
+	return isSupportedMfaType(user.PreferredMfaType)
 }
 
 func (user *User) GetPreferredMfaProps(masked bool) *MfaProps {
-	if user == nil || user.PreferredMfaType == "" {
+	if user == nil || !isSupportedMfaType(user.PreferredMfaType) {
 		return nil
 	}
 	return user.GetMfaProps(user.PreferredMfaType, masked)
@@ -1678,33 +1578,6 @@ func (user *User) IsGlobalAdmin() bool {
 	}
 
 	return user.Owner == "built-in"
-}
-
-func (user *User) HasFaceIdImage() bool {
-	for _, userFaceId := range user.FaceIds {
-		if userFaceId.ImageUrl != "" {
-			return true
-		}
-	}
-	return false
-}
-
-const maxFaceIdImageSize = 10 << 20
-
-// getFaceIdImage fetches a face image the user set the URL of, so it must not reach the intranet,
-// except for the files uploaded to the "Local File System" storage, which are read from disk
-func getFaceIdImage(imageUrl string) ([]byte, error) {
-	if data, ok := readLocalUploadedFile(imageUrl); ok {
-		return data, nil
-	}
-
-	resp, err := util.NewInternetOnlyHttpClient(30 * time.Second).Get(imageUrl)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	return io.ReadAll(io.LimitReader(resp.Body, maxFaceIdImageSize))
 }
 
 func readLocalUploadedFile(fileUrl string) ([]byte, bool) {
@@ -1720,35 +1593,6 @@ func readLocalUploadedFile(fileUrl string) ([]byte, bool) {
 
 	data, err := os.ReadFile(filepath.Join("files", filePath))
 	return data, err == nil
-}
-
-func (user *User) CheckUserFace(faceIdImage []string, provider *Provider) (bool, error) {
-	faceIdChecker := faceId.GetFaceIdProvider(provider.Type, provider.ClientId, provider.ClientSecret, provider.Endpoint)
-	errList := []error{}
-	for _, userFaceId := range user.FaceIds {
-		if userFaceId.ImageUrl != "" {
-			imgByte, err := getFaceIdImage(userFaceId.ImageUrl)
-			if err != nil {
-				continue
-			}
-
-			base64Img := base64.StdEncoding.EncodeToString(imgByte)
-			for _, imgBase64 := range faceIdImage {
-				isSuccess, err := faceIdChecker.Check(imgBase64, base64Img)
-				if err != nil {
-					errList = append(errList, err)
-					continue
-				}
-				if isSuccess {
-					return true, nil
-				}
-			}
-		}
-	}
-	if len(errList) > 0 {
-		return false, errList[0]
-	}
-	return false, nil
 }
 
 func (user *User) GetUserFullGroupPath() ([]string, error) {

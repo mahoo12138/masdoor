@@ -23,12 +23,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/go-webauthn/webauthn/webauthn"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/idp"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/go-webauthn/webauthn/webauthn"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/xorm-io/core"
 	"golang.org/x/oauth2"
 )
@@ -566,13 +566,6 @@ func getUserRoleNames(user *User) (res []string) {
 	return res
 }
 
-func getUserPermissionNames(user *User) (res []string) {
-	for _, permission := range user.Permissions {
-		res = append(res, permission.Name)
-	}
-	return res
-}
-
 func ClearUserOAuthProperties(user *User, providerType string) (bool, error) {
 	for k := range user.Properties {
 		prefix := fmt.Sprintf("oauth_%s_", providerType)
@@ -614,7 +607,6 @@ func GetAccountItemForUpdate(name string, organization *Organization) *AccountIt
 }
 
 func restoreAdminOnlyUserFields(oldUser, newUser *User) {
-	newUser.MfaPhoneEnabled = oldUser.MfaPhoneEnabled
 	newUser.MfaEmailEnabled = oldUser.MfaEmailEnabled
 	newUser.MfaItems = oldUser.MfaItems
 	newUser.MfaRememberDeadline = oldUser.MfaRememberDeadline
@@ -928,15 +920,6 @@ func CheckPermissionForUpdateUser(oldUser, newUser *User, isAdmin bool, allowDis
 		}
 	}
 
-	if newUser.FaceIds != nil {
-		item := GetAccountItemByName("Face ID", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.FaceIds = oldUser.FaceIds
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
 	if oldUser.IsAdmin != newUser.IsAdmin {
 		item := GetAccountItemByName("Is admin", organization)
 		if !userVisible(isAdmin, item) {
@@ -1180,14 +1163,10 @@ func StringArrayToStruct[T any](stringArray [][]string) ([]*T, error) {
 				err = setReflectAttr[[]string](&fv, v)
 			case reflect.TypeOf([]*string{}):
 				err = setReflectAttr[[]*string](&fv, v)
-			case reflect.TypeOf([]*FaceId{}):
-				err = setReflectAttr[[]*FaceId](&fv, v)
 			case reflect.TypeOf([]*MfaProps{}):
 				err = setReflectAttr[[]*MfaProps](&fv, v)
 			case reflect.TypeOf([]*Role{}):
 				err = setReflectAttr[[]*Role](&fv, v)
-			case reflect.TypeOf([]*Permission{}):
-				err = setReflectAttr[[]*Permission](&fv, v)
 			case reflect.TypeOf([]ManagedAccount{}):
 				err = setReflectAttr[[]ManagedAccount](&fv, v)
 			case reflect.TypeOf([]MfaAccount{}):
@@ -1218,7 +1197,7 @@ func replaceAttributeValue(user *User, value string) []string {
 	}
 
 	if strings.Contains(value, "$user.permissions") {
-		valueList = replaceAttributeValuesWithList("$user.permissions", getUserPermissionNames(user), valueList)
+		valueList = replaceAttributeValues("$user.permissions", "", valueList)
 	}
 
 	if strings.Contains(value, "$user.groups") {

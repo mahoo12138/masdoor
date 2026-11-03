@@ -359,7 +359,7 @@ func GetGroupUserCount(groupId string, field, value string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	names, err := userEnforcer.GetUserNamesByGroupName(groupId)
+	names, err := getGroupMemberNames(groupId)
 	if err != nil {
 		return 0, err
 	}
@@ -383,7 +383,7 @@ func GetPaginationGroupUsers(groupId string, offset, limit int, field, value, so
 	if err != nil {
 		return nil, err
 	}
-	names, err := userEnforcer.GetUserNamesByGroupName(groupId)
+	names, err := getGroupMemberNames(groupId)
 	if err != nil {
 		return nil, err
 	}
@@ -421,21 +421,59 @@ func GetPaginationGroupUsers(groupId string, offset, limit int, field, value, so
 	return users, nil
 }
 
-func GetGroupUsers(groupId string) ([]*User, error) {
-	users := []*User{}
+// getGroupMembers returns the users whose Groups field lists the group. The
+// membership only exists on the user row, so the reverse lookup reads the users
+// table: the LIKE clause is a coarse pre-filter ("built-in/a" would also match
+// "built-in/ab"), the exact check happens on the decoded list.
+func getGroupMembers(groupId string) ([]*User, error) {
 	owner, _, err := util.GetOwnerAndNameFromIdWithError(groupId)
 	if err != nil {
 		return nil, err
 	}
-	names, err := userEnforcer.GetUserNamesByGroupName(groupId)
+
+	candidates := []*User{}
+	err = ormer.Engine.Where("owner = ?", owner).And(builder.Like{"`groups`", groupId}).Find(&candidates)
 	if err != nil {
 		return nil, err
 	}
-	err = ormer.Engine.Where("owner = ?", owner).In("name", names).Find(&users)
+
+	members := make([]*User, 0, len(candidates))
+	for _, user := range candidates {
+		if util.InSlice(user.Groups, groupId) {
+			members = append(members, user)
+		}
+	}
+	return members, nil
+}
+
+func getGroupMemberNames(groupId string) ([]string, error) {
+	members, err := getGroupMembers(groupId)
 	if err != nil {
 		return nil, err
 	}
-	return users, nil
+
+	names := make([]string, 0, len(members))
+	for _, user := range members {
+		names = append(names, user.Name)
+	}
+	return names, nil
+}
+
+func getGroupMemberIds(groupId string) ([]string, error) {
+	members, err := getGroupMembers(groupId)
+	if err != nil {
+		return nil, err
+	}
+
+	userIds := make([]string, 0, len(members))
+	for _, user := range members {
+		userIds = append(userIds, user.GetId())
+	}
+	return userIds, nil
+}
+
+func GetGroupUsers(groupId string) ([]*User, error) {
+	return getGroupMembers(groupId)
 }
 
 func GetGroupUsersWithoutError(groupId string) []*User {
@@ -448,9 +486,7 @@ func ExtendGroupWithUsers(group *Group) error {
 		return nil
 	}
 
-	groupId := group.GetId()
-	userIds := []string{}
-	userIds, err := userEnforcer.GetAllUsersByGroup(groupId)
+	userIds, err := getGroupMemberIds(group.GetId())
 	if err != nil {
 		return err
 	}
@@ -464,20 +500,13 @@ func ExtendGroupsWithUsers(groups []*Group) error {
 		return nil
 	}
 
-	// Load the policy once for the whole page, GetAllUsersByGroup() would
-	// otherwise read the entire policy table again for every group.
-	err := userEnforcer.LoadPolicy()
-	if err != nil {
-		return err
-	}
-
 	for _, group := range groups {
-		users, err := userEnforcer.getAllUsersByGroup(group.GetId())
+		userIds, err := getGroupMemberIds(group.GetId())
 		if err != nil {
 			return err
 		}
 
-		group.Users = users
+		group.Users = userIds
 	}
 	return nil
 }
@@ -502,10 +531,6 @@ func GroupChangeTrigger(owner string, oldName string, newName string) error {
 	for _, user := range users {
 		user.Groups = util.ReplaceVal(user.Groups, oldGroupId, newGroupId)
 		_, err := updateUser(user.GetId(), user, []string{"groups"})
-		if err != nil {
-			return err
-		}
-		_, err = userEnforcer.UpdateGroupsForUser(user.GetId(), user.Groups)
 		if err != nil {
 			return err
 		}

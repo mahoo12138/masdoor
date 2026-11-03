@@ -24,7 +24,7 @@ import (
 	"time"
 )
 
-const MfaRememberCookieName = "casdoor_mfa_remember"
+const MfaRememberCookieName = "masdoor_mfa_remember"
 
 func getMfaRememberSignature(userId string, deadline string) (string, error) {
 	cert, err := getCert("admin", "cert-built-in")

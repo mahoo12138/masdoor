@@ -104,7 +104,6 @@ func (c *ApiController) MfaSetupVerify() {
 	passcode := c.Ctx.Request.Form.Get("passcode")
 	secret := c.Ctx.Request.Form.Get("secret")
 	dest := c.Ctx.Request.Form.Get("dest")
-	countryCode := c.Ctx.Request.Form.Get("countryCode")
 
 	if mfaType == "" || passcode == "" {
 		c.ResponseError("missing auth type or passcode")
@@ -120,17 +119,6 @@ func (c *ApiController) MfaSetupVerify() {
 			return
 		}
 		config.Secret = secret
-	} else if mfaType == object.SmsType {
-		if dest == "" {
-			c.ResponseError("destination is missing")
-			return
-		}
-		config.Secret = dest
-		if countryCode == "" {
-			c.ResponseError("country code is missing")
-			return
-		}
-		config.CountryCode = countryCode
 	} else if mfaType == object.EmailType {
 		if dest == "" {
 			c.ResponseError("destination is missing")
@@ -166,7 +154,7 @@ func (c *ApiController) MfaSetupVerify() {
 		return
 	}
 
-	verifiedDest := getMfaSetupDest(mfaType, dest, countryCode)
+	verifiedDest := getMfaSetupDest(mfaType, dest)
 	err = object.VerifyMfaWithLimit(user, func() error { return mfaUtil.SetupVerify(passcode, c.GetAcceptLanguage()) }, c.GetAcceptLanguage())
 	if err != nil {
 		c.ResponseError(err.Error())
@@ -178,23 +166,17 @@ func (c *ApiController) MfaSetupVerify() {
 
 const mfaSetupVerifiedDestSession = "mfaSetupVerifiedDest"
 
-func getMfaSetupDest(mfaType string, dest string, countryCode string) string {
-	if mfaType == object.SmsType {
-		dest, _ = util.GetE164Number(dest, countryCode)
-	}
+func getMfaSetupDest(mfaType string, dest string) string {
 	return mfaType + ":" + dest
 }
 
 func (c *ApiController) checkMfaSetupDest(user *object.User, mfaType string) bool {
-	if (mfaType != object.SmsType && mfaType != object.EmailType) || c.IsAdminOf(user) {
+	if mfaType != object.EmailType || c.IsAdminOf(user) {
 		return true
 	}
 
 	dest := user.Email
-	if mfaType == object.SmsType {
-		dest = user.Phone
-	}
-	if c.GetSession(mfaSetupVerifiedDestSession) != getMfaSetupDest(mfaType, dest, user.CountryCode) {
+	if c.GetSession(mfaSetupVerifiedDestSession) != getMfaSetupDest(mfaType, dest) {
 		c.ResponseError("the MFA destination has not been verified")
 		return false
 	}
@@ -216,7 +198,6 @@ func (c *ApiController) MfaSetupEnable() {
 	mfaType := c.Ctx.Request.Form.Get("mfaType")
 	secret := c.Ctx.Request.Form.Get("secret")
 	dest := c.Ctx.Request.Form.Get("dest")
-	countryCode := c.Ctx.Request.Form.Get("countryCode")
 	recoveryCodes := c.Ctx.Request.Form.Get("recoveryCodes")
 
 	user, err := object.GetUser(util.GetId(owner, name))
@@ -247,19 +228,6 @@ func (c *ApiController) MfaSetupEnable() {
 				return
 			}
 			user.Email = dest
-		}
-	} else if mfaType == object.SmsType {
-		if user.Phone == "" {
-			if dest == "" {
-				c.ResponseError("destination is missing")
-				return
-			}
-			user.Phone = dest
-			if countryCode == "" {
-				c.ResponseError("country code is missing")
-				return
-			}
-			user.CountryCode = countryCode
 		}
 	} else if mfaType == object.PushType {
 		if dest == "" {

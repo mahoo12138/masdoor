@@ -19,8 +19,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mahoo12138/masdoor/util"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 func GetOAuthToken(grantType string, clientId string, clientSecret string, code string, verifier string, scope string, nonce string, username string, password string, countryCode string, host string, refreshToken string, tag string, avatar string, lang string, subjectToken string, subjectTokenType string, assertion string, clientAssertion string, clientAssertionType string, audience string, resource string, dpopProof string, clientIp string) (interface{}, error) {
@@ -78,8 +78,6 @@ func GetOAuthToken(grantType string, clientId string, clientSecret string, code 
 		token, tokenError, err = GetClientCredentialsToken(application, clientSecret, scope, host)
 	case VerificationCodeGrantType:
 		token, tokenError, err = GetVerificationCodeToken(application, username, countryCode, code, scope, host, clientIp, lang)
-	case MobileOneClickGrantType:
-		token, tokenError, err = GetMobileOneClickToken(application, code, scope, host, clientIp, lang)
 	case "token", "id_token": // Implicit Grant
 		token, tokenError, err = GetImplicitToken(application, username, password, scope, nonce, host, clientIp, lang)
 	case "urn:ietf:params:oauth:grant-type:jwt-bearer":
@@ -317,7 +315,7 @@ func GetPasswordToken(application *Application, username string, password string
 
 // getUserGrantToken issues the token of a grant whose user has been authenticated by the grant itself
 func getUserGrantToken(application *Application, user *User, scope string, host string) (*Token, *TokenError, error) {
-	err := ExtendUserWithRolesAndPermissions(user)
+	err := ExtendUserWithRoles(user)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -558,7 +556,7 @@ func GetTokenByUser(application *Application, user *User, scope string, nonce st
 // authTime is when the user entered credentials, withAtHash is set when the access token is
 // returned together with the ID token
 func GetTokenByUserWithAuth(application *Application, user *User, scope string, nonce string, sessionId string, host string, authTime int64, withAtHash bool) (*Token, error) {
-	err := ExtendUserWithRolesAndPermissions(user)
+	err := ExtendUserWithRoles(user)
 	if err != nil {
 		return nil, err
 	}
@@ -593,7 +591,6 @@ func GetTokenByUserWithAuth(application *Application, user *User, scope string, 
 
 	return token, nil
 }
-
 
 // GetTokenExchangeToken handles the Token Exchange Grant flow (RFC 8693).
 // Exchanges a subject token for a new token with different audience or scope.
@@ -758,7 +755,7 @@ func GetTokenExchangeToken(application *Application, clientSecret string, subjec
 		}
 	}
 
-	err = ExtendUserWithRolesAndPermissions(user)
+	err = ExtendUserWithRoles(user)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -879,7 +876,7 @@ func getFederatedTokenExchangeToken(application *Application, credential *Federa
 	}
 
 	if !isApplication {
-		err = ExtendUserWithRolesAndPermissions(user)
+		err = ExtendUserWithRoles(user)
 		if err != nil {
 			return nil, nil, err
 		}

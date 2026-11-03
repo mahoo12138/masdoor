@@ -18,7 +18,6 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
-	"math"
 	"math/big"
 	"net/url"
 	"regexp"
@@ -151,30 +150,6 @@ func SendVerificationCodeToEmail(organization *Organization, user *User, provide
 	}
 
 	err = SendEmail(provider, title, content, []string{dest}, sender)
-	if err != nil {
-		return err
-	}
-
-	err = AddToVerificationRecord(user, provider, organization, remoteAddr, provider.Category, dest, code)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func SendVerificationCodeToPhone(organization *Organization, user *User, provider *Provider, remoteAddr string, dest string, application *Application, lang string) error {
-	err := IsAllowSend(user, remoteAddr, provider.Category, application, lang)
-	if err != nil {
-		return err
-	}
-
-	code := getRandomCode(6)
-	// if organization.MasterVerificationCode != "" {
-	//	code = organization.MasterVerificationCode
-	// }
-
-	err = SendSms(provider, code, dest)
 	if err != nil {
 		return err
 	}
@@ -452,45 +427,6 @@ func CheckVerifyCodeWithLimit(user *User, dest, code, lang string) error {
 	default:
 		return errors.New(result.Msg)
 	}
-}
-
-func CheckFaceIdWithLimit(user *User, check func() error, lang string) error {
-	err := checkSigninErrorTimes(user, lang)
-	if err != nil {
-		return err
-	}
-
-	err = check()
-	if err != nil {
-		if recordErr := recordSigninErrorInfo(user, lang); recordErr != nil {
-			return fmt.Errorf("%s, %s", err.Error(), recordErr.Error())
-		}
-		return err
-	}
-
-	return resetUserSigninErrorTimes(user)
-}
-
-func CheckFaceId(user *User, faceId []float64, lang string) error {
-	if len(user.FaceIds) == 0 {
-		return errors.New(i18n.Translate(lang, "check:Face data does not exist, cannot log in"))
-	}
-
-	for _, userFaceId := range user.FaceIds {
-		if len(faceId) == 0 || len(userFaceId.FaceIdData) != len(faceId) {
-			continue
-		}
-		var sumOfSquares float64
-		for i := 0; i < len(userFaceId.FaceIdData); i++ {
-			diff := userFaceId.FaceIdData[i] - faceId[i]
-			sumOfSquares += diff * diff
-		}
-		if math.Sqrt(sumOfSquares) < 0.25 {
-			return nil
-		}
-	}
-
-	return errors.New(i18n.Translate(lang, "check:Face data mismatch"))
 }
 
 // IsUserVerifyDest checks that dest, the email or E.164 phone a code is checked against, is the

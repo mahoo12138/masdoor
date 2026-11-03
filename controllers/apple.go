@@ -28,7 +28,7 @@ import (
 // authorization's form_post to /api/callback, so it waits in this cookie until
 // the separate /api/login request that consumes it.
 const (
-	appleUserNameCookie    = "casdoor_apple_user"
+	appleUserNameCookie    = "masdoor_apple_user"
 	appleUserNameCookieAge = 300
 )
 

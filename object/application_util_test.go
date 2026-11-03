@@ -82,7 +82,7 @@ func TestRedirectUriMatchesPattern(t *testing.T) {
 // corresponding IsXEnabled() check return true — that rule exists
 // specifically so an application can keep a method configured (e.g. to
 // remember its settings) while actually disabling it. Before this fix,
-// IsPasswordEnabled/IsLdapEnabled/IsFaceIdEnabled only checked whether an
+// IsPasswordEnabled/IsLdapEnabled only checked whether an
 // entry with the right Name existed, ignoring Rule entirely.
 func TestSigninMethodHiddenByRuleIsNotEnabled(t *testing.T) {
 	tests := []struct {
@@ -116,18 +116,6 @@ func TestSigninMethodHiddenByRuleIsNotEnabled(t *testing.T) {
 			wantEnabled:   true,
 		},
 		{
-			name:          "Face ID hidden via rule is not enabled",
-			signinMethods: []*SigninMethod{{Name: "Face ID", DisplayName: "Face ID", Rule: "Hide password"}},
-			enabledMethod: (*Application).IsFaceIdEnabled,
-			wantEnabled:   false,
-		},
-		{
-			name:          "Face ID without hide rule is enabled",
-			signinMethods: []*SigninMethod{{Name: "Face ID", DisplayName: "Face ID", Rule: "None"}},
-			enabledMethod: (*Application).IsFaceIdEnabled,
-			wantEnabled:   true,
-		},
-		{
 			name:          "Password hidden via the legacy rule value is not enabled",
 			signinMethods: []*SigninMethod{{Name: "Password", DisplayName: "Password", Rule: "Hide-Password"}},
 			enabledMethod: (*Application).IsPasswordEnabled,
@@ -137,12 +125,6 @@ func TestSigninMethodHiddenByRuleIsNotEnabled(t *testing.T) {
 			name:          "LDAP hidden via the legacy rule value is not enabled",
 			signinMethods: []*SigninMethod{{Name: "LDAP", DisplayName: "LDAP", Rule: "Hide-Password"}},
 			enabledMethod: (*Application).IsLdapEnabled,
-			wantEnabled:   false,
-		},
-		{
-			name:          "Face ID hidden via the legacy rule value is not enabled",
-			signinMethods: []*SigninMethod{{Name: "Face ID", DisplayName: "Face ID", Rule: "Hide-Password"}},
-			enabledMethod: (*Application).IsFaceIdEnabled,
 			wantEnabled:   false,
 		},
 	}

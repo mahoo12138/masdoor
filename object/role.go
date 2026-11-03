@@ -108,20 +108,6 @@ func UpdateRole(id string, role *Role, isGlobalAdmin bool, lang string) (bool, e
 	}
 
 	renameRole := name != role.Name
-	oldPermissions := []*Permission{}
-	if renameRole {
-		oldPermissions, err = GetPermissionsByRole(id)
-		if err != nil {
-			return false, err
-		}
-
-		for _, permission := range oldPermissions {
-			err = removePolicies(permission)
-			if err != nil {
-				return false, err
-			}
-		}
-	}
 
 	if renameRole {
 		err := roleChangeTrigger(owner, name, role.Name)
@@ -133,20 +119,6 @@ func UpdateRole(id string, role *Role, isGlobalAdmin bool, lang string) (bool, e
 	affected, err := ormer.Engine.ID(core.PK{owner, name}).AllCols().Update(role)
 	if err != nil {
 		return false, err
-	}
-
-	if renameRole && affected != 0 {
-		permissions, err := GetPermissionsByRole(role.GetId())
-		if err != nil {
-			return false, err
-		}
-
-		for _, permission := range permissions {
-			err = addPolicies(permission)
-			if err != nil {
-				return false, err
-			}
-		}
 	}
 
 	return affected != 0, nil
@@ -209,20 +181,6 @@ func deleteRole(role *Role) (bool, error) {
 }
 
 func DeleteRole(role *Role) (bool, error) {
-	roleId := role.GetId()
-	permissions, err := GetPermissionsByRole(roleId)
-	if err != nil {
-		return false, err
-	}
-
-	for _, permission := range permissions {
-		permission.Roles = util.DeleteVal(permission.Roles, roleId)
-		_, err := UpdatePermission(permission.GetId(), permission)
-		if err != nil {
-			return false, err
-		}
-	}
-
 	return deleteRole(role)
 }
 
@@ -373,38 +331,6 @@ func roleChangeTrigger(owner string, oldName string, newName string) error {
 			continue
 		}
 		_, err = session.Where("name=?", role.Name).And("owner=?", role.Owner).Update(role)
-		if err != nil {
-			return err
-		}
-	}
-
-	var permissions []*Permission
-	err = ormer.Engine.Find(&permissions)
-	if err != nil {
-		return err
-	}
-
-	for _, permission := range permissions {
-		changed := false
-		for j, u := range permission.Roles {
-			// u = organization/rolename
-			if u == "*" {
-				continue
-			}
-
-			roleOwner, roleName, err := util.GetOwnerAndNameFromIdWithError(u)
-			if err != nil {
-				return err
-			}
-			if roleOwner == owner && roleName == oldName {
-				permission.Roles[j] = util.GetId(roleOwner, newName)
-				changed = true
-			}
-		}
-		if !changed {
-			continue
-		}
-		_, err = session.Where("name=?", permission.Name).And("owner=?", permission.Owner).Update(permission)
 		if err != nil {
 			return err
 		}

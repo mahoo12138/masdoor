@@ -14,28 +14,20 @@
 
 package object
 
-import (
-	"errors"
+import "errors"
 
-	"github.com/mahoo12138/masdoor/util"
-)
-
-type SmsMfa struct {
+type CodeMfa struct {
 	*MfaProps
 }
 
-func (mfa *SmsMfa) Initiate(userId string, issuer string) (*MfaProps, error) {
+func (mfa *CodeMfa) Initiate(userId string, issuer string) (*MfaProps, error) {
 	mfaProps := MfaProps{
 		MfaType: mfa.MfaType,
 	}
 	return &mfaProps, nil
 }
 
-func (mfa *SmsMfa) SetupVerify(passCode string, lang string) error {
-	if !util.IsEmailValid(mfa.Secret) {
-		mfa.Secret, _ = util.GetE164Number(mfa.Secret, mfa.CountryCode)
-	}
-
+func (mfa *CodeMfa) SetupVerify(passCode string, lang string) error {
 	result, err := CheckVerificationCode(mfa.Secret, passCode, lang)
 	if err != nil {
 		return err
@@ -47,7 +39,7 @@ func (mfa *SmsMfa) SetupVerify(passCode string, lang string) error {
 	return nil
 }
 
-func (mfa *SmsMfa) Enable(user *User) error {
+func (mfa *CodeMfa) Enable(user *User) error {
 	columns := []string{"recovery_codes", "preferred_mfa_type"}
 
 	user.RecoveryCodes = append(user.RecoveryCodes, mfa.RecoveryCodes...)
@@ -55,10 +47,7 @@ func (mfa *SmsMfa) Enable(user *User) error {
 		user.PreferredMfaType = mfa.MfaType
 	}
 
-	if mfa.MfaType == SmsType {
-		user.MfaPhoneEnabled = true
-		columns = append(columns, "mfa_phone_enabled", "phone", "country_code")
-	} else if mfa.MfaType == EmailType {
+	if mfa.MfaType == EmailType {
 		user.MfaEmailEnabled = true
 		user.EmailVerified = true
 		columns = append(columns, "mfa_email_enabled", "email", "email_verified")
@@ -72,11 +61,7 @@ func (mfa *SmsMfa) Enable(user *User) error {
 	return nil
 }
 
-func (mfa *SmsMfa) Verify(passCode string, lang string) error {
-	if !util.IsEmailValid(mfa.Secret) {
-		mfa.Secret, _ = util.GetE164Number(mfa.Secret, mfa.CountryCode)
-	}
-
+func (mfa *CodeMfa) Verify(passCode string, lang string) error {
 	result, err := CheckVerificationCode(mfa.Secret, passCode, lang)
 	if err != nil {
 		return err
@@ -88,24 +73,13 @@ func (mfa *SmsMfa) Verify(passCode string, lang string) error {
 	return DisableVerificationCode(mfa.Secret)
 }
 
-func NewSmsMfaUtil(config *MfaProps) *SmsMfa {
-	if config == nil {
-		config = &MfaProps{
-			MfaType: SmsType,
-		}
-	}
-	return &SmsMfa{
-		config,
-	}
-}
-
-func NewEmailMfaUtil(config *MfaProps) *SmsMfa {
+func NewEmailMfaUtil(config *MfaProps) *CodeMfa {
 	if config == nil {
 		config = &MfaProps{
 			MfaType: EmailType,
 		}
 	}
-	return &SmsMfa{
+	return &CodeMfa{
 		config,
 	}
 }

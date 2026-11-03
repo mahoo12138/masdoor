@@ -36,12 +36,6 @@ type EmailForm struct {
 	ProviderObject object.Provider `json:"providerObject"`
 }
 
-type SmsForm struct {
-	Content   string   `json:"content"`
-	Receivers []string `json:"receivers"`
-	OrgId     string   `json:"organizationId"` // e.g. "admin/built-in"
-}
-
 type NotificationForm struct {
 	Content   string `json:"content"`
 	Recipient string `json:"recipient"`
@@ -206,49 +200,6 @@ func (c *ApiController) SendEmail() {
 			c.ResponseError(err.Error())
 			return
 		}
-	}
-
-	c.ResponseOk()
-}
-
-// SendSms
-// @Title SendSms
-// @Tag Service API
-// @Description This API is not for Masdoor frontend to call, it is for Masdoor SDKs.
-// @Param   clientId    query    string  true        "The clientId of the application"
-// @Param   clientSecret    query    string  true    "The clientSecret of the application"
-// @Param   from    body   controllers.SmsForm    true           "Details of the sms request"
-// @Success 200 {object} controllers.Response The Response object
-// @router /send-sms [post]
-func (c *ApiController) SendSms() {
-	provider, err := c.GetProviderFromContext("SMS")
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-	if !c.checkServiceProvider(provider, "SMS", false) {
-		return
-	}
-
-	var smsForm SmsForm
-	err = json.Unmarshal(c.Ctx.Input.RequestBody, &smsForm)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-
-	if provider.Type != "Custom HTTP SMS" {
-		invalidReceivers := getInvalidSmsReceivers(smsForm)
-		if len(invalidReceivers) != 0 {
-			c.ResponseError(fmt.Sprintf(c.T("service:Invalid phone receivers: %s"), strings.Join(invalidReceivers, ", ")))
-			return
-		}
-	}
-
-	err = object.SendSms(provider, smsForm.Content, smsForm.Receivers...)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
 	}
 
 	c.ResponseOk()

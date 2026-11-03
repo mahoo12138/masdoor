@@ -39,10 +39,9 @@ type MfaInterface interface {
 }
 
 const (
-	EmailType  = "email"
-	SmsType    = "sms"
-	TotpType   = "app"
-	PushType   = "push"
+	EmailType = "email"
+	TotpType  = "app"
+	PushType  = "push"
 )
 
 const (
@@ -53,8 +52,6 @@ const (
 
 func GetMfaUtil(mfaType string, config *MfaProps) MfaInterface {
 	switch mfaType {
-	case SmsType:
-		return NewSmsMfaUtil(config)
 	case EmailType:
 		return NewEmailMfaUtil(config)
 	case TotpType:
@@ -117,7 +114,7 @@ func MfaRecover(user *User, recoveryCode string) error {
 func GetAllMfaProps(user *User, masked bool) []*MfaProps {
 	mfaProps := []*MfaProps{}
 
-	for _, mfaType := range []string{SmsType, EmailType, TotpType, PushType} {
+	for _, mfaType := range []string{EmailType, TotpType, PushType} {
 		mfaProps = append(mfaProps, user.GetMfaProps(mfaType, masked))
 	}
 	return mfaProps
@@ -126,25 +123,7 @@ func GetAllMfaProps(user *User, masked bool) []*MfaProps {
 func (user *User) GetMfaProps(mfaType string, masked bool) *MfaProps {
 	mfaProps := &MfaProps{}
 
-	if mfaType == SmsType {
-		if !user.MfaPhoneEnabled {
-			return &MfaProps{
-				Enabled: false,
-				MfaType: mfaType,
-			}
-		}
-
-		mfaProps = &MfaProps{
-			Enabled:     user.MfaPhoneEnabled,
-			MfaType:     mfaType,
-			CountryCode: user.CountryCode,
-		}
-		if masked {
-			mfaProps.Secret = util.GetMaskedPhone(user.Phone)
-		} else {
-			mfaProps.Secret = user.Phone
-		}
-	} else if mfaType == EmailType {
+	if mfaType == EmailType {
 		if !user.MfaEmailEnabled {
 			return &MfaProps{
 				Enabled: false,
@@ -207,7 +186,6 @@ func (user *User) GetMfaProps(mfaType string, masked bool) *MfaProps {
 func DisabledMultiFactorAuth(user *User) error {
 	user.PreferredMfaType = ""
 	user.RecoveryCodes = []string{}
-	user.MfaPhoneEnabled = false
 	user.MfaEmailEnabled = false
 	user.TotpSecret = ""
 	user.MfaPushEnabled = false

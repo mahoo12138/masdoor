@@ -548,12 +548,8 @@ var unsafeCssTokens = []string{"\\", "<", "image(", "image-set(", "cross-fade(",
 var cssUrlPrefixes = []string{
 	"https://fonts.googleapis.com/",
 	"https://fonts.gstatic.com/",
-	"https://cdn.jsdelivr.net/gh/casdoor/",
 	"https://cdn.jsdelivr.net/npm/@fontsource/",
 	"https://cdn.jsdelivr.net/npm/@fontsource-variable/",
-	"https://cdn.casbin.org/",
-	"https://cdn.casdoor.com/",
-	"https://cdn.casvisor.com/",
 }
 
 // a stylesheet pulled in by @import is not checked itself, so it may only come from font services
@@ -786,19 +782,6 @@ func (application *Application) IsCodeSigninViaEmailEnabled() bool {
 	}
 }
 
-func (application *Application) IsCodeSigninViaSmsEnabled() bool {
-	if len(application.SigninMethods) == 0 {
-		return application.EnableCodeSignin
-	} else {
-		for _, signinMethod := range application.SigninMethods {
-			if signinMethod.Name == "Verification code" && signinMethod.Rule != "Email only" {
-				return true
-			}
-		}
-		return false
-	}
-}
-
 func (application *Application) IsMagicLinkEnabled() bool {
 	return application.HasSigninMethod("Magic link")
 }
@@ -830,10 +813,10 @@ func (application *Application) IsCodeSigninSignupEnabled(verifyType string) boo
 		return false
 	}
 
-	if verifyType == VerifyTypeEmail {
-		return application.IsCodeSigninViaEmailEnabled() && application.IsSignupFieldVisible("Email")
+	if verifyType != VerifyTypeEmail {
+		return false
 	}
-	return application.IsCodeSigninViaSmsEnabled() && application.IsSignupFieldVisible("Phone")
+	return application.IsCodeSigninViaEmailEnabled() && application.IsSignupFieldVisible("Email")
 }
 
 // IsSelfSignupEnabled tells whether users may sign themselves up on the signup page, by a
@@ -860,10 +843,6 @@ func (application *Application) IsLdapEnabled() bool {
 
 func (application *Application) IsWebAuthnEnabled() bool {
 	return application.HasSigninMethod("WebAuthn")
-}
-
-func (application *Application) IsFaceIdEnabled() bool {
-	return application.HasSigninMethod("Face ID")
 }
 
 func (application *Application) IsOriginValid(origin string) bool {
@@ -982,25 +961,6 @@ func applicationChangeTrigger(oldName string, newName string) error {
 	_, err = session.Where("application=?", oldName).Update(resource)
 	if err != nil {
 		return err
-	}
-
-	var permissions []*Permission
-	err = ormer.Engine.Find(&permissions)
-	if err != nil {
-		return err
-	}
-	for i := 0; i < len(permissions); i++ {
-		permissionResoureces := permissions[i].Resources
-		for j := 0; j < len(permissionResoureces); j++ {
-			if permissionResoureces[j] == oldName {
-				permissionResoureces[j] = newName
-			}
-		}
-		permissions[i].Resources = permissionResoureces
-		_, err = session.Where("owner=?", permissions[i].Owner).Where("name=?", permissions[i].Name).Update(permissions[i])
-		if err != nil {
-			return err
-		}
 	}
 
 	return session.Commit()

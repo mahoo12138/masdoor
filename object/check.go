@@ -327,7 +327,6 @@ func CheckPasswordComplexity(user *User, password string, lang string) string {
 	return CheckPasswordComplexityByOrg(organization, password, lang)
 }
 
-
 func CheckUserPassword(organization string, username string, password string, lang string, options ...bool) (*User, error) {
 	enableCaptcha := false
 	if len(options) > 0 {
@@ -411,132 +410,6 @@ func CheckUserPermission(requestUserId, userId string, strict bool, lang string)
 	}
 
 	return hasPermission, errors.New(i18n.Translate(lang, "auth:Unauthorized operation"))
-}
-
-func CheckApiPermission(userId string, organization string, path string, method string) (bool, error) {
-	if organization == "" {
-		return false, nil
-	}
-
-	permissions, err := GetPermissions(organization)
-	if err != nil {
-		return false, err
-	}
-
-	path = strings.TrimPrefix(path, "/api/")
-
-	allowPermissionCount := 0
-	denyPermissionCount := 0
-	allowCount := 0
-	denyCount := 0
-	for _, permission := range permissions {
-		if !permission.IsEnabled || permission.State != "Approved" || permission.ResourceType != "API" || !permission.isResourceHit(path) {
-			continue
-		}
-
-		userHit := permission.isUserHit(userId)
-		groupHit := permission.isGroupHit(userId)
-		roleHit := permission.isRoleHit(userId)
-
-		if !userHit && !groupHit && !roleHit {
-			if permission.Effect == "Allow" {
-				allowPermissionCount += 1
-			} else {
-				denyPermissionCount += 1
-			}
-			continue
-		}
-
-		enforcer, err := getPermissionEnforcer(permission)
-		if err != nil {
-			return false, err
-		}
-
-		var isAllowed bool
-
-		if userHit {
-			isAllowed, err = enforcer.Enforce(userId, path, method)
-			if err != nil {
-				return false, err
-			}
-
-			if isAllowed {
-				if permission.Effect == "Allow" {
-					allowCount += 1
-				}
-			} else {
-				if permission.Effect == "Deny" {
-					denyCount += 1
-				}
-			}
-		}
-		if groupHit {
-			isAllowed, err = enforcer.Enforce(userId, path, method)
-			if err != nil {
-				return false, err
-			}
-
-			if isAllowed {
-				if permission.Effect == "Allow" {
-					allowCount += 1
-				}
-			} else {
-				if permission.Effect == "Deny" {
-					denyCount += 1
-				}
-			}
-		}
-		if roleHit {
-			targetRoles, err := getRolesByUser(userId)
-			if err != nil {
-				return false, err
-			}
-
-			var checkRoleList []*Role
-
-			for _, role := range permission.Roles {
-				if role == "*" {
-					checkRoleList = targetRoles
-					break
-				}
-
-				for _, targetRole := range targetRoles {
-					if role == targetRole.GetId() {
-						checkRoleList = append(checkRoleList, targetRole)
-					}
-				}
-			}
-
-			for _, role := range checkRoleList {
-				isAllowed, err = enforcer.Enforce(role.GetId(), path, method)
-
-				if isAllowed {
-					if permission.Effect == "Allow" {
-						allowCount += 1
-					}
-				} else {
-					if permission.Effect == "Deny" {
-						denyCount += 1
-					}
-				}
-			}
-		}
-	}
-
-	// Deny-override, if one deny is found, then deny
-	if denyCount > 0 {
-		return false, nil
-	} else if allowCount > 0 {
-		return true, nil
-	}
-
-	// For no-allow and no-deny condition
-	// If only allow permissions exist, we suppose it's Deny-by-default, aka no-allow means deny
-	// Otherwise, it's Allow-by-default, aka no-deny means allow
-	if allowPermissionCount > 0 && denyPermissionCount == 0 {
-		return false, nil
-	}
-	return false, nil
 }
 
 func IsUserOfApplication(user *User, application *Application) (bool, error) {
@@ -634,6 +507,11 @@ func checkUserOrganizationSignin(application *Application, user *User, clientIp 
 	return CheckEntryIp(clientIp, nil, nil, organization, lang)
 }
 
+// CheckLoginPermission reports whether the user may sign in to the application.
+// It used to walk the application permissions of the organization; without that
+// feature the rule is plain membership, which is what a single-organization
+// deployment needs: a user signs in to the applications of their own
+// organization, plus any application marked as shared.
 func CheckLoginPermission(userId string, application *Application) (bool, error) {
 	owner, _, err := util.GetOwnerAndNameFromIdWithError(userId)
 	if err != nil {
@@ -647,132 +525,18 @@ func CheckLoginPermission(userId string, application *Application) (bool, error)
 	if err != nil {
 		return false, err
 	}
-	if user != nil && user.IsAdmin {
+	if user == nil || user.IsDeleted {
+		return false, nil
+	}
+	if user.IsAdmin {
 		return true, nil
 	}
 
-	permissionOrganization := application.Organization
-	if application.IsShared {
-		permissionOrganization = owner
-	}
-
-	permissions, err := GetPermissions(permissionOrganization)
-	if err != nil {
-		return false, err
-	}
-
-	allowPermissionCount := 0
-	denyPermissionCount := 0
-	allowCount := 0
-	denyCount := 0
-	for _, permission := range permissions {
-		if !permission.IsEnabled || permission.State != "Approved" || permission.ResourceType != "Application" || !permission.isResourceHit(application.Name) {
-			continue
-		}
-
-		userHit := permission.isUserHit(userId)
-		groupHit := permission.isGroupHit(userId)
-		roleHit := permission.isRoleHit(userId)
-
-		if !userHit && !groupHit && !roleHit {
-			if permission.Effect == "Allow" {
-				allowPermissionCount += 1
-			} else {
-				denyPermissionCount += 1
-			}
-			continue
-		}
-
-		enforcer, err := getPermissionEnforcer(permission)
-		if err != nil {
-			return false, err
-		}
-
-		var isAllowed bool
-
-		if userHit {
-			isAllowed, err = enforcer.Enforce(userId, application.Name, "Read")
-			if err != nil {
-				return false, err
-			}
-
-			if isAllowed {
-				if permission.Effect == "Allow" {
-					allowCount += 1
-				}
-			} else {
-				if permission.Effect == "Deny" {
-					denyCount += 1
-				}
-			}
-		}
-		if groupHit {
-			isAllowed, err = enforcer.Enforce(userId, application.Name, "Read")
-			if err != nil {
-				return false, err
-			}
-
-			if isAllowed {
-				if permission.Effect == "Allow" {
-					allowCount += 1
-				}
-			} else {
-				if permission.Effect == "Deny" {
-					denyCount += 1
-				}
-			}
-		}
-		if roleHit {
-			targetRoles, err := getRolesByUser(userId)
-			if err != nil {
-				return false, err
-			}
-
-			var checkRoleList []*Role
-
-			for _, role := range permission.Roles {
-				if role == "*" {
-					checkRoleList = targetRoles
-					break
-				}
-
-				for _, targetRole := range targetRoles {
-					if role == targetRole.GetId() {
-						checkRoleList = append(checkRoleList, targetRole)
-					}
-				}
-			}
-
-			for _, role := range checkRoleList {
-				isAllowed, err = enforcer.Enforce(role.GetId(), application.Name, "Read")
-
-				if isAllowed {
-					if permission.Effect == "Allow" {
-						allowCount += 1
-					}
-				} else {
-					if permission.Effect == "Deny" {
-						denyCount += 1
-					}
-				}
-			}
-		}
-	}
-
-	// Deny-override, if one deny is found, then deny
-	if denyCount > 0 {
-		return false, nil
-	} else if allowCount > 0 {
+	if application == nil || application.IsShared {
 		return true, nil
 	}
 
-	// For no-allow and no-deny condition
-	// If only allow permissions exist, we suppose it's Deny-by-default, aka no-allow means deny
-	// Otherwise, it's Allow-by-default, aka no-deny means allow
-	if allowPermissionCount > 0 && denyPermissionCount == 0 {
-		return false, nil
-	}
-	return true, nil
+	return user.Owner == application.Organization, nil
 }
 
 func CheckUsername(username string, lang string) string {

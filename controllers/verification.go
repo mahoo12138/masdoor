@@ -439,69 +439,9 @@ func (c *ApiController) SendVerificationCode() {
 			sendResp = object.SendVerificationCodeToEmail(organization, user, provider, clientIp, vform.Dest, vform.Method, c.Ctx.Request.Host, application.Name, application, c.GetAcceptLanguage())
 		}
 	case object.VerifyTypePhone:
-		if vform.Method == SignupVerification {
-			phone, countryCode, _ := util.GetNormalizedPhone(vform.Dest, vform.CountryCode)
-			if object.HasUserByPhoneAndCountryCode(organization.Name, phone, countryCode) {
-				c.ResponseError(c.T("check:Phone already exists"))
-				return
-			}
-		}
-
-		if vform.Method == LoginVerification || vform.Method == ForgetVerification {
-			if user != nil && util.GetMaskedPhone(user.Phone) == vform.Dest {
-				vform.Dest = user.Phone
-			}
-
-			if user, err = object.GetUserByPhoneWithCountryCode(organization.Name, vform.Dest, vform.CountryCode); err != nil {
-				c.ResponseError(err.Error())
-				return
-			} else if user == nil && (vform.Method == ForgetVerification || !application.IsVerificationCodeSignupEnabled(object.VerifyTypePhone) && !application.IsCodeSigninSignupEnabled(object.VerifyTypePhone)) {
-				c.ResponseError(c.T("verification:the user does not exist, please sign up first"))
-				return
-			}
-
-
-			if user != nil {
-				vform.CountryCode = user.GetCountryCode(vform.CountryCode)
-			} else if vform.CountryCode == "" && !strings.HasPrefix(vform.Dest, "+") && len(organization.CountryCodes) > 0 {
-				vform.CountryCode = organization.CountryCodes[0]
-			}
-		} else if vform.Method == ResetVerification || vform.Method == MfaSetupVerification {
-			if vform.CountryCode == "" {
-				if user = c.getCurrentUser(); user != nil {
-					vform.CountryCode = user.GetCountryCode(vform.CountryCode)
-				}
-			}
-		} else if vform.Method == MfaAuthVerification {
-			if user == nil {
-				c.ResponseError(c.T("general:Please sign in first"))
-				return
-			}
-			mfaProps := user.GetMfaProps(object.SmsType, false)
-			if util.GetMaskedPhone(mfaProps.Secret) == vform.Dest {
-				vform.Dest = mfaProps.Secret
-			}
-
-			vform.CountryCode = mfaProps.CountryCode
-			vform.CountryCode = user.GetCountryCode(vform.CountryCode)
-		}
-
-		provider, err = application.GetSmsProvider(vform.Method, vform.CountryCode)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
-		if provider == nil {
-			c.ResponseError(fmt.Sprintf(c.T("verification:please add a SMS provider to the \"Providers\" list for the application: %s"), application.Name))
-			return
-		}
-
-		if phone, ok := util.GetE164Number(vform.Dest, vform.CountryCode); !ok {
-			c.ResponseError(fmt.Sprintf(c.T("verification:Phone number is invalid in your region %s"), vform.CountryCode))
-			return
-		} else {
-			sendResp = object.SendVerificationCodeToPhone(organization, user, provider, clientIp, phone, application, c.GetAcceptLanguage())
-		}
+		// this build only sends verification codes by email
+		c.ResponseError(c.T("verification:Unknown type"))
+		return
 	}
 
 	if sendResp != nil {
