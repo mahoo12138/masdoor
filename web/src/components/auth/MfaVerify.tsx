@@ -12,14 +12,12 @@ import {
   EmailMfaType,
   PushMfaType,
   RadiusMfaType,
-  SmsMfaType,
   TotpMfaType,
 } from "@/components/auth/mfa/constants";
 
 export {
   NextMfa,
   RequiredMfa,
-  SmsMfaType,
   EmailMfaType,
   TotpMfaType,
   RadiusMfaType,
@@ -35,8 +33,6 @@ export function getPreferredMfaProp(mfaProps: any[]) {
 /** Label of the "use another factor" link, as antd's renderMfaAuthVerifyForm has it. */
 function getSwitchLabel(mfaType: string) {
   switch (mfaType) {
-  case SmsMfaType:
-    return i18next.t("mfa:Use SMS");
   case TotpMfaType:
     return i18next.t("mfa:Use Authenticator App");
   case EmailMfaType:
@@ -111,22 +107,22 @@ export function MfaVerify({formValues, authParams, mfaProps, application, onSucc
           {i18next.t("forget:Verify")}
         </Button>
         <Button variant="link" className="w-full" onClick={() => setUseRecovery(false)}>
-          {i18next.t("mfa:Have problems?")} {i18next.t("mfa:Use SMS verification code")}
+          {i18next.t("mfa:Have problems?")} {i18next.t("mfa:Use recovery code")}
         </Button>
       </div>
     );
   }
 
-  const isCodeType = selected?.mfaType === SmsMfaType || selected?.mfaType === EmailMfaType;
+  const isCodeType = selected?.mfaType === EmailMfaType;
   const verifyComplete = () => {
     if (!loading) {
       post({passcode, enableMfaRemember: remember});
     }
   };
 
-  // The antd MfaAuthVerifyForm branches on the factor: SMS/email get a "Get Code"
-  // field, TOTP an authenticator code, push the code from the notification, and
-  // RADIUS the account's RADIUS password.
+  // The form branches on the factor: email gets a "Get Code" field, TOTP an
+  // authenticator code, push the code from the notification, and RADIUS the
+  // account's RADIUS password.
   const {prompt, placeholder} = (() => {
     if (selected?.mfaType === PushMfaType) {
       return {
@@ -160,7 +156,7 @@ export function MfaVerify({formValues, authParams, mfaProps, application, onSucc
             value={passcode}
             onChange={setPasscode}
             method="mfaAuth"
-            destType={selected.mfaType === EmailMfaType ? "email" : "phone"}
+            destType="email"
             dest={selected?.secret ?? ""}
             countryCode={selected?.countryCode ?? ""}
             application={application}

@@ -185,7 +185,7 @@ export function getStateFromQueryParams(applicationName, providerName, method, i
 }
 
 // Keep in sync with public/AuthCallbackHandler.js
-const LINK_NONCE_KEY = "casdoor_link_nonce";
+const LINK_NONCE_KEY = "masdoor_link_nonce";
 
 function newLinkNonce(): string {
   const bytes = new Uint8Array(16);

@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// the path Masdoor is served under, like "/casdoor", or "" at the root; the server writes it into index.html
+// the path Masdoor is served under, like "/sso", or "" at the root; the server writes it into index.html
 // (basePath in app.conf, see routers/base_path.go)
 function readBasePath(): string {
   if (typeof document === "undefined") {
     return "";
   }
 
-  const value = document.querySelector("meta[name=\"casdoor-base-path\"]")?.getAttribute("content") ?? "";
+  const value = document.querySelector("meta[name=\"masdoor-base-path\"]")?.getAttribute("content") ?? "";
   const trimmed = value.replace(/^\/+|\/+$/g, "");
   return trimmed === "" ? "" : `/${trimmed}`;
 }
 
 export const BasePath = readBasePath();
 
-// "/login" -> "/casdoor/login"; full URLs and protocol-relative URLs are kept
+// "/login" -> "/sso/login"; full URLs and protocol-relative URLs are kept
 export function withBasePath(path: string): string {
   if (BasePath === "" || typeof path !== "string" || !path.startsWith("/") || path.startsWith("//")) {
     return path;
@@ -42,7 +42,7 @@ export function getRoutePath(pathname: string = window.location.pathname): strin
   return pathname;
 }
 
-// the URL of Masdoor's frontend in this browser, like "https://example.com/casdoor"
+// the URL of Masdoor's frontend in this browser, like "https://example.com/sso"
 export function getOriginUrl(): string {
   return `${window.location.origin}${BasePath}`;
 }

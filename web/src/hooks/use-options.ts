@@ -1,13 +1,10 @@
 import * as React from "react";
 import type {SearchableOption} from "@/components/common/SearchableSelect";
-import * as AdapterBackend from "@/backend/AdapterBackend";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
 import * as CertBackend from "@/backend/CertBackend";
 import * as GroupBackend from "@/backend/GroupBackend";
-import * as ModelBackend from "@/backend/ModelBackend";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
 import * as ProviderBackend from "@/backend/ProviderBackend";
-import * as RuleBackend from "@/backend/RuleBackend";
 import * as RoleBackend from "@/backend/RoleBackend";
 import * as UserBackend from "@/backend/UserBackend";
 
@@ -124,19 +121,6 @@ export function useRoleNameOptions(organizationName: string): SearchableOption[]
   return React.useMemo(() => toNameOptions(items), [items]);
 }
 
-export function useModelOptions(organizationName: string): SearchableOption[] {
-  const items = useList(() => (organizationName ? ModelBackend.getModels(organizationName, 1, PAGE_SIZE) : null), [organizationName]);
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
-
-export function useAdapterOptions(organizationName: string): SearchableOption[] {
-  const items = useList(
-    () => (organizationName ? AdapterBackend.getAdapters(organizationName, 1, PAGE_SIZE) : null),
-    [organizationName],
-  );
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
-
 export function useApplicationOptions(organizationName: string): SearchableOption[] {
   const items = useList(
     () => (organizationName ? ApplicationBackend.getApplicationsByOrganization("admin", organizationName, 1, PAGE_SIZE) : null),
@@ -178,8 +162,4 @@ export function useCertOptions(organizationName: string, scope?: string): Search
 
 
 
-export function useRuleOptions(organizationName: string): SearchableOption[] {
-  // the rules API paginates but takes no filter arguments
-  const items = useList(() => (organizationName ? RuleBackend.getRules(organizationName, 1, PAGE_SIZE) : null), [organizationName]);
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
+

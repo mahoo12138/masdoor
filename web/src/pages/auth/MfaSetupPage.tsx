@@ -14,7 +14,6 @@ import {
   EmailMfaType,
   PushMfaType,
   RadiusMfaType,
-  SmsMfaType,
   TotpMfaType,
 } from "@/components/auth/mfa/constants";
 import {useAccount} from "@/hooks/use-account";
@@ -23,7 +22,6 @@ import * as MfaBackend from "@/backend/MfaBackend";
 import * as Setting from "@/lib/setting";
 
 const MFA_TYPE_LABELS: {type: string; labelKey: string}[] = [
-  {type: SmsMfaType, labelKey: "mfa:Use SMS"},
   {type: EmailMfaType, labelKey: "mfa:Use Email"},
   {type: TotpMfaType, labelKey: "mfa:Use Authenticator App"},
   {type: RadiusMfaType, labelKey: "mfa:Use Radius"},
@@ -53,19 +51,19 @@ export default function MfaSetupPage() {
   const cameFromLogin = (location.state as any)?.from !== undefined;
   const [current, setCurrent] = React.useState(cameFromLogin ? 1 : 0);
   // A "RequiredMfa" sign-in lands here without a "mfaType", so fall back to the
-  // required factor: plain SMS would ask for a phone code the organization never asked for.
+  // factor the organization marks as required.
   const [mfaType, setMfaType] = React.useState(
     () =>
       searchParams.get("mfaType") ??
       getRequiredMfaType(account) ??
       Setting.getAllowedMfaTypes(account, account?.organization)[0] ??
-      SmsMfaType,
+      EmailMfaType,
   );
   const [application, setApplication] = React.useState<any>(undefined);
   const [applicationError, setApplicationError] = React.useState<string | null>(null);
   const [mfaProps, setMfaProps] = React.useState<any>(null);
   const [initiating, setInitiating] = React.useState(false);
-  const [verified, setVerified] = React.useState<{dest?: string; countryCode?: string; secret?: string}>({});
+  const [verified, setVerified] = React.useState<{dest?: string; secret?: string}>({});
 
   React.useEffect(() => {
     if (!account) {
@@ -173,7 +171,7 @@ export default function MfaSetupPage() {
             application={application}
             user={account}
             onSuccess={(res) => {
-              setVerified({dest: res.dest, countryCode: res.countryCode, secret: res.secret});
+              setVerified({dest: res.dest, secret: res.secret});
               setCurrent(2);
             }}
             onFail={(res) =>
@@ -201,14 +199,13 @@ export default function MfaSetupPage() {
           secret={verified.secret ?? mfaProps?.secret}
           recoveryCodes={mfaProps?.recoveryCodes}
           dest={verified.dest}
-          countryCode={verified.countryCode}
           onSuccess={() => {
             Setting.showMessage("success", i18next.t("general:Enabled successfully"));
             // A "RequiredMfa" sign-in parks the URL it wanted to reach here.
             const mfaRedirectUrl = localStorage.getItem("mfaRedirectUrl");
             if (mfaRedirectUrl) {
               // The full page load fetches the account again. Reloading it here would
-              // remount this wizard, which then falls back to SMS as nothing is required anymore.
+              // remount this wizard, which then falls back to the first allowed factor.
               localStorage.removeItem("mfaRedirectUrl");
               Setting.goToLink(mfaRedirectUrl);
             } else {

@@ -51,21 +51,14 @@ const defaultEmailMapping: Record<string, string> = {
   content: "content",
 };
 
-const defaultSmsMapping: Record<string, string> = {
-  phoneNumber: "phoneNumber",
-  content: "content",
-};
-
 const CATEGORIES = [
-  "Audit", "Captcha", "Email", "Face ID", "ID Verification", "Notification",
-  "OAuth", "SMS", "Storage",
+  "Audit", "Captcha", "Email", "Notification",
+  "OAuth", "Storage",
 ].sort((a, b) => a.localeCompare(b));
 
 const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE"];
 const CONTENT_TYPES = ["application/json", "application/x-www-form-urlencoded"];
 
-const SMS_PROVIDERS_WITHOUT_SIGN_NAME = ["Custom HTTP SMS", "Twilio SMS", "Amazon SNS", "Msg91 SMS", "Infobip SMS"];
-const SMS_PROVIDERS_WITHOUT_TEMPLATE_CODE = ["Infobip SMS"];
 
 const SYSLOG_PROTOCOLS = ["UDP", "TCP", "TLS"];
 const SYSLOG_FACILITIES = [
@@ -129,27 +122,12 @@ function getClientIdLabel(provider: any): Label {
       : label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("signup:Username"), i18next.t("signup:Username - Tooltip"));
-  } else if (provider.category === "SMS") {
-    if (["Volc Engine SMS", "Amazon SNS", "Baidu Cloud SMS"].includes(provider.type)) {
-      return label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"));
-    } else if (provider.type === "Huawei Cloud SMS") {
-      return label(i18next.t("provider:App key"), i18next.t("provider:App key - Tooltip"));
-    } else if (provider.type === "UCloud SMS") {
-      return label(i18next.t("provider:Public key"), i18next.t("provider:Public key - Tooltip"));
-    } else if (["Msg91 SMS", "Infobip SMS", "OSON SMS"].includes(provider.type)) {
-      return label(i18next.t("provider:Sender Id"), i18next.t("provider:Sender Id - Tooltip"));
-    }
-    return label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   } else if (provider.category === "Captcha") {
     return provider.type === "Aliyun Captcha"
       ? label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"))
       : label(i18next.t("provider:Site key"), i18next.t("provider:Site key - Tooltip"));
   } else if (provider.category === "Notification") {
     return provider.type === "DingTalk"
-      ? label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"))
-      : label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
-  } else if (provider.category === "ID Verification") {
-    return provider.type === "Alibaba Cloud"
       ? label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"))
       : label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   }
@@ -169,19 +147,6 @@ function getClientSecretLabel(provider: any): Label {
     return ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)
       ? label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"))
       : label(i18next.t("general:Password"), i18next.t("general:Password - Tooltip"));
-  } else if (provider.category === "SMS") {
-    if (["Volc Engine SMS", "Amazon SNS", "Baidu Cloud SMS", "OSON SMS"].includes(provider.type)) {
-      return label(i18next.t("provider:Secret access key"), i18next.t("provider:Secret access key - Tooltip"));
-    } else if (provider.type === "Huawei Cloud SMS") {
-      return label(i18next.t("provider:App secret"), i18next.t("provider:AppSecret - Tooltip"));
-    } else if (provider.type === "UCloud SMS") {
-      return label(i18next.t("provider:Private Key"), i18next.t("provider:Private Key - Tooltip"));
-    } else if (provider.type === "Msg91 SMS") {
-      return label(i18next.t("provider:Auth Key"), i18next.t("provider:Auth Key - Tooltip"));
-    } else if (provider.type === "Infobip SMS") {
-      return label(i18next.t("provider:Api Key"), i18next.t("provider:Api Key - Tooltip"));
-    }
-    return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   } else if (provider.category === "Captcha") {
     return provider.type === "Aliyun Captcha"
       ? label(i18next.t("provider:Secret access key"), i18next.t("provider:Secret access key - Tooltip"))
@@ -193,10 +158,6 @@ function getClientSecretLabel(provider: any): Label {
       return label(i18next.t("provider:Endpoint"), i18next.t("provider:Endpoint - Tooltip"));
     }
     return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
-  } else if (provider.category === "ID Verification") {
-    return provider.type === "Alibaba Cloud"
-      ? label(i18next.t("provider:Secret access key"), i18next.t("provider:Secret access key - Tooltip"))
-      : label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   }
   return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
 }
@@ -231,25 +192,7 @@ function getClientSecret2Label(provider: any): Label {
 
 /** the extra "appId" row, whose meaning depends on the provider — null hides it */
 function getAppIdLabel(provider: any): Label | null {
-  if (provider.category === "SMS") {
-    if (provider.type === "Twilio SMS" || provider.type === "Azure ACS") {
-      return label(i18next.t("provider:Sender number"), i18next.t("provider:Sender number - Tooltip"));
-    } else if (provider.type === "Tencent Cloud SMS") {
-      return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
-    } else if (provider.type === "Volc Engine SMS") {
-      return label(i18next.t("provider:SMS account"), i18next.t("provider:SMS account - Tooltip"));
-    } else if (provider.type === "Huawei Cloud SMS") {
-      return label(i18next.t("provider:Channel No."), i18next.t("provider:Channel No. - Tooltip"));
-    } else if (provider.type === "Amazon SNS") {
-      return label(i18next.t("provider:Region"), i18next.t("provider:Region - Tooltip"));
-    } else if (provider.type === "Baidu Cloud SMS") {
-      return label(i18next.t("provider:Endpoint"), i18next.t("provider:Endpoint - Tooltip"));
-    } else if (provider.type === "Infobip SMS") {
-      return label(i18next.t("provider:Base URL"), i18next.t("provider:Base URL - Tooltip"));
-    } else if (provider.type === "UCloud SMS") {
-      return label(i18next.t("provider:Project Id"), i18next.t("provider:Project Id - Tooltip"));
-    }
-  } else if (provider.category === "Email") {
+  if (provider.category === "Email") {
     if (provider.type === "SUBMAIL") {
       return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
     }
@@ -278,7 +221,6 @@ function getReceiverLabel(provider: any): Label | null {
 function hasClientIdRow(provider: any) {
   if ((provider.category === "Storage" && provider.type === "Google Cloud Storage") ||
       (provider.category === "Email" && ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)) ||
-      (provider.category === "Face ID" && provider.type === "Local UniFace") ||
       (provider.category === "Notification" && ["Line", "Telegram", "Bark", "Discord", "Slack", "Pushbullet", "Pushover", "Lark", "Microsoft Teams"].includes(provider.type))) {
     return false;
   }
@@ -290,7 +232,6 @@ function hasCredentialRows(provider: any) {
       provider.category === "Audit" ||
       provider.category === "Log" ||
       (provider.category === "Storage" && provider.type === "Local File System") ||
-      (provider.category === "SMS" && provider.type === "Custom HTTP SMS") ||
       (provider.category === "Email" && provider.type === "Custom HTTP Email") ||
       (provider.category === "Notification" && ["Google Chat", "Custom HTTP", "Balance"].includes(provider.type))) {
     return false;
@@ -324,10 +265,6 @@ export default function ProviderEditPage() {
     if (provider.type === "Custom HTTP Email") {
       if (!provider.userMapping || !provider.userMapping.fromName) {
         provider.userMapping = {...defaultEmailMapping};
-      }
-    } else if (provider.type === "Custom HTTP SMS") {
-      if (!provider.userMapping || !provider.userMapping.phoneNumber) {
-        provider.userMapping = {...defaultSmsMapping};
       }
     } else {
       provider.userMapping = provider.userMapping || {...defaultUserMapping};
@@ -509,19 +446,12 @@ export default function ProviderEditPage() {
       patch.content = Setting.getDefaultHtmlEmailContent();
       patch.metadata = Setting.getDefaultInvitationHtmlEmailContent();
       patch.receiver = account?.email ?? "";
-    } else if (value === "SMS") {
-      defaultType = "Twilio SMS";
     } else if (value === "Storage") {
       defaultType = "AWS S3";
     } else if (value === "Captcha") {
       defaultType = "Default";
     } else if (value === "Notification") {
       defaultType = "Telegram";
-    } else if (value === "Face ID") {
-      defaultType = "Alibaba Cloud Facebody";
-    } else if (value === "ID Verification") {
-      defaultType = "Jumio";
-      patch.endpoint = "";
     } else if (value === "Audit") {
       defaultType = "Syslog";
       patch.host = "";
@@ -557,14 +487,7 @@ export default function ProviderEditPage() {
     } else if (value === "OIDC") {
       patch.scopes = "openid profile email";
     } else if (value.startsWith("Custom") && provider.category === "OAuth") {
-      patch.customAuthUrl = "https://door.casdoor.com/login/oauth/authorize";
       patch.scopes = "openid profile email";
-      patch.customTokenUrl = "https://door.casdoor.com/api/login/oauth/access_token";
-      patch.customUserInfoUrl = "https://door.casdoor.com/api/userinfo";
-    } else if (value === "Custom HTTP SMS") {
-      patch.endpoint = "https://example.com/send-custom-http-sms";
-      patch.method = "GET";
-      patch.title = "code";
     } else if (value === "Custom HTTP Email") {
       patch.endpoint = "https://example.com/send-custom-http-email";
       patch.method = "POST";
@@ -620,11 +543,6 @@ export default function ProviderEditPage() {
     {key: "toAddress", label: label(i18next.t("provider:To address"))},
     {key: "subject", label: label(i18next.t("provider:Subject"))},
     {key: "content", label: label(i18next.t("provider:Email content"))},
-  ]);
-
-  const renderSmsMappingInput = () => renderMappingRows([
-    {key: "phoneNumber", label: label(i18next.t("general:Phone"))},
-    {key: "content", label: label(i18next.t("provider:Content"))},
   ]);
 
   const renderHttpHeaderTable = () => (
@@ -866,62 +784,6 @@ export default function ProviderEditPage() {
     </React.Fragment>
   );
 
-  const renderSmsFields = () => (
-    <React.Fragment>
-      {!SMS_PROVIDERS_WITHOUT_SIGN_NAME.includes(provider.type) ? (
-        <FormRow labelKey="provider:Sign Name">
-          <Input value={provider.signName ?? ""} onChange={(e) => updateProviderField("signName", e.target.value)} />
-        </FormRow>
-      ) : null}
-      {!SMS_PROVIDERS_WITHOUT_TEMPLATE_CODE.includes(provider.type) ? (
-        <FormRow labelKey="provider:Template code">
-          <Input value={provider.templateCode ?? ""} onChange={(e) => updateProviderField("templateCode", e.target.value)} />
-        </FormRow>
-      ) : null}
-      {provider.type === "Custom HTTP SMS" ? (
-        <React.Fragment>
-          <FormRow label={i18next.t("provider:Endpoint")} tooltip={i18next.t("provider:Region endpoint for Internet")}>
-            <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
-          </FormRow>
-          {renderHttpRows(HTTP_METHODS)}
-          {provider.method !== "GET" ? (
-            <FormRow labelKey="provider:HTTP body mapping" block>
-              {renderSmsMappingInput()}
-            </FormRow>
-          ) : null}
-          <FormRow labelKey="provider:Parameter">
-            <Input value={provider.title ?? ""} onChange={(e) => updateProviderField("title", e.target.value)} />
-          </FormRow>
-        </React.Fragment>
-      ) : null}
-      <FormRow labelKey="provider:Enable proxy">
-        <Switch checked={!!provider.enableProxy} onCheckedChange={(v) => updateProviderField("enableProxy", v)} />
-      </FormRow>
-      <FormRow labelKey="provider:SMS Test">
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="w-32 shrink-0">
-            <CountryCodeSelect
-              value={provider.content ?? ""}
-              onChange={(v) => updateProviderField("content", v)}
-              countryCodes={account?.organization?.countryCodes}
-            />
-          </div>
-          <Input
-            className="w-48"
-            value={provider.receiver ?? ""}
-            placeholder={i18next.t("user:Input your phone number")}
-            onChange={(e) => updateProviderField("receiver", e.target.value)}
-          />
-          <Button
-            disabled={!Setting.isValidPhone(provider.receiver ?? "") || (provider.type === "Custom HTTP SMS" && provider.endpoint === "")}
-            onClick={() => ProviderTest.sendTestSms(provider, "+" + Setting.getCountryCode(provider.content) + provider.receiver)}
-          >
-            {i18next.t("provider:Send Testing SMS")}
-          </Button>
-        </div>
-      </FormRow>
-    </React.Fragment>
-  );
 
   const renderNotificationFields = () => {
     const receiverLabel = getReceiverLabel(provider);
@@ -1041,7 +903,7 @@ export default function ProviderEditPage() {
 
   const renderStorageFields = () => (
     <React.Fragment>
-      {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology", "Masdoor"].includes(provider.type) ? (
+      {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology"].includes(provider.type) ? (
         <FormRow label={i18next.t("provider:Endpoint (Intranet)")} tooltip={i18next.t("provider:Region endpoint for Intranet")}>
           <Input value={provider.intranetEndpoint ?? ""} onChange={(e) => updateProviderField("intranetEndpoint", e.target.value)} />
         </FormRow>
@@ -1051,10 +913,7 @@ export default function ProviderEditPage() {
           <FormRow label={i18next.t("provider:Endpoint")} tooltip={i18next.t("provider:Region endpoint for Internet")}>
             <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
           </FormRow>
-          <FormRow
-            label={provider.type === "Masdoor" ? i18next.t("general:Provider") : i18next.t("provider:Bucket")}
-            tooltip={provider.type === "Masdoor" ? i18next.t("general:Provider - Tooltip") : i18next.t("provider:Bucket - Tooltip")}
-          >
+          <FormRow label={i18next.t("provider:Bucket")} tooltip={i18next.t("provider:Bucket - Tooltip")}>
             <Input value={provider.bucket ?? ""} onChange={(e) => updateProviderField("bucket", e.target.value)} />
           </FormRow>
         </React.Fragment>
@@ -1062,7 +921,7 @@ export default function ProviderEditPage() {
       <FormRow labelKey="provider:Path prefix">
         <Input value={provider.pathPrefix ?? ""} onChange={(e) => updateProviderField("pathPrefix", e.target.value)} />
       </FormRow>
-      {!["Synology", "Masdoor"].includes(provider.type) ? (
+      {provider.type !== "Synology" ? (
         <FormRow labelKey="provider:Domain">
           <Input
             value={provider.domain ?? ""}
@@ -1071,16 +930,8 @@ export default function ProviderEditPage() {
           />
         </FormRow>
       ) : null}
-      {provider.type === "Masdoor" ? (
-        <FormRow labelKey="general:Organization">
-          <Input value={provider.content ?? ""} onChange={(e) => updateProviderField("content", e.target.value)} />
-        </FormRow>
-      ) : null}
-      {["AWS S3", "Tencent Cloud COS", "Qiniu Cloud Kodo", "Masdoor", "CUCloud OSS", "MinIO"].includes(provider.type) ? (
-        <FormRow
-          label={provider.type === "Masdoor" ? i18next.t("general:Application") : i18next.t("provider:Region ID")}
-          tooltip={provider.type === "Masdoor" ? i18next.t("general:Application - Tooltip") : i18next.t("provider:Region ID - Tooltip")}
-        >
+      {["AWS S3", "Tencent Cloud COS", "Qiniu Cloud Kodo", "CUCloud OSS", "MinIO"].includes(provider.type) ? (
+        <FormRow label={i18next.t("provider:Region ID")} tooltip={i18next.t("provider:Region ID - Tooltip")}>
           <Input value={provider.regionId ?? ""} onChange={(e) => updateProviderField("regionId", e.target.value)} />
         </FormRow>
       ) : null}
@@ -1224,12 +1075,9 @@ export default function ProviderEditPage() {
 
       {provider.category === "Notification" ? renderNotificationFields() : null}
       {provider.category === "Email" ? renderEmailFields() : null}
-      {provider.category === "SMS" ? renderSmsFields() : null}
       {provider.category === "Audit" ? renderAuditFields() : null}
       {provider.category === "Log" ? renderLogFields() : null}
       {provider.category === "Storage" ? renderStorageFields() : null}
-      {provider.category === "Face ID" ? renderEndpointOnlyField() : null}
-      {provider.category === "ID Verification" ? renderEndpointOnlyField() : null}
 
       {provider.category !== "Log" && provider.category !== "Audit" ? (
         <FormRow block labelKey="provider:Provider URL">

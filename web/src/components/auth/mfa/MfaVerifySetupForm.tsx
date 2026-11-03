@@ -8,12 +8,10 @@ import {Label} from "@/components/ui/label";
 import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
 import {SendCodeInput} from "@/components/auth/SendCodeInput";
 import {CodeInput} from "@/components/auth/CodeInput";
-import {CasdoorAuthenticatorLink} from "@/components/user/CasdoorAppConnector";
 import {
   EmailMfaType,
   PushMfaType,
   RadiusMfaType,
-  SmsMfaType,
   TotpMfaType,
   mfaSetup,
 } from "@/components/auth/mfa/constants";
@@ -34,25 +32,15 @@ interface Props {
  */
 export function MfaVerifySetupForm({mfaProps, application, user, onSuccess, onFail}: Props) {
   const isEmail = mfaProps?.mfaType === EmailMfaType;
-  const isSms = mfaProps?.mfaType === SmsMfaType;
 
   const [passcode, setPasscode] = React.useState("");
   const [dest, setDest] = React.useState("");
-  const [countryCode, setCountryCode] = React.useState(
-    mfaProps?.countryCode || user?.countryCode || application?.organizationObj?.countryCodes?.[0] || "",
-  );
   const [submitting, setSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-    if (isSms) {
-      setDest(user?.phone ?? "");
-    } else if (isEmail) {
-      setDest(user?.email ?? "");
-    } else {
-      setDest("");
-    }
+    setDest(isEmail ? (user?.email ?? "") : "");
     setPasscode("");
-  }, [mfaProps?.mfaType, user, isSms, isEmail]);
+  }, [mfaProps?.mfaType, user, isEmail]);
 
   if (!mfaProps || !application || !user) {
     return null;
@@ -81,12 +69,11 @@ export function MfaVerifySetupForm({mfaProps, application, user, onSuccess, onFa
       mfaType: mfaProps.mfaType,
       secret,
       dest,
-      countryCode,
       ...user,
     })
       .then((res: any) => {
         if (res.status === "ok") {
-          onSuccess({...res, dest, countryCode, secret});
+          onSuccess({...res, dest, secret});
         } else {
           onFail(res);
         }
@@ -107,50 +94,34 @@ export function MfaVerifySetupForm({mfaProps, application, user, onSuccess, onFa
   };
 
   const renderBody = () => {
-    if (isSms || isEmail) {
-      const hasDest = isEmail ? !!user.email : !!user.phone;
+    if (isEmail) {
+      const hasDest = !!user.email;
       return (
         <>
           {hasDest ? (
             <p className="text-center text-sm text-muted-foreground">
-              {isEmail ? i18next.t("mfa:Your email is") : i18next.t("mfa:Your phone is")} {dest}
+              {i18next.t("mfa:Your email is")} {dest}
             </p>
           ) : (
             <>
               <p className="text-center text-sm text-muted-foreground">
-                {isEmail
-                  ? i18next.t(
-                    "mfa:Please bind your email first, the system will automatically uses the mail for multi-factor authentication",
-                  )
-                  : i18next.t(
-                    "mfa:Please bind your phone first, the system automatically uses the phone for multi-factor authentication",
-                  )}
-              </p>
-              <div className="flex gap-2">
-                {isEmail ? null : (
-                  <div className="w-28 shrink-0">
-                    <CountryCodeSelect
-                      value={countryCode}
-                      onChange={setCountryCode}
-                      countryCodes={application.organizationObj?.countryCodes}
-                    />
-                  </div>
+                {i18next.t(
+                  "mfa:Please bind your email first, the system will automatically uses the mail for multi-factor authentication",
                 )}
-                <Input
-                  value={dest}
-                  placeholder={isEmail ? i18next.t("general:Email") : i18next.t("general:Phone")}
-                  onChange={(e) => setDest(e.target.value)}
-                />
-              </div>
+              </p>
+              <Input
+                value={dest}
+                placeholder={i18next.t("general:Email")}
+                onChange={(e) => setDest(e.target.value)}
+              />
             </>
           )}
           <SendCodeInput
             value={passcode}
             onChange={setPasscode}
             method={mfaSetup}
-            destType={isEmail ? "email" : "phone"}
+            destType="email"
             dest={mfaProps.secret || dest}
-            countryCode={countryCode}
             application={application}
             applicationId={Setting.getApplicationName(application)}
             checkUser={user?.name}
@@ -171,7 +142,6 @@ export function MfaVerifySetupForm({mfaProps, application, user, onSuccess, onFa
               <p className="text-center text-sm text-muted-foreground">
                 {i18next.t("mfa:Scan the QR code with your Authenticator App")}
               </p>
-              <CasdoorAuthenticatorLink className="text-center text-sm" />
               <p className="text-center text-sm text-muted-foreground">
                 {i18next.t("mfa:Or copy the secret to your Authenticator App")}
               </p>

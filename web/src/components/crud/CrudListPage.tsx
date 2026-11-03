@@ -9,8 +9,7 @@ import {ColumnMenu, columnKey, useColumnVisibility} from "@/components/crud/Colu
 import {DataTable} from "@/components/crud/DataTable";
 import {PageHeader} from "@/components/crud/PageHeader";
 import {RowActions} from "@/components/crud/RowActions";
-import type {ColumnDef, CasdoorListResponse, RowAction, TableQuery} from "@/components/crud/types";
-import {useFormItems} from "@/hooks/use-form-items";
+import type {ColumnDef, ApiListResponse, RowAction, TableQuery} from "@/components/crud/types";
 import {useTableData} from "@/hooks/use-table-data";
 import {submitAdd, submitDelete, submitDeleteMany} from "@/lib/crud";
 import * as Setting from "@/lib/setting";
@@ -19,7 +18,7 @@ export interface CrudListPageProps<T extends Record<string, any>> {
   title: React.ReactNode;
   description?: React.ReactNode;
   columns: ColumnDef<T>[];
-  fetch: (query: TableQuery) => Promise<CasdoorListResponse<T>>;
+  fetch: (query: TableQuery) => Promise<ApiListResponse<T>>;
   /** re-fetch when any of these change */
   deps?: React.DependencyList;
   /** builds the default object for a new row; omit to hide the Add button */
@@ -155,8 +154,7 @@ export function CrudListPage<T extends Record<string, any>>({
     });
   };
 
-  const savedFormItems = useFormItems(formItemsProp ? undefined : formType);
-  const formItems = formItemsProp ?? savedFormItems;
+  const formItems = formItemsProp ?? [];
 
   const deleteAction = (record: T): RowAction => {
     const blockedReason = deleteDisabled?.(record);

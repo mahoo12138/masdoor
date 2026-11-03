@@ -44,22 +44,10 @@ function getNavItemNodes(): TreeNode[] {
           ],
         },
         {
-          key: "/sites-top",
-          title: i18next.t("general:LLM AI"),
-          children: [
-            {key: "/sites", title: i18next.t("general:Sites")},
-            {key: "/rules", title: i18next.t("general:Rules")},
-          ],
-        },
-        {
           key: "/roles-top",
           title: i18next.t("general:Authorization"),
           children: [
             {key: "/roles", title: i18next.t("general:Roles")},
-            {key: "/permissions", title: i18next.t("general:Permissions")},
-            {key: "/models", title: i18next.t("general:Models")},
-            {key: "/adapters", title: i18next.t("general:Adapters")},
-            {key: "/enforcers", title: i18next.t("general:Enforcers")},
           ],
         },
         {

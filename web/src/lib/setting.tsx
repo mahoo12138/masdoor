@@ -44,7 +44,9 @@ export {BasePath, getOriginUrl, getRoutePath, withBasePath} from "@/lib/base-pat
 
 export const ServerUrl = BasePath;
 
-export const StaticBaseUrl = Conf.StaticBaseUrl;
+// the icons, flag sprites and preview images ship in web/public, so every asset
+// URL is relative to this instance; there is no CDN to point at
+export const StaticBaseUrl = "";
 
 export const MAX_PAGE_SIZE = 25;
 export const SEARCH_DEBOUNCE_MS = 300;
@@ -103,7 +105,7 @@ export function isSelfRedirectUri(redirectUri) {
 }
 
 export function getOAuthIssuer() {
-  return document.querySelector("meta[name=\"casdoor-issuer\"]")?.getAttribute("content") || getFullServerUrl();
+  return document.querySelector("meta[name=\"masdoor-issuer\"]")?.getAttribute("content") || getFullServerUrl();
 }
 
 export function getOAuthIssuerParam() {
@@ -244,9 +246,9 @@ export function getAlgorithmNames(themeData) {
 
 export function getLogo(themes) {
   if (themes.includes("dark")) {
-    return `${StaticBaseUrl}/img/casdoor-logo_1185x256_dark.png`;
+    return `${StaticBaseUrl}/img/masdoor-logo-dark.png`;
   } else {
-    return `${StaticBaseUrl}/img/casdoor-logo_1185x256.png`;
+    return `${StaticBaseUrl}/img/masdoor-logo.png`;
   }
 }
 
@@ -255,8 +257,8 @@ export function getLogo(themes) {
  * organization's and application's logo. It is nearly black, so it disappears on
  * a dark sidebar — but it has a `_dark` twin, which `getLogo` returns.
  */
-function isDefaultCasdoorLogo(logo: string | undefined | null) {
-  return typeof logo === "string" && logo.endsWith("/img/casdoor-logo_1185x256.png");
+function isDefaultLogo(logo: string | undefined | null) {
+  return typeof logo === "string" && logo.endsWith("/img/masdoor-logo.png");
 }
 
 /**
@@ -273,7 +275,7 @@ export function getThemedLogo(
     if (logoDark) {
       return logoDark;
     }
-    if (!logo || isDefaultCasdoorLogo(logo)) {
+    if (!logo || isDefaultLogo(logo)) {
       return getLogo(themes);
     }
   }
@@ -296,72 +298,6 @@ export const Countries = [
 ];
 
 export const OtherProviderInfo = {
-  SMS: {
-    "Aliyun SMS": {
-      logo: `${StaticBaseUrl}/img/social_aliyun.png`,
-      url: "https://aliyun.com/product/sms",
-    },
-    "Amazon SNS": {
-      logo: `${StaticBaseUrl}/img/social_aws.png`,
-      url: "https://aws.amazon.com/cn/sns/",
-    },
-    "Azure ACS": {
-      logo: `${StaticBaseUrl}/img/social_azure.png`,
-      url: "https://azure.microsoft.com/en-us/products/communication-services",
-    },
-    "Infobip SMS": {
-      logo: `${StaticBaseUrl}/img/social_infobip.png`,
-      url: "https://portal.infobip.com/homepage/",
-    },
-    "Tencent Cloud SMS": {
-      logo: `${StaticBaseUrl}/img/social_tencent_cloud.jpg`,
-      url: "https://cloud.tencent.com/product/sms",
-    },
-    "Baidu Cloud SMS": {
-      logo: `${StaticBaseUrl}/img/social_baidu_cloud.png`,
-      url: "https://cloud.baidu.com/product/sms.html",
-    },
-    "Volc Engine SMS": {
-      logo: `${StaticBaseUrl}/img/social_volc_engine.jpg`,
-      url: "https://www.volcengine.com/products/cloud-sms",
-    },
-    "Huawei Cloud SMS": {
-      logo: `${StaticBaseUrl}/img/social_huawei.png`,
-      url: "https://www.huaweicloud.com/product/msgsms.html",
-    },
-    "UCloud SMS": {
-      logo: `${StaticBaseUrl}/img/social_ucloud.png`,
-      url: "https://www.ucloud.cn/site/product/usms.html",
-    },
-    "Twilio SMS": {
-      logo: `${StaticBaseUrl}/img/social_twilio.svg`,
-      url: "https://www.twilio.com/messaging",
-    },
-    "SmsBao SMS": {
-      logo: `${StaticBaseUrl}/img/social_smsbao.png`,
-      url: "https://www.smsbao.com/",
-    },
-    "SUBMAIL SMS": {
-      logo: `${StaticBaseUrl}/img/social_submail.svg`,
-      url: "https://www.mysubmail.com",
-    },
-    "Msg91 SMS": {
-      logo: `${StaticBaseUrl}/img/social_msg91.ico`,
-      url: "https://control.msg91.com/app/",
-    },
-    "OSON SMS": {
-      logo: `${StaticBaseUrl}/img/social_osonsms.svg`,
-      url: "https://osonsms.com/",
-    },
-    "Custom HTTP SMS": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://casdoor.org/docs/provider/sms/overview",
-    },
-    "Mock SMS": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "",
-    },
-  },
   Email: {
     "Default": {
       logo: `${StaticBaseUrl}/img/email_default.png`,
@@ -385,7 +321,6 @@ export const OtherProviderInfo = {
     },
     "Custom HTTP Email": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://casdoor.org/docs/provider/email/overview",
     },
     "Resend": {
       logo: `${StaticBaseUrl}/img/email_resend.png`,
@@ -428,10 +363,6 @@ export const OtherProviderInfo = {
     "Synology": {
       logo: `${StaticBaseUrl}/img/social_synology.png`,
       url: "https://www.synology.com/en-global/dsm/feature/file_sharing",
-    },
-    "Masdoor": {
-      logo: `${StaticBaseUrl}/img/casdoor.png`,
-      url: "https://casdoor.org/docs/provider/storage/overview",
     },
     "CUCloud OSS": {
       logo: `${StaticBaseUrl}/img/social_cucloud.png`,
@@ -479,7 +410,6 @@ export const OtherProviderInfo = {
     },
     "Custom HTTP": {
       logo: `${StaticBaseUrl}/img/email_default.png`,
-      url: "https://casdoor.org/docs/provider/notification/overview",
     },
     "DingTalk": {
       logo: `${StaticBaseUrl}/img/social_dingtalk.png`,
@@ -554,26 +484,6 @@ export const OtherProviderInfo = {
       url: "https://work.weixin.qq.com/",
     },
   },
-  "Face ID": {
-    "Alibaba Cloud Facebody": {
-      logo: `${StaticBaseUrl}/img/social_aliyun.png`,
-      url: "https://vision.aliyun.com/facebody",
-    },
-    "Local UniFace": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://github.com/yakhyo/uniface",
-    },
-  },
-  "ID Verification": {
-    "Jumio": {
-      logo: `${StaticBaseUrl}/img/social_jumio.png`,
-      url: "https://www.jumio.com/",
-    },
-    "Alibaba Cloud": {
-      logo: `${StaticBaseUrl}/img/social_aliyun.png`,
-      url: "https://www.aliyun.com/product/idverification",
-    },
-  },
   Audit: {
     "Syslog": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
@@ -597,7 +507,7 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "soundcloud", "spotify", "strava", "stripe", "tiktok", "tumblr", "twitch", "twitter", "typetalk", "uber", "vk",
   "wepay", "xero", "yahoo", "yammer", "yandex", "zoom", "oidc", "custom", "webauthnCredentials",
   "preferred_mfa_type", "recovery_codes", "totp_secret", "mfa_phone_enabled", "mfa_email_enabled", "invitation",
-  "invitation_code", "face_ids", "properties", "roles", "permissions", "groups", "last_change_password_time",
+  "invitation_code", "face_ids", "properties", "roles", "groups", "last_change_password_time",
   "last_signin_wrong_time", "signin_wrong_times", "managedAccounts", "mfaAccounts", "mfaItems", "need_update_password",
   "created_time", "updated_time", "deleted_time",
   "ip_whitelist"];
@@ -607,10 +517,6 @@ export const GroupFields = ["owner", "name", "created_time", "updated_time", "di
 
 export const RoleFields = ["owner", "name", "created_time", "display_name", "description",
   "users", "groups", "roles", "domains", "is_enabled"];
-
-export const PermissionFields = ["owner", "name", "created_time", "display_name", "description",
-  "users", "groups", "roles", "domains", "model", "adapter", "resource_type",
-  "resources", "actions", "effect", "is_enabled", "submitter", "approver", "approve_time", "state"];
 
 
 // The "<translated label>#<field>" column list behind the .xlsx import templates,
@@ -654,7 +560,6 @@ export const GetTranslatedUserItems = () => {
     {name: "API key", label: i18next.t("general:API key")},
     {name: "Groups", label: i18next.t("general:Groups")},
     {name: "Roles", label: i18next.t("general:Roles")},
-    {name: "Permissions", label: i18next.t("general:Permissions")},
     {name: "3rd-party logins", label: i18next.t("user:3rd-party logins")},
     {name: "Properties", label: i18next.t("user:Properties")},
     {name: "Is online", label: i18next.t("user:Is online")},
@@ -670,7 +575,6 @@ export const GetTranslatedUserItems = () => {
     {name: "Last signin time", label: i18next.t("user:Last signin time")},
     {name: "Last signin IP", label: i18next.t("user:Last signin IP")},
     {name: "Managed accounts", label: i18next.t("user:Managed accounts")},
-    {name: "Face ID", label: i18next.t("login:Face ID")},
     {name: "MFA accounts", label: i18next.t("user:MFA accounts")},
     {name: "MFA items", label: i18next.t("general:MFA items")},
   ];
@@ -688,8 +592,6 @@ export function getUserColumns() {
       transField = "MFA accounts";
     } else if (field === "mfaItems") {
       transField = "MFA items";
-    } else if (field === "face_ids") {
-      transField = "Face ID";
     } else if (field === "managedAccounts") {
       transField = "Managed accounts";
     } else {
@@ -739,22 +641,6 @@ export function getRoleColumns() {
       transField = "Organization";
     }
     const toTranslateList = ["general", "role"].map((ns: string) => `${ns}:${transField}`);
-    const transResult = toTranslateList.map((item: string) => i18next.t(item) === transField ? null : i18next.t(item))
-      .find((item: any) => item !== null);
-    transField = transResult ? transResult : transField;
-    return `${transField}#${field}`;
-  });
-}
-
-export function getPermissionColumns() {
-  return PermissionFields.map((field: string) => {
-    let transField = field.toLowerCase().split("_").join(" ");
-    transField = transField.charAt(0).toUpperCase() + transField.slice(1);
-    transField = transField.replace("Id", "ID");
-    if (transField === "Owner") {
-      transField = "Organization";
-    }
-    const toTranslateList = ["general", "permission"].map((ns: string) => `${ns}:${transField}`);
     const transResult = toTranslateList.map((item: string) => i18next.t(item) === transField ? null : i18next.t(item))
       .find((item: any) => item !== null);
     transField = transResult ? transResult : transField;
@@ -1395,28 +1281,6 @@ export function getProviderTypeOptions(category) {
         {id: "Resend", name: "Resend"},
       ]
     );
-  } else if (category === "SMS") {
-    return (
-      [
-        {id: "Aliyun SMS", name: "Alibaba Cloud SMS"},
-        {id: "Alibaba Cloud PNVS SMS", name: "Alibaba Cloud PNVS SMS"},
-        {id: "Amazon SNS", name: "Amazon SNS"},
-        {id: "Azure ACS", name: "Azure ACS"},
-        {id: "Custom HTTP SMS", name: "Custom HTTP SMS"},
-        {id: "Mock SMS", name: "Mock SMS"},
-        {id: "OSON SMS", name: "OSON SMS"},
-        {id: "Infobip SMS", name: "Infobip SMS"},
-        {id: "Tencent Cloud SMS", name: "Tencent Cloud SMS"},
-        {id: "Baidu Cloud SMS", name: "Baidu Cloud SMS"},
-        {id: "Volc Engine SMS", name: "Volc Engine SMS"},
-        {id: "Huawei Cloud SMS", name: "Huawei Cloud SMS"},
-        {id: "UCloud SMS", name: "UCloud SMS"},
-        {id: "Twilio SMS", name: "Twilio SMS"},
-        {id: "SmsBao SMS", name: "SmsBao SMS"},
-        {id: "SUBMAIL SMS", name: "SUBMAIL SMS"},
-        {id: "Msg91 SMS", name: "Msg91 SMS"},
-      ]
-    );
   } else if (category === "Storage") {
     return (
       [
@@ -1429,7 +1293,6 @@ export function getProviderTypeOptions(category) {
         {id: "Qiniu Cloud Kodo", name: "Qiniu Cloud Kodo"},
         {id: "Google Cloud Storage", name: "Google Cloud Storage"},
         {id: "Synology", name: "Synology"},
-        {id: "Masdoor", name: "Masdoor"},
         {id: "CUCloud OSS", name: "CUCloud OSS"},
       ]
     );
@@ -1465,16 +1328,6 @@ export function getProviderTypeOptions(category) {
       {id: "Viber", name: "Viber"},
       {id: "CUCloud", name: "CUCloud"},
       {id: "WeCom", name: "WeCom"},
-    ]);
-  } else if (category === "Face ID") {
-    return ([
-      {id: "Alibaba Cloud Facebody", name: "Alibaba Cloud Facebody"},
-      {id: "Local UniFace", name: "Local UniFace"},
-    ]);
-  } else if (category === "ID Verification") {
-    return ([
-      {id: "Jumio", name: "Jumio"},
-      {id: "Alibaba Cloud", name: "Alibaba Cloud"},
     ]);
   } else if (category === "Audit") {
     return ([
@@ -1569,7 +1422,7 @@ export function getProvidersRule(application, item) {
 // The login page offers a credential form, the sign-in providers or a QR panel; without any of them it has nothing to sign in with.
 export function hasAnySigninMethod(application) {
   if (isPasswordEnabled(application) || isCodeSigninEnabled(application) || isWebAuthnEnabled(application) ||
-    isFaceIdEnabled(application) || isMagicLinkEnabled(application)) {
+    isMagicLinkEnabled(application)) {
     return true;
   }
   const providersShown = (application?.signinItems ?? []).some(item => item.name === "Providers" && item.visible);
@@ -1603,9 +1456,6 @@ export function isWebAuthnEnabled(application) {
   return isSigninMethodEnabled(application, "WebAuthn");
 }
 
-export function isFaceIdEnabled(application) {
-  return isSigninMethodEnabled(application, "Face ID");
-}
 
 export function isMagicLinkEnabled(application) {
   return isSigninMethodEnabled(application, "Magic link");
@@ -1733,36 +1583,19 @@ export function isDefaultOrganizationSelected(account) {
   return false;
 }
 
-const BuiltInObjects = [
-  "api-enforcer-built-in",
-  "user-enforcer-built-in",
-  "api-model-built-in",
-  "user-model-built-in",
-  "api-adapter-built-in",
-  "user-adapter-built-in",
-];
-
-export function builtInObject(obj) {
-  if (obj === undefined || obj === null) {
-    return false;
-  }
-  return obj.owner === "built-in" && BuiltInObjects.includes(obj.name);
-}
-
-
 export function getUserCommonFields() {
   return ["Owner", "Name", "CreatedTime", "UpdatedTime", "DeletedTime", "Id", "ExternalId", "Type", "Password", "PasswordSalt", "PasswordType", "DisplayName", "FirstName", "LastName", "Avatar", "AvatarType", "PermanentAvatar",
     "Email", "EmailVerified", "Phone", "CountryCode", "Location", "Address", "Affiliation", "Title", "IdCardType", "IdCard", "RealName", "IsVerified", "Homepage", "Bio", "Tag", "Region",
     "Language", "Gender", "Birthday", "Education", "UidNumber", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
     "SignupApplication", "RegisterType", "RegisterSource", "CreatedIp", "LastSigninTime", "LastSigninIp",
     "PreferredMfaType", "TotpSecret", "RecoveryCodes", "MfaPhoneEnabled", "MfaEmailEnabled", "MfaPushEnabled", "MfaPushReceiver", "MfaPushProvider",
-    "WebauthnCredentials", "FaceIds", "Invitation", "InvitationCode", "Properties", "Groups"];
+    "WebauthnCredentials", "Invitation", "InvitationCode", "Properties", "Groups"];
 }
 
 export function getDefaultFooterContent() {
   // the height is inline rather than an attribute: this HTML is injected into the
   // page, where Tailwind's preflight would otherwise reset it to `height: auto`
-  return `Powered by <a target="_blank" href="https://casdoor.org" rel="noreferrer"><img style="display: inline-block; height: 20px; width: auto; padding-bottom: 3px" alt="Masdoor" src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png"/></a>`;
+  return `<img style="display: inline-block; height: 20px; width: auto" alt="Masdoor" src="${StaticBaseUrl}/img/masdoor-logo.png"/>`;
 }
 
 export function getEmptyFooterContent() {
@@ -1794,7 +1627,7 @@ export function getDefaultHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Masdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/masdoor-logo.png" alt="Masdoor Logo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
     <p>Use this code for your transaction. It's valid for 5 minutes</p>
@@ -1807,11 +1640,6 @@ export function getDefaultHtmlEmailContent() {
       </div>
     </reset-link>
     <p>Thanks</p>
-    <p>Casbin Team</p>
-    <hr>
-    <div class="footer">
-        <p>Masdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
-    </div>
 </div>
 </body>
 </html>`;
@@ -1837,7 +1665,7 @@ export function getDefaultInvitationHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Masdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/masdoor-logo.png" alt="Masdoor Logo" width="300">
     </div>
     <p>You have been invited into Masdoor</p>
     <div class="code">
@@ -1849,11 +1677,6 @@ export function getDefaultInvitationHtmlEmailContent() {
       </div>
     </reset-link>
     <p>Thanks</p>
-    <p>Casbin Team</p>
-    <hr>
-    <div class="footer">
-        <p>Masdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
-    </div>
 </div>
 </body>
 </html>`;
@@ -1956,7 +1779,7 @@ export function getFormTypeItems(formType) {
 
 
 export function getApiPaths() {
-  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "permission", "model", "adapter", "enforcer", "session", "token", "webhook", "form", "invitation"];
+  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "session", "token", "webhook", "form", "invitation"];
   const res = [];
 
   // Auth and user session APIs
@@ -1979,17 +1802,11 @@ export function getApiPaths() {
     if (obj === "role") {
       res.push("upload-roles");
     }
-    if (obj === "permission") {
-      res.push("upload-permissions");
-    }
     if (obj === "resource") {
       res.push("upload-resource");
     }
     if (obj === "invitation") {
       res.push("send-invitation", "verify-invitation");
-    }
-    if (obj === "enforcer") {
-      res.push("enforce", "batch-enforce");
     }
     if (obj === "session") {
       res.push("is-session-duplicated");
@@ -2013,7 +1830,7 @@ export function getApiPaths() {
 
   // Verification and communication APIs
   res.push("send-verification-code", "verify-code", "verify-captcha");
-  res.push("send-email", "send-sms", "send-notification");
+  res.push("send-email", "send-notification");
 
   // Monitoring and health APIs
   res.push("health", "metrics");

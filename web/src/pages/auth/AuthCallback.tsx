@@ -21,13 +21,13 @@ import * as Setting from "@/lib/setting";
  * static page that posts the provider's code itself, so the browser does not have
  * to download the whole bundle first. When that page meets something it cannot
  * finish — an MFA challenge, a plan to pick — it stores what it already got and
- * sends the browser here with `__casdoor_callback_react=1`.
+ * sends the browser here with `__masdoor_callback_react=1`.
  *
  * The authorization code is single-use, so this page must continue from that
  * stored response instead of POSTing the code a second time.
  */
-const REACT_FALLBACK_KEY = "__casdoor_callback_react";
-const REACT_FALLBACK_PAYLOAD_KEY = "casdoor_callback_react_fallback";
+const REACT_FALLBACK_KEY = "__masdoor_callback_react";
+const REACT_FALLBACK_PAYLOAD_KEY = "masdoor_callback_react_fallback";
 
 interface ReactFallbackPayload {
   search: string;

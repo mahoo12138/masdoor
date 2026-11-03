@@ -2,7 +2,7 @@ import path from "path";
 import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react";
 
-const backend = process.env.CASDOOR_BACKEND || "http://localhost:8000";
+const backend = process.env.MASDOOR_BACKEND || "http://localhost:8000";
 
 const proxyPaths = [
   "/api",

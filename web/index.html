@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- routers/static_filter.go rewrites this exact URL to the organization's own
-         favicon, so the first paint is already branded; keep it byte-identical -->
-    <link rel="icon" href="https://cdn.casbin.org/img/favicon.png" />
-    <link rel="apple-touch-icon" href="https://cdn.casbin.org/img/favicon.png" />
-    <link rel="manifest" href="https://cdn.casbin.org/site/casdoor/manifest.json" />
+    <!-- routers/branding.go replaces this exact path with the organization's or
+         application's own favicon, so the first paint is already branded; keep it
+         byte-identical to branding.go's defaultFavicon -->
+    <link rel="icon" href="/img/favicon.png" />
+    <link rel="apple-touch-icon" href="/img/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Masdoor - An open-source Identity and Access Management (IAM) / Single-Sign-On (SSO) platform" />
@@ -15,7 +16,7 @@
       body {
         margin: 0;
       }
-      #casdoor-boot-fallback {
+      #masdoor-boot-fallback {
         display: -webkit-box;
         display: -webkit-flex;
         display: flex;
@@ -39,48 +40,48 @@
         text-align: center;
         -webkit-font-smoothing: antialiased;
       }
-      html.dark #casdoor-boot-fallback {
+      html.dark #masdoor-boot-fallback {
         background: #121212;
         color: #f5f5f5;
       }
-      html.dark #casdoor-boot-spinner,
-      html.dark #casdoor-boot-hint {
+      html.dark #masdoor-boot-spinner,
+      html.dark #masdoor-boot-hint {
         color: #a3a3a3;
       }
-      html.dark #casdoor-boot-detail {
+      html.dark #masdoor-boot-detail {
         border-color: #303030;
         background: #262626;
         color: #a3a3a3;
       }
-      #casdoor-boot-spinner {
+      #masdoor-boot-spinner {
         width: 24px;
         height: 24px;
         color: #707070;
-        -webkit-animation: casdoor-boot-spin 1s linear infinite;
-        animation: casdoor-boot-spin 1s linear infinite;
+        -webkit-animation: masdoor-boot-spin 1s linear infinite;
+        animation: masdoor-boot-spin 1s linear infinite;
       }
-      #casdoor-boot-fallback.failed #casdoor-boot-spinner {
+      #masdoor-boot-fallback.failed #masdoor-boot-spinner {
         display: none;
       }
-      #casdoor-boot-message {
+      #masdoor-boot-message {
         display: none;
         width: 100%;
         max-width: 28rem;
       }
-      #casdoor-boot-fallback.failed #casdoor-boot-message {
+      #masdoor-boot-fallback.failed #masdoor-boot-message {
         display: block;
       }
-      #casdoor-boot-title {
+      #masdoor-boot-title {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
         letter-spacing: -0.01em;
       }
-      #casdoor-boot-hint {
+      #masdoor-boot-hint {
         margin: 8px 0 0 0;
         color: #707070;
       }
-      #casdoor-boot-detail {
+      #masdoor-boot-detail {
         display: none;
         margin-top: 16px;
         padding: 8px 12px;
@@ -93,10 +94,10 @@
         text-align: left;
         word-break: break-all;
       }
-      @-webkit-keyframes casdoor-boot-spin {
+      @-webkit-keyframes masdoor-boot-spin {
         to { -webkit-transform: rotate(360deg); }
       }
-      @keyframes casdoor-boot-spin {
+      @keyframes masdoor-boot-spin {
         to { transform: rotate(360deg); }
       }
     </style>
@@ -127,14 +128,14 @@
         var shown = false;
 
         function show(title, detail) {
-          var box = document.getElementById("casdoor-boot-fallback");
+          var box = document.getElementById("masdoor-boot-fallback");
           if (!box || shown) {
             return;
           }
           shown = true;
 
-          var titleEl = document.getElementById("casdoor-boot-title");
-          var detailEl = document.getElementById("casdoor-boot-detail");
+          var titleEl = document.getElementById("masdoor-boot-title");
+          var detailEl = document.getElementById("masdoor-boot-detail");
 
           titleEl.innerHTML = title;
           box.className += " failed";
@@ -146,7 +147,7 @@
 
         window.addEventListener("error", function(event) {
           // a file the server pointed to a CDN (routers/frontend_cdn.go) is loaded from the server again on failure
-          if (event && event.target && event.target.getAttribute && event.target.getAttribute("data-casdoor-local") !== null) {
+          if (event && event.target && event.target.getAttribute && event.target.getAttribute("data-masdoor-local") !== null) {
             return;
           }
           if (event && event.target && event.target !== window && event.target.tagName === "SCRIPT") {
@@ -170,13 +171,13 @@
          bundle does not get that far. Inline styles on purpose: the stylesheet is
          part of the bundle that just failed. -->
     <div id="root">
-      <div id="casdoor-boot-fallback" role="status" aria-label="Loading">
-        <svg id="casdoor-boot-spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <div id="masdoor-boot-fallback" role="status" aria-label="Loading">
+        <svg id="masdoor-boot-spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 12a9 9 0 1 1-6.219-8.56" />
         </svg>
         <script>
           (function() {
-            var spinner = document.getElementById("casdoor-boot-spinner");
+            var spinner = document.getElementById("masdoor-boot-spinner");
             if (spinner.getAnimations) {
               var animations = spinner.getAnimations();
               for (var i = 0; i < animations.length; i++) {
@@ -185,13 +186,13 @@
             }
           })();
         </script>
-        <div id="casdoor-boot-message">
-          <h1 id="casdoor-boot-title"></h1>
-          <p id="casdoor-boot-hint">
+        <div id="masdoor-boot-message">
+          <h1 id="masdoor-boot-title"></h1>
+          <p id="masdoor-boot-hint">
             Your browser may be too old to run Masdoor. Please open this page in a recent version of Chrome, Edge, Firefox or Safari.
             If this page was opened inside an app's built-in login window, sign in with your system browser instead.
           </p>
-          <div id="casdoor-boot-detail"></div>
+          <div id="masdoor-boot-detail"></div>
         </div>
       </div>
     </div>

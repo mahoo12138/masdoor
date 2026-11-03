@@ -24,7 +24,6 @@ const SIGNIN_METHOD_RULES: Record<string, EnumMap> = {
   "Verification code": {
     "All": {i18nKey: "general:All"},
     "Email only": {i18nKey: "general:Email only"},
-    "Phone only": {i18nKey: "general:Phone only"},
   },
   "Password": {
     "All": {i18nKey: "general:All"},
@@ -51,7 +50,6 @@ const SIGNIN_METHOD_NAMES: {name: string; labelKey: string}[] = [
   {name: "Verification code", labelKey: "login:Verification code"},
   {name: "Magic link", labelKey: "login:Magic link"},
   {name: "WebAuthn", labelKey: "login:WebAuthn"},
-  {name: "Face ID", labelKey: "login:Face ID"},
   {name: "Device login", labelKey: "login:Device login"},
 ];
 

@@ -82,14 +82,7 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     to: "/roles",
     items: [
       {key: "/roles", label: i18next.t("general:Roles")},
-      {key: "/permissions", label: i18next.t("general:Permissions")},
-      {key: "/models", label: i18next.t("general:Models")},
-      {key: "/adapters", label: i18next.t("general:Adapters")},
-      {key: "/enforcers", label: i18next.t("general:Enforcers")},
-    ].filter(
-      (item) =>
-        Setting.isLocalAdminUser(account) || !["/models", "/adapters", "/enforcers"].includes(item.key),
-    ),
+    ],
   });
 
 
@@ -115,12 +108,8 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     );
   }
   adminItems.push(
-    {key: "/sites", label: i18next.t("general:Sites")},
-    {key: "/rules", label: i18next.t("general:Rules")},
-    {key: "/forms", label: i18next.t("general:Forms")},
     {key: "/webhooks", label: i18next.t("general:Webhooks")},
     {key: "/webhook-events", label: i18next.t("general:Webhook Events")},
-    {key: "/tickets", label: i18next.t("general:Tickets")},
   );
   if (Setting.isAdminUser(account)) {
     adminItems.push({

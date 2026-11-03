@@ -55,19 +55,7 @@ const KeyEditPage = React.lazy(() => import("@/pages/KeyEditPage"));
 
 const RoleListPage = React.lazy(() => import("@/pages/RoleListPage"));
 const RoleEditPage = React.lazy(() => import("@/pages/RoleEditPage"));
-const PermissionListPage = React.lazy(() => import("@/pages/PermissionListPage"));
-const PermissionEditPage = React.lazy(() => import("@/pages/PermissionEditPage"));
-const ModelListPage = React.lazy(() => import("@/pages/ModelListPage"));
-const ModelEditPage = React.lazy(() => import("@/pages/ModelEditPage"));
-const AdapterListPage = React.lazy(() => import("@/pages/AdapterListPage"));
-const AdapterEditPage = React.lazy(() => import("@/pages/AdapterEditPage"));
-const EnforcerListPage = React.lazy(() => import("@/pages/EnforcerListPage"));
-const EnforcerEditPage = React.lazy(() => import("@/pages/EnforcerEditPage"));
 
-const SiteListPage = React.lazy(() => import("@/pages/SiteListPage"));
-const SiteEditPage = React.lazy(() => import("@/pages/SiteEditPage"));
-const RuleListPage = React.lazy(() => import("@/pages/RuleListPage"));
-const RuleEditPage = React.lazy(() => import("@/pages/RuleEditPage"));
 
 const SessionListPage = React.lazy(() => import("@/pages/SessionListPage"));
 const RecordListPage = React.lazy(() => import("@/pages/RecordListPage"));
@@ -76,13 +64,9 @@ const TokenEditPage = React.lazy(() => import("@/pages/TokenEditPage"));
 const VerificationListPage = React.lazy(() => import("@/pages/VerificationListPage"));
 
 
-const FormListPage = React.lazy(() => import("@/pages/FormListPage"));
-const FormEditPage = React.lazy(() => import("@/pages/FormEditPage"));
 const WebhookListPage = React.lazy(() => import("@/pages/WebhookListPage"));
 const WebhookEditPage = React.lazy(() => import("@/pages/WebhookEditPage"));
 const WebhookEventListPage = React.lazy(() => import("@/pages/WebhookEventListPage"));
-const TicketListPage = React.lazy(() => import("@/pages/TicketListPage"));
-const TicketEditPage = React.lazy(() => import("@/pages/TicketEditPage"));
 
 // ---- public pages ------------------------------------------------------------
 const LoginPage = React.lazy(() => import("@/pages/auth/LoginPage"));
@@ -241,19 +225,7 @@ export default function App() {
 
           <Route path="/roles" element={<RoleListPage />} />
           <Route path="/roles/:organizationName/:roleName" element={<RoleEditPage />} />
-          <Route path="/permissions" element={<PermissionListPage />} />
-          <Route path="/permissions/:organizationName/:permissionName" element={<PermissionEditPage />} />
-          <Route path="/models" element={<ModelListPage />} />
-          <Route path="/models/:organizationName/:modelName" element={<ModelEditPage />} />
-          <Route path="/adapters" element={<AdapterListPage />} />
-          <Route path="/adapters/:organizationName/:adapterName" element={<AdapterEditPage />} />
-          <Route path="/enforcers" element={<EnforcerListPage />} />
-          <Route path="/enforcers/:organizationName/:enforcerName" element={<EnforcerEditPage />} />
 
-          <Route path="/sites" element={<SiteListPage />} />
-          <Route path="/sites/:organizationName/:siteName" element={<SiteEditPage />} />
-          <Route path="/rules" element={<RuleListPage />} />
-          <Route path="/rules/:organizationName/:ruleName" element={<RuleEditPage />} />
 
           <Route path="/sessions" element={<SessionListPage />} />
           <Route path="/records" element={<RecordListPage />} />
@@ -262,13 +234,9 @@ export default function App() {
           <Route path="/verifications" element={<VerificationListPage />} />
 
 
-          <Route path="/forms" element={<FormListPage />} />
-          <Route path="/forms/:formName" element={<FormEditPage />} />
           <Route path="/webhooks" element={<WebhookListPage />} />
           <Route path="/webhooks/:webhookName" element={<WebhookEditPage />} />
           <Route path="/webhook-events" element={<WebhookEventListPage />} />
-          <Route path="/tickets" element={<TicketListPage />} />
-          <Route path="/tickets/:organizationName/:ticketName" element={<TicketEditPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

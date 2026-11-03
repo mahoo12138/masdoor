@@ -38,11 +38,7 @@ if (Conf.IsDemoMode) {
               action: {
                 label: i18next.t("general:OK"),
                 onClick: () => {
-                  window.open(
-                    `https://demo.casdoor.com${location.pathname}${location.search}?username=built-in/admin&password=123`,
-                    "_blank",
-                    "noopener,noreferrer",
-                  );
+                  window.location.reload();
                 },
               },
             });

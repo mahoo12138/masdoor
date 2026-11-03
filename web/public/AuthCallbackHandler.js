@@ -15,18 +15,18 @@
 (function() {
   "use strict";
 
-  // the path Masdoor is served under, like "/casdoor", which the server writes into the page (routers/base_path.go)
+  // the path Masdoor is served under, like "/sso", which the server writes into the page (routers/base_path.go)
   var basePath = (function() {
-    var meta = document.querySelector("meta[name=\"casdoor-base-path\"]");
+    var meta = document.querySelector("meta[name=\"masdoor-base-path\"]");
     var value = meta ? (meta.getAttribute("content") || "").replace(/^\/+|\/+$/g, "") : "";
     return value ? "/" + value : "";
   })();
 
-  var reactFallbackKey = "__casdoor_callback_react";
-  var reactFallbackPayloadKey = "casdoor_callback_react_fallback";
+  var reactFallbackKey = "__masdoor_callback_react";
+  var reactFallbackPayloadKey = "masdoor_callback_react_fallback";
 
   function getIssuer() {
-    var meta = document.querySelector("meta[name=\"casdoor-issuer\"]");
+    var meta = document.querySelector("meta[name=\"masdoor-issuer\"]");
     return (meta && meta.getAttribute("content")) || window.location.origin + basePath;
   }
 
@@ -76,8 +76,8 @@
 
   // Keep in sync with consumeLinkNonce() in src/auth/Util.ts
   function consumeLinkNonce(nonce) {
-    var expected = sessionStorage.getItem("casdoor_link_nonce");
-    sessionStorage.removeItem("casdoor_link_nonce");
+    var expected = sessionStorage.getItem("masdoor_link_nonce");
+    sessionStorage.removeItem("masdoor_link_nonce");
     return !!nonce && nonce === expected;
   }
 
@@ -345,27 +345,7 @@
     });
   }
 
-  // The WeChat QR code on the sign-in page comes back here inside its frame (see
-  // web/src/auth/Provider.ts): the page around it finishes the sign-in instead.
-  function handOffToSigninPage() {
-    var frame = null;
-    try {
-      frame = window.frameElement;
-    } catch (e) {
-      frame = null;
-    }
-    if (!frame || frame.getAttribute("name") !== "casdoor-wechat-qr") {
-      return false;
-    }
-    window.parent.location.replace(window.location.href);
-    return true;
-  }
-
   async function run() {
-    if (handOffToSigninPage()) {
-      return;
-    }
-
     var params = new URLSearchParams(window.location.search);
     var innerParams = getInnerParams();
     if (!innerParams) {
@@ -517,7 +497,7 @@
     goToReactFallback();
   }
 
-  window.CasdoorAuthCallback = {
+  window.MasdoorAuthCallback = {
     run: function() {
       return run().catch(function(error) {
         setStatus(error && error.message ? error.message : "Failed to complete callback.", true);

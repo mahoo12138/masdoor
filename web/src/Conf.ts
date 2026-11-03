@@ -22,8 +22,6 @@ export let IsDemoMode = false;
 export let ForceLanguage = "";
 export let DefaultLanguage = "en";
 
-export let StaticBaseUrl = "https://cdn.casbin.org";
-
 export const ThemeDefault = {
   themeType: "default",
   colorPrimary: "#262626",
@@ -53,9 +51,6 @@ export function setConfig(config: Record<string, any>) {
   if (config.defaultLanguage !== undefined) {
     DefaultLanguage = config.defaultLanguage;
   }
-  if (config.staticBaseUrl !== undefined) {
-    StaticBaseUrl = config.staticBaseUrl;
-  }
   if (config.defaultApplication !== undefined) {
     DefaultApplication = config.defaultApplication;
   }
@@ -72,7 +67,7 @@ export function initConfigFromCookie() {
   try {
     const curCookie = Cookie.parse(document.cookie);
     // a page embedded in another site gets no cookie, the server also puts the config into the page
-    const raw = curCookie["jsonWebConfig"] ?? document.querySelector<HTMLMetaElement>("meta[name='casdoor-web-config']")?.content;
+    const raw = curCookie["jsonWebConfig"] ?? document.querySelector<HTMLMetaElement>("meta[name='masdoor-web-config']")?.content;
     if (!raw || raw === "null") {
       return;
     }

@@ -13,7 +13,7 @@ import {CodeEditor} from "@/components/common/CodeEditor";
 import {EditPageShell} from "@/components/crud/EditPageShell";
 import {FormGrid, FormRow} from "@/components/crud/FormRow";
 import {useEditRecord} from "@/hooks/use-edit-record";
-import {getModeTitleKey, submitEdit, type CasdoorResponse, type EditMode} from "@/lib/crud";
+import {getModeTitleKey, submitEdit, type ApiResponse, type EditMode} from "@/lib/crud";
 import * as Setting from "@/lib/setting";
 
 type Ctx = {record: any; mode: EditMode; reload: () => void};
@@ -66,9 +66,9 @@ export interface SimpleEditPageProps {
   titleKey: string;
   backTo: string;
   fields: EditField[];
-  fetch: () => Promise<CasdoorResponse<any>>;
-  add: (record: any) => Promise<CasdoorResponse>;
-  update: (record: any) => Promise<CasdoorResponse>;
+  fetch: () => Promise<ApiResponse<any>>;
+  add: (record: any) => Promise<ApiResponse>;
+  update: (record: any) => Promise<ApiResponse>;
   /** deps of the fetch, usually the route params */
   deps?: React.DependencyList;
   /** where to go after "Save" (not "Save & Exit") when the name changed */
@@ -78,7 +78,7 @@ export interface SimpleEditPageProps {
    * Only for what a reload cannot reach: a record the server renamed is no longer
    * where the page would look for it.
    */
-  onAdded?: (record: any, res: CasdoorResponse) => Record<string, any> | undefined;
+  onAdded?: (record: any, res: ApiResponse) => Record<string, any> | undefined;
   transform?: (record: any) => any;
   /**
    * Last chance to adjust the payload before it is sent. Returning `null` aborts

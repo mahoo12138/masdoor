@@ -15,9 +15,9 @@
 (function() {
   "use strict";
 
-  // the path Masdoor is served under, like "/casdoor", which the server writes into the page (routers/base_path.go)
+  // the path Masdoor is served under, like "/sso", which the server writes into the page (routers/base_path.go)
   var basePath = (function() {
-    var meta = document.querySelector("meta[name=\"casdoor-base-path\"]");
+    var meta = document.querySelector("meta[name=\"masdoor-base-path\"]");
     var value = meta ? (meta.getAttribute("content") || "").replace(/^\/+|\/+$/g, "") : "";
     return value ? "/" + value : "";
   })();
@@ -411,7 +411,7 @@
     window.location.replace(authUrl);
   }
 
-  window.CasdoorProviderHintRedirect = {
+  window.MasdoorProviderHintRedirect = {
     run: function() {
       return run().catch(function() {
         redirectToFallback();

@@ -15,11 +15,8 @@ import {MfaVerify, NextMfa, RequiredMfa} from "@/components/auth/MfaVerify";
 import {AgreementCheckbox, isSigninAgreementShown} from "@/components/auth/AgreementModal";
 import {DeviceLoginPanel} from "@/components/auth/DeviceLoginPanel";
 import {GoogleOneTap} from "@/components/auth/GoogleOneTap";
-import {FaceRecognitionCommonModal} from "@/components/common/FaceRecognitionCommonModal";
-import {FaceRecognitionModal} from "@/components/common/FaceRecognitionModal";
 import {ProviderButtons, getVisibleProviders} from "@/components/auth/ProviderButtons";
 import {OrganizationSelect} from "@/components/common/OrganizationSelect";
-import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
 import {PasswordInput} from "@/components/common/PasswordInput";
 import {useSendCode, type CaptchaValues} from "@/components/auth/SendCodeInput";
 import {CodeInput, VerificationCodeLength} from "@/components/auth/CodeInput";
@@ -38,7 +35,7 @@ import * as OrganizationBackend from "@/backend/OrganizationBackend";
 import * as Setting from "@/lib/setting";
 
 type LoginType = "login" | "code" | "device";
-type LoginMethod = "password" | "verificationCode" | "verificationCodeEmail" | "verificationCodePhone" | "webAuthn" | "faceId" | "magicLink" | "device";
+type LoginMethod = "password" | "verificationCode" | "verificationCodeEmail" | "webAuthn" | "magicLink" | "device";
 
 function getDefaultLoginMethod(application: any): LoginMethod {
   const first = application?.signinMethods?.[0];
@@ -51,14 +48,10 @@ function getDefaultLoginMethod(application: any): LoginMethod {
       return "verificationCode";
     case "Email only":
       return "verificationCodeEmail";
-    case "Phone only":
-      return "verificationCodePhone";
     }
     break;
   case "WebAuthn":
     return "webAuthn";
-  case "Face ID":
-    return "faceId";
   case "Magic link":
     return "magicLink";
   case "Device login":
@@ -78,9 +71,7 @@ const SIGNIN_METHOD_KEYS = new Map<string, LoginMethod>([
   ["Password-All", "password"],
   ["Verification code-All", "verificationCode"],
   ["Verification code-Email only", "verificationCodeEmail"],
-  ["Verification code-Phone only", "verificationCodePhone"],
   ["WebAuthn-None", "webAuthn"],
-  ["Face ID-None", "faceId"],
   ["Device login-Tab", "device"],
 ]);
 
@@ -119,8 +110,6 @@ function getSigninMethodLabel(method: LoginMethod) {
     return i18next.t("general:Password");
   case "webAuthn":
     return i18next.t("login:WebAuthn");
-  case "faceId":
-    return i18next.t("login:Face ID");
   case "magicLink":
     return i18next.t("login:Magic link");
   case "device":
@@ -136,8 +125,6 @@ function getUsernameRequiredMessage(method: LoginMethod | undefined) {
   case "magicLink":
   case "verificationCodeEmail":
     return i18next.t("login:Please input your Email!");
-  case "verificationCodePhone":
-    return i18next.t("login:Please input your Phone!");
   default:
     return i18next.t("login:Please input your Email or Phone!");
   }
@@ -150,8 +137,6 @@ function getUsernameLabel(method: LoginMethod | undefined) {
   case "magicLink":
   case "verificationCodeEmail":
     return i18next.t("general:Email");
-  case "verificationCodePhone":
-    return i18next.t("general:Phone");
   default:
     return i18next.t("login:username, Email or phone");
   }
@@ -160,12 +145,6 @@ function getUsernameLabel(method: LoginMethod | undefined) {
 /** The backend's answer to a verification-code sign-in of an email or phone that has no account yet. */
 const NextSignup = "NextSignup";
 
-/** A phone number typed without a country code belongs to the organization's only country, if it has just one. */
-function getOnlyCountryCode(application: any): string {
-  const countryCodes = application?.organizationObj?.countryCodes ?? [];
-  return countryCodes.length === 1 ? countryCodes[0] : "";
-}
-
 /** Which of the three verification-code methods the "Verification code" tab stands for. */
 function getCodeLoginMethod(application: any): LoginMethod {
   const rule = (application?.signinMethods ?? []).find(
@@ -173,9 +152,6 @@ function getCodeLoginMethod(application: any): LoginMethod {
   )?.rule;
   if (rule === "Email only") {
     return "verificationCodeEmail";
-  }
-  if (rule === "Phone only") {
-    return "verificationCodePhone";
   }
   return "verificationCode";
 }
@@ -189,9 +165,6 @@ function getSigninMethodName(method: LoginMethod) {
   }
   if (method === "webAuthn") {
     return "WebAuthn";
-  }
-  if (method === "faceId") {
-    return "Face ID";
   }
   if (method === "magicLink") {
     return "Magic link";
@@ -283,7 +256,6 @@ export default function LoginPage({type = "login", application: applicationProp,
     const query = new URLSearchParams(location.search);
     return query.get("username") || query.get("login_hint") || "";
   });
-  const [countryCode, setCountryCode] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [code, setCode] = React.useState("");
   // the verification-code method asks for the address first, and for the code only once it has been sent there
@@ -295,7 +267,6 @@ export default function LoginPage({type = "login", application: applicationProp,
   const [captchaVisible, setCaptchaVisible] = React.useState(false);
   const [pendingValues, setPendingValues] = React.useState<any>(null);
   const [agreed, setAgreed] = React.useState(true);
-  const [faceValues, setFaceValues] = React.useState<any>(null);
   const [captchaValues, setCaptchaValues] = React.useState<CaptchaValues | undefined>(undefined);
   const captchaRef = React.useRef<CaptchaHandle | null>(null);
   // the device-code flow ends on the page itself: "" while it runs, then the outcome
@@ -330,7 +301,6 @@ export default function LoginPage({type = "login", application: applicationProp,
         return;
       }
       setApplication(app);
-      setCountryCode(app?.organizationObj?.countryCodes?.[0] ?? "");
       setLoginMethod(getDefaultLoginMethod(app));
       setAgreed(true);
       setAutoSignin(Setting.getAutoSigninDefaultValue(app));
@@ -608,13 +578,10 @@ export default function LoginPage({type = "login", application: applicationProp,
       }
       values.password = cipher;
       values.loginMethod = loginMethod;
-    } else if (loginMethod !== "webAuthn" && loginMethod !== "faceId") {
+    } else if (loginMethod !== "webAuthn") {
       values.code = code;
       values.username = username;
       values.password = "";
-      if (loginMethod === "verificationCodePhone") {
-        values.countryCode = countryCode;
-      }
     }
 
     return applyRequestType(values);
@@ -628,20 +595,12 @@ export default function LoginPage({type = "login", application: applicationProp,
     }
 
     const value = username.trim();
-    if (isPhoneCodeMethod) {
-      if (countryCode === "" && !application.organizationObj?.countryCodes?.[0]) {
-        found.countryCode = i18next.t("signup:Please select your country code!");
-      } else if (value === "") {
-        found.username = i18next.t("signup:Please input your phone number!");
-      } else if (!Setting.isValidPhone(value, countryCode)) {
-        found.username = i18next.t("signup:The input is not valid Phone!");
-      }
-    } else if (value === "") {
+    if (value === "") {
       if (loginMethod !== "webAuthn") {
         found.username = getUsernameRequiredMessage(loginMethod);
       }
-    } else if (loginMethod === "verificationCode" && !Setting.isValidEmail(value) && !Setting.isValidPhone(value, getOnlyCountryCode(application))) {
-      found.username = i18next.t("login:The input is not valid Email or phone number!");
+    } else if (loginMethod === "verificationCode" && !Setting.isValidEmail(value)) {
+      found.username = i18next.t("login:The input is not valid Email!");
     } else if ((loginMethod === "verificationCodeEmail" || loginMethod === "magicLink") && !Setting.isValidEmail(value)) {
       found.username = i18next.t("login:The input is not valid Email!");
     }
@@ -870,26 +829,6 @@ export default function LoginPage({type = "login", application: applicationProp,
       return;
     }
 
-    if (loginMethod === "faceId") {
-      // the backend checks the user exists and picks the provider before the camera opens
-      setLoading(true);
-      fetch(`${Setting.ServerUrl}/api/faceid-signin-begin?owner=${application.organization}&name=${encodeURIComponent(username)}`, {
-        method: "GET",
-        credentials: "include",
-        headers: {"Accept-Language": Setting.getAcceptLanguage()},
-      })
-        .then((res) => res.json())
-        .then((res: any) => {
-          if (res.status === "error") {
-            setLoading(false);
-            Setting.showMessage("error", res.msg);
-            return;
-          }
-          setFaceValues(values);
-        });
-      return;
-    }
-
     // Password sign-in may need a captcha first; the code flow is already
     // rate-limited by the code itself.
     if (loginMethod === "password") {
@@ -1067,9 +1006,8 @@ export default function LoginPage({type = "login", application: applicationProp,
   const codeDest = username.trim();
   const codeSender = useSendCode({
     method: "login",
-    destType: loginMethod === "verificationCodeEmail" || (loginMethod !== "verificationCodePhone" && codeDest.includes("@")) ? "email" : "phone",
+    destType: "email",
     dest: codeDest,
-    countryCode: loginMethod === "verificationCodePhone" ? countryCode : "",
     applicationId: application ? Setting.getApplicationName(application) : "",
     application: application ?? undefined,
     useInlineCaptcha: application ? Setting.isInlineCaptchaEnabled(application) : false,
@@ -1195,15 +1133,11 @@ export default function LoginPage({type = "login", application: applicationProp,
   const passwordEnabled = Setting.isPasswordEnabled(application);
   const codeEnabled = Setting.isCodeSigninEnabled(application);
   const webAuthnEnabled = Setting.isWebAuthnEnabled(application);
-  const faceIdEnabled = Setting.isFaceIdEnabled(application);
   const magicLinkEnabled = Setting.isMagicLinkEnabled(application);
-  // an application with a Face ID provider lets the backend do the recognition
-  const hasFaceIdProvider = (application.providers ?? []).some((item: any) => item.provider?.category === "Face ID");
   const isCodeMethod = (loginMethod ?? "").startsWith("verificationCode");
   // "Email only" and "Phone only" share the "Verification code" tab, but they are
   // different methods: the tab has to lead back to the one the application configured
   const codeMethod = getCodeLoginMethod(application);
-  const isPhoneCodeMethod = loginMethod === "verificationCodePhone";
   const activeTab = isCodeMethod ? codeMethod : loginMethod;
   // the application lists its methods in the order it wants them shown, each with
   // its own rule and display name
@@ -1218,7 +1152,7 @@ export default function LoginPage({type = "login", application: applicationProp,
     (item: any) => item.name === "Device login" && item.rule === "Login page",
   );
   // without any credential method there is no form, only the providers
-  const showForm = passwordEnabled || codeEnabled || webAuthnEnabled || faceIdEnabled || magicLinkEnabled;
+  const showForm = passwordEnabled || codeEnabled || webAuthnEnabled || magicLinkEnabled;
 
   if (singleProviderAuthUrl !== null) {
     return <AuthLoading application={application} preview={!!preview} />;
@@ -1353,37 +1287,6 @@ export default function LoginPage({type = "login", application: applicationProp,
           </div>
         );
       }
-      if (isPhoneCodeMethod) {
-        return (
-          <div key={key} className="signin-phone space-y-2">
-            <Label htmlFor="username">{item.label || i18next.t("general:Phone")}</Label>
-            <div className="flex gap-2">
-              <div className="w-28 max-w-[50%] shrink-0">
-                <CountryCodeSelect
-                  className="px-2"
-                  value={countryCode}
-                  onChange={setCountryCode}
-                  countryCodes={application.organizationObj?.countryCodes}
-                />
-              </div>
-              <Input
-                id="username"
-                className="login-username-input min-w-0 flex-1"
-                autoFocus
-                autoComplete="tel"
-                placeholder={item.placeholder || i18next.t("general:Phone")}
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  clearError("username");
-                }}
-              />
-            </div>
-            {fieldError("countryCode")}
-            {fieldError("username")}
-          </div>
-        );
-      }
       return (
         <div key={key} className="login-username space-y-2">
           <Label htmlFor="username">
@@ -1410,7 +1313,7 @@ export default function LoginPage({type = "login", application: applicationProp,
       }
       return renderCodeInput(item);
     case "Password":
-      if (isPanelMethod || loginMethod === "webAuthn" || loginMethod === "faceId" || loginMethod === "magicLink") {
+      if (isPanelMethod || loginMethod === "webAuthn" || loginMethod === "magicLink") {
         return null;
       }
       if (isCodeMethod) {
@@ -1482,9 +1385,7 @@ export default function LoginPage({type = "login", application: applicationProp,
               ? i18next.t("code:Get Code")
               : loginMethod === "webAuthn"
                 ? i18next.t("login:Sign in with WebAuthn")
-                : loginMethod === "faceId"
-                  ? i18next.t("login:Sign in with Face ID")
-                  : loginMethod === "magicLink"
+                : loginMethod === "magicLink"
                     ? i18next.t("login:Send sign-in link")
                     : type === "device"
                       ? i18next.t("login:Approve and sign in")
@@ -1625,34 +1526,6 @@ export default function LoginPage({type = "login", application: applicationProp,
         ) : null}
 
         {preview === "auto" || preview === "theme" ? null : <GoogleOneTap application={application} />}
-
-        {faceValues !== null ? (
-          hasFaceIdProvider ? (
-            <FaceRecognitionCommonModal
-              visible={true}
-              onOk={(faceIdImage) => {
-                doLogin({...faceValues, faceIdImage});
-                setFaceValues(null);
-              }}
-              onCancel={() => {
-                setFaceValues(null);
-                setLoading(false);
-              }}
-            />
-          ) : (
-            <FaceRecognitionModal
-              visible={true}
-              onOk={(faceId) => {
-                doLogin({...faceValues, faceId});
-                setFaceValues(null);
-              }}
-              onCancel={() => {
-                setFaceValues(null);
-                setLoading(false);
-              }}
-            />
-          )
-        ) : null}
 
         {captchaProvider && !Setting.isInlineCaptchaEnabled(application) ? (
           <CaptchaModal

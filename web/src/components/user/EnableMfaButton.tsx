@@ -7,7 +7,7 @@ import * as MfaBackend from "@/backend/MfaBackend";
 import * as Setting from "@/lib/setting";
 
 /**
- * Turns an email or SMS factor on for another user, which an admin can do without
+ * Turns an email factor on for another user, which an admin can do without
  * the user's own verification code. Port of `web/src/common/modal/EnableMfaModal.js`:
  * opening the dialog initiates the setup, confirming it enables the factor.
  */

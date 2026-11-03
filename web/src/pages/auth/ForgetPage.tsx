@@ -35,8 +35,7 @@ export default function ForgetPage() {
   const [step, setStep] = React.useState<Step>(linkCode ? "password" : "account");
   const [username, setUsername] = React.useState(queryParams.get("username") ?? "");
   const [account, setAccount] = React.useState(queryParams.get("username") ?? "");
-  const [dest, setDest] = React.useState({email: "", phone: "", countryCode: ""});
-  const [method, setMethod] = React.useState<"email" | "phone">("email");
+  const [dest, setDest] = React.useState({email: ""});
   const [code, setCode] = React.useState(linkCode);
   const [password, setPassword] = React.useState("");
   const [confirm, setConfirm] = React.useState("");
@@ -70,19 +69,8 @@ export default function ForgetPage() {
     application?.providers?.some((providerItem: any) => providerItem?.provider?.category === category &&
       ["forget", "", "All", "all", "None"].includes(providerItem.rule)) ?? false;
 
-  // only advertise the identifiers that can be used: a lookup by email or phone is
-  // a dead end when the matching provider is not configured for the application
-  const accountPlaceholder = () => {
-    const hasEmail = hasProviderOfCategory("Email");
-    const hasPhone = hasProviderOfCategory("SMS");
-    if (hasEmail && !hasPhone) {
-      return i18next.t("login:username or Email");
-    }
-    if (!hasEmail && hasPhone) {
-      return i18next.t("login:username or phone");
-    }
-    return i18next.t("login:username, Email or phone");
-  };
+  // the reset code goes out by email, so that is the only identifier worth naming
+  const accountPlaceholder = () => i18next.t("login:username or Email");
 
   const findAccount = () => {
     setLoading(true);
@@ -93,17 +81,15 @@ export default function ForgetPage() {
           return;
         }
 
-        // only offer a method whose provider is configured for the application
+        // the reset code goes out by email
         const email = hasProviderOfCategory("Email") ? (res.data?.email ?? "") : "";
-        const phone = hasProviderOfCategory("SMS") ? (res.data?.phone ?? "") : "";
-        if (!email && !phone) {
+        if (!email) {
           Setting.showMessage("error", i18next.t("general:No verification method"));
           return;
         }
 
         setAccount(res.data?.name ?? username);
-        setDest({email, phone, countryCode: res.data?.countryCode ?? ""});
-        setMethod(email ? "email" : "phone");
+        setDest({email});
         setStep("verify");
       })
       .finally(() => setLoading(false));
@@ -115,11 +101,10 @@ export default function ForgetPage() {
       application: application.name,
       organization: application.organization,
       // the backend derives the code type from "username", so it must be the destination
-      username: method === "email" ? dest.email : dest.phone,
+      username: dest.email,
       name: account,
       code,
       type: "login",
-      countryCode: dest.countryCode,
     })
       .then((res: any) => {
         if (res.status === "ok") {
@@ -289,32 +274,11 @@ export default function ForgetPage() {
               verifyCode();
             }}
           >
-            {dest.email && dest.phone ? (
-              // both are configured, so which one gets the code is a real choice
-              <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1">
-                {(["email", "phone"] as const).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => setMethod(option)}
-                    className={cn(
-                      "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-                      method === option
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {i18next.t(option === "email" ? "general:Email" : "general:Phone")}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-
             <div className="rounded-lg border bg-muted/50 px-3 py-2.5 text-sm">
               <span className="text-muted-foreground">
-                {i18next.t(method === "email" ? "general:Email" : "general:Phone")}
+                {i18next.t("general:Email")}
               </span>
-              <span className="ml-2 break-all font-medium">{method === "email" ? dest.email : dest.phone}</span>
+              <span className="ml-2 break-all font-medium">{dest.email}</span>
             </div>
 
             <div className="space-y-2">
@@ -323,9 +287,8 @@ export default function ForgetPage() {
                 value={code}
                 onChange={setCode}
                 method="forget"
-                destType={method}
-                dest={method === "email" ? dest.email : dest.phone}
-                countryCode={dest.countryCode}
+                destType="email"
+                dest={dest.email}
                 application={application}
                 applicationId={Setting.getApplicationName(application)}
                 checkUser={account}

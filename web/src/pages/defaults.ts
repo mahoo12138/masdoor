@@ -49,7 +49,7 @@ export function newApplication(account: Account) {
     category: "Default",
     type: "All",
     scopes: [],
-    logo: `${Setting.StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
+    logo: `${Setting.StaticBaseUrl}/img/masdoor-logo.png`,
     enablePassword: true,
     enableSignUp: true,
     disableSignin: false,
@@ -62,7 +62,6 @@ export function newApplication(account: Account) {
       {name: "Password", displayName: "Password", rule: "All"},
       {name: "Verification code", displayName: "Verification code", rule: "All"},
       {name: "WebAuthn", displayName: "WebAuthn", rule: "None"},
-      {name: "Face ID", displayName: "Face ID", rule: "None"},
     ],
     signupItems: [
       {name: "ID", visible: false, required: true, rule: "Random"},
@@ -277,39 +276,6 @@ export function newRule(account: Account) {
   };
 }
 
-export function newSite(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `site_${randomName}`,
-    createdTime: now(),
-    displayName: `New Site - ${randomName}`,
-    domain: "door.casdoor.com",
-    otherDomains: [],
-    needRedirect: false,
-    disableVerbose: false,
-    rules: [],
-    enableAlert: false,
-    alertInterval: 60,
-    alertTryTimes: 3,
-    alertProviders: [],
-    challenges: [],
-    publicPaths: [],
-    host: "",
-    port: 8000,
-    hosts: [],
-    sslMode: "HTTPS Only",
-    sslCert: "",
-    publicIp: "8.131.81.162",
-    node: "",
-    isSelf: false,
-    nodes: [],
-    casdoorApplication: "",
-    organizations: [],
-  };
-}
-
 export function newTicket(account: Account) {
   const randomName = Setting.getRandomName();
   const owner = Setting.getRequestOrganization(account);
@@ -356,7 +322,7 @@ export function newUser(account: Account, organization: Record<string, any>, org
     password: "123",
     passwordSalt: "",
     displayName: `New User - ${randomName}`,
-    avatar: organization?.defaultAvatar ?? `${Setting.StaticBaseUrl}/img/casbin.svg`,
+    avatar: organization?.defaultAvatar ?? `${Setting.StaticBaseUrl}/img/avatar-default.svg`,
     email: `${randomName}@example.com`,
     phone: "",
     countryCode: organization?.countryCodes?.length > 0 ? organization.countryCodes[0] : "",

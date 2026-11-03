@@ -20,7 +20,7 @@ export function getModeTitleKey(editTitleKey: string, mode: EditMode): string {
   return editTitleKey;
 }
 
-export interface CasdoorResponse<T = any> {
+export interface ApiResponse<T = any> {
   status: "ok" | "error";
   msg?: string;
   data?: T;
@@ -34,12 +34,12 @@ export interface CasdoorResponse<T = any> {
 export async function submitEdit<T extends Record<string, any>>(options: {
   mode: EditMode;
   record: T;
-  add: (record: T) => Promise<CasdoorResponse>;
-  update: (record: T) => Promise<CasdoorResponse>;
+  add: (record: T) => Promise<ApiResponse>;
+  update: (record: T) => Promise<ApiResponse>;
   /** called only when the backend accepted the change */
-  onSaved?: (record: T, res: CasdoorResponse) => void;
+  onSaved?: (record: T, res: ApiResponse) => void;
   /** called when the backend rejected the change */
-  onFailed?: (res: CasdoorResponse) => void;
+  onFailed?: (res: ApiResponse) => void;
 }): Promise<boolean> {
   const {mode, record, add, update, onSaved, onFailed} = options;
   try {
@@ -61,7 +61,7 @@ export async function submitEdit<T extends Record<string, any>>(options: {
 /** Shared "Delete" behaviour of every Masdoor list page. */
 export async function submitDelete<T>(options: {
   record: T;
-  remove: (record: T) => Promise<CasdoorResponse>;
+  remove: (record: T) => Promise<ApiResponse>;
   onDeleted?: () => void;
 }): Promise<boolean> {
   const {record, remove, onDeleted} = options;
@@ -90,7 +90,7 @@ export async function submitDelete<T>(options: {
  */
 export async function submitDeleteMany<T>(options: {
   records: T[];
-  remove: (record: T) => Promise<CasdoorResponse>;
+  remove: (record: T) => Promise<ApiResponse>;
   onDeleted?: (deleted: number) => void;
 }): Promise<number> {
   const {records, remove, onDeleted} = options;
@@ -123,8 +123,8 @@ export async function submitDeleteMany<T>(options: {
 /** Shared "Add" behaviour: create the record and jump to its edit page. */
 export async function submitAdd<T>(options: {
   record: T;
-  add: (record: T) => Promise<CasdoorResponse>;
-  onAdded?: (res: CasdoorResponse) => void;
+  add: (record: T) => Promise<ApiResponse>;
+  onAdded?: (res: ApiResponse) => void;
 }): Promise<boolean> {
   const {record, add, onAdded} = options;
   try {

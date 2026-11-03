@@ -18,8 +18,8 @@ export const TourObj: Record<string, TourStep[]> = {
   home: [
     {
       title: "Welcome to masdoor",
-      description: "You can learn more about the use of CasDoor at https://casdoor.org/.",
-      coverUrl: `${Setting.StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
+      description: "This tour walks through the pages you need for a single-organization setup.",
+      coverUrl: `${Setting.StaticBaseUrl}/img/masdoor-logo.png`,
     },
     {
       title: "Statistic cards",
@@ -77,40 +77,6 @@ export const TourObj: Record<string, TourStep[]> = {
       description: "Masdoor is based on OAuth. Tokens are users' OAuth token.You can get access token in this list.",
     },
   ],
-  enforcers: [
-    {
-      title: "Enforcer List",
-      description: "In addition to the API interface for requesting enforcement of permission control, Masdoor also provides other interfaces that help external applications obtain permission policy information, which is also listed here.",
-    },
-  ],
-  adapters: [
-    {
-      title: "Adapter List",
-      description: "Masdoor supports using the UI to connect the adapter and manage the policy rules. In Casbin, the policy storage is implemented as an adapter (aka middleware for Casbin). A Casbin user can use an adapter to load policy rules from a storage, or save policy rules to it.",
-    },
-  ],
-  models: [
-    {
-      title: "Model List",
-      description: "Model defines your permission policy structure, and how requests should match these permission policies and their effects. Then you can user model in Permission.",
-    },
-  ],
-  permissions: [
-    {
-      title: "Permission List",
-      description: "All users associated with a single Masdoor organization are shared between the organization's applications and therefore have access to the applications. Sometimes you may want to restrict users' access to certain applications, or certain resources in a certain application. In this case, you can use Permission implemented by Casbin.",
-    },
-    {
-      title: "Permission Add",
-      description: "In the Masdoor Web UI, you can add a Model for your organization in the Model configuration item, and a Policy for your organization in the Permission configuration item. ",
-      id: "add-button",
-    },
-    {
-      title: "Permission Upload",
-      description: "With Casbin Online Editor, you can get Model and Policy files suitable for your usage scenarios. You can easily import the Model file into Masdoor through the Masdoor Web UI for use by the built-in Casbin. ",
-      id: "upload-button",
-    },
-  ],
   roles: [
     {
       title: "Role List",
@@ -131,7 +97,7 @@ export const TourObj: Record<string, TourStep[]> = {
   providers: [
     {
       title: "Provider List",
-      description: "We have 6 kinds of providers:OAuth providers、SMS Providers、Email Providers、Storage Providers、Payment Provider、Captcha Provider.",
+      description: "Providers fall into a few kinds: OAuth, Email, Storage, Notification, Captcha and Face ID.",
     },
     {
       title: "Provider Add",
@@ -170,7 +136,7 @@ export const TourObj: Record<string, TourStep[]> = {
   ],
 };
 
-export const TourUrlList = ["home", "organizations", "groups", "users", "applications", "providers", "resources", "roles", "permissions", "models", "adapters", "enforcers", "tokens", "sessions", "sysinfo", "webhooks"];
+export const TourUrlList = ["home", "organizations", "groups", "users", "applications", "providers", "resources", "roles", "tokens", "sessions", "sysinfo", "webhooks"];
 
 export function getNextUrl(pathName = Setting.getRoutePath()) {
   return TourUrlList[TourUrlList.indexOf(pathName.replace("/", "")) + 1] || "";

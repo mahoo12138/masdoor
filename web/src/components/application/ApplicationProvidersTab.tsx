@@ -22,7 +22,7 @@ import * as Setting from "@/lib/setting";
 /** the provider kinds a user account can be linked to */
 const LINKABLE_PROVIDER_CATEGORIES = ["OAuth"];
 
-/** the methods an Email or SMS provider row can be picked for, "All" being the absence of one */
+/** the methods an Email provider row can be picked for, "All" being the absence of one */
 const CODE_PROVIDER_METHODS = Object.keys(PROVIDER_CODE_RULES).filter((rule) => rule !== "all");
 
 /** The rule options a provider row offers, or null when it has no rule at all. */
@@ -33,7 +33,7 @@ function getProviderRuleMap(provider: any) {
   if (provider?.category === "Captcha") {
     return PROVIDER_CAPTCHA_RULES;
   }
-  if (provider?.category === "SMS" || provider?.category === "Email") {
+  if (provider?.category === "Email") {
     return PROVIDER_CODE_RULES;
   }
   return null;
@@ -47,7 +47,7 @@ function normalizeProviderRule(provider: any, rule: string) {
   if (provider?.type === "Google") {
     return "Default";
   }
-  if (provider?.category === "SMS" || provider?.category === "Email") {
+  if (provider?.category === "Email") {
     return "all";
   }
   return rule;
@@ -59,35 +59,20 @@ function getCodeProviderRule(row: any) {
   return !rule || rule === "all" || rule === "All" || rule === "None" ? "all" : rule;
 }
 
-/** an SMS row is only outranked by one serving every country it serves; an Email row has no countries */
-function outranksCountryCodes(row: any, other: any, category: string) {
-  if (category !== "SMS") {
-    return true;
-  }
-
-  const codesOf = (item: any) => (item?.countryCodes?.length ? item.countryCodes : ["All"]);
-  const codes = codesOf(row);
-  if (codes.some((code: string) => code === "" || code === "All" || code === "all")) {
-    return true;
-  }
-
-  return codesOf(other).every((code: string) => codes.includes(code));
-}
-
 /**
- * Which methods an Email or SMS row is actually used for. The backend takes the
+ * Which method an Email row is actually used for. The backend takes the
  * first row whose rule names the method and otherwise the first "All" row, so a
  * later row carrying a rule an earlier one already carries is never reached.
  */
 function getCodeProviderCoverage(rows: any[], index: number, categoryOf: (row: any) => string | undefined) {
   const row = rows[index];
   const category = categoryOf(row);
-  if (category !== "Email" && category !== "SMS") {
+  if (category !== "Email") {
     return null;
   }
 
   const rule = getCodeProviderRule(row);
-  const outranks = (other: any) => categoryOf(other) === category && outranksCountryCodes(other, row, category);
+  const outranks = (other: any) => categoryOf(other) === category;
 
   if (rows.some((other, i) => i < index && getCodeProviderRule(other) === rule && outranks(other))) {
     return {methods: [], shadowed: true};
@@ -106,7 +91,7 @@ interface ApplicationProvidersTabProps extends ApplicationTabProps {
   providerObjs: any[];
 }
 
-/** The "Providers" tab: which OAuth, Email, SMS, Captcha and Storage providers this application uses. */
+/** The "Providers" tab: which OAuth, Email, Captcha and Storage providers this application uses. */
 export function ApplicationProvidersTab({
   application,
   updateField,
@@ -155,7 +140,7 @@ export function ApplicationProvidersTab({
                     onChange={(v) => {
                       // the row carries its provider, which would otherwise still be the previous one
                       const provider = providerObjs.find((item: any) => item.name === v);
-                      patch(provider?.category === "Email" || provider?.category === "SMS"
+                      patch(provider?.category === "Email"
                         ? {name: v, provider, rule: "all"}
                         : {name: v, provider});
                     }}
@@ -231,27 +216,6 @@ export function ApplicationProvidersTab({
               render: (row: any) => resolveProvider(row)?.type ?? null,
             },
             {
-              key: "countryCodes",
-              title: i18next.t("user:Country/Region"),
-              width: 200,
-              // an SMS provider can be limited to the countries it serves
-              render: (row: any, _i, patch) =>
-                resolveProvider(row)?.category === "SMS" ? (
-                  <MultiSelect
-                    value={row.countryCodes ?? ["All"]}
-                    onChange={(v) => patch({countryCodes: v})}
-                    options={[
-                      {value: "All", label: i18next.t("general:All")},
-                      ...Setting.getCountryCodeData(application.organizationObj?.countryCodes).map((country: any) => ({
-                        value: country.code,
-                        label: `${country.name} (+${country.phone})`,
-                        keywords: `${country.name} ${country.code} ${country.phone}`,
-                      })),
-                    ]}
-                  />
-                ) : null,
-            },
-            {
               key: "bindingRule",
               title: i18next.t("provider:Binding rule"),
               width: 200,
@@ -296,7 +260,7 @@ export function ApplicationProvidersTab({
               key: "coverage",
               title: i18next.t("application:Used for"),
               width: 220,
-              // an Email or SMS row can be shadowed by an earlier one, which is invisible otherwise
+              // an Email row can be shadowed by an earlier one, which is invisible otherwise
               render: (_row: any, index) => {
                 const coverage = getCodeProviderCoverage(
                   application.providers ?? [],

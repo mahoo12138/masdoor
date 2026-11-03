@@ -35,7 +35,6 @@ export default function PromptPage({application: applicationProp}: {application?
   const [user, setUser] = React.useState<any>(null);
   const [savedUser, setSavedUser] = React.useState<any>(null);
   const [emailCode, setEmailCode] = React.useState("");
-  const [phoneCode, setPhoneCode] = React.useState("");
   const [saving, setSaving] = React.useState(false);
 
   React.useEffect(() => {
@@ -111,7 +110,6 @@ export default function PromptPage({application: applicationProp}: {application?
   // update-user drops email and phone for a non-admin, so a new one is confirmed with a code
   // through /api/reset-email-or-phone, the same way the account page changes them
   const emailChanged = (user?.email ?? "") !== (savedUser?.email ?? "");
-  const phoneChanged = (user?.phone ?? "") !== (savedUser?.phone ?? "");
 
   const submit = async() => {
     setSaving(true);
@@ -128,7 +126,6 @@ export default function PromptPage({application: applicationProp}: {application?
       }
       for (const [changed, dest, destType, code] of [
         [emailChanged, user.email, "email", emailCode],
-        [phoneChanged, user.phone, "phone", phoneCode],
       ]) {
         if (!changed) {
           continue;
@@ -279,19 +276,6 @@ export default function PromptPage({application: applicationProp}: {application?
                     onChange={(e) => update({phone: e.target.value, countryCode: phoneCountryCode})}
                   />
                 </div>
-                {phoneChanged ? (
-                  <SendCodeInput
-                    value={phoneCode}
-                    onChange={setPhoneCode}
-                    method="reset"
-                    destType="phone"
-                    dest={user?.phone ?? ""}
-                    countryCode={phoneCountryCode}
-                    disabled={!Setting.isValidPhone(user?.phone ?? "", phoneCountryCode)}
-                    application={application}
-                    applicationId={Setting.getApplicationName(application)}
-                  />
-                ) : null}
               </div>
             );
           }
@@ -301,7 +285,7 @@ export default function PromptPage({application: applicationProp}: {application?
         <Button
           className="w-full"
           loading={saving}
-          disabled={saving || !Setting.isPromptAnswered(user, application) || (emailChanged && emailCode === "") || (phoneChanged && phoneCode === "")}
+          disabled={saving || !Setting.isPromptAnswered(user, application) || (emailChanged && emailCode === "")}
           onClick={submit}
         >
           {i18next.t("code:Submit and complete")}

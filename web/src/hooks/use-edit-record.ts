@@ -1,11 +1,11 @@
 import * as React from "react";
 import {useLocation} from "react-router-dom";
 import * as Setting from "@/lib/setting";
-import type {CasdoorResponse, EditMode} from "@/lib/crud";
+import type {ApiResponse, EditMode} from "@/lib/crud";
 
 interface UseEditRecordOptions<T> {
   /** loads the record in "edit" mode */
-  fetch: () => Promise<CasdoorResponse<T>>;
+  fetch: () => Promise<ApiResponse<T>>;
   /** applied to the record right after it is loaded (edit) or handed over (add) */
   transform?: (record: T) => T;
   deps?: React.DependencyList;

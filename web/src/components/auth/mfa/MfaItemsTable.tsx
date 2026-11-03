@@ -1,12 +1,11 @@
 import i18next from "i18next";
 import {SelectField} from "@/components/common/SelectField";
 import {EditableTable} from "@/components/crud/EditableTable";
-import {EmailMfaType, PushMfaType, SmsMfaType, TotpMfaType} from "@/components/auth/mfa/constants";
+import {EmailMfaType, PushMfaType, TotpMfaType} from "@/components/auth/mfa/constants";
 import * as Setting from "@/lib/setting";
 
 /** The stored name is the backend's MFA type, not the label shown in the dropdown. */
 const MFA_ITEMS = [
-  {id: SmsMfaType, name: "Phone"},
   {id: EmailMfaType, name: "Email"},
   {id: TotpMfaType, name: "App"},
   {id: PushMfaType, name: "Push"},

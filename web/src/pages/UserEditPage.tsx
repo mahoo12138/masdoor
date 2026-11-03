@@ -23,9 +23,7 @@ import {EditableTable} from "@/components/crud/EditableTable";
 import {MapTable} from "@/components/crud/MapTable";
 import {formGridClass} from "@/components/crud/FormRow";
 import {AffiliationAddressSelect, AffiliationField, useAffiliation} from "@/components/user/AffiliationSelect";
-import {CasdoorAppQrCode, CasdoorAppUrl, CasdoorAuthenticatorLink} from "@/components/user/CasdoorAppConnector";
 import {ConsentTable} from "@/components/user/ConsentTable";
-import {FaceIdTable} from "@/components/user/FaceIdTable";
 import {CropperDivModal, UserImageField} from "@/components/user/CropperDivModal";
 import {ThirdPartyLogins} from "@/components/user/OAuthWidget";
 import {AccountItemRow, AccountItemsProvider} from "@/components/user/AccountItemRow";
@@ -67,7 +65,7 @@ const ADDRESS_TAGS = [
 export default function UserEditPage({self}: {self?: boolean} = {}) {
   const params = useParams();
   const navigate = useNavigate();
-  const {account, accessToken, reload: reloadAccount} = useAccount();
+  const {account, reload: reloadAccount} = useAccount();
   const returnUrl = new URLSearchParams(useLocation().search).get("returnUrl") ?? "";
   // "/account" edits the signed-in user, every other route takes the name from the URL
   const organizationName = self ? account?.owner ?? "" : params.organizationName ?? "";
@@ -333,14 +331,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
             />
           </div>
           <Input value={user.phone ?? ""} disabled={!isAdmin} onChange={(e) => updateField("phone", e.target.value)} />
-          {isSelf ? (
-            <ResetModal
-              application={application}
-              destType="phone"
-              countryCode={user.countryCode ?? ""}
-              buttonText={i18next.t("user:Reset Phone...")}
-            />
-          ) : null}
         </div>
       </AccountItemRow>
     ),
@@ -786,83 +776,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         />
       </AccountItemRow>
     ),
-    "MFA accounts": (
-      <AccountItemRow name="MFA accounts" labelKey="user:MFA accounts" block>
-        <div className="space-y-2">
-          {/* the Masdoor Authenticator app takes these over by scanning the QR / opening the link */}
-          <p className="text-sm text-muted-foreground">
-            {i18next.t("user:Scan the QR code with Masdoor Authenticator to sync these MFA accounts to your phone")}
-          </p>
-          <CasdoorAuthenticatorLink />
-          <div className="flex flex-wrap gap-2">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">{i18next.t("general:QR Code")}</Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto">
-                <CasdoorAppQrCode accessToken={accessToken ?? undefined} icon={user.avatar} />
-              </PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">{i18next.t("general:URL")}</Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-96">
-                <CasdoorAppUrl accessToken={accessToken ?? undefined} />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <EditableTable
-            rows={user.mfaAccounts ?? []}
-            onChange={(rows) => updateField("mfaAccounts", rows)}
-            newRow={() => ({accountName: "", issuer: "", secretKey: "", origin: ""})}
-            columns={[
-              {
-                key: "accountName",
-                title: i18next.t("cert:Account"),
-                width: 180,
-                render: (row: any, _i, patch) => (
-                  <Input value={row.accountName ?? ""} onChange={(e) => patch({accountName: e.target.value})} />
-                ),
-              },
-              {
-                key: "issuer",
-                title: "Issuer",
-                width: 180,
-                render: (row: any, _i, patch) => (
-                  <Input value={row.issuer ?? ""} onChange={(e) => patch({issuer: e.target.value})} />
-                ),
-              },
-              {
-                key: "origin",
-                title: i18next.t("general:URL"),
-                width: 180,
-                render: (row: any, _i, patch) => (
-                  <Input value={row.origin ?? ""} onChange={(e) => patch({origin: e.target.value})} />
-                ),
-              },
-              {
-                key: "secretKey",
-                title: i18next.t("provider:Secret key"),
-                render: (row: any, _i, patch) => (
-                  <Input
-                    type="password"
-                    value={row.secretKey ?? ""}
-                    onChange={(e) => patch({secretKey: e.target.value})}
-                  />
-                ),
-              },
-              {
-                key: "logo",
-                title: i18next.t("general:Logo"),
-                width: 70,
-                render: (row: any) => <IssuerLogo issuer={row.issuer} />,
-              },
-            ]}
-          />
-        </div>
-      </AccountItemRow>
-    ),
     "WebAuthn credentials": (
       <AccountItemRow name="WebAuthn credentials" labelKey="user:WebAuthn credentials" block>
         <WebauthnCredentialTable
@@ -870,15 +783,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           isSelf={isSelf}
           onUpdateTable={(rows) => updateField("webauthnCredentials", rows)}
           refresh={reload}
-        />
-      </AccountItemRow>
-    ),
-    "Face ID": (
-      <AccountItemRow name="Face ID" labelKey="user:Face IDs" block>
-        <FaceIdTable
-          table={user.faceIds ?? []}
-          account={account}
-          onUpdateTable={(rows) => updateField("faceIds", rows)}
         />
       </AccountItemRow>
     ),
@@ -932,7 +836,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
                   ) : (
                     <Badge variant="secondary">{i18next.t("general:Disabled")}</Badge>
                   )}
-                  {/* an admin can turn on another user's email/SMS factor without
+                  {/* an admin can turn on another user's email factor without
                       their code; TOTP always needs the user's own authenticator */}
                   {!item.enabled && !isSelf && isAdmin && item.mfaType !== TotpMfaType ? (
                     <EnableMfaButton user={user} mfaType={item.mfaType} onSuccess={reload} />
@@ -991,46 +895,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
                     </Badge>
                   </TooltipTrigger>
                   <TooltipContent>{`${i18next.t("general:Groups")}: ${sourceGroups.join(", ")}`}</TooltipContent>
-                </Tooltip>
-              );
-            })
-          )}
-        </div>
-      </AccountItemRow>
-    ),
-    "Permissions": (
-      <AccountItemRow name="Permissions" labelKey="general:Permissions">
-        <div className="flex flex-wrap gap-1">
-          {(user.permissions ?? []).length === 0 ? (
-            <span className="text-sm text-muted-foreground">{i18next.t("general:No data")}</span>
-          ) : (
-            (user.permissions ?? []).map((permission: any) => {
-              const sourceGroups: string[] = permission.sourceGroups ?? [];
-              const sourceRoles: string[] = permission.sourceRoles ?? [];
-              const key = `${permission.owner}/${permission.name}`;
-              if (sourceGroups.length === 0 && sourceRoles.length === 0) {
-                return (
-                  <Badge key={key} variant="secondary">
-                    {permission.name}
-                  </Badge>
-                );
-              }
-              const sourceTexts: string[] = [];
-              if (sourceRoles.length !== 0) {
-                sourceTexts.push(`${i18next.t("general:Roles")}: ${sourceRoles.join(", ")}`);
-              }
-              if (sourceGroups.length !== 0) {
-                sourceTexts.push(`${i18next.t("general:Groups")}: ${sourceGroups.join(", ")}`);
-              }
-              return (
-                <Tooltip key={key}>
-                  <TooltipTrigger asChild>
-                    <Badge variant="outline" className="cursor-default">
-                      {sourceRoles.length !== 0 ? <ShieldCheck className="h-3 w-3" /> : <Users className="h-3 w-3" />}
-                      {permission.name}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>{sourceTexts.join(" | ")}</TooltipContent>
                 </Tooltip>
               );
             })

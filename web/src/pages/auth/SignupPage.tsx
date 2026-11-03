@@ -442,23 +442,6 @@ export default function SignupPage({application: applicationProp}: {application?
         </div>
         {fieldError("phone")}
       </div>
-      {item.rule !== "No verification" ? (
-        <div className="phone-code space-y-2">
-          {renderLabel(i18next.t("code:Phone code"), item.required)}
-          <SendCodeInput
-            className="signup-phone-code-input"
-            value={values.phoneCode ?? ""}
-            onChange={(v) => set("phoneCode", v)}
-            method="signup"
-            destType="phone"
-            dest={values.phone ?? ""}
-            countryCode={values.countryCode ?? ""}
-            disabled={!Setting.isValidPhone(values.phone ?? "", values.countryCode ?? "")}
-            application={application}
-            applicationId={Setting.getApplicationName(application)}
-          />
-        </div>
-      ) : null}
     </React.Fragment>
   );
 

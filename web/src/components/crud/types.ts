@@ -66,7 +66,7 @@ export interface ColumnDef<T = any> {
   render?: (value: any, record: T, index: number) => React.ReactNode;
 }
 
-export interface CasdoorListResponse<T = any> {
+export interface ApiListResponse<T = any> {
   status: "ok" | "error";
   msg?: string;
   data: T[];

@@ -3,10 +3,9 @@ import {useIsDark} from "@/hooks/use-theme";
 import * as Setting from "@/lib/setting";
 
 /**
- * The default footer: "Powered by" followed by the Masdoor wordmark, which has a
- * light and a dark variant. The antd frontend renders the same image rather than
- * the word "Masdoor", and a deployment can replace the whole line through
- * `Conf.CustomFooter` or an organization's `footerHtml`.
+ * The default footer: the Masdoor wordmark, which has a light and a dark
+ * variant. A deployment can replace the whole line through `Conf.CustomFooter`
+ * or an organization's `footerHtml`.
  */
 export function PoweredBy() {
   const isDark = useIsDark();
@@ -16,16 +15,13 @@ export function PoweredBy() {
   }
 
   return (
-    <span className="inline-flex items-center gap-1">
-      Powered by
-      <a href="https://casdoor.org" target="_blank" rel="noreferrer">
-        <img
-          src={Setting.getLogo([isDark ? "dark" : "light"])}
-          alt="Masdoor"
-          height={20}
-          className="h-5 w-auto pb-[3px]"
-        />
-      </a>
+    <span className="inline-flex items-center">
+      <img
+        src={Setting.getLogo([isDark ? "dark" : "light"])}
+        alt="Masdoor"
+        height={20}
+        className="h-5 w-auto"
+      />
     </span>
   );
 }

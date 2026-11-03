@@ -177,13 +177,9 @@ export default function Dashboard() {
     {key: "providerCounts", name: i18next.t("application:Providers"), data: data.providerCounts, to: "/providers"},
     {key: "organizationCounts", name: i18next.t("general:Organizations"), data: data.organizationCounts, to: "/organizations"},
     {key: "roleCounts", name: i18next.t("general:Roles"), data: data.roleCounts, to: "/roles"},
-    {key: "permissionCounts", name: i18next.t("general:Permissions"), data: data.permissionCounts, to: "/permissions"},
     {key: "groupCounts", name: i18next.t("general:Groups"), data: data.groupCounts, to: "/groups"},
     {key: "resourceCounts", name: i18next.t("general:Resources"), data: data.resourceCounts, to: "/resources"},
     {key: "certCounts", name: i18next.t("general:Certs"), data: data.certCounts, to: "/certs"},
-    {key: "modelCounts", name: i18next.t("general:Models"), data: data.modelCounts, to: "/models", hidden: true},
-    {key: "adapterCounts", name: i18next.t("general:Adapters"), data: data.adapterCounts, to: "/adapters", hidden: true},
-    {key: "enforcerCounts", name: i18next.t("general:Enforcers"), data: data.enforcerCounts, to: "/enforcers", hidden: true},
   ].filter((s) => Array.isArray(s.data));
 
   const chartData = DATE_ARRAY.map((date, index) => {

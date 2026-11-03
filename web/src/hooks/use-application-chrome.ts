@@ -225,7 +225,7 @@ export function useApplicationHelmet(application: any) {
 }
 
 /** what the tab shows before an organization has been loaded */
-const DEFAULT_FAVICON = "https://cdn.casdoor.com/static/favicon.png";
+const DEFAULT_FAVICON = "/img/favicon.png";
 
 /**
  * The console's tab title and favicon, which follow the signed-in user's

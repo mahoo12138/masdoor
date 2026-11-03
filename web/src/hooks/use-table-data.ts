@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Setting from "@/lib/setting";
-import type {CasdoorListResponse, TableQuery} from "@/components/crud/types";
+import type {ApiListResponse, TableQuery} from "@/components/crud/types";
 
 const defaultQuery: TableQuery = {
   page: 1,
@@ -33,7 +33,7 @@ export interface UseTableDataResult<T> {
  * sortField, sortOrder) and answer with {data, data2: total}.
  */
 export function useTableData<T = any>(
-  fetcher: (query: TableQuery) => Promise<CasdoorListResponse<T>>,
+  fetcher: (query: TableQuery) => Promise<ApiListResponse<T>>,
   deps: React.DependencyList = [],
   initial?: Partial<TableQuery>,
 ): UseTableDataResult<T> {

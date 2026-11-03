@@ -70,17 +70,6 @@ export function Header({onOpenPalette}: {onOpenPalette: () => void}) {
 
       <div className="ml-auto flex items-center gap-1.5">
         <CommandPaletteTrigger onOpen={onOpenPalette} />
-        {/* the demo deployment advertises the hosted offering, as antd does */}
-        {Setting.isLocalAdminUser(account) && Conf.ShowGithubCorner ? (
-          <a
-            href="https://casdoor.com"
-            target="_blank"
-            rel="noreferrer"
-            className="saas-hosting-btn mr-1 hidden whitespace-nowrap text-sm sm:inline"
-          >
-            🚀 SaaS Hosting 🔥
-          </a>
-        ) : null}
         {showOrganizationSelect && (
           <OrganizationSelect
             withAll

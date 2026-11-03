@@ -16,10 +16,10 @@ yarn install
 yarn start          # http://localhost:7001, proxies /api to http://localhost:8000
 ```
 
-Point the dev proxy at a different backend with `CASDOOR_BACKEND`:
+Point the dev proxy at a different backend with `MASDOOR_BACKEND`:
 
 ```bash
-CASDOOR_BACKEND=https://door.casdoor.com yarn start
+MASDOOR_BACKEND=http://localhost:8000 yarn start
 ```
 
 Build:
@@ -130,14 +130,14 @@ hCaptcha, Aliyun, GEETEST and Cloudflare Turnstile all mount through the same
 `CaptchaWidget` port, so the tokens the backend validates are unchanged.
 
 **MFA** — `/mfa/setup` is a three-step wizard (verify password → verify the
-factor → enable + recovery code) covering SMS, email, TOTP (QR + secret), RADIUS
+factor → enable + recovery code) covering email, TOTP (QR + secret), RADIUS
 and push. An organization that marks a factor `Required` redirects the user there
 right after sign-in, and the user page can set the preferred factor or remove
 MFA.
 
 At sign-in the second factor opens on the factor the user marked preferred and
 offers the others as links; each one asks for what it actually needs (a "Get
-Code" field for SMS/email, an authenticator code, the code from a push
+Code" field for email, an authenticator code, the code from a push
 notification, or the RADIUS password), and a recovery code always works instead.
 The same panel appears on `/callback` and `/callback/saml`, because a provider's
 authorization code is single-use — sending the user back to `/login` would drop
@@ -147,8 +147,8 @@ the pending sign-in.
 `/callback?state=...` with a small page that posts the provider's code itself,
 so a returning visitor does not wait for the bundle. When it meets something it
 cannot finish it stores what it already got under
-`casdoor_callback_react_fallback` and comes here with
-`__casdoor_callback_react=1`; `AuthCallback` continues from that stored response
+`masdoor_callback_react_fallback` and comes here with
+`__masdoor_callback_react=1`; `AuthCallback` continues from that stored response
 rather than spending the single-use code again, and ignores a payload whose
 `search` does not match this callback. `?provider_hint=<name>` likewise jumps
 straight to that provider, which is what happens when the static redirect page
@@ -181,8 +181,8 @@ one map per enum in `lib/enum-labels.tsx`. Edit pages title themselves "New X" /
 
 The per-page actions are there too: duplicating an application, uploading the
 Terms of Use HTML, resetting the footer HTML, previewing a webhook's payload,
-copying a URL, the save-time checks on
-permissions, the block on deleting a group that still has
+copying a URL, the save-time checks on a role
+name, the block on deleting a group that still has
 subgroups, "Show all" on the group tree, and the LDAP sync page's synced /
 unsynced marks, group ids and per-user results. A record opens in a drawer with
 its whole response and object, because the row is far too wide to read in the
@@ -191,8 +191,7 @@ links to db-ip.com, as in the antd tables.
 
 Dashboard, apps, shortcuts, my account, system info, breadcrumbs,
 and list + edit pages for: organizations, users, groups (incl. tree), invitations,
-applications, providers, resources, certs, keys, roles, permissions, models,
-adapters, enforcers, sites, rules, sessions,
+applications, providers, resources, certs, keys, roles, sites, rules, sessions,
 records, tokens, verifications, forms, webhooks, webhook events,
 tickets.
 
@@ -202,8 +201,10 @@ user's organization, brands the sidebar with that organization's logo (its
 console and the sign-in pages close with the Masdoor wordmark rather than the
 word — the same footer image the antd frontend renders, and the one
 `Setting.getDefaultFooterContent()` writes into an application's `footerHtml`.
-`index.html` ships the `https://cdn.casbin.org/img/favicon.png` literal that
-`routers/static_filter.go` rewrites, so the first paint is branded too.
+`index.html` ships the `/img/favicon.png` literal that `routers/branding.go`
+replaces with the application's or organization's own icon, so the first paint is
+branded too. The icons, flag sprites and theme previews the console uses ship in
+`web/public` instead of a CDN, so an instance makes no third-party requests.
 
 **Organization branding** — the sign-in pages apply the organization/application
 `themeData` to the shadcn CSS variables, set the tab title and favicon, inject

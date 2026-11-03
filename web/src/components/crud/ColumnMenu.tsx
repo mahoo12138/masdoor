@@ -34,7 +34,7 @@ const isAlwaysVisible = (column: ColumnDef) => column.key === "op" || column.fix
  * code still reaches everyone who never opened the menu.
  */
 export function useColumnVisibility(columns: ColumnDef[], tableId?: string) {
-  const storageKey = tableId ? `casdoorColumns:${tableId}` : "";
+  const storageKey = tableId ? `masdoorColumns:${tableId}` : "";
 
   const read = React.useCallback(() => {
     if (!storageKey) {
