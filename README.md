@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Masdoor</h1>
   <p><strong>A personal / family self-hosted identity and access management system</strong></p>
-  <p>Forked from <a href="https://github.com/casdoor/casdoor">Casdoor</a>, trimmed to the core: OIDC / OAuth 2.0, user management and login-page theming.</p>
+  <p>Started as a trimmed fork of <a href="https://github.com/casdoor/casdoor">Casdoor</a>; the code has since diverged and no longer tracks upstream.</p>
 </div>
 
 ## What is Masdoor
@@ -15,11 +15,11 @@ This fork exists because the upstream Casdoor is a full enterprise IAM platform,
 | Area | Kept | Removed |
 |------|------|---------|
 | Protocols | OAuth 2.0, OIDC | SAML 2.0, CAS, LDAP, RADIUS, SCIM, Kerberos |
-| Users | Registration, password / email & SMS code login, WebAuthn / Passkey, TOTP & MFA, account linking | — |
+| Users | Registration, password / email code login, WebAuthn / Passkey, TOTP & MFA, account linking | SMS code login, Face ID login |
 | Applications | Multi-app OAuth/OIDC clients, PKCE, device flow | — |
 | Login page | Full theming: logo, colors, CSS/HTML slots, sign-in method layout (应用设置 → UI Customization) | — |
-| Providers | Google, GitHub and the standard OAuth/OIDC adapters, custom OIDC | WeChat / WeCom / Telegram login, SAML providers |
-| Ops | Webhooks, audit records, resource storage | AI Agent / MCP gateway, marketplace, integrations, syncers, LDAP admin |
+| Providers | Google, GitHub and the standard OAuth/OIDC adapters, custom OIDC, email (SMTP) | SMS, Face ID, ID verification, WeChat / WeCom / Telegram login, SAML providers |
+| Ops | Webhooks, audit records, resource storage | Sites / reverse proxy + ACME certs + WAF rules, tickets, forms, AI Agent / MCP gateway, marketplace, integrations, syncers, LDAP admin |
 | Business | — | Products, plans, pricing, orders, payments, subscriptions, coupons, transactions |
 
 Everything above is configured in the web console — no config-file edits or redeploys to change branding, providers or sign-in methods.
@@ -109,38 +109,17 @@ All keys live in [`conf/app.conf`](conf/app.conf). The ones you are most likely 
 |-----|---------|
 | `driverName` / `dataSourceName` / `dbName` | Database connection (MySQL, PostgreSQL, SQLite, …) |
 | `origin` / `originFrontend` | Public URLs of the server and the console |
-| `staticBaseUrl` | Base URL for static assets (logos, CSS) |
 | `initDataFile` | Optional JSON applied at startup (declarative org/app/user setup) |
 | `redisEndpoint` | Optional Redis for the OAuth device-authorization flow |
 
 Kubernetes deployments can mount `app.conf` from a Secret instead of the values file (see the chart README).
-
-## Staying in sync with upstream
-
-Masdoor tracks [Casdoor](https://github.com/casdoor/casdoor). To pull upstream improvements without re-applying the trim by hand:
-
-```bash
-git remote add upstream https://github.com/casdoor/casdoor.git
-git fetch upstream
-git rebase upstream/master   # or: git merge upstream/master
-```
-
-Expect conflicts in the usual hotspots — that is the trim meeting upstream's additions:
-
-- `go.mod` / imports: upstream keeps adding packages this fork deleted (`ldap`, `scim`, `pp`, `mcp`, …); drop the import lines again.
-- `routers/router.go`: upstream registers routes for removed controllers; delete those `web.Router` lines.
-- `object/`: upstream models (Product, Plan, Subscription, …) and fields (Balance, Hash, …) were removed; discard theirs.
-- `web/src/`: removed pages, backends and menu entries reappear in merges; re-delete them.
-- `conf/app.conf`, `manifests/`: upstream config keys for removed servers reappear; drop them.
-
-After each sync, run the regression checks below before deploying.
 
 ## Regression checklist
 
 After an upgrade or an upstream merge, verify at minimum:
 
 1. `go build ./...` and `cd web && yarn build` pass.
-2. Username/password login, email/SMS code login and registration work.
+2. Username/password login, email code login and registration work.
 3. An OAuth 2.0 / OIDC client can complete the code flow and receive a valid ID token (`state`, `nonce` and PKCE intact).
 4. WebAuthn / Passkey and TOTP MFA enrollment + login work.
 5. Application → UI Customization still changes the login page (logo, colors, custom CSS) and the custom HTML/CSS sanitising still rejects script injection.

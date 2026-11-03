@@ -36,7 +36,7 @@ lastupdate.tmp
 commentsRouter*.go
 
 # ignore build result
-casdoor
+masdoor
 /server
 
 # dev.sh local artifacts
@@ -46,7 +46,7 @@ masdoor-dev.db*
 .workbuddy/
 
 # include helm-chart, but not its packaged output
-!manifests/casdoor
+!manifests/masdoor
 *.tgz
 
 # the console has its own .gitignore for these; web-old does not

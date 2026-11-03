@@ -11,7 +11,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
-# ref: https://casdoor.org/docs/basic/server-installation#via-ini-file
+# every key mirrors conf/app.conf
 config: |
   appname = masdoor
   httpport = {{ .Values.service.port }}
@@ -37,7 +37,7 @@ config: |
 # configFromSecret: masdoor
 
 # -- Declarative configuration: organizations, applications, users, providers, roles, permissions, ... in the
-# init data format (https://casdoor.ai/docs/deployment/data-initialization). It is stored in a Secret and applied
+# init data format (see init_data.json.template). It is stored in a Secret and applied
 # by Masdoor at startup, and with watchInterval set, a change rolled out by `helm upgrade` is applied again
 # without restarting the pods.
 initData:

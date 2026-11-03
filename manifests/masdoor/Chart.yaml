@@ -5,8 +5,7 @@ type: application
 # version and appVersion are set from the release tag by the Docker Release job
 version: 0.0.0
 appVersion: 0.0.0
-home: https://casdoor.ai
-icon: https://cdn.casdoor.com/static/favicon.png
+home: https://github.com/mahoo12138/masdoor
 keywords:
   - masdoor
   - iam
@@ -18,13 +17,10 @@ sources:
   - https://github.com/mahoo12138/masdoor
 maintainers:
   - name: Masdoor
-    email: admin@casdoor.org
-    url: https://casdoor.ai
+    url: https://github.com/mahoo12138/masdoor
 annotations:
   artifacthub.io/category: security
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
-    - name: Documentation
-      url: https://casdoor.ai/docs/basic/try-with-helm
-    - name: Demo
-      url: https://door.casdoor.com
+    - name: Source
+      url: https://github.com/mahoo12138/masdoor

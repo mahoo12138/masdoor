@@ -7,7 +7,7 @@ Masdoor 本身是一套功能全面的企业级 IAM 系统。为了适配个人/
 | **保留:** OAuth/OIDC 核心      | 保留 | `controllers/authorize.go`、`controllers/token.go` 等授权流程和令牌签发逻辑；OIDC/PKCE、刷新令牌、JWT 签发、撤销等。                                                                                                    |
 | **保留:** 用户与会话管理            | 保留 | 用户注册/登录/登出、密码重置、邮箱/短信验证码、多因素登录（TOTP/Passkeys/FaceID）功能。对应控制器如 `controllers/user.go`、`controllers/login.go`、`controllers/logout.go`、`controllers/password.go` 等。                              |
 | **保留:** 应用与客户端配置           | 保留 | OAuth 客户端（应用）管理相关代码（如 `controllers/application.go`），管理 ClientID/Secret、回调 URL、权限等；预留主题配置字段供自定义登录页使用。                                                                                         |
-| **保留:** 基本授权策略             | 保留 | RBAC/权限管理核心（Casbin 模型）逻辑；`controllers/role_policy.go` 等。尽管仅单组织使用，也应保留最低级的角色/权限控制和审计日志。                                                                                                       |
+| **调整:** 授权模型             | 改造 | 权限中台（Permission/Model/Adapter/Enforcer、`/api/enforce` 系列、`object/permission*.go`）整体移除；API 层守卫改为 `authz/authz.go` 中的常量规则表 + 自实现 keyMatch2，不再依赖 Casbin。角色（Role）保留用于组织内分组，组成员关系直接读 `User.Groups`，不再维护 `casbin_user_rule` 冗余索引。 |
 | **保留:** 自定义登录页主题系统         | 保留 | 主题相关字段和渲染逻辑：Application 模型的主题字段（`FormCss`、`FormOffset`、`HeaderHtml`、`SigninHtml` 等）及前端 UI 定制器。前端 `web/src/components/auth/AuthLayout.tsx` 与 `LoginPage.tsx` 相关实现（布局插槽、CSS 注入）必须保留并简化界面。      |
 | **保留:** 静态资源与基本页面          | 保留 | 登录、注册、密码重置等页面模板和样式；多语言（可选降低优先级）、基础运维功能（备份、日志审计、配置管理）等。                                                                                                                                       |
 | **移除:** 商业订阅/计费模块          | 移除 | `pp/` 目录及相关 `object` 中的 Product、Order、Pricing、Plan、Subscription 等数据模型；前端中的商品/订单管理页面。替代方案：无需订单付款流程，直接跳过购买环节。                                                                                  |
@@ -163,9 +163,9 @@ ALTER TABLE Application
 
 ## 发布与维护策略
 
-- **Fork 管理：** 在 GitHub 新建仓库 `casdoor-lite`（或其他名），基于 Masdoor 主仓库初始化。建议采用与上游相同的 Apache-2.0 许可证（Masdoor 原为 Apache-2.0），保持兼容性。使用多分支策略：`master/main` 保持最新稳定版；`dev` 分支用于日常开发和合并上游更新；feature 分支（如 `remove-subscription`）做具体裁剪任务。合并上游时，先在本地或 `dev` 分支执行 `git merge`，解决冲突后再推送。对核心裁剪部分可通过 PR 形式记录变更。  
-- **版本发布：** 可使用 GoReleaser 或自定义脚本打包二进制和 Docker 镜像。定期（例如按月或按主线上游大版本发布时）推出新版本。在 GitHub Releases 中附带变更日志（突出指出移除或修改的部分）。Docker 镜像建议通过 GitHub Packages 或 Docker Hub 发布，镜像标签可与版本号对应。提供详细升级指南：描述从 Masdoor 原始或旧版迁移的 SQL 脚本和配置差异。  
-- **升级策略：** 由于改动较大，建议仅在小版本升级时合并上游更改（大版本变化可能冲击大）。上游修复安全漏洞时应及时评估并 cherry-pick 到本项目；若存在冲突，需手动合并，特别注意主题、安全部分。可编写脚本帮助提取上游变更清单，减少遗漏。对外发布时注明改动差异以示区别。  
+- **仓库管理：** 本项目已是独立仓库 `github.com/mahoo12138/masdoor`，裁剪幅度已大到无法再合并上游，因此**不再跟踪 Casdoor**。许可证保持 Apache-2.0：源码里 `Copyright The Casdoor Authors` 的版权头属于上游代码的署名，按许可证必须保留；`go.mod` 中的 `github.com/casdoor/*` 是第三方库（OSS 存储、通知、邮件、SMS、OIDC 客户端），与 Casdoor 服务无关。使用多分支策略：`master/main` 保持稳定；feature 分支做具体裁剪任务。
+- **版本发布：** 可使用 GoReleaser 或自定义脚本打包二进制和 Docker 镜像。在 GitHub Releases 中附带变更日志（突出指出移除或修改的部分）。镜像通过 GitHub Packages 或 Docker Hub 发布，标签与版本号对应。升级指南需描述配置差异；数据库由 xorm `Sync2` 自动加列（不删列），旧实例升级后遗留的空表/旧列需手工清理。
+- **升级策略：** 无上游合并，安全问题自行评估；改动集中在主题、鉴权与静态资源，升级前跑一遍回归清单（`go build`、前端构建、登录、OIDC 授权码流程、MFA）。
 - **打包指南：** 提供 Dockerfile / Helm Chart 示例（可基于原文档）。可优化 Dockerfile：`WORKDIR /app; COPY . /app; RUN go build ...; EXPOSE 8000`. 建议提供两种部署：一键运行（all-in-one）和分服务（若前端独立）。  
 - **维护与回馈：** 维护文档和测试用例，方便社区和自己调试。  
 - **许可证注意：** Masdoor 是 Apache-2.0 协议。本项目继续沿用 Apache-2.0，无需变更。如借鉴其他项目（如仅参考，未直接复制代码）或集成第三方代码，则要注意对应协议。不要将 GPL 代码直接合入，以免许可证冲突。  

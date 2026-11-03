@@ -115,7 +115,7 @@ cmd_dev() {
   info "启动前端 (Vite 热更新, http://localhost:${FRONTEND_PORT})"
   info "开发入口: http://localhost:${FRONTEND_PORT}   (API 代理 -> http://localhost:${BACKEND_PORT})"
   info "Ctrl-C 停止前后端"
-  (cd web && CASDOOR_BACKEND="http://localhost:${BACKEND_PORT}" yarn dev --port "$FRONTEND_PORT")
+  (cd web && MASDOOR_BACKEND="http://localhost:${BACKEND_PORT}" yarn dev --port "$FRONTEND_PORT")
 }
 
 cmd_test() {

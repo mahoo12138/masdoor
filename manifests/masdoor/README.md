@@ -1,10 +1,9 @@
 # Masdoor
 
-[Masdoor](https://casdoor.ai) is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This is the official Helm chart, published with every Masdoor release.
+Masdoor is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This is the official Helm chart, published with every Masdoor release.
 
-- Documentation: <https://casdoor.ai/docs/basic/try-with-helm>
+- Source: <https://github.com/mahoo12138/masdoor>
 - Source: <https://github.com/mahoo12138/masdoor/tree/master/manifests/masdoor>
-- Demo: <https://door.casdoor.com>
 
 ## Prerequisites
 
@@ -76,7 +75,7 @@ Override any value from [values.yaml](https://github.com/mahoo12138/masdoor/blob
 
 ### Declarative configuration (init data)
 
-Organizations, applications, users, providers, roles, permissions and the other Masdoor objects can be kept in the values file, in the [init data](https://casdoor.ai/docs/deployment/data-initialization) format. The chart stores them in a Secret, Masdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
+Organizations, applications, users, providers, roles, permissions and the other Masdoor objects can be kept in the values file, in the init data file format. The chart stores them in a Secret, Masdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
 
 ```yaml
 initData:
