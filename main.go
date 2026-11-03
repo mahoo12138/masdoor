@@ -28,7 +28,6 @@ import (
 	"github.com/mahoo12138/masdoor/object"
 	"github.com/mahoo12138/masdoor/proxy"
 	"github.com/mahoo12138/masdoor/routers"
-	"github.com/mahoo12138/masdoor/service"
 	"github.com/mahoo12138/masdoor/util"
 )
 
@@ -79,18 +78,10 @@ func runServer() {
 	object.InitDefaultStorageProvider()
 	proxy.InitHttpClient()
 	authz.InitApi()
-	object.InitUserManager()
 	object.InitFromFile()
 	object.InitCleanupTokens()
 	object.InitCleanupRecords()
 	object.InitCleanupDeviceAuthMap()
-	object.InitExpirePermissions()
-
-	object.InitSiteMap()
-	if len(object.SiteMap) != 0 {
-		object.InitRuleMap()
-		object.StartMonitorSitesLoop()
-	}
 
 	// web.DelStaticPath("/static")
 	// web.SetStaticPath("/assets", "web/build/assets")
@@ -101,7 +92,6 @@ func runServer() {
 	}
 	web.SetStaticPath("/files", "files")
 	// https://studygolang.com/articles/2303
-	web.InsertFilter("/api/forward-auth", web.BeforeStatic, routers.ForwardAuthFilter)
 	web.InsertFilter("*", web.BeforeStatic, routers.RequestBodyFilter)
 	web.InsertFilter("*", web.BeforeStatic, routers.ContentTypeFilter)
 	web.InsertFilter("*", web.BeforeStatic, routers.UploadedFileFilter)
@@ -153,10 +143,6 @@ func runServer() {
 
 	// Start webhook delivery worker
 	object.StartWebhookDeliveryWorker()
-
-	if len(object.SiteMap) != 0 {
-		service.Start()
-	}
 
 	web.RunWithMiddleWares(fmt.Sprintf(":%v", port), routers.BasePathMiddleware)
 }

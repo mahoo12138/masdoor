@@ -32,24 +32,16 @@ type InitData struct {
 	Users         []*User         `json:"users"`
 	Certs         []*Cert         `json:"certs"`
 	Providers     []*Provider     `json:"providers"`
-	Models        []*Model        `json:"models"`
-	Permissions   []*Permission   `json:"permissions"`
 	Resources     []*Resource     `json:"resources"`
 	Roles         []*Role         `json:"roles"`
 	Tokens        []*Token        `json:"tokens"`
 	Webhooks      []*Webhook      `json:"webhooks"`
 	Groups        []*Group        `json:"groups"`
-	Adapters      []*Adapter      `json:"adapters"`
-	Enforcers     []*Enforcer     `json:"enforcers"`
 	Invitations   []*Invitation   `json:"invitations"`
 	Records       []*Record       `json:"records"`
 	Sessions      []*Session      `json:"sessions"`
-	Sites         []*Site         `json:"sites"`
-	Rules         []*Rule         `json:"rules"`
 
 	ThirdPartyLinks []*ThirdPartyLink `json:"third_party_links"`
-
-	EnforcerPolicies map[string][][]string `json:"enforcerPolicies"`
 }
 
 var (
@@ -158,9 +150,6 @@ func applyInitData(s string) error {
 	for i, cert := range initData.Certs {
 		initDefinedCert(cert, getInitDataRaw(raws, "certs", i))
 	}
-	for i, model := range initData.Models {
-		initDefinedModel(model, getInitDataRaw(raws, "models", i))
-	}
 	for i, resource := range initData.Resources {
 		initDefinedResource(resource, getInitDataRaw(raws, "resources", i))
 	}
@@ -176,16 +165,6 @@ func applyInitData(s string) error {
 	for i, group := range initData.Groups {
 		initDefinedGroup(group, getInitDataRaw(raws, "groups", i))
 	}
-	for i, adapter := range initData.Adapters {
-		initDefinedAdapter(adapter, getInitDataRaw(raws, "adapters", i))
-	}
-	for i, enforcer := range initData.Enforcers {
-		policies := initData.EnforcerPolicies[enforcer.GetId()]
-		initDefinedEnforcer(enforcer, policies, getInitDataRaw(raws, "enforcers", i))
-	}
-	for i, permission := range initData.Permissions {
-		initDefinedPermission(permission, getInitDataRaw(raws, "permissions", i))
-	}
 	for i, invitation := range initData.Invitations {
 		initDefinedInvitation(invitation, getInitDataRaw(raws, "invitations", i))
 	}
@@ -194,12 +173,6 @@ func applyInitData(s string) error {
 	}
 	for _, session := range initData.Sessions {
 		initDefinedSession(session)
-	}
-	for i, rule := range initData.Rules {
-		initDefinedRule(rule, getInitDataRaw(raws, "rules", i))
-	}
-	for i, site := range initData.Sites {
-		initDefinedSite(site, getInitDataRaw(raws, "sites", i))
 	}
 	for _, link := range initData.ThirdPartyLinks {
 		initThirdPartyLinks(link)
@@ -285,24 +258,16 @@ func parseInitData(s string) (*InitData, error) {
 		Users:         []*User{},
 		Certs:         []*Cert{},
 		Providers:     []*Provider{},
-		Models:        []*Model{},
-		Permissions:   []*Permission{},
 		Resources:     []*Resource{},
 		Roles:         []*Role{},
 		Tokens:        []*Token{},
 		Webhooks:      []*Webhook{},
 		Groups:        []*Group{},
-		Adapters:      []*Adapter{},
-		Enforcers:     []*Enforcer{},
 		Invitations:   []*Invitation{},
 		Records:       []*Record{},
 		Sessions:      []*Session{},
-		Sites:         []*Site{},
-		Rules:         []*Rule{},
 
 		ThirdPartyLinks: []*ThirdPartyLink{},
-
-		EnforcerPolicies: map[string][][]string{},
 	}
 	err := util.JsonToStruct(s, data)
 	if err != nil {
@@ -339,20 +304,6 @@ func parseInitData(s string) (*InitData, error) {
 		}
 		if application.TokenFields == nil {
 			application.TokenFields = []string{}
-		}
-	}
-	for _, permission := range data.Permissions {
-		if permission.Actions == nil {
-			permission.Actions = []string{}
-		}
-		if permission.Resources == nil {
-			permission.Resources = []string{}
-		}
-		if permission.Roles == nil {
-			permission.Roles = []string{}
-		}
-		if permission.Users == nil {
-			permission.Users = []string{}
 		}
 	}
 	for _, role := range data.Roles {
@@ -525,7 +476,6 @@ func initDefinedCert(cert *Cert, raw json.RawMessage) {
 	}
 }
 
-
 func initDefinedProvider(provider *Provider, raw json.RawMessage) {
 	existed, err := GetProvider(util.GetId("admin", provider.Name))
 	if err != nil {
@@ -555,70 +505,6 @@ func initDefinedProvider(provider *Provider, raw json.RawMessage) {
 		panic(err)
 	}
 }
-
-func initDefinedModel(model *Model, raw json.RawMessage) {
-	existed, err := GetModel(model.GetId())
-	if err != nil {
-		panic(err)
-	}
-
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateModel(model.GetId(), existed)
-			})
-			return
-		}
-		affected, err := DeleteModel(model)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete provider")
-		}
-	}
-	model.CreatedTime = util.GetCurrentTime()
-	_, err = AddModel(model)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initDefinedPermission(permission *Permission, raw json.RawMessage) {
-	existed, err := GetPermission(permission.GetId())
-	if err != nil {
-		panic(err)
-	}
-
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdatePermission(permission.GetId(), existed)
-			})
-			return
-		}
-		affected, err := deletePermission(permission)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete permission")
-		}
-	}
-	permission.CreatedTime = util.GetCurrentTime()
-	_, err = AddPermission(permission)
-	if err != nil {
-		panic(err)
-	}
-}
-
-
 
 func initDefinedResource(resource *Resource, raw json.RawMessage) {
 	existed, err := GetResource(resource.GetId())
@@ -681,7 +567,6 @@ func initDefinedRole(role *Role, raw json.RawMessage) {
 		panic(err)
 	}
 }
-
 
 func initDefinedToken(token *Token, raw json.RawMessage) {
 	existed, err := GetToken(token.GetId())
@@ -775,94 +660,6 @@ func initDefinedGroup(group *Group, raw json.RawMessage) {
 	}
 }
 
-func initDefinedAdapter(adapter *Adapter, raw json.RawMessage) {
-	existed, err := getAdapter(adapter.Owner, adapter.Name)
-	if err != nil {
-		panic(err)
-	}
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateAdapter(util.GetId(adapter.Owner, adapter.Name), existed)
-			})
-			return
-		}
-		affected, err := DeleteAdapter(adapter)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete adapter")
-		}
-	}
-	adapter.CreatedTime = util.GetCurrentTime()
-	_, err = AddAdapter(adapter)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initDefinedEnforcer(enforcer *Enforcer, policies [][]string, raw json.RawMessage) {
-	existed, err := getEnforcer(enforcer.Owner, enforcer.Name)
-	if err != nil {
-		panic(err)
-	}
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateEnforcer(util.GetId(enforcer.Owner, enforcer.Name), existed)
-			})
-			initEnforcerPolicies(existed, policies)
-			return
-		}
-		affected, err := DeleteEnforcer(enforcer)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete enforcer")
-		}
-	}
-	enforcer.CreatedTime = util.GetCurrentTime()
-	_, err = AddEnforcer(enforcer)
-	if err != nil {
-		panic(err)
-	}
-
-	initEnforcerPolicies(enforcer, policies)
-}
-
-func initEnforcerPolicies(enforcer *Enforcer, policies [][]string) {
-	err := enforcer.InitEnforcer()
-	if err != nil {
-		panic(err)
-	}
-
-	for _, policy := range policies {
-		if enforcer.HasPolicy(policy) {
-			continue
-		}
-
-		_, err = enforcer.AddPolicy(policy)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	err = enforcer.SavePolicy()
-	if err != nil {
-		panic(err)
-	}
-}
-
-
-
 func initDefinedInvitation(invitation *Invitation, raw json.RawMessage) {
 	existed, err := getInvitation(invitation.Owner, invitation.Name)
 	if err != nil {
@@ -910,68 +707,6 @@ func initDefinedSession(session *Session) {
 
 	session.CreatedTime = util.GetCurrentTime()
 	_, err := AddSession(session)
-	if err != nil {
-		panic(err)
-	}
-}
-
-
-
-func initDefinedSite(site *Site, raw json.RawMessage) {
-	existed, err := getSite(site.Owner, site.Name)
-	if err != nil {
-		panic(err)
-	}
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateSite(util.GetId(site.Owner, site.Name), existed)
-			})
-			return
-		}
-		affected, err := DeleteSite(site)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete site")
-		}
-	}
-	site.CreatedTime = util.GetCurrentTime()
-	_, err = AddSite(site)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initDefinedRule(rule *Rule, raw json.RawMessage) {
-	existed, err := getRule(rule.Owner, rule.Name)
-	if err != nil {
-		panic(err)
-	}
-	if existed != nil {
-		if initDataNewOnly {
-			return
-		}
-		if initDataMerge {
-			mergeInitObject(existed, raw, func() (bool, error) {
-				return UpdateRule(util.GetId(rule.Owner, rule.Name), existed)
-			})
-			return
-		}
-		affected, err := DeleteRule(rule)
-		if err != nil {
-			panic(err)
-		}
-		if !affected {
-			panic("Fail to delete rule")
-		}
-	}
-	rule.CreatedTime = util.GetCurrentTime()
-	_, err = AddRule(rule)
 	if err != nil {
 		panic(err)
 	}

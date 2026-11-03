@@ -46,19 +46,6 @@ func writeInitDataToFile(filePath string) error {
 		return err
 	}
 
-
-	models, err := GetModels("")
-	if err != nil {
-		return err
-	}
-
-	permissions, err := GetPermissions("")
-	if err != nil {
-		return err
-	}
-
-
-
 	resources, err := GetResources("", "")
 	if err != nil {
 		return err
@@ -68,7 +55,6 @@ func writeInitDataToFile(filePath string) error {
 	if err != nil {
 		return err
 	}
-
 
 	tokens, err := GetTokens("", "")
 	if err != nil {
@@ -85,18 +71,6 @@ func writeInitDataToFile(filePath string) error {
 		return err
 	}
 
-	adapters, err := GetAdapters("")
-	if err != nil {
-		return err
-	}
-
-	enforcers, err := GetEnforcers("")
-	if err != nil {
-		return err
-	}
-
-
-
 	invitations, err := GetInvitations("")
 	if err != nil {
 		return err
@@ -112,38 +86,20 @@ func writeInitDataToFile(filePath string) error {
 		return err
 	}
 
-
-
-	enforcerPolicies := make(map[string][][]string)
-	for _, enforcer := range enforcers {
-		err = enforcer.InitEnforcer()
-		if err != nil {
-			continue
-		}
-
-		enforcerPolicies[enforcer.GetId()] = enforcer.GetPolicy()
-	}
-
 	data := &InitData{
 		Organizations: organizations,
 		Applications:  applications,
 		Users:         users,
 		Certs:         certs,
 		Providers:     providers,
-		Models:        models,
-		Permissions:   permissions,
 		Resources:     resources,
 		Roles:         roles,
 		Tokens:        tokens,
 		Webhooks:      webhooks,
 		Groups:        groups,
-		Adapters:      adapters,
-		Enforcers:     enforcers,
 		Invitations:   invitations,
 		Records:       records,
 		Sessions:      sessions,
-
-		EnforcerPolicies: enforcerPolicies,
 	}
 
 	text := util.StructToJsonFormatted(data)

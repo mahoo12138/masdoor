@@ -20,7 +20,7 @@
 // @SecurityDefinition AccessToken apiKey Authorization header
 // @Schemes https,http
 // @ExternalDocs Find out more about Masdoor
-// @ExternalDocsUrl https://casdoor.org/
+// @ExternalDocsUrl https://github.com/mahoo12138/masdoor
 package routers
 
 import (
@@ -87,7 +87,6 @@ func InitAPI() {
 	web.Router("/api/delete-user", &controllers.ApiController{}, "POST:DeleteUser")
 	web.Router("/api/upload-users", &controllers.ApiController{}, "POST:UploadUsers")
 	web.Router("/api/remove-user-from-group", &controllers.ApiController{}, "POST:RemoveUserFromGroup")
-	web.Router("/api/verify-identification", &controllers.ApiController{}, "POST:VerifyIdentification")
 	web.Router("/api/impersonate-user", &controllers.ApiController{}, "POST:ImpersonateUser")
 	web.Router("/api/exit-impersonate-user", &controllers.ApiController{}, "POST:ExitImpersonateUser")
 
@@ -116,7 +115,6 @@ func InitAPI() {
 	web.Router("/api/add-provider", &controllers.ApiController{}, "POST:AddProvider")
 	web.Router("/api/delete-provider", &controllers.ApiController{}, "POST:DeleteProvider")
 
-
 	web.Router("/api/get-resources", &controllers.ApiController{}, "GET:GetResources")
 	web.Router("/api/get-resource", &controllers.ApiController{}, "GET:GetResource")
 	web.Router("/api/update-resource", &controllers.ApiController{}, "POST:UpdateResource")
@@ -125,21 +123,6 @@ func InitAPI() {
 	web.Router("/api/upload-resource", &controllers.ApiController{}, "POST:UploadResource")
 
 
-
-
-
-	web.Router("/api/get-global-sites", &controllers.ApiController{}, "GET:GetGlobalSites")
-	web.Router("/api/get-sites", &controllers.ApiController{}, "GET:GetSites")
-	web.Router("/api/get-site", &controllers.ApiController{}, "GET:GetSite")
-	web.Router("/api/update-site", &controllers.ApiController{}, "POST:UpdateSite")
-	web.Router("/api/add-site", &controllers.ApiController{}, "POST:AddSite")
-	web.Router("/api/delete-site", &controllers.ApiController{}, "POST:DeleteSite")
-
-	web.Router("/api/get-rules", &controllers.ApiController{}, "GET:GetRules")
-	web.Router("/api/get-rule", &controllers.ApiController{}, "GET:GetRule")
-	web.Router("/api/add-rule", &controllers.ApiController{}, "POST:AddRule")
-	web.Router("/api/update-rule", &controllers.ApiController{}, "POST:UpdateRule")
-	web.Router("/api/delete-rule", &controllers.ApiController{}, "POST:DeleteRule")
 
 	web.Router("/api/get-certs", &controllers.ApiController{}, "GET:GetCerts")
 	web.Router("/api/get-global-certs", &controllers.ApiController{}, "GET:GetGlobalCerts")
@@ -163,45 +146,6 @@ func InitAPI() {
 	web.Router("/api/delete-role", &controllers.ApiController{}, "POST:DeleteRole")
 	web.Router("/api/upload-roles", &controllers.ApiController{}, "POST:UploadRoles")
 
-	web.Router("/api/get-permissions", &controllers.ApiController{}, "GET:GetPermissions")
-	web.Router("/api/get-permissions-by-submitter", &controllers.ApiController{}, "GET:GetPermissionsBySubmitter")
-	web.Router("/api/get-permissions-by-role", &controllers.ApiController{}, "GET:GetPermissionsByRole")
-	web.Router("/api/get-permission", &controllers.ApiController{}, "GET:GetPermission")
-	web.Router("/api/update-permission", &controllers.ApiController{}, "POST:UpdatePermission")
-	web.Router("/api/update-permissions", &controllers.ApiController{}, "POST:UpdatePermissions")
-	web.Router("/api/add-permission", &controllers.ApiController{}, "POST:AddPermission")
-	web.Router("/api/delete-permission", &controllers.ApiController{}, "POST:DeletePermission")
-	web.Router("/api/upload-permissions", &controllers.ApiController{}, "POST:UploadPermissions")
-
-	web.Router("/api/get-models", &controllers.ApiController{}, "GET:GetModels")
-	web.Router("/api/get-model", &controllers.ApiController{}, "GET:GetModel")
-	web.Router("/api/update-model", &controllers.ApiController{}, "POST:UpdateModel")
-	web.Router("/api/add-model", &controllers.ApiController{}, "POST:AddModel")
-	web.Router("/api/delete-model", &controllers.ApiController{}, "POST:DeleteModel")
-
-	web.Router("/api/get-adapters", &controllers.ApiController{}, "GET:GetAdapters")
-	web.Router("/api/get-adapter", &controllers.ApiController{}, "GET:GetAdapter")
-	web.Router("/api/update-adapter", &controllers.ApiController{}, "POST:UpdateAdapter")
-	web.Router("/api/add-adapter", &controllers.ApiController{}, "POST:AddAdapter")
-	web.Router("/api/delete-adapter", &controllers.ApiController{}, "POST:DeleteAdapter")
-	web.Router("/api/get-policies", &controllers.ApiController{}, "GET:GetPolicies")
-	web.Router("/api/get-filtered-policies", &controllers.ApiController{}, "POST:GetFilteredPolicies")
-	web.Router("/api/update-policy", &controllers.ApiController{}, "POST:UpdatePolicy")
-	web.Router("/api/add-policy", &controllers.ApiController{}, "POST:AddPolicy")
-	web.Router("/api/remove-policy", &controllers.ApiController{}, "POST:RemovePolicy")
-
-	web.Router("/api/get-enforcers", &controllers.ApiController{}, "GET:GetEnforcers")
-	web.Router("/api/get-enforcer", &controllers.ApiController{}, "GET:GetEnforcer")
-	web.Router("/api/update-enforcer", &controllers.ApiController{}, "POST:UpdateEnforcer")
-	web.Router("/api/add-enforcer", &controllers.ApiController{}, "POST:AddEnforcer")
-	web.Router("/api/delete-enforcer", &controllers.ApiController{}, "POST:DeleteEnforcer")
-
-	web.Router("/api/enforce", &controllers.ApiController{}, "POST:Enforce")
-	web.Router("/api/batch-enforce", &controllers.ApiController{}, "POST:BatchEnforce")
-	web.Router("/api/get-all-objects", &controllers.ApiController{}, "GET:GetAllObjects")
-	web.Router("/api/get-all-actions", &controllers.ApiController{}, "GET:GetAllActions")
-	web.Router("/api/get-all-roles", &controllers.ApiController{}, "GET:GetAllRoles")
-
 	web.Router("/api/get-sessions", &controllers.ApiController{}, "GET:GetSessions")
 	web.Router("/api/get-session", &controllers.ApiController{}, "GET:GetSingleSession")
 	web.Router("/api/update-session", &controllers.ApiController{}, "POST:UpdateSession")
@@ -215,14 +159,6 @@ func InitAPI() {
 	web.Router("/api/add-token", &controllers.ApiController{}, "POST:AddToken")
 	web.Router("/api/delete-token", &controllers.ApiController{}, "POST:DeleteToken")
 
-
-
-
-
-
-
-
-
 	web.Router("/api/get-system-info", &controllers.ApiController{}, "GET:GetSystemInfo")
 	web.Router("/api/get-version-info", &controllers.ApiController{}, "GET:GetVersionInfo")
 	web.Router("/api/get-setting", &controllers.ApiController{}, "GET:GetSetting")
@@ -230,13 +166,6 @@ func InitAPI() {
 	web.Router("/api/health", &controllers.ApiController{}, "GET:Health")
 	web.Router("/api/get-prometheus-info", &controllers.ApiController{}, "GET:GetPrometheusInfo")
 	web.Router("/api/metrics", &controllers.ApiController{}, "GET:GetMetrics")
-
-	web.Router("/api/get-global-forms", &controllers.ApiController{}, "GET:GetGlobalForms")
-	web.Router("/api/get-forms", &controllers.ApiController{}, "GET:GetForms")
-	web.Router("/api/get-form", &controllers.ApiController{}, "GET:GetForm")
-	web.Router("/api/update-form", &controllers.ApiController{}, "POST:UpdateForm")
-	web.Router("/api/add-form", &controllers.ApiController{}, "POST:AddForm")
-	web.Router("/api/delete-form", &controllers.ApiController{}, "POST:DeleteForm")
 
 
 	web.Router("/api/get-webhooks", &controllers.ApiController{}, "GET:GetWebhooks")
@@ -251,12 +180,6 @@ func InitAPI() {
 	web.Router("/api/replay-webhook-event", &controllers.ApiController{}, "POST:ReplayWebhookEvent")
 	web.Router("/api/delete-webhook-event", &controllers.ApiController{}, "POST:DeleteWebhookEvent")
 
-	web.Router("/api/get-tickets", &controllers.ApiController{}, "GET:GetTickets")
-	web.Router("/api/get-ticket", &controllers.ApiController{}, "GET:GetTicket")
-	web.Router("/api/update-ticket", &controllers.ApiController{}, "POST:UpdateTicket")
-	web.Router("/api/add-ticket", &controllers.ApiController{}, "POST:AddTicket")
-	web.Router("/api/delete-ticket", &controllers.ApiController{}, "POST:DeleteTicket")
-	web.Router("/api/add-ticket-message", &controllers.ApiController{}, "POST:AddTicketMessage")
 
 	web.Router("/api/set-password", &controllers.ApiController{}, "POST:SetPassword")
 	web.Router("/api/get-init-admin-status", &controllers.ApiController{}, "GET:GetInitAdminStatus")
@@ -270,7 +193,6 @@ func InitAPI() {
 	web.Router("/api/get-captcha", &controllers.ApiController{}, "GET:GetCaptcha")
 	web.Router("/api/get-verifications", &controllers.ApiController{}, "GET:GetVerifications")
 
-
 	web.Router("/api/login/oauth/access_token", &controllers.ApiController{}, "POST:GetOAuthToken")
 	web.Router("/api/login/oauth/refresh_token", &controllers.ApiController{}, "POST:RefreshToken")
 	web.Router("/api/login/oauth/introspect", &controllers.ApiController{}, "POST:IntrospectToken")
@@ -283,7 +205,6 @@ func InitAPI() {
 	web.Router("/api/add-record", &controllers.ApiController{}, "POST:AddRecord")
 
 	web.Router("/api/send-email", &controllers.ApiController{}, "POST:SendEmail")
-	web.Router("/api/send-sms", &controllers.ApiController{}, "POST:SendSms")
 	web.Router("/api/send-notification", &controllers.ApiController{}, "POST:SendNotification")
 
 	web.Router("/api/webauthn/signup/begin", &controllers.ApiController{}, "GET:WebAuthnSignupBegin")
@@ -311,8 +232,4 @@ func InitAPI() {
 	web.Router("/.well-known/oauth-protected-resource", &controllers.RootController{}, "GET:GetOauthProtectedResourceMetadata")
 	web.Router("/.well-known/:application/oauth-protected-resource", &controllers.RootController{}, "GET:GetOauthProtectedResourceMetadataByApplication")
 
-
-
-
-	web.Router("/api/faceid-signin-begin", &controllers.ApiController{}, "GET:FaceIDSigninBegin")
 }

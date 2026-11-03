@@ -19,7 +19,6 @@ type WebConfig struct {
 	ForceLanguage       string `json:"forceLanguage"`
 	DefaultLanguage     string `json:"defaultLanguage"`
 	IsDemoMode          bool   `json:"isDemoMode"`
-	StaticBaseUrl       string `json:"staticBaseUrl"`
 	DefaultApplication  string `json:"defaultApplication"`
 	MaxItemsForFlatMenu int64  `json:"maxItemsForFlatMenu"`
 	ThemeShowcase       bool   `json:"themeShowcase"`
@@ -37,7 +36,6 @@ func GetWebConfig() *WebConfig {
 	}
 	config.DefaultLanguage = GetLanguage(GetConfigString("defaultLanguage"))
 	config.IsDemoMode = IsDemoMode()
-	config.StaticBaseUrl = GetConfigString("staticBaseUrl")
 	config.DefaultApplication = GetConfigString("defaultApplication")
 	if config.DefaultApplication == "" {
 		config.DefaultApplication = "app-built-in"

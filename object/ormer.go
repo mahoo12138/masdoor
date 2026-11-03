@@ -25,11 +25,10 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/server/web"
+	_ "github.com/go-sql-driver/mysql" // db = mysql
+	_ "github.com/lib/pq"              // db = postgres
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/util"
-	xormadapter "github.com/casdoor/xorm-adapter/v3"
-	_ "github.com/go-sql-driver/mysql"  // db = mysql
-	_ "github.com/lib/pq"               // db = postgres
 	_ "github.com/microsoft/go-mssqldb" // db = mssql
 	"github.com/xorm-io/xorm"
 	"github.com/xorm-io/xorm/core"
@@ -413,26 +412,6 @@ func (a *Ormer) createTable() {
 		panic(err)
 	}
 
-	err = a.Engine.Sync2(new(Permission))
-	if err != nil {
-		panic(err)
-	}
-
-	err = a.Engine.Sync2(new(Model))
-	if err != nil {
-		panic(err)
-	}
-
-	err = a.Engine.Sync2(new(Adapter))
-	if err != nil {
-		panic(err)
-	}
-
-	err = a.Engine.Sync2(new(Enforcer))
-	if err != nil {
-		panic(err)
-	}
-
 	err = a.Engine.Sync2(new(Session))
 	if err != nil {
 		panic(err)
@@ -472,17 +451,6 @@ func (a *Ormer) createTable() {
 		panic(err)
 	}
 
-	err = a.Engine.Sync2(new(xormadapter.CasbinRule))
-	if err != nil {
-		panic(err)
-	}
-
-	err = a.Engine.Sync2(new(Form))
-	if err != nil {
-		panic(err)
-	}
-
-	err = a.Engine.Sync2(new(Ticket))
 	if err != nil {
 		panic(err)
 	}
@@ -491,12 +459,14 @@ func (a *Ormer) createTable() {
 		panic(err)
 	}
 
-	err = a.Engine.Sync2(new(Site))
 	if err != nil {
 		panic(err)
 	}
 
-	err = a.Engine.Sync2(new(Rule))
+	if err != nil {
+		panic(err)
+	}
+
 	if err != nil {
 		panic(err)
 	}

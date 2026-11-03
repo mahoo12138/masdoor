@@ -22,30 +22,20 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/xorm-io/core"
 )
 
 func InitDb() {
 	existed := initBuiltInOrganization()
 	if !existed {
-		initBuiltInPermission()
 		initBuiltInProvider()
 		initBuiltInUser()
 		initBuiltInApplication()
 		initBuiltInCert()
-	}
-
-	existed = initBuiltInApiModel()
-	if !existed {
-		initBuiltInApiAdapter()
-		initBuiltInApiEnforcer()
-		initBuiltInUserModel()
-		initBuiltInUserAdapter()
-		initBuiltInUserEnforcer()
 	}
 
 	warnPublicBuiltInCert()
@@ -76,7 +66,6 @@ func GetDefaultAccountItems() []*AccountItem {
 		{Name: "ID card", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
 		{Name: "ID card info", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
 		{Name: "Real name", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
-		{Name: "ID verification", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
 		{Name: "Homepage", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
 		{Name: "Bio", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
 		{Name: "Tag", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},
@@ -89,7 +78,6 @@ func GetDefaultAccountItems() []*AccountItem {
 		{Name: "Register type", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},
 		{Name: "Register source", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},
 		{Name: "Roles", Visible: true, ViewRule: "Public", ModifyRule: "Immutable"},
-		{Name: "Permissions", Visible: true, ViewRule: "Public", ModifyRule: "Immutable"},
 		{Name: "Groups", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},
 		{Name: "Consents", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
 		{Name: "3rd-party logins", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
@@ -106,7 +94,6 @@ func GetDefaultAccountItems() []*AccountItem {
 		{Name: "Last signin time", Visible: true, ViewRule: "Self", ModifyRule: "Admin"},
 		{Name: "Last signin IP", Visible: true, ViewRule: "Self", ModifyRule: "Admin"},
 		{Name: "Managed accounts", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
-		{Name: "Face ID", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
 		{Name: "MFA accounts", Visible: true, ViewRule: "Self", ModifyRule: "Self"},
 		{Name: "Need update password", Visible: true, ViewRule: "Admin", ModifyRule: "Admin"},
 		{Name: "IP whitelist", Visible: true, ViewRule: "Admin", ModifyRule: "Admin"},
@@ -129,11 +116,11 @@ func initBuiltInOrganization() bool {
 		CreatedTime:        util.GetCurrentTime(),
 		DisplayName:        "Built-in Organization",
 		WebsiteUrl:         "https://example.com",
-		Favicon:            fmt.Sprintf("%s/img/casbin/favicon.ico", conf.GetConfigString("staticBaseUrl")),
+		Favicon:            "/img/favicon.png",
 		PasswordType:       "bcrypt",
 		PasswordOptions:    []string{"AtLeast6"},
 		CountryCodes:       []string{"US", "ES", "FR", "DE", "GB", "CN", "JP", "KR", "VN", "ID", "SG", "IN"},
-		DefaultAvatar:      fmt.Sprintf("%s/img/casbin.svg", conf.GetConfigString("staticBaseUrl")),
+		DefaultAvatar:      "/img/avatar-default.svg",
 		DefaultTokenFormat: "JWT",
 		DefaultTokenFields: []string{},
 		UserTypes:          []string{},
@@ -171,7 +158,7 @@ func initBuiltInUser() {
 		Type:              "normal-user",
 		Password:          getInitAdminPassword(),
 		DisplayName:       "Admin",
-		Avatar:            fmt.Sprintf("%s/img/casbin.svg", conf.GetConfigString("staticBaseUrl")),
+		Avatar:            "/img/avatar-default.svg",
 		Email:             "admin@example.com",
 		Phone:             "12345678910",
 		CountryCode:       "US",
@@ -283,8 +270,8 @@ func initBuiltInApplication() {
 		Category:       "Default",
 		Type:           "All",
 		Scopes:         []*ScopeItem{},
-		Logo:           fmt.Sprintf("%s/img/casdoor-logo_1185x256.png", conf.GetConfigString("staticBaseUrl")),
-		HomepageUrl:    "https://casdoor.org",
+		Logo:           "/img/masdoor-logo.png",
+		HomepageUrl:    "",
 		Organization:   "built-in",
 		Cert:           "cert-built-in",
 		EnablePassword: true,
@@ -296,7 +283,6 @@ func initBuiltInApplication() {
 			{Name: "Password", DisplayName: "Password", Rule: "All"},
 			{Name: "Verification code", DisplayName: "Verification code", Rule: "All"},
 			{Name: "WebAuthn", DisplayName: "WebAuthn", Rule: "None"},
-			{Name: "Face ID", DisplayName: "Face ID", Rule: "None"},
 		},
 		SignupItems: []*SignupItem{
 			{Name: "ID", Visible: false, Required: true, Prompted: false, Rule: "Random"},
@@ -370,7 +356,6 @@ func warnPublicBuiltInCert() {
 	}
 }
 
-
 func initBuiltInProvider() {
 	providers := []*Provider{
 		{
@@ -402,218 +387,4 @@ func initBuiltInProvider() {
 
 func initWebAuthn() {
 	gob.Register(webauthn.SessionData{})
-}
-
-func initBuiltInUserModel() {
-	model, err := GetModel("built-in/user-model-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if model != nil {
-		return
-	}
-
-	model = &Model{
-		Owner:       "built-in",
-		Name:        "user-model-built-in",
-		CreatedTime: util.GetCurrentTime(),
-		DisplayName: "Built-in Model",
-		ModelText: `[request_definition]
-r = sub, obj, act
-
-[policy_definition]
-p = sub, obj, act
-
-[role_definition]
-g = _, _
-
-[policy_effect]
-e = some(where (p.eft == allow))
-
-[matchers]
-m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act`,
-	}
-	_, err = AddModel(model)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initBuiltInApiModel() bool {
-	model, err := GetModel("built-in/api-model-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if model != nil {
-		return true
-	}
-
-	modelText := `[request_definition]
-r = subOwner, subName, method, urlPath, objOwner, objName
-
-[policy_definition]
-p = subOwner, subName, method, urlPath, objOwner, objName
-
-[role_definition]
-g = _, _
-
-[policy_effect]
-e = some(where (p.eft == allow))
-
-[matchers]
-m = (r.subOwner == p.subOwner || p.subOwner == "*") && \
-    (r.subName == p.subName || p.subName == "*" || r.subName != "anonymous" && p.subName == "!anonymous") && \
-    (r.method == p.method || p.method == "*") && \
-    (keyMatch2(r.urlPath, p.urlPath) || p.urlPath == "*") && \
-    (r.objOwner == p.objOwner || p.objOwner == "*") && \
-    (r.objName == p.objName || p.objName == "*") || \
-    (r.subOwner == r.objOwner && r.subName == r.objName)`
-
-	model = &Model{
-		Owner:       "built-in",
-		Name:        "api-model-built-in",
-		CreatedTime: util.GetCurrentTime(),
-		DisplayName: "API Model",
-		ModelText:   modelText,
-	}
-	_, err = AddModel(model)
-	if err != nil {
-		panic(err)
-	}
-	return false
-}
-
-func initBuiltInPermission() {
-	permission, err := GetPermission("built-in/permission-built-in")
-	if err != nil {
-		panic(err)
-	}
-	if permission != nil {
-		return
-	}
-
-	permission = &Permission{
-		Owner:        "built-in",
-		Name:         "permission-built-in",
-		CreatedTime:  util.GetCurrentTime(),
-		DisplayName:  "Built-in Permission",
-		Description:  "Built-in Permission",
-		Users:        []string{"built-in/*"},
-		Groups:       []string{},
-		Roles:        []string{},
-		Domains:      []string{},
-		Model:        "built-in/user-model-built-in",
-		Adapter:      "",
-		ResourceType: "Application",
-		Resources:    []string{"app-built-in"},
-		Actions:      []string{"Read", "Write", "Admin"},
-		Effect:       "Allow",
-		IsEnabled:    true,
-		Submitter:    "admin",
-		Approver:     "admin",
-		ApproveTime:  util.GetCurrentTime(),
-		State:        "Approved",
-	}
-	_, err = AddPermission(permission)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initBuiltInUserAdapter() {
-	adapter, err := GetAdapter("built-in/user-adapter-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if adapter != nil {
-		return
-	}
-
-	adapter = &Adapter{
-		Owner:       "built-in",
-		Name:        "user-adapter-built-in",
-		CreatedTime: util.GetCurrentTime(),
-		Table:       "casbin_user_rule",
-		UseSameDb:   true,
-	}
-	_, err = AddAdapter(adapter)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initBuiltInApiAdapter() {
-	adapter, err := GetAdapter("built-in/api-adapter-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if adapter != nil {
-		return
-	}
-
-	adapter = &Adapter{
-		Owner:       "built-in",
-		Name:        "api-adapter-built-in",
-		CreatedTime: util.GetCurrentTime(),
-		Table:       "casbin_api_rule",
-		UseSameDb:   true,
-	}
-	_, err = AddAdapter(adapter)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initBuiltInUserEnforcer() {
-	enforcer, err := GetEnforcer("built-in/user-enforcer-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if enforcer != nil {
-		return
-	}
-
-	enforcer = &Enforcer{
-		Owner:       "built-in",
-		Name:        "user-enforcer-built-in",
-		CreatedTime: util.GetCurrentTime(),
-		DisplayName: "User Enforcer",
-		Model:       "built-in/user-model-built-in",
-		Adapter:     "built-in/user-adapter-built-in",
-	}
-
-	_, err = AddEnforcer(enforcer)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func initBuiltInApiEnforcer() {
-	enforcer, err := GetEnforcer("built-in/api-enforcer-built-in")
-	if err != nil {
-		panic(err)
-	}
-
-	if enforcer != nil {
-		return
-	}
-
-	enforcer = &Enforcer{
-		Owner:       "built-in",
-		Name:        "api-enforcer-built-in",
-		CreatedTime: util.GetCurrentTime(),
-		DisplayName: "API Enforcer",
-		Model:       "built-in/api-model-built-in",
-		Adapter:     "built-in/api-adapter-built-in",
-	}
-
-	_, err = AddEnforcer(enforcer)
-	if err != nil {
-		panic(err)
-	}
 }

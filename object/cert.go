@@ -18,7 +18,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/mahoo12138/masdoor/certificate"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
@@ -291,42 +290,6 @@ func (p *Cert) populateContent() error {
 	return nil
 }
 
-func RenewCert(cert *Cert) (bool, error) {
-	useProxy := false
-	if cert.Provider == "GoDaddy" {
-		useProxy = true
-	}
-
-	client, err := GetAcmeClient(useProxy)
-	if err != nil {
-		return false, err
-	}
-
-	var certStr, privateKey string
-	if cert.Provider == "Aliyun" {
-		certStr, privateKey, err = certificate.ObtainCertificateAli(client, cert.Name, cert.AccessKey, cert.AccessSecret)
-	} else if cert.Provider == "GoDaddy" {
-		certStr, privateKey, err = certificate.ObtainCertificateGoDaddy(client, cert.Name, cert.AccessKey, cert.AccessSecret)
-	} else {
-		return false, fmt.Errorf("unknown provider: %s", cert.Provider)
-	}
-
-	if err != nil {
-		return false, err
-	}
-
-	expireTime, err := util.GetCertExpireTime(certStr)
-	if err != nil {
-		return false, err
-	}
-
-	cert.ExpireTime = expireTime
-	cert.Certificate = certStr
-	cert.PrivateKey = privateKey
-
-	return UpdateCert(cert.GetId(), cert)
-}
-
 func getCertByApplication(application *Application) (*Cert, error) {
 	if application.Cert != "" {
 		return GetCertEx(util.GetId(application.Organization, application.Cert))
@@ -376,29 +339,6 @@ func getBaseDomain(domain string) (string, error) {
 	// subdomain.abc.io -> abc.io
 	// subdomain.abc.org.us -> abc.org.us
 	return publicsuffix.EffectiveTLDPlusOne(domain)
-}
-
-func GetCertByDomain(domain string) (*Cert, error) {
-	if domain == "" {
-		return nil, fmt.Errorf("GetCertByDomain() error: domain should not be empty")
-	}
-
-	cert, ok := certMap[domain]
-	if ok {
-		return cert, nil
-	}
-
-	baseDomain, err := getBaseDomain(domain)
-	if err != nil {
-		return nil, err
-	}
-
-	cert, ok = certMap[baseDomain]
-	if ok {
-		return cert, nil
-	}
-
-	return nil, nil
 }
 
 func getCertMap() (map[string]*Cert, error) {

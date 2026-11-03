@@ -48,9 +48,7 @@ func GetConfigString(key string) string {
 
 	res, _ := web.AppConfig.String(key)
 	if res == "" {
-		if key == "staticBaseUrl" {
-			res = "https://cdn.casbin.org"
-		} else if key == "logConfig" {
+		if key == "logConfig" {
 			appname, _ := web.AppConfig.String("appname")
 			res = fmt.Sprintf("{\"filename\": \"logs/%s.log\", \"maxdays\":99999, \"perm\":\"0770\"}", appname)
 		}
@@ -130,7 +128,7 @@ func IsDemoMode() bool {
 }
 
 func IsDemoDatabase() bool {
-	return GetConfigString("dbName") == "casdoor_demo"
+	return GetConfigString("dbName") == "masdoor_demo"
 }
 
 func GetConfigBatchSize() int {
@@ -141,7 +139,7 @@ func GetConfigBatchSize() int {
 	return res
 }
 
-// GetBasePath returns the path prefix Masdoor is served under behind a reverse proxy, like "/casdoor", or "" at the root
+// GetBasePath returns the path prefix Masdoor is served under behind a reverse proxy, like "/sso", or "" at the root
 func GetBasePath() string {
 	res := strings.Trim(strings.TrimSpace(GetConfigString("basePath")), "/")
 	if res == "" {
