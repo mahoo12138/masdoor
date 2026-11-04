@@ -18,8 +18,8 @@ This fork exists because the upstream Casdoor is a full enterprise IAM platform,
 | Users | Registration, password / email code login, WebAuthn / Passkey, TOTP & MFA, account linking | SMS code login, Face ID login |
 | Applications | Multi-app OAuth/OIDC clients, PKCE, device flow | — |
 | Login page | Full theming: logo, colors, CSS/HTML slots, sign-in method layout (应用设置 → UI Customization) | — |
-| Providers | Google, GitHub and the standard OAuth/OIDC adapters, custom OIDC, email (SMTP) | SMS, Face ID, ID verification, WeChat / WeCom / Telegram login, SAML providers |
-| Ops | Webhooks, audit records, resource storage | Sites / reverse proxy + ACME certs + WAF rules, tickets, forms, AI Agent / MCP gateway, marketplace, integrations, syncers, LDAP admin |
+| Providers | Social login: Google, GitHub, GitLab, Gitea (+ custom OIDC); email: SMTP, Resend; storage: local disk, MinIO/S3; notifications: Bark, Telegram, WeCom, custom HTTP webhook | SMS, Face ID, ID verification, WeChat login, SAML providers, 50+ other goth adapters, cloud OSS (Aliyun/Tencent/Azure/GCS/七牛), SendGrid/Azure ACS |
+| Ops | Webhooks, audit records, resource storage | Sites / reverse proxy + ACME certs + WAF rules, tickets, forms, xlsx bulk import, AI Agent / MCP gateway, marketplace, integrations, syncers, LDAP admin |
 | Business | — | Products, plans, pricing, orders, payments, subscriptions, coupons, transactions |
 
 Everything above is configured in the web console — no config-file edits or redeploys to change branding, providers or sign-in methods.
@@ -123,7 +123,23 @@ After an upgrade or an upstream merge, verify at minimum:
 3. An OAuth 2.0 / OIDC client can complete the code flow and receive a valid ID token (`state`, `nonce` and PKCE intact).
 4. WebAuthn / Passkey and TOTP MFA enrollment + login work.
 5. Application → UI Customization still changes the login page (logo, colors, custom CSS) and the custom HTML/CSS sanitising still rejects script injection.
-6. Removed endpoints answer 404 (e.g. `/api/get-products`, `/api/saml/metadata`, `/api/get-ldap-users`).
+6. Removed endpoints stay unreachable (e.g. `/api/get-permissions`, `/api/upload-users`, `/api/get-sites`) — `go test ./routers/` asserts this automatically.
+7. `go test ./...` passes (`go vet ./...` too; CI runs both).
+
+## Footprint
+
+Measured on the STANDARD image after the trim (arm64, SQLite, idle):
+
+- **Image size: ~105 MB** (static binary + embedded frontend build, no Node in the runtime).
+- **Resident memory: ~19 MB** at idle; runs comfortably under a `--memory=256m` container limit with health checks, the login page and the OAuth token endpoints all responding.
+- The shipped image runs with `runmode = prod` (dev-only swagger UI is compiled out of the routing); local `./dev.sh dev` stays in `dev` mode.
+
+## Upgrading
+
+- **Data first:** the database is a single SQLite file (`data/masdoor.db` by default, or the `masdoor-data` volume in compose). Stop the container and copy that file before upgrading.
+- **Schema:** XORM's `Sync2` only adds missing columns/tables on startup; it never drops anything. Tables and columns left behind by removed modules are inert — drop them manually if you want a tidy schema.
+- **No upstream merges:** Masdoor no longer tracks Casdoor. Security fixes are backported manually; run the regression checklist and `go test ./...` after every pull.
+- **Config drift:** new releases may add `app.conf` keys; existing keys keep their values. Check the release notes for renamed or removed keys.
 
 ## Security notes
 
