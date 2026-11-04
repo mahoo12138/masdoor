@@ -110,15 +110,11 @@ func GetMaskedProvider(provider *Provider, isMaskEnabled bool) *Provider {
 	if provider.Content != "" {
 		provider.Content = "***"
 	}
-	if isProviderMetadataSecret(provider) && provider.Metadata != "" {
+	if provider.Metadata != "" {
 		provider.Metadata = "***"
 	}
 
 	return provider
-}
-
-func isProviderMetadataSecret(provider *Provider) bool {
-	return provider.Type == "Google Chat"
 }
 
 func getMaskedHttpHeaders(headers map[string]string) map[string]string {
@@ -310,7 +306,7 @@ func UpdateProvider(id string, provider *Provider) (bool, error) {
 	if provider.Content == "***" {
 		session = session.Omit("content")
 	}
-	if provider.Metadata == "***" && isProviderMetadataSecret(provider) {
+	if provider.Metadata == "***" {
 		session = session.Omit("metadata")
 	}
 

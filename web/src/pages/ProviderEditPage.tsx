@@ -115,9 +115,7 @@ function getClientIdLabel(provider: any): Label {
       ? label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"))
       : label(i18next.t("provider:Site key"), i18next.t("provider:Site key - Tooltip"));
   } else if (provider.category === "Notification") {
-    return provider.type === "DingTalk"
-      ? label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"))
-      : label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
+    return label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   }
   return label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
 }
@@ -136,10 +134,8 @@ function getClientSecretLabel(provider: any): Label {
       ? label(i18next.t("provider:Secret access key"), i18next.t("provider:Secret access key - Tooltip"))
       : label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"));
   } else if (provider.category === "Notification") {
-    if (["Line", "Telegram", "Bark", "DingTalk", "Discord", "Slack", "Pushover", "Pushbullet"].includes(provider.type)) {
+    if (["Telegram", "Bark"].includes(provider.type)) {
       return label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"));
-    } else if (["Lark", "Microsoft Teams"].includes(provider.type)) {
-      return label(i18next.t("provider:Endpoint"), i18next.t("provider:Endpoint - Tooltip"));
     }
     return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   }
@@ -153,8 +149,6 @@ function getClientId2Label(provider: any): Label {
     return label(i18next.t("provider:From address"), i18next.t("provider:From address - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
     return label(i18next.t("provider:Scene"), i18next.t("provider:Scene - Tooltip"));
-  } else if (provider.type === "CUCloud") {
-    return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
   }
   return label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
 }
@@ -172,23 +166,14 @@ function getClientSecret2Label(provider: any): Label {
 
 /** the extra "appId" row, whose meaning depends on the provider — null hides it */
 function getAppIdLabel(provider: any): Label | null {
-  if (provider.category === "Notification") {
-    if (provider.type === "Viber") {
-      return label(i18next.t("provider:Domain"), i18next.t("provider:Domain - Tooltip"));
-    } else if (["Line", "Matrix", "Rocket Chat"].includes(provider.type)) {
-      return label(i18next.t("provider:App Key"), i18next.t("provider:App Key - Tooltip"));
-    } else if (provider.type === "CUCloud") {
-      return label("Topic name", "Topic name - Tooltip");
-    }
-  }
   return null;
 }
 
 /** the notification "receiver" row — null when the provider needs no receiver */
 function getReceiverLabel(provider: any): Label | null {
-  if (["Telegram", "Pushover", "Pushbullet", "Slack", "Discord", "Line", "Twitter", "Reddit", "Rocket Chat", "Viber"].includes(provider.type)) {
+  if (provider.type === "Telegram") {
     return label(i18next.t("provider:Chat ID"), i18next.t("provider:Chat ID - Tooltip"));
-  } else if (["Custom HTTP", "Webpush", "Matrix"].includes(provider.type)) {
+  } else if (provider.type === "Custom HTTP") {
     return label(i18next.t("provider:Endpoint"), i18next.t("provider:Endpoint - Tooltip"));
   }
   return null;
@@ -196,7 +181,7 @@ function getReceiverLabel(provider: any): Label | null {
 
 function hasClientIdRow(provider: any) {
   if ((provider.category === "Email" && provider.type === "Resend") ||
-      (provider.category === "Notification" && ["Line", "Telegram", "Bark", "Discord", "Slack", "Pushbullet", "Pushover", "Lark", "Microsoft Teams"].includes(provider.type))) {
+      (provider.category === "Notification" && ["Telegram", "Bark"].includes(provider.type))) {
     return false;
   }
   return true;
@@ -207,7 +192,7 @@ function hasCredentialRows(provider: any) {
       provider.category === "Audit" ||
       provider.category === "Log" ||
       (provider.category === "Storage" && provider.type === "Local File System") ||
-      (provider.category === "Notification" && ["Google Chat", "Custom HTTP", "Balance"].includes(provider.type))) {
+      (provider.category === "Notification" && ["Custom HTTP"].includes(provider.type))) {
     return false;
   }
   return true;
@@ -215,7 +200,7 @@ function hasCredentialRows(provider: any) {
 
 function hasCredential2Rows(provider: any) {
   return provider.category === "Email" ||
-    ["Aliyun Captcha", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
+    provider.type === "Aliyun Captcha";
 }
 
 export default function ProviderEditPage() {
@@ -690,11 +675,6 @@ export default function ProviderEditPage() {
     const receiverLabel = getReceiverLabel(provider);
     return (
       <React.Fragment>
-        {provider.type === "CUCloud" ? (
-          <FormRow labelKey="provider:Region ID">
-            <Input value={provider.regionId ?? ""} onChange={(e) => updateProviderField("regionId", e.target.value)} />
-          </FormRow>
-        ) : null}
         {provider.type === "Custom HTTP" ? (
           <FormRow label={i18next.t("general:Method")} tooltip={i18next.t("provider:Method - Tooltip")}>
             <SelectField
@@ -704,14 +684,9 @@ export default function ProviderEditPage() {
             />
           </FormRow>
         ) : null}
-        {["Custom HTTP", "CUCloud"].includes(provider.type) ? (
+        {provider.type === "Custom HTTP" ? (
           <FormRow labelKey="provider:Parameter">
             <Input value={provider.title ?? ""} onChange={(e) => updateProviderField("title", e.target.value)} />
-          </FormRow>
-        ) : null}
-        {["Google Chat", "CUCloud"].includes(provider.type) ? (
-          <FormRow labelKey="provider:Metadata">
-            <Textarea rows={4} value={provider.metadata ?? ""} onChange={(e) => updateProviderField("metadata", e.target.value)} />
           </FormRow>
         ) : null}
         <FormRow labelKey="provider:Content">
@@ -822,16 +797,14 @@ export default function ProviderEditPage() {
       <FormRow labelKey="provider:Path prefix">
         <Input value={provider.pathPrefix ?? ""} onChange={(e) => updateProviderField("pathPrefix", e.target.value)} />
       </FormRow>
-      {provider.type !== "Synology" ? (
-        <FormRow labelKey="provider:Domain">
-          <Input
-            value={provider.domain ?? ""}
-            disabled={provider.type === "Local File System"}
-            onChange={(e) => updateProviderField("domain", e.target.value)}
-          />
-        </FormRow>
-      ) : null}
-      {["AWS S3", "Tencent Cloud COS", "Qiniu Cloud Kodo", "CUCloud OSS", "MinIO"].includes(provider.type) ? (
+      <FormRow labelKey="provider:Domain">
+        <Input
+          value={provider.domain ?? ""}
+          disabled={provider.type === "Local File System"}
+          onChange={(e) => updateProviderField("domain", e.target.value)}
+        />
+      </FormRow>
+      {["AWS S3", "MinIO"].includes(provider.type) ? (
         <FormRow label={i18next.t("provider:Region ID")} tooltip={i18next.t("provider:Region ID - Tooltip")}>
           <Input value={provider.regionId ?? ""} onChange={(e) => updateProviderField("regionId", e.target.value)} />
         </FormRow>
@@ -956,7 +929,7 @@ export default function ProviderEditPage() {
           <FormRow label={getClientId2Label(provider).label} tooltip={getClientId2Label(provider).tooltip}>
             <Input value={provider.clientId2 ?? ""} onChange={(e) => updateProviderField("clientId2", e.target.value)} />
           </FormRow>
-          {provider.type === "CUCloud" ? null : (
+          {(
             <FormRow label={getClientSecret2Label(provider).label} tooltip={getClientSecret2Label(provider).tooltip}>
               <Input value={provider.clientSecret2 ?? ""} onChange={(e) => updateProviderField("clientSecret2", e.target.value)} />
             </FormRow>
