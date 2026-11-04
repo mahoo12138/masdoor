@@ -86,7 +86,9 @@ func runServer() {
 	// web.DelStaticPath("/static")
 	// web.SetStaticPath("/assets", "web/build/assets")
 
-	web.BConfig.WebConfig.DirectoryIndex = true
+	// Directory listing on static paths (e.g. /files/) is an information leak; index.html
+	// resolution is unaffected, so the SPA and swagger UI keep working with it disabled.
+	web.BConfig.WebConfig.DirectoryIndex = false
 	if web.BConfig.RunMode == "dev" {
 		web.SetStaticPath("/swagger", routers.GetSwaggerFolder())
 	}

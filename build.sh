@@ -9,5 +9,6 @@ else
     export GOPROXY="https://goproxy.cn,direct"
 fi
 
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o masdoor_linux_amd64 .
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-w -s" -o masdoor_linux_arm64 .
+# Build only for the current platform. Docker passes TARGETARCH; local builds default to the host arch.
+ARCH="${TARGETARCH:-$(go env GOARCH)}"
+CGO_ENABLED=0 GOOS=linux GOARCH="$ARCH" go build -trimpath -ldflags="-w -s" -o "masdoor_linux_${ARCH}" .
