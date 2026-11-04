@@ -303,24 +303,9 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/email_default.png`,
       url: "",
     },
-    "SUBMAIL": {
-      logo: `${StaticBaseUrl}/img/social_submail.svg`,
-      url: "https://www.mysubmail.com",
-    },
     "Mailtrap": {
       logo: `${StaticBaseUrl}/img/email_mailtrap.png`,
       url: "https://mailtrap.io",
-    },
-    "Azure ACS": {
-      logo: `${StaticBaseUrl}/img/social_azure.png`,
-      url: "https://learn.microsoft.com/zh-cn/azure/communication-services",
-    },
-    "SendGrid": {
-      logo: `${StaticBaseUrl}/img/email_sendgrid.png`,
-      url: "https://sendgrid.com/",
-    },
-    "Custom HTTP Email": {
-      logo: `${StaticBaseUrl}/img/social_default.png`,
     },
     "Resend": {
       logo: `${StaticBaseUrl}/img/email_resend.png`,
@@ -1176,11 +1161,7 @@ export function getProviderTypeOptions(category) {
     return (
       [
         {id: "Default", name: "Default"},
-        {id: "SUBMAIL", name: "SUBMAIL"},
         {id: "Mailtrap", name: "Mailtrap"},
-        {id: "Azure ACS", name: "Azure ACS"},
-        {id: "SendGrid", name: "SendGrid"},
-        {id: "Custom HTTP Email", name: "Custom HTTP Email"},
         {id: "Resend", name: "Resend"},
       ]
     );

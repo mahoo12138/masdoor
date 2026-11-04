@@ -19,7 +19,6 @@ import (
 	"time"
 
 	notify "github.com/casdoor/notify2"
-	"github.com/mahoo12138/masdoor/email"
 	"github.com/mahoo12138/masdoor/notification"
 	"github.com/mahoo12138/masdoor/util"
 )
@@ -50,12 +49,6 @@ func getProviderHttpClient(provider *Provider) *http.Client {
 		return client
 	}
 	return &http.Client{Timeout: 30 * time.Second}
-}
-
-func restrictTenantEmailProvider(provider *Provider, emailProvider email.EmailProvider) {
-	if httpProvider, ok := emailProvider.(*email.HttpEmailProvider); ok {
-		httpProvider.SetHttpClient(getTenantHttpClient(provider))
-	}
 }
 
 func restrictNotificationClient(client notify.Notifier, httpClient *http.Client) {

@@ -36,7 +36,7 @@ func TestSmtpServer(provider *Provider) error {
 }
 
 func SendEmail(provider *Provider, title string, content string, dest []string, sender string) error {
-	if provider.Type != "Resend" && provider.Type != "Custom HTTP Email" {
+	if provider.Type != "Resend" {
 		if err := checkTenantProviderHost(provider, provider.Host); err != nil {
 			return err
 		}
@@ -44,7 +44,6 @@ func SendEmail(provider *Provider, title string, content string, dest []string, 
 
 	sslMode := getSslMode(provider)
 	emailProvider := email.GetEmailProvider(provider.Type, provider.ClientId, provider.ClientSecret, provider.Host, provider.Port, sslMode, provider.Endpoint, provider.Method, provider.HttpHeaders, provider.UserMapping, provider.IssuerUrl, provider.EnableProxy)
-	restrictTenantEmailProvider(provider, emailProvider)
 
 	fromAddress := provider.ClientId2
 	if fromAddress == "" {

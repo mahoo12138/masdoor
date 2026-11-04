@@ -43,21 +43,11 @@ const defaultUserMapping: Record<string, string> = {
   title: "title",
 };
 
-const defaultEmailMapping: Record<string, string> = {
-  fromName: "fromName",
-  fromAddress: "fromAddress",
-  toAddress: "toAddress",
-  subject: "subject",
-  content: "content",
-};
-
 const CATEGORIES = [
   "Audit", "Captcha", "Email", "Notification",
   "OAuth", "Storage",
 ].sort((a, b) => a.localeCompare(b));
 
-const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE"];
-const CONTENT_TYPES = ["application/json", "application/x-www-form-urlencoded"];
 
 
 const SYSLOG_PROTOCOLS = ["UDP", "TCP", "TLS"];
@@ -142,7 +132,7 @@ function getClientSecretLabel(provider: any): Label {
   } else if (provider.category === "Storage") {
     return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   } else if (provider.category === "Email") {
-    return ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)
+    return provider.type === "Resend"
       ? label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"))
       : label(i18next.t("general:Password"), i18next.t("general:Password - Tooltip"));
   } else if (provider.category === "Captcha") {
@@ -190,11 +180,7 @@ function getClientSecret2Label(provider: any): Label {
 
 /** the extra "appId" row, whose meaning depends on the provider — null hides it */
 function getAppIdLabel(provider: any): Label | null {
-  if (provider.category === "Email") {
-    if (provider.type === "SUBMAIL") {
-      return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
-    }
-  } else if (provider.category === "Notification") {
+  if (provider.category === "Notification") {
     if (provider.type === "Viber") {
       return label(i18next.t("provider:Domain"), i18next.t("provider:Domain - Tooltip"));
     } else if (["Line", "Matrix", "Rocket Chat"].includes(provider.type)) {
@@ -217,7 +203,7 @@ function getReceiverLabel(provider: any): Label | null {
 }
 
 function hasClientIdRow(provider: any) {
-  if ((provider.category === "Email" && ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)) ||
+  if ((provider.category === "Email" && provider.type === "Resend") ||
       (provider.category === "Notification" && ["Line", "Telegram", "Bark", "Discord", "Slack", "Pushbullet", "Pushover", "Lark", "Microsoft Teams"].includes(provider.type))) {
     return false;
   }
@@ -229,7 +215,6 @@ function hasCredentialRows(provider: any) {
       provider.category === "Audit" ||
       provider.category === "Log" ||
       (provider.category === "Storage" && provider.type === "Local File System") ||
-      (provider.category === "Email" && provider.type === "Custom HTTP Email") ||
       (provider.category === "Notification" && ["Google Chat", "Custom HTTP", "Balance"].includes(provider.type))) {
     return false;
   }
@@ -259,13 +244,7 @@ export default function ProviderEditPage() {
   const [discoveryLoading, setDiscoveryLoading] = React.useState(false);
 
   const transform = React.useCallback((provider: any) => {
-    if (provider.type === "Custom HTTP Email") {
-      if (!provider.userMapping || !provider.userMapping.fromName) {
-        provider.userMapping = {...defaultEmailMapping};
-      }
-    } else {
-      provider.userMapping = provider.userMapping || {...defaultUserMapping};
-    }
+    provider.userMapping = provider.userMapping || {...defaultUserMapping};
     return provider;
   }, []);
 
@@ -339,12 +318,7 @@ export default function ProviderEditPage() {
       return;
     }
     const requiredKeys = ["id", "username", "displayName"];
-    if (provider.type === "Custom HTTP Email") {
-      if (value === "") {
-        Setting.showMessage("error", i18next.t("general:This field is required"));
-        return;
-      }
-    } else if (value === "" && requiredKeys.includes(key)) {
+    if (value === "" && requiredKeys.includes(key)) {
       Setting.showMessage("error", i18next.t("general:This field is required"));
       return;
     }
@@ -485,9 +459,6 @@ export default function ProviderEditPage() {
       patch.scopes = "openid profile email";
     } else if (value.startsWith("Custom") && provider.category === "OAuth") {
       patch.scopes = "openid profile email";
-    } else if (value === "Custom HTTP Email") {
-      patch.endpoint = "https://example.com/send-custom-http-email";
-      patch.method = "POST";
     } else if (value === "Custom HTTP") {
       patch.method = "GET";
       patch.title = "";
@@ -533,47 +504,6 @@ export default function ProviderEditPage() {
     {key: "affiliation", label: label(i18next.t("user:Affiliation"))},
     {key: "title", label: label(i18next.t("general:Title"))},
   ]);
-
-  const renderEmailMappingInput = () => renderMappingRows([
-    {key: "fromName", label: label(i18next.t("provider:From name"))},
-    {key: "fromAddress", label: label(i18next.t("provider:From address"))},
-    {key: "toAddress", label: label(i18next.t("provider:To address"))},
-    {key: "subject", label: label(i18next.t("provider:Subject"))},
-    {key: "content", label: label(i18next.t("provider:Email content"))},
-  ]);
-
-  const renderHttpHeaderTable = () => (
-    <MapTable
-      value={provider.httpHeaders}
-      onChange={(value) => updateProviderField("httpHeaders", value)}
-      keyTitle={i18next.t("general:Keys")}
-      valueTitle={i18next.t("user:Values")}
-    />
-  );
-
-  const renderHttpRows = (methods: string[]) => (
-    <React.Fragment>
-      <FormRow label={i18next.t("general:Method")} tooltip={i18next.t("provider:Method - Tooltip")}>
-        <SelectField
-          value={provider.method}
-          onChange={(v) => updateProviderField("method", v)}
-          options={methods.map((m) => ({id: m, name: m}))}
-        />
-      </FormRow>
-      {provider.method !== "GET" ? (
-        <FormRow labelKey="webhook:Content type">
-          <SelectField
-            value={provider.issuerUrl === "" ? "application/x-www-form-urlencoded" : provider.issuerUrl}
-            onChange={(v) => updateProviderField("issuerUrl", v)}
-            options={CONTENT_TYPES.map((t) => ({id: t, name: t}))}
-          />
-        </FormRow>
-      ) : null}
-      <FormRow labelKey="provider:HTTP header" block>
-        {renderHttpHeaderTable()}
-      </FormRow>
-    </React.Fragment>
-  );
 
   const renderOAuthFields = () => (
     <React.Fragment>
@@ -649,17 +579,12 @@ export default function ProviderEditPage() {
 
   const renderEmailFields = () => (
     <React.Fragment>
-      {["Custom HTTP Email", "SendGrid"].includes(provider.type) ? (
-        <FormRow label={i18next.t("provider:Endpoint")} tooltip={i18next.t("provider:Region endpoint for Internet")}>
-          <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
-        </FormRow>
-      ) : null}
       {provider.type !== "Resend" ? (
         <FormRow label={i18next.t("general:Host")} tooltip={i18next.t("provider:Host - Tooltip")}>
           <Input value={provider.host ?? ""} onChange={(e) => updateProviderField("host", e.target.value)} />
         </FormRow>
       ) : null}
-      {!["Azure ACS", "SendGrid", "Resend"].includes(provider.type) ? (
+      {provider.type !== "Resend" ? (
         <React.Fragment>
           <FormRow label={i18next.t("general:Port")} tooltip={i18next.t("provider:Port - Tooltip")}>
             <Input type="number" value={provider.port ?? 0} onChange={(e) => updateProviderField("port", e.target.value)} />
@@ -680,16 +605,6 @@ export default function ProviderEditPage() {
       <FormRow labelKey="provider:Enable proxy">
         <Switch checked={!!provider.enableProxy} onCheckedChange={(v) => updateProviderField("enableProxy", v)} />
       </FormRow>
-      {provider.type === "Custom HTTP Email" ? (
-        <React.Fragment>
-          {renderHttpRows(HTTP_METHODS)}
-          {provider.method !== "GET" ? (
-            <FormRow labelKey="provider:HTTP body mapping" block>
-              {renderEmailMappingInput()}
-            </FormRow>
-          ) : null}
-        </React.Fragment>
-      ) : null}
       <FormRow block labelKey="provider:Email title">
         <Input value={provider.title ?? ""} onChange={(e) => updateProviderField("title", e.target.value)} />
       </FormRow>
@@ -765,7 +680,7 @@ export default function ProviderEditPage() {
             placeholder={i18next.t("user:Input your email")}
             onChange={(e) => updateProviderField("receiver", e.target.value)}
           />
-          {!["Azure ACS", "SendGrid", "Resend"].includes(provider.type) ? (
+          {provider.type !== "Resend" ? (
             <Button variant="outline" onClick={() => ProviderTest.connectSmtpServer(provider)}>
               {i18next.t("provider:Test SMTP Connection")}
             </Button>
@@ -1052,7 +967,7 @@ export default function ProviderEditPage() {
           <FormRow label={getClientId2Label(provider).label} tooltip={getClientId2Label(provider).tooltip}>
             <Input value={provider.clientId2 ?? ""} onChange={(e) => updateProviderField("clientId2", e.target.value)} />
           </FormRow>
-          {provider.type === "CUCloud" || (provider.category === "Email" && provider.type === "Azure ACS") ? null : (
+          {provider.type === "CUCloud" ? null : (
             <FormRow label={getClientSecret2Label(provider).label} tooltip={getClientSecret2Label(provider).tooltip}>
               {provider.category === "OAuth" && provider.type === "Apple" ? (
                 <Textarea rows={4} value={provider.clientSecret2 ?? ""} onChange={(e) => updateProviderField("clientSecret2", e.target.value)} />
