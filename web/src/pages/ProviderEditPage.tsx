@@ -140,9 +140,7 @@ function getClientSecretLabel(provider: any): Label {
       ? label(i18next.t("provider:Team ID"), i18next.t("provider:Team ID - Tooltip"))
       : label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   } else if (provider.category === "Storage") {
-    return provider.type === "Google Cloud Storage"
-      ? label(i18next.t("provider:Service account JSON"), i18next.t("provider:Service account JSON - Tooltip"))
-      : label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
+    return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   } else if (provider.category === "Email") {
     return ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)
       ? label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"))
@@ -219,8 +217,7 @@ function getReceiverLabel(provider: any): Label | null {
 }
 
 function hasClientIdRow(provider: any) {
-  if ((provider.category === "Storage" && provider.type === "Google Cloud Storage") ||
-      (provider.category === "Email" && ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)) ||
+  if ((provider.category === "Email" && ["Azure ACS", "SendGrid", "Resend"].includes(provider.type)) ||
       (provider.category === "Notification" && ["Line", "Telegram", "Bark", "Discord", "Slack", "Pushbullet", "Pushover", "Lark", "Microsoft Teams"].includes(provider.type))) {
     return false;
   }
@@ -903,7 +900,7 @@ export default function ProviderEditPage() {
 
   const renderStorageFields = () => (
     <React.Fragment>
-      {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology"].includes(provider.type) ? (
+      {!["Local File System", "MinIO"].includes(provider.type) ? (
         <FormRow label={i18next.t("provider:Endpoint (Intranet)")} tooltip={i18next.t("provider:Region endpoint for Intranet")}>
           <Input value={provider.intranetEndpoint ?? ""} onChange={(e) => updateProviderField("intranetEndpoint", e.target.value)} />
         </FormRow>

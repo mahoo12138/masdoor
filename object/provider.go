@@ -318,11 +318,6 @@ func UpdateProvider(id string, provider *Provider) (bool, error) {
 		session = session.Omit("metadata")
 	}
 
-	if provider.Type == "Tencent Cloud COS" {
-		provider.Endpoint = util.GetEndPoint(provider.Endpoint)
-		provider.IntranetEndpoint = util.GetEndPoint(provider.IntranetEndpoint)
-	}
-
 	affected, err := session.Update(provider)
 	if err != nil {
 		return false, err
@@ -336,11 +331,6 @@ func UpdateProvider(id string, provider *Provider) (bool, error) {
 }
 
 func AddProvider(provider *Provider) (bool, error) {
-	if provider.Type == "Tencent Cloud COS" {
-		provider.Endpoint = util.GetEndPoint(provider.Endpoint)
-		provider.IntranetEndpoint = util.GetEndPoint(provider.IntranetEndpoint)
-	}
-
 	if provider.EmailRegex != "" {
 		_, err := regexp.Compile(provider.EmailRegex)
 		if err != nil {

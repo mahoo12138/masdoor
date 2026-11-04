@@ -32,11 +32,8 @@ import (
 var isCloudIntranet bool
 
 const (
-	ProviderTypeGoogleCloudStorage = "Google Cloud Storage"
-	ProviderTypeTencentCloudCOS    = "Tencent Cloud COS"
-	ProviderTypeAzureBlob          = "Azure Blob"
-	ProviderTypeLocalFileSystem    = "Local File System"
-	ProviderTypeMinIO              = "MinIO"
+	ProviderTypeLocalFileSystem = "Local File System"
+	ProviderTypeMinIO           = "MinIO"
 )
 
 func init() {
@@ -55,16 +52,6 @@ func escapePath(path string) string {
 	tokens := strings.Split(path, "/")
 	if len(tokens) > 0 {
 		tokens[len(tokens)-1] = url.QueryEscape(tokens[len(tokens)-1])
-	}
-
-	res := strings.Join(tokens, "/")
-	return res
-}
-
-func escapePathForCOS(path string) string {
-	tokens := strings.Split(path, "/")
-	if len(tokens) > 0 {
-		tokens[len(tokens)-1] = strings.ReplaceAll(url.QueryEscape(tokens[len(tokens)-1]), "+", "%20")
 	}
 
 	res := strings.Join(tokens, "/")
@@ -106,9 +93,6 @@ func GetUploadFileUrl(provider *Provider, fullFilePath string, hasTimestamp bool
 		// provider.Domain = "http://localhost:8000" or "https://files.example.com"
 		host = util.UrlJoin(provider.Domain, "/files")
 	}
-	if provider.Type == ProviderTypeAzureBlob || provider.Type == ProviderTypeGoogleCloudStorage {
-		host = util.UrlJoin(host, provider.Bucket)
-	}
 
 	fileUrl := ""
 	if host != "" {
@@ -119,10 +103,6 @@ func GetUploadFileUrl(provider *Provider, fullFilePath string, hasTimestamp bool
 	// if fileUrl != "" && hasTimestamp {
 	//	fileUrl = fmt.Sprintf("%s?t=%s", fileUrl, util.GetCurrentUnixTime())
 	// }
-
-	if provider.Type == ProviderTypeTencentCloudCOS {
-		objectKey = escapePathForCOS(objectKey)
-	}
 
 	return fileUrl, objectKey
 }
@@ -224,10 +204,6 @@ func DeleteFile(provider *Provider, objectKey string, lang string) error {
 }
 
 func refineObjectKey(provider *Provider, objectKey string) string {
-	if provider.Type == ProviderTypeGoogleCloudStorage {
-		return strings.TrimPrefix(objectKey, "/")
-	}
-
 	if provider.Type == ProviderTypeMinIO && provider.PathPrefix != "" {
 		p := path.Join("/", strings.Trim(provider.PathPrefix, "/"))
 		if strings.HasPrefix(objectKey, p+"/") {

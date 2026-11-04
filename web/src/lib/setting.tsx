@@ -340,34 +340,6 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/social_minio.png`,
       url: "https://min.io/",
     },
-    "Aliyun OSS": {
-      logo: `${StaticBaseUrl}/img/social_aliyun.png`,
-      url: "https://aliyun.com/product/oss",
-    },
-    "Tencent Cloud COS": {
-      logo: `${StaticBaseUrl}/img/social_tencent_cloud.jpg`,
-      url: "https://cloud.tencent.com/product/cos",
-    },
-    "Azure Blob": {
-      logo: `${StaticBaseUrl}/img/social_azure.png`,
-      url: "https://azure.microsoft.com/en-us/services/storage/blobs/",
-    },
-    "Qiniu Cloud Kodo": {
-      logo: `${StaticBaseUrl}/img/social_qiniu_cloud.png`,
-      url: "https://www.qiniu.com/solutions/storage",
-    },
-    "Google Cloud Storage": {
-      logo: `${StaticBaseUrl}/img/social_google_cloud.png`,
-      url: "https://cloud.google.com/storage",
-    },
-    "Synology": {
-      logo: `${StaticBaseUrl}/img/social_synology.png`,
-      url: "https://www.synology.com/en-global/dsm/feature/file_sharing",
-    },
-    "CUCloud OSS": {
-      logo: `${StaticBaseUrl}/img/social_cucloud.png`,
-      url: "https://www.cucloud.cn/product/oss.html",
-    },
   },
   Captcha: {
     "Default": {
@@ -1218,13 +1190,6 @@ export function getProviderTypeOptions(category) {
         {id: "Local File System", name: "Local File System"},
         {id: "AWS S3", name: "AWS S3"},
         {id: "MinIO", name: "MinIO"},
-        {id: "Aliyun OSS", name: "Alibaba Cloud OSS"},
-        {id: "Tencent Cloud COS", name: "Tencent Cloud COS"},
-        {id: "Azure Blob", name: "Azure Blob"},
-        {id: "Qiniu Cloud Kodo", name: "Qiniu Cloud Kodo"},
-        {id: "Google Cloud Storage", name: "Google Cloud Storage"},
-        {id: "Synology", name: "Synology"},
-        {id: "CUCloud OSS", name: "CUCloud OSS"},
       ]
     );
   } else if (category === "Captcha") {
