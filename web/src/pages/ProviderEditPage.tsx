@@ -107,9 +107,7 @@ function getProviderSubTypeOptions(type: string) {
 
 function getClientIdLabel(provider: any): Label {
   if (provider.category === "OAuth") {
-    return provider.type === "Apple"
-      ? label(i18next.t("provider:Service ID identifier"), i18next.t("provider:Service ID identifier - Tooltip"))
-      : label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
+    return label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("signup:Username"), i18next.t("signup:Username - Tooltip"));
   } else if (provider.category === "Captcha") {
@@ -126,9 +124,7 @@ function getClientIdLabel(provider: any): Label {
 
 function getClientSecretLabel(provider: any): Label {
   if (provider.category === "OAuth") {
-    return provider.type === "Apple"
-      ? label(i18next.t("provider:Team ID"), i18next.t("provider:Team ID - Tooltip"))
-      : label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
+    return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   } else if (provider.category === "Storage") {
     return label(i18next.t("provider:Client secret"), i18next.t("provider:Client secret - Tooltip"));
   } else if (provider.category === "Email") {
@@ -152,9 +148,7 @@ function getClientSecretLabel(provider: any): Label {
 
 function getClientId2Label(provider: any): Label {
   if (provider.category === "OAuth") {
-    return provider.type === "Apple"
-      ? label(i18next.t("provider:Key ID"), i18next.t("provider:Key ID - Tooltip"))
-      : label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
+    return label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("provider:From address"), i18next.t("provider:From address - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
@@ -167,9 +161,7 @@ function getClientId2Label(provider: any): Label {
 
 function getClientSecret2Label(provider: any): Label {
   if (provider.category === "OAuth") {
-    return provider.type === "Apple"
-      ? label(i18next.t("provider:Key text"), i18next.t("provider:Key text - Tooltip"))
-      : label(i18next.t("provider:Client secret 2"), i18next.t("provider:Client secret 2 - Tooltip"));
+    return label(i18next.t("provider:Client secret 2"), i18next.t("provider:Client secret 2 - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("provider:From name"), i18next.t("provider:From name - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
@@ -223,7 +215,7 @@ function hasCredentialRows(provider: any) {
 
 function hasCredential2Rows(provider: any) {
   return provider.category === "Email" ||
-    ["Apple", "Aliyun Captcha", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
+    ["Aliyun Captcha", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
 }
 
 export default function ProviderEditPage() {
@@ -513,11 +505,8 @@ export default function ProviderEditPage() {
       <FormRow labelKey="provider:Enable proxy">
         <Switch checked={!!provider.enableProxy} onCheckedChange={(v) => updateProviderField("enableProxy", v)} />
       </FormRow>
-      {["AzureAD", "Nextcloud"].includes(provider.type) || provider.category === "Storage" ? (
-        <FormRow
-          label={provider.type === "AzureAD" ? i18next.t("provider:Tenant ID") : i18next.t("provider:Domain")}
-          tooltip={provider.type === "AzureAD" ? i18next.t("provider:Tenant ID - Tooltip") : i18next.t("provider:Domain - Tooltip")}
-        >
+      {provider.category === "Storage" ? (
+        <FormRow label={i18next.t("provider:Domain")} tooltip={i18next.t("provider:Domain - Tooltip")}>
           <Input value={provider.domain ?? ""} onChange={(e) => updateProviderField("domain", e.target.value)} />
         </FormRow>
       ) : null}
@@ -969,11 +958,7 @@ export default function ProviderEditPage() {
           </FormRow>
           {provider.type === "CUCloud" ? null : (
             <FormRow label={getClientSecret2Label(provider).label} tooltip={getClientSecret2Label(provider).tooltip}>
-              {provider.category === "OAuth" && provider.type === "Apple" ? (
-                <Textarea rows={4} value={provider.clientSecret2 ?? ""} onChange={(e) => updateProviderField("clientSecret2", e.target.value)} />
-              ) : (
-                <Input value={provider.clientSecret2 ?? ""} onChange={(e) => updateProviderField("clientSecret2", e.target.value)} />
-              )}
+              <Input value={provider.clientSecret2 ?? ""} onChange={(e) => updateProviderField("clientSecret2", e.target.value)} />
             </FormRow>
           )}
         </React.Fragment>

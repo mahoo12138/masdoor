@@ -107,7 +107,7 @@ func GetMaskedProvider(provider *Provider, isMaskEnabled bool) *Provider {
 
 	provider.HttpHeaders = getMaskedHttpHeaders(provider.HttpHeaders)
 
-	if isProviderContentSecret(provider) && provider.Content != "" {
+	if provider.Content != "" {
 		provider.Content = "***"
 	}
 	if isProviderMetadataSecret(provider) && provider.Metadata != "" {
@@ -115,10 +115,6 @@ func GetMaskedProvider(provider *Provider, isMaskEnabled bool) *Provider {
 	}
 
 	return provider
-}
-
-func isProviderContentSecret(provider *Provider) bool {
-	return provider.Type == "WeChat"
 }
 
 func isProviderMetadataSecret(provider *Provider) bool {
@@ -311,7 +307,7 @@ func UpdateProvider(id string, provider *Provider) (bool, error) {
 	if provider.ClientSecret2 == "***" {
 		session = session.Omit("client_secret2")
 	}
-	if provider.Content == "***" && isProviderContentSecret(provider) {
+	if provider.Content == "***" {
 		session = session.Omit("content")
 	}
 	if provider.Metadata == "***" && isProviderMetadataSecret(provider) {
@@ -485,12 +481,7 @@ func FromProviderToIdpInfo(ctx *context.Context, provider *Provider) (*idp.Provi
 		DisableSsl:    provider.DisableSsl,
 	}
 
-	if provider.Type == "WeChat" {
-		if ctx != nil && strings.Contains(ctx.Request.UserAgent(), "MicroMessenger") {
-			providerInfo.ClientId = provider.ClientId2
-			providerInfo.ClientSecret = provider.ClientSecret2
-		}
-	} else if provider.Type == "ADFS" || provider.Type == "AzureAD" || provider.Type == "AzureADB2C" || provider.Type == "Masdoor" || provider.Type == "Okta" || provider.Type == "OIDC" {
+	if provider.Type == "ADFS" || provider.Type == "AzureAD" || provider.Type == "AzureADB2C" || provider.Type == "Masdoor" || provider.Type == "Okta" || provider.Type == "OIDC" {
 		providerInfo.HostUrl = provider.Domain
 	} else if provider.Type == "Alipay" && provider.Cert != "" {
 		cert, err := GetCertEx(util.GetId(provider.Owner, provider.Cert))

@@ -460,16 +460,8 @@ func isProxyProviderType(providerType string) bool {
 	providerTypes := []string{
 		"GitHub",
 		"Google",
-		"Facebook",
-		"LinkedIn",
-		"Steam",
-		"Line",
-		"Amazon",
-		"Instagram",
-		"TikTok",
-		"Twitter",
-		"Uber",
-		"Yahoo",
+		"GitLab",
+		"Gitea",
 	}
 	for _, v := range providerTypes {
 		if strings.EqualFold(v, providerType) {
@@ -930,15 +922,6 @@ func (c *ApiController) Login() {
 			if err != nil {
 				c.ResponseError(fmt.Sprintf(c.T("auth:Failed to login in: %s"), err.Error()))
 				return
-			}
-
-			// Apple's name only arrives in the form_post callback, and unsigned, so it
-			// may set the display name but never the username or email used for binding
-			if provider.Type == "Apple" {
-				appleDisplayName := takeAppleDisplayNameCookie(c.Ctx)
-				if appleDisplayName != "" {
-					userInfo.DisplayName = appleDisplayName
-				}
 			}
 
 			if provider.EmailRegex != "" {
@@ -1459,8 +1442,6 @@ func (c *ApiController) GetCaptchaStatus() {
 func (c *ApiController) Callback() {
 	code := c.GetString("code")
 	state := c.GetString("state")
-
-	setAppleDisplayNameCookie(c.Ctx, getAppleDisplayName(c.GetString("user")))
 
 	frontendCallbackUrl := fmt.Sprintf("%s/callback?code=%s&state=%s", conf.GetBasePath(), url.QueryEscape(code), url.QueryEscape(state))
 	c.Ctx.Redirect(http.StatusFound, frontendCallbackUrl)
