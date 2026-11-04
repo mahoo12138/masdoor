@@ -21,9 +21,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/mahoo12138/masdoor/conf"
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
+	"github.com/mahoo12138/masdoor/conf"
 )
 
 func GetWebAuthnObject(host string) (*webauthn.WebAuthn, error) {

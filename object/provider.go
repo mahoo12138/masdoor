@@ -24,7 +24,6 @@ import (
 	"github.com/beego/beego/v2/server/web/context"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/idp"
-	"github.com/mahoo12138/masdoor/idv"
 	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
 )
@@ -265,7 +264,6 @@ func GetProvider(id string) (*Provider, error) {
 	return getProvider(owner, name)
 }
 
-
 func UpdateProvider(id string, provider *Provider) (bool, error) {
 	owner, name, err := util.GetOwnerAndNameFromIdWithError(id)
 	if err != nil {
@@ -367,7 +365,6 @@ func AddProvider(provider *Provider) (bool, error) {
 		return false, err
 	}
 
-
 	return affected != 0, nil
 }
 
@@ -383,7 +380,6 @@ func DeleteProvider(provider *Provider) (bool, error) {
 
 	return affected != 0, nil
 }
-
 
 func (p *Provider) GetId() string {
 	return fmt.Sprintf("%s/%s", p.Owner, p.Name)
@@ -425,88 +421,6 @@ func GetCaptchaProviderByApplication(applicationId, isCurrentProvider, lang stri
 		return nil, nil
 	}
 	return GetCaptchaProviderByOwnerName(util.GetId(providerItem.Provider.Owner, providerItem.Provider.Name), lang)
-}
-
-func GetFaceIdProviderByOwnerName(applicationId, lang string) (*Provider, error) {
-	owner, name, err := util.GetOwnerAndNameFromIdWithError(applicationId)
-	if err != nil {
-		return nil, err
-	}
-	provider := Provider{Owner: owner, Name: name, Category: "Face ID"}
-	existed, err := ormer.Engine.Get(&provider)
-	if err != nil {
-		return nil, err
-	}
-
-	if !existed {
-		return nil, fmt.Errorf(i18n.Translate(lang, "provider:the provider: %s does not exist"), applicationId)
-	}
-
-	return &provider, nil
-}
-
-func GetFaceIdProviderByApplication(applicationId, isCurrentProvider, lang string) (*Provider, error) {
-	if isCurrentProvider == "true" {
-		return GetFaceIdProviderByOwnerName(applicationId, lang)
-	}
-	application, err := GetApplication(applicationId)
-	if err != nil {
-		return nil, err
-	}
-
-	if application == nil || len(application.Providers) == 0 {
-		return nil, errors.New(i18n.Translate(lang, "provider:Invalid application id"))
-	}
-	for _, provider := range application.Providers {
-		if provider.Provider == nil {
-			continue
-		}
-		if provider.Provider.Category == "Face ID" {
-			return GetFaceIdProviderByOwnerName(util.GetId(provider.Provider.Owner, provider.Provider.Name), lang)
-		}
-	}
-	return nil, nil
-}
-
-func GetIdvProviderByOwnerName(applicationId, lang string) (*Provider, error) {
-	owner, name, err := util.GetOwnerAndNameFromIdWithError(applicationId)
-	if err != nil {
-		return nil, err
-	}
-	provider := Provider{Owner: owner, Name: name, Category: "ID Verification"}
-	existed, err := ormer.Engine.Get(&provider)
-	if err != nil {
-		return nil, err
-	}
-
-	if !existed {
-		return nil, fmt.Errorf(i18n.Translate(lang, "provider:the provider: %s does not exist"), applicationId)
-	}
-
-	return &provider, nil
-}
-
-func GetIdvProviderByApplication(applicationId, isCurrentProvider, lang string) (*Provider, error) {
-	if isCurrentProvider == "true" {
-		return GetIdvProviderByOwnerName(applicationId, lang)
-	}
-	application, err := GetApplication(applicationId)
-	if err != nil {
-		return nil, err
-	}
-
-	if application == nil || len(application.Providers) == 0 {
-		return nil, errors.New(i18n.Translate(lang, "provider:Invalid application id"))
-	}
-	for _, provider := range application.Providers {
-		if provider.Provider == nil {
-			continue
-		}
-		if provider.Provider.Category == "ID Verification" {
-			return GetIdvProviderByOwnerName(util.GetId(provider.Provider.Owner, provider.Provider.Name), lang)
-		}
-	}
-	return nil, nil
 }
 
 func providerChangeTrigger(owner string, oldName string, newName string) error {
@@ -611,13 +525,6 @@ func FromProviderToIdpInfo(ctx *context.Context, provider *Provider) (*idp.Provi
 	}
 
 	return providerInfo, nil
-}
-
-func GetIdvProviderFromProvider(provider *Provider) idv.IdvProvider {
-	if provider.Category != "ID Verification" {
-		return nil
-	}
-	return idv.GetIdvProvider(provider.Type, provider.ClientId, provider.ClientSecret, provider.Endpoint)
 }
 
 // InvokeCustomProviderLogout iterates through the application's Custom OAuth2 providers

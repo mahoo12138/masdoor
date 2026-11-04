@@ -24,10 +24,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mahoo12138/masdoor/proxy"
-	"github.com/mahoo12138/masdoor/util"
 	"github.com/go-jose/go-jose/v4"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/mahoo12138/masdoor/proxy"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // FederatedCredential trusts the tokens of an external OIDC issuer (GitHub Actions, Kubernetes,

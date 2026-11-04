@@ -20,8 +20,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/mahoo12138/masdoor/util"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 // LogoutTokenClaims represents the claims in an OIDC Back-Channel Logout token.

@@ -103,49 +103,23 @@ func GetVerificationCodeToken(application *Application, username string, country
 	var dest string
 	var err error
 	verifyType := GetVerifyType(username)
-	if verifyType == VerifyTypeEmail {
-		if !util.IsEmailValid(username) {
-			return nil, &TokenError{
-				Error:            InvalidRequest,
-				ErrorDescription: "the email is invalid",
-			}, nil
-		}
+	if verifyType != VerifyTypeEmail {
+		return nil, &TokenError{
+			Error:            InvalidRequest,
+			ErrorDescription: "a verification code can only be requested by email",
+		}, nil
+	}
+	if !util.IsEmailValid(username) {
+		return nil, &TokenError{
+			Error:            InvalidRequest,
+			ErrorDescription: "the email is invalid",
+		}, nil
+	}
 
-		dest = username
-		user, err = getUserByEmailIgnoreCase(application.Organization, username)
-		if err != nil {
-			return nil, nil, err
-		}
-	} else {
-		// a national number without a country code is the one of the user who has it, the
-		// same as /api/send-verification-code resolves it
-		if countryCode == "" && !strings.HasPrefix(username, "+") {
-			user, err = GetUserByPhone(application.Organization, username)
-			if err != nil {
-				return nil, nil, err
-			}
-			if user != nil {
-				countryCode = user.GetCountryCode("")
-			} else if application.OrganizationObj != nil && len(application.OrganizationObj.CountryCodes) > 0 {
-				countryCode = application.OrganizationObj.CountryCodes[0]
-			}
-		}
-
-		var ok bool
-		dest, ok = util.GetE164Number(username, countryCode)
-		if !ok {
-			return nil, &TokenError{
-				Error:            InvalidRequest,
-				ErrorDescription: "the phone number is invalid",
-			}, nil
-		}
-
-		if user == nil {
-			user, err = GetUserByPhone(application.Organization, dest)
-			if err != nil {
-				return nil, nil, err
-			}
-		}
+	dest = username
+	user, err = getUserByEmailIgnoreCase(application.Organization, username)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	if user != nil {
@@ -168,7 +142,7 @@ func GetVerificationCodeToken(application *Application, username string, country
 			}, nil
 		}
 
-		user, err = addVerificationCodeUser(application, verifyType, dest, clientIp, lang)
+		user, err = addVerificationCodeUser(application, dest, clientIp, lang)
 		if err != nil {
 			return nil, &TokenError{
 				Error:            InvalidGrant,
@@ -206,7 +180,7 @@ func GetVerificationCodeToken(application *Application, username string, country
 	return getUserGrantToken(application, user, scope, host)
 }
 
-func addVerificationCodeUser(application *Application, verifyType string, dest string, clientIp string, lang string) (*User, error) {
+func addVerificationCodeUser(application *Application, dest string, clientIp string, lang string) (*User, error) {
 	organization, err := GetOrganization(util.GetId("admin", application.Organization))
 	if err != nil {
 		return nil, err
@@ -239,24 +213,17 @@ func addVerificationCodeUser(application *Application, verifyType string, dest s
 		RegisterSource:    fmt.Sprintf("%s/%s", application.Organization, application.Name),
 	}
 
-	if verifyType == VerifyTypeEmail {
-		email := strings.ToLower(dest)
-		user.Email = email
-		user.EmailVerified = true
-		user.DisplayName = email
-		if organization.UseEmailAsUsername {
-			existedUser, err := GetUser(util.GetId(application.Organization, email))
-			if err != nil {
-				return nil, err
-			}
-			if existedUser == nil {
-				user.Name = email
-			}
+	email := strings.ToLower(dest)
+	user.Email = email
+	user.EmailVerified = true
+	user.DisplayName = email
+	if organization.UseEmailAsUsername {
+		existedUser, err := GetUser(util.GetId(application.Organization, email))
+		if err != nil {
+			return nil, err
 		}
-	} else {
-		user.Phone, user.CountryCode = util.ParseE164Phone(dest)
-		if !util.IsPhoneAllowInRegin(user.CountryCode, organization.CountryCodes) {
-			return nil, fmt.Errorf("the phone number: %s is not in the allowed regions of the organization", dest)
+		if existedUser == nil {
+			user.Name = email
 		}
 	}
 

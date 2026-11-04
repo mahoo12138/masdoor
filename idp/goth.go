@@ -135,8 +135,9 @@ func NewGothIdProvider(providerType string, clientId string, clientSecret string
 			Session:  &azureadv2.Session{},
 		}
 	case "Auth0":
+		// the tenant comes from the provider's host, there is no built-in one
 		idp = GothIdProvider{
-			Provider: auth0.New(clientId, clientSecret, redirectUrl, "casdoor.auth0.com"),
+			Provider: auth0.New(clientId, clientSecret, redirectUrl, hostUrl),
 			Session:  &auth0.Session{},
 		}
 	case "BattleNet":
@@ -452,7 +453,7 @@ func (idp *GothIdProvider) GetToken(code string) (*oauth2.Token, error) {
 			// Use dynamic code verifier if provided, otherwise fall back to static one
 			verifier := idp.CodeVerifier
 			if verifier == "" {
-				verifier = "casdoor-verifier"
+				verifier = "masdoor-verifier"
 			}
 			// RFC 7636 PKCE uses 'code_verifier' parameter
 			value.Add("code_verifier", verifier)

@@ -23,9 +23,9 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/go-jose/go-jose/v4"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/go-jose/go-jose/v4"
 )
 
 type OidcDiscovery struct {
@@ -96,7 +96,7 @@ func getOriginFromHostInternal(host string) (string, string) {
 	}
 
 	isDev := conf.GetConfigString("runmode") == "dev"
-	// "door.casdoor.com"
+	// "auth.example.com"
 	protocol := "https://"
 	if !strings.Contains(host, ".") {
 		// "localhost:8000" or "computer-name:80"
@@ -195,7 +195,7 @@ func GetOidcDiscovery(host string, applicationName string) OidcDiscovery {
 		RevocationEndpoint:                         fmt.Sprintf("%s/api/login/oauth/revoke", originBackend),
 		ResponseTypesSupported:                     []string{"code", "token", "id_token", "code token", "code id_token", "token id_token", "code token id_token"},
 		ResponseModesSupported:                     []string{"query", "fragment", "form_post"},
-		GrantTypesSupported:                        []string{"authorization_code", "implicit", "password", "client_credentials", "refresh_token", "urn:ietf:params:oauth:grant-type:device_code", "urn:ietf:params:oauth:grant-type:token-exchange", VerificationCodeGrantType, MobileOneClickGrantType},
+		GrantTypesSupported:                        []string{"authorization_code", "implicit", "password", "client_credentials", "refresh_token", "urn:ietf:params:oauth:grant-type:device_code", "urn:ietf:params:oauth:grant-type:token-exchange", VerificationCodeGrantType},
 		SubjectTypesSupported:                      []string{"public"},
 		IdTokenSigningAlgValuesSupported:           []string{"RS256", "RS512", "ES256", "ES384", "ES512"},
 		ScopesSupported:                            scopes,

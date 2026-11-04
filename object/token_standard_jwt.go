@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mahoo12138/masdoor/util"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/mahoo12138/masdoor/util"
 )
 
 type ClaimsStandard struct {
