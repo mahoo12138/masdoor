@@ -75,7 +75,6 @@ func InitAPI() {
 	web.Router("/api/update-group", &controllers.ApiController{}, "POST:UpdateGroup")
 	web.Router("/api/add-group", &controllers.ApiController{}, "POST:AddGroup")
 	web.Router("/api/delete-group", &controllers.ApiController{}, "POST:DeleteGroup")
-	web.Router("/api/upload-groups", &controllers.ApiController{}, "POST:UploadGroups")
 
 	web.Router("/api/get-global-users", &controllers.ApiController{}, "GET:GetGlobalUsers")
 	web.Router("/api/get-users", &controllers.ApiController{}, "GET:GetUsers")
@@ -85,7 +84,6 @@ func InitAPI() {
 	web.Router("/api/update-user", &controllers.ApiController{}, "POST:UpdateUser")
 	web.Router("/api/add-user", &controllers.ApiController{}, "POST:AddUser")
 	web.Router("/api/delete-user", &controllers.ApiController{}, "POST:DeleteUser")
-	web.Router("/api/upload-users", &controllers.ApiController{}, "POST:UploadUsers")
 	web.Router("/api/remove-user-from-group", &controllers.ApiController{}, "POST:RemoveUserFromGroup")
 	web.Router("/api/impersonate-user", &controllers.ApiController{}, "POST:ImpersonateUser")
 	web.Router("/api/exit-impersonate-user", &controllers.ApiController{}, "POST:ExitImpersonateUser")
@@ -144,7 +142,6 @@ func InitAPI() {
 	web.Router("/api/update-role", &controllers.ApiController{}, "POST:UpdateRole")
 	web.Router("/api/add-role", &controllers.ApiController{}, "POST:AddRole")
 	web.Router("/api/delete-role", &controllers.ApiController{}, "POST:DeleteRole")
-	web.Router("/api/upload-roles", &controllers.ApiController{}, "POST:UploadRoles")
 
 	web.Router("/api/get-sessions", &controllers.ApiController{}, "GET:GetSessions")
 	web.Router("/api/get-session", &controllers.ApiController{}, "GET:GetSingleSession")

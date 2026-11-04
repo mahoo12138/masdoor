@@ -519,8 +519,6 @@ export const RoleFields = ["owner", "name", "created_time", "display_name", "des
   "users", "groups", "roles", "domains", "is_enabled"];
 
 
-// The "<translated label>#<field>" column list behind the .xlsx import templates,
-// ported verbatim from web/src/Setting.js.
 export const GetTranslatedUserItems = () => {
   return [
     {name: "Organization", label: i18next.t("general:Organization")},
@@ -580,73 +578,6 @@ export const GetTranslatedUserItems = () => {
   ];
 };
 
-export function getUserColumns() {
-  const items = GetTranslatedUserItems();
-  return UserFields.map((field: string) => {
-    let transField = "";
-    if (field === "webauthnCredentials") {
-      transField = "WebAuthn credentials";
-    } else if (field === "region") {
-      transField = "Country/Region";
-    } else if (field === "mfaAccounts") {
-      transField = "MFA accounts";
-    } else if (field === "mfaItems") {
-      transField = "MFA items";
-    } else if (field === "managedAccounts") {
-      transField = "Managed accounts";
-    } else {
-      transField = field.toLowerCase().split("_").join(" ");
-      transField = transField.charAt(0).toUpperCase() + transField.slice(1);
-      transField = transField.replace("ip", "IP")
-        .replace("Ip", "IP")
-        .replace("Id", "ID")
-        .replace("id", "ID");
-    }
-    if (transField === "Owner") {
-      transField = "Organization";
-    }
-    const transFieldItem = items.find((item: any) => item.name === transField);
-    if (transFieldItem === undefined) {
-      const toTranslateList = ["general", "user", "organization"].map((ns: string) => `${ns}:${transField}`);
-      const transResult = toTranslateList.map((item: string) => i18next.t(item) === transField ? null : i18next.t(item))
-        .find((item: any) => item !== null);
-      transField = transResult ? transResult : transField;
-    }
-    return `${transFieldItem ? transFieldItem.label : transField}#${field}`;
-  });
-}
-
-export function getGroupColumns() {
-  return GroupFields.map((field: string) => {
-    let transField = field.toLowerCase().split("_").join(" ");
-    transField = transField.charAt(0).toUpperCase() + transField.slice(1);
-    transField = transField.replace("Id", "ID");
-    if (transField === "Owner") {
-      transField = "Organization";
-    }
-    const toTranslateList = ["general", "group"].map((ns: string) => `${ns}:${transField}`);
-    const transResult = toTranslateList.map((item: string) => i18next.t(item) === transField ? null : i18next.t(item))
-      .find((item: any) => item !== null);
-    transField = transResult ? transResult : transField;
-    return `${transField}#${field}`;
-  });
-}
-
-export function getRoleColumns() {
-  return RoleFields.map((field: string) => {
-    let transField = field.toLowerCase().split("_").join(" ");
-    transField = transField.charAt(0).toUpperCase() + transField.slice(1);
-    transField = transField.replace("Id", "ID");
-    if (transField === "Owner") {
-      transField = "Organization";
-    }
-    const toTranslateList = ["general", "role"].map((ns: string) => `${ns}:${transField}`);
-    const transResult = toTranslateList.map((item: string) => i18next.t(item) === transField ? null : i18next.t(item))
-      .find((item: any) => item !== null);
-    transField = transResult ? transResult : transField;
-    return `${transField}#${field}`;
-  });
-}
 
 export function getCountryCode(country) {
   if (phoneNumber.isSupportedCountry(country)) {

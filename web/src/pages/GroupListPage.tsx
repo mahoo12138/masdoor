@@ -2,7 +2,6 @@ import i18next from "i18next";
 import {Link} from "react-router-dom";
 import {Button} from "@/components/ui/button";
 import {CrudListPage} from "@/components/crud/CrudListPage";
-import {XlsxImport} from "@/components/crud/XlsxImport";
 import {dateColumn, linkColumn, organizationColumn, textColumn} from "@/components/crud/columns";
 import type {ColumnDef} from "@/components/crud/types";
 import {useAccount} from "@/hooks/use-account";
@@ -66,19 +65,10 @@ export default function GroupListPage() {
       title={i18next.t("general:Groups")}
       columns={columns}
       deps={[organizationFilter]}
-      toolbar={({refresh}) => (
-        <>
-          <Button variant="outline" asChild>
-            <Link to={`/trees/${organizationName}`}>{i18next.t("general:Groups")}</Link>
-          </Button>
-          <XlsxImport
-            columns={Setting.getGroupColumns()}
-            templateName="import-group.xlsx"
-            uploadApi="upload-groups"
-            successMessage="Groups uploaded successfully, refreshing the page"
-            onUploaded={refresh}
-          />
-        </>
+      toolbar={() => (
+        <Button variant="outline" asChild>
+          <Link to={`/trees/${organizationName}`}>{i18next.t("general:Groups")}</Link>
+        </Button>
       )}
       fetch={(q) =>
         GroupBackend.getGroups(

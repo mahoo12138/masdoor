@@ -1,10 +1,8 @@
 import i18next from "i18next";
 import {CrudListPage} from "@/components/crud/CrudListPage";
-import {XlsxImport} from "@/components/crud/XlsxImport";
 import {boolColumn, dateColumn, linkColumn, organizationColumn, refsColumn, tagsColumn, textColumn} from "@/components/crud/columns";
 import type {ColumnDef} from "@/components/crud/types";
 import {useAccount} from "@/hooks/use-account";
-import * as Setting from "@/lib/setting";
 import {useOrganizationFilter} from "@/hooks/use-organization";
 import * as RoleBackend from "@/backend/RoleBackend";
 import {newRole} from "@/pages/defaults";
@@ -29,15 +27,6 @@ export default function RoleListPage() {
     <CrudListPage
       title={i18next.t("general:Roles")}
       columns={columns}
-      toolbar={({refresh}) => (
-        <XlsxImport
-          columns={Setting.getRoleColumns()}
-          templateName="import-role.xlsx"
-          uploadApi="upload-roles"
-          successMessage="Roles uploaded successfully, refreshing the page"
-          onUploaded={refresh}
-        />
-      )}
       deps={[organizationName]}
       fetch={(q) =>
         RoleBackend.getRoles(organizationName, q.page, q.pageSize, q.searchedColumn, q.searchText, q.sortField, q.sortOrder)
