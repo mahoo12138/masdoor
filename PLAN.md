@@ -186,20 +186,36 @@ ALTER TABLE Application
 
 ```mermaid
 gantt
-    title Masdoor 精简版开发计划
+    title Masdoor 精简版开发计划（2026-11-05 已全部完成）
     dateFormat  YYYY-MM-DD
     section 阶段1：PoC
     环境搭建与基本功能验证 :done, 2026-11-01, 2d
-    核心认证流程测试       :active, 2026-11-03, 1d
+    核心认证流程测试       :done, 2026-11-03, 1d
     section 阶段2：后端裁剪
-    删除订阅与目录模块     :crit, 2026-11-05, 3d
+    删除订阅与目录模块     :done, 2026-11-05, 3d
     数据库结构迁移与测试   :done, 2026-11-08, 2d
-    前端页面精简           :active, 2026-11-10, 2d
+    前端页面精简           :done, 2026-11-10, 2d
     section 阶段3：精简发布
-    性能/安全优化         :2026-11-12, 2d
-    自动化回归测试        :2026-11-14, 1d
-    镜像打包与发布         :2026-11-15, 1d
-    文档与社区联动        :2026-11-16, 1d
+    性能/安全优化          :done, 2026-11-12, 2d
+    自动化回归测试         :done, 2026-11-14, 1d
+    镜像打包与发布准备     :done, 2026-11-15, 1d
+    文档与社区联动         :done, 2026-11-16, 1d
 ```
+
+## 执行结果（2026-11-05）
+
+三阶段计划已全部执行完毕，实际裁剪结果相对本计划的调整：
+
+| 计划项 | 实际执行 |
+| --- | --- |
+| 移除商业订阅、AI Agent、企业目录协议 | 已删除（含 SAML/CAS、syncer、站点托管 + ACME + WAF 规则、工单、自定义表单、FaceID/IDV、xlsx 批量导入） |
+| 权限中台改造 | 已删除 Casbin 全套（Permission/Model/Adapter/Enforcer/`/api/enforce`），API 层守卫改为 `authz/authz.go` 常量规则表 + 自实现 keyMatch2，含单元测试 |
+| 第三方适配器精简 | 按使用决策裁剪：社交登录 58→4（GitHub/GitLab/Gitea/Google）；存储 11→3（本地/MinIO/S3）；邮件 5→2（SMTP/Resend）；通知 20→4（Bark/Telegram/企业微信/自定义 HTTP） |
+| 数据库 | 默认 SQLite（modernc 纯 Go 驱动，CGO_ENABLED=0）；Sync2 只加不删，废弃表可手工清理 |
+| 安全保留清单 | CSRF（HttpOnly + SameSite Lax + authz 归属校验）、PKCE/nonce/state、令牌签发/刷新/撤销、HTML/CSS 注入防护均验证在位 |
+| 资源目标 | 实测优于计划：镜像 **105MB**（计划估 200-300MB）；256MB 内存限制下常驻 **~19MB**（计划估 150-220MB） |
+| 自动化回归 | 新增 `routers/route_matrix_test.go`（移除端点 44 个 + 核心端点 30 个断言）；CI 跑 build/vet/test + 前端 typecheck/build |
+| 发布准备 | Dockerfile 硬化（prod runmode、单架构编译、无 sudo）；`.goreleaser.yaml` 补前端构建 hook 与版本号注入；README 含升级指南，CONTRIBUTING.md 就绪 |
+| 未采用项 | 通知通道完整保留的选项未采纳（按决策裁至 4 种）；WeChat OAuth 在计划外已被更早的裁剪移除，仅保留企业微信通知通道 |
 
 > **信息来源：** 本方案参考 Masdoor 官方源码与文档（主题配置与订阅逻辑说明），结合对 Masdoor 架构的分析和类似项目经验编写。外部工具如 Auténtico、Tinyauth、Keycloakify 等仅作为对比，不影响本方案基于 Masdoor 的实施细节。
