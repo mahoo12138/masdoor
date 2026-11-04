@@ -27,8 +27,8 @@ export const TourObj: Record<string, TourStep[]> = {
       id: "statistic",
     },
     {
-      title: "Import users",
-      description: "You can add new users or update existing Masdoor users by uploading a XLSX file of user information.",
+      title: "Statistic charts",
+      description: "The charts visualize sign-in activity and user distribution across your organizations.",
       id: "echarts-chart",
     },
   ],
@@ -121,11 +121,6 @@ export const TourObj: Record<string, TourStep[]> = {
     {
       title: "User List",
       description: "As an authentication platform, Masdoor is able to manage users.",
-    },
-    {
-      title: "Import users",
-      description: "You can add new users or update existing Masdoor users by uploading a XLSX file of user information.",
-      id: "upload-button",
     },
   ],
   applications: [
