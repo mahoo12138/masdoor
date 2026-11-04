@@ -26,7 +26,7 @@ import (
 	"github.com/mahoo12138/masdoor/util"
 )
 
-const FileSessionProvider = "casdoor_file"
+const FileSessionProvider = "masdoor_file"
 
 const fileSessionGcInterval = time.Hour
 

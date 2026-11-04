@@ -27,7 +27,6 @@ var forbiddenChars = `/?:#&%=+;`
 
 // these add APIs either generate the name themselves or have no name field
 var addPathsWithoutName = map[string]bool{
-	"/api/add-policy":         true,
 	"/api/add-record":         true,
 	"/api/add-ticket-message": true,
 }

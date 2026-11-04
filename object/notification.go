@@ -21,9 +21,9 @@ import (
 	"strings"
 	"time"
 
+	notify "github.com/casdoor/notify2"
 	"github.com/mahoo12138/masdoor/notification"
 	"github.com/mahoo12138/masdoor/util"
-	notify "github.com/casdoor/notify2"
 )
 
 func getNotificationClient(provider *Provider) (notify.Notifier, error) {

@@ -21,9 +21,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/go-sql-driver/mysql"
 )
 
 const dataSourceFieldChars = "?#/()'\"\\=;& \t\r\n"

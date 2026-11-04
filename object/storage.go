@@ -22,11 +22,11 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/casdoor/oss"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/storage"
 	"github.com/mahoo12138/masdoor/util"
-	"github.com/casdoor/oss"
 )
 
 var isCloudIntranet bool
@@ -100,10 +100,10 @@ func GetUploadFileUrl(provider *Provider, fullFilePath string, hasTimestamp bool
 
 	host := ""
 	if provider.Type != ProviderTypeLocalFileSystem {
-		// provider.Domain = "https://cdn.casbin.com/casdoor/"
+		// provider.Domain = "https://files.example.com/"
 		host = util.GetUrlHost(provider.Domain)
 	} else {
-		// provider.Domain = "http://localhost:8000" or "https://door.casdoor.com"
+		// provider.Domain = "http://localhost:8000" or "https://files.example.com"
 		host = util.UrlJoin(provider.Domain, "/files")
 	}
 	if provider.Type == ProviderTypeAzureBlob || provider.Type == ProviderTypeGoogleCloudStorage {

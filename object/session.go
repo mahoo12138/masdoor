@@ -28,11 +28,6 @@ import (
 	"github.com/xorm-io/core"
 )
 
-var (
-	CasdoorApplication  = "app-built-in"
-	CasdoorOrganization = "built-in"
-)
-
 type SessionInfo struct {
 	SessionId      string `json:"sessionId"`
 	CreatedTime    string `json:"createdTime"`

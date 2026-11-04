@@ -37,10 +37,8 @@ import (
 )
 
 var (
-	oldStaticBaseUrl = "https://cdn.casbin.org"
-	newStaticBaseUrl = conf.GetConfigString("staticBaseUrl")
-	enableGzip       = conf.GetConfigBool("enableGzip")
-	frontendBaseDir  = conf.GetConfigString("frontendBaseDir")
+	enableGzip      = conf.GetConfigBool("enableGzip")
+	frontendBaseDir = conf.GetConfigString("frontendBaseDir")
 )
 
 func getWebBuildFolder() string {
@@ -293,19 +291,17 @@ func StaticFilter(ctx *context.Context) {
 		}
 		dir = strings.ReplaceAll(dir, "\\", "/")
 		ctx.ResponseWriter.WriteHeader(http.StatusNotFound)
-		errorText := fmt.Sprintf("The Masdoor frontend HTML file: \"index.html\" was not found, it should be placed at: \"%s/web/build/index.html\". For more information, see: https://casdoor.org/docs/basic/server-installation/#frontend-1", dir)
+		errorText := fmt.Sprintf("The Masdoor frontend HTML file: \"index.html\" was not found, it should be placed at: \"%s/web/build/index.html\". For more information, see the frontend section of README.md", dir)
 		http.ServeContent(ctx.ResponseWriter, ctx.Request, "Masdoor frontend has encountered error...", time.Now(), strings.NewReader(errorText))
 		return
 	}
 
-	if oldStaticBaseUrl == newStaticBaseUrl {
-		makeGzipResponse(ctx.ResponseWriter, ctx.Request, path, organizationThemeCookie)
-	} else {
-		serveFileWithReplace(ctx.ResponseWriter, ctx.Request, path, organizationThemeCookie)
-	}
+	makeGzipResponse(ctx.ResponseWriter, ctx.Request, path, organizationThemeCookie)
 }
 
-func serveFileWithReplace(w http.ResponseWriter, r *http.Request, name string, organizationThemeCookie *OrganizationThemeCookie) {
+// serveFileWithInjection serves a build file after the per-request injections: the
+// organization branding, the language, the base path, the web config and the issuer.
+func serveFileWithInjection(w http.ResponseWriter, r *http.Request, name string, organizationThemeCookie *OrganizationThemeCookie) {
 	f, err := os.Open(filepath.Clean(name))
 	if err != nil {
 		panic(err)
@@ -343,8 +339,6 @@ func serveFileWithReplace(w http.ResponseWriter, r *http.Request, name string, o
 		newContent = addIssuerToHtml(newContent, r.Host)
 	}
 
-	newContent = strings.ReplaceAll(newContent, oldStaticBaseUrl, newStaticBaseUrl)
-
 	http.ServeContent(w, r, d.Name(), modTime, strings.NewReader(newContent))
 }
 
@@ -356,13 +350,13 @@ func addWebConfigToHtml(content string) string {
 		return content
 	}
 
-	meta := fmt.Sprintf(`<meta name="casdoor-web-config" content="%s">`, html.EscapeString(string(webConfig)))
+	meta := fmt.Sprintf(`<meta name="masdoor-web-config" content="%s">`, html.EscapeString(string(webConfig)))
 	return strings.Replace(content, "</head>", meta+"</head>", 1)
 }
 
 // addIssuerToHtml tells the frontend the issuer it has to send back as `iss` in authorization responses (RFC 9207)
 func addIssuerToHtml(content string, host string) string {
-	meta := fmt.Sprintf(`<meta name="casdoor-issuer" content="%s">`, html.EscapeString(object.GetOidcIssuer(host)))
+	meta := fmt.Sprintf(`<meta name="masdoor-issuer" content="%s">`, html.EscapeString(object.GetOidcIssuer(host)))
 	return strings.Replace(content, "</head>", meta+"</head>", 1)
 }
 
@@ -377,12 +371,12 @@ func (w gzipResponseWriter) Write(b []byte) (int, error) {
 
 func makeGzipResponse(w http.ResponseWriter, r *http.Request, path string, organizationThemeCookie *OrganizationThemeCookie) {
 	if !enableGzip || !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-		serveFileWithReplace(w, r, path, organizationThemeCookie)
+		serveFileWithInjection(w, r, path, organizationThemeCookie)
 		return
 	}
 	w.Header().Set("Content-Encoding", "gzip")
 	gz := gzip.NewWriter(w)
 	defer gz.Close()
 	gzw := gzipResponseWriter{Writer: gz, ResponseWriter: w}
-	serveFileWithReplace(gzw, r, path, organizationThemeCookie)
+	serveFileWithInjection(gzw, r, path, organizationThemeCookie)
 }

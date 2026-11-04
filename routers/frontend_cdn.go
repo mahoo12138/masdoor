@@ -26,12 +26,12 @@ import (
 	"github.com/mahoo12138/masdoor/conf"
 )
 
-// frontendCdnUrl is where the frontend build published as an npm package (casdoor-web) is served from, with "{name}"
+// frontendCdnUrl is where the frontend build published as an npm package is served from, with "{name}"
 // and "{version}" taken from the package.json in the build folder, e.g. "https://cdn.jsdelivr.net/npm/{name}@{version}".
 // Only a build installed from that package has the package.json, any other build is served from this server.
 var frontendCdnUrl = conf.GetConfigString("frontendCdnUrl")
 
-const frontendCdnOffCookie = "casdoor_cdn_off"
+const frontendCdnOffCookie = "masdoor_cdn_off"
 
 var reFrontendAsset = regexp.MustCompile(`(<script type="module" crossorigin src=|<link rel="stylesheet" crossorigin href=|<link rel="modulepreload" crossorigin href=)"(/assets/[^"]+)"`)
 
@@ -44,10 +44,10 @@ const frontendCdnScript = `<script>
           document.cookie = "` + frontendCdnOffCookie + `=1; path=/; SameSite=Lax";
         }
 
-        window.casdoorCdnFallback = function(el) {
+        window.masdoorCdnFallback = function(el) {
           disableCdn();
           el.onerror = null;
-          var local = el.getAttribute("data-casdoor-local");
+          var local = el.getAttribute("data-masdoor-local");
           if (el.tagName === "LINK") {
             el.href = local;
             return;
@@ -121,7 +121,7 @@ func useFrontendCdn(content string, htmlPath string, r *http.Request) (string, b
 		if strings.Contains(m[1], "modulepreload") {
 			return fmt.Sprintf(`%s"%s%s"`, m[1], cdn, m[2])
 		}
-		return fmt.Sprintf(`%s"%s%s" data-casdoor-local="%s" onerror="casdoorCdnFallback(this)"`, m[1], cdn, m[2], m[2])
+		return fmt.Sprintf(`%s"%s%s" data-masdoor-local="%s" onerror="masdoorCdnFallback(this)"`, m[1], cdn, m[2], m[2])
 	})
 	return content[:first[0]] + frontendCdnScript + assets, true
 }

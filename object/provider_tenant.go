@@ -18,10 +18,10 @@ import (
 	"net/http"
 	"time"
 
+	notify "github.com/casdoor/notify2"
 	"github.com/mahoo12138/masdoor/email"
 	"github.com/mahoo12138/masdoor/notification"
 	"github.com/mahoo12138/masdoor/util"
-	notify "github.com/casdoor/notify2"
 )
 
 // isTenantProvider reports a provider an organization admin manages, as opposed to the global

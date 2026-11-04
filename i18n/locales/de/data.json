@@ -1,7 +1,6 @@
 {
   "account": {
     "Failed to add user": "Konnte den Benutzer nicht hinzufügen",
-    "Get init score failed, error: %w": "Init-Score konnte nicht abgerufen werden, Fehler: %w",
     "The application does not allow to sign up new account": "Die Anwendung erlaubt es nicht, sich für ein neues Konto anzumelden"
   },
   "auth": {
@@ -21,33 +20,21 @@
     "The application: %s has disabled users to signin": "Die Anwendung: %s hat die Anmeldung von Benutzern deaktiviert",
     "The group: %s does not exist": "Die Gruppe: %s existiert nicht",
     "The login method: login with LDAP is not enabled for the application": "Die Anmeldemethode: Anmeldung mit LDAP ist für die Anwendung nicht aktiviert",
-    "The login method: login with SMS is not enabled for the application": "Die Anmeldemethode: Anmeldung per SMS ist für die Anwendung nicht aktiviert",
     "The login method: login with WebAuthn is not enabled for the application": "Die Anmeldemethode: Anmeldung mit WebAuthn ist für die Anwendung nicht aktiviert",
     "The login method: login with email is not enabled for the application": "Die Anmeldemethode: Anmeldung per E-Mail ist für die Anwendung nicht aktiviert",
-    "The login method: login with face is not enabled for the application": "Die Anmeldemethode: Anmeldung per Gesicht ist für die Anwendung nicht aktiviert",
     "The login method: login with magic link is not enabled for the application": "Die Anmeldemethode: Anmeldung per Magic Link ist für die Anwendung nicht aktiviert",
     "The login method: login with password is not enabled for the application": "Die Anmeldeart \"Anmeldung mit Passwort\" ist für die Anwendung nicht aktiviert",
-    "The order: %s does not exist": "Die Bestellung: %s existiert nicht",
     "The organization: %s does not exist": "Die Organisation: %s existiert nicht",
     "The organization: %s has disabled users to signin": "Die Organisation: %s hat die Anmeldung von Benutzern deaktiviert",
-    "The plan: %s does not exist": "Der Plan: %s existiert nicht",
-    "The pricing: %s does not exist": "Die Preisgestaltung: %s existiert nicht",
-    "The pricing: %s does not have plan: %s": "Die Preisgestaltung: %s hat keinen Plan: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "Die Preisgestaltung: %s ist nur auf Einladung verfügbar, nur eingeladene Benutzer können sie nutzen",
     "The provider: %s does not exist": "Der Anbieter: %s existiert nicht",
     "The provider: %s is not enabled for the application": "Der Anbieter: %s ist nicht für die Anwendung aktiviert",
-    "The subscription: %s does not exist": "Das Abonnement: %s existiert nicht",
     "Unauthorized operation": "Nicht autorisierte Operation",
     "Unknown authentication type (not password or provider), form = %s": "Unbekannter Authentifizierungstyp (nicht Passwort oder Anbieter), Formular = %s",
     "User's tag: %s is not listed in the application's tags": "Benutzer-Tag: %s ist nicht in den Tags der Anwendung aufgeführt",
     "UserCode Expired": "Benutzercode abgelaufen",
     "UserCode Invalid": "Benutzercode ungültig",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "Bezahlter Benutzer %s hat kein aktives oder ausstehendes Abonnement und die Anwendung: %s hat keine Standardpreisgestaltung",
     "the application for user %s is not found": "Die Anwendung für Benutzer %s wurde nicht gefunden",
     "the organization: %s is not found": "Die Organisation: %s wurde nicht gefunden"
-  },
-  "cas": {
-    "Service %s and %s do not match": "Service %s und %s stimmen nicht überein"
   },
   "cert": {
     "The cert name: %s is already used by another organization": "Der Zertifikatsname: %s wird bereits von einer anderen Organisation verwendet"
@@ -64,8 +51,6 @@
     "Email cannot be empty": "E-Mail darf nicht leer sein",
     "Email is invalid": "E-Mail ist ungültig",
     "Empty username.": "Leerer Benutzername.",
-    "Face data does not exist, cannot log in": "Gesichtsdaten existieren nicht, Anmeldung nicht möglich",
-    "Face data mismatch": "Gesichtsdaten stimmen nicht überein",
     "Failed to parse client IP: %s": "Fehler beim Parsen der Client-IP: %s",
     "FirstName cannot be blank": "Vorname darf nicht leer sein",
     "Guest users must upgrade their account by setting a username and password before they can sign in directly": "Gastbenutzer müssen ihr Konto aktualisieren, indem sie einen Benutzernamen und ein Passwort festlegen, bevor sie sich direkt anmelden können",
@@ -75,7 +60,6 @@
     "Invitation code is invalid": "Einladungscode ist ungültig",
     "Invitation code suspended": "Einladungscode ausgesetzt",
     "LastName cannot be blank": "Nachname darf nicht leer sein",
-    "Multiple accounts with same uid, please check your ldap server": "Mehrere Konten mit derselben uid, bitte überprüfen Sie Ihren LDAP-Server",
     "Organization does not exist": "Organisation existiert nicht",
     "Password cannot be empty": "Passwort darf nicht leer sein",
     "Phone already exists": "Telefon existiert bereits",
@@ -93,7 +77,6 @@
     "The password must not contain any repeated characters": "Das Passwort darf keine wiederholten Zeichen enthalten",
     "The user has been deleted and cannot be used to sign in, please contact the administrator": "Der Benutzer wurde gelöscht und kann nicht zur Anmeldung verwendet werden. Bitte wenden Sie sich an den Administrator",
     "The user is forbidden to sign in, please contact the administrator": "Dem Benutzer ist der Zugang verboten, bitte kontaktieren Sie den Administrator",
-    "The user: %s doesn't exist in LDAP server": "Der Benutzer: %s existiert nicht im LDAP-Server",
     "The username may only contain alphanumeric characters, underlines or hyphens, cannot have consecutive hyphens or underlines, and cannot begin or end with a hyphen or underline.": "Der Benutzername darf nur alphanumerische Zeichen, Unterstriche oder Bindestriche enthalten, keine aufeinanderfolgenden Bindestriche oder Unterstriche haben und darf nicht mit einem Bindestrich oder Unterstrich beginnen oder enden.",
     "The value \"%s\" for account field \"%s\" doesn't match the account item regex": "Der Wert \"%s\" für das Kontenfeld \"%s\" stimmt nicht mit dem Kontenelement-Regex überein",
     "The value \"%s\" for signup field \"%s\" doesn't match the signup item regex of the application \"%s\"": "Der Wert \"%s\" für das Registrierungsfeld \"%s\" stimmt nicht mit dem Registrierungselement-Regex der Anwendung \"%s\" überein",
@@ -112,27 +95,19 @@
     "password or code is incorrect, you have %s remaining chances": "Das Passwort oder der Code ist falsch. Du hast noch %s Versuche übrig",
     "unsupported password type: %s": "Nicht unterstützter Passworttyp: %s"
   },
-  "enforcer": {
-    "the adapter: %s is not found": "Der Adapter: %s wurde nicht gefunden"
-  },
   "general": {
     "Application cannot be empty": "Anwendung darf nicht leer sein",
     "Failed to import groups": "Gruppen importieren fehlgeschlagen",
     "Failed to import users": "Fehler beim Importieren von Benutzern",
     "Granted scopes cannot be empty": "Gewährte Scopes dürfen nicht leer sein",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Unzureichendes Guthaben: neues Guthaben %v wäre unter dem Kreditlimit %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Unzureichendes Guthaben: neues Organisationsguthaben %v wäre unter dem Kreditlimit %v",
     "Invalid application": "Ungültige Anwendung",
     "Missing parameter": "Fehlender Parameter",
     "Multiple captcha providers are not allowed in the same application: %s": "Mehrere Captcha-Anbieter sind in derselben Anwendung nicht erlaubt: %s",
-    "Only admin user can specify user": "Nur Administrator kann Benutzer angeben",
     "Please login first": "Bitte zuerst einloggen",
     "Please sign in first": "Bitte melden Sie sich zuerst an",
-    "The LDAP: %s does not exist": "Das LDAP: %s existiert nicht",
     "The client ID: %s is already used by another application": "Die Client-ID: %s wird bereits von einer anderen Anwendung verwendet",
     "The object does not exist": "Das Objekt existiert nicht",
     "The organization: %s should have one application at least": "Die Organisation: %s sollte mindestens eine Anwendung haben",
-    "The syncer: %s does not exist": "Der Synchronizer: %s existiert nicht",
     "The token: %s does not exist": "Das Token: %s existiert nicht",
     "The uploaded file contains no user": "Die hochgeladene Datei enthält keinen Benutzer",
     "The uploaded file is empty": "Die hochgeladene Datei ist leer",
@@ -140,9 +115,7 @@
     "The user name in line %d is empty": "Der Benutzername in Zeile %d ist leer",
     "The user: %s doesn't exist": "Der Benutzer %s existiert nicht",
     "The user: %s in line %d is duplicated with line %d": "Der Benutzer: %s in Zeile %d ist ein Duplikat von Zeile %d",
-    "The user: %s is not found": "Der Benutzer: %s wurde nicht gefunden",
     "The users already exist: %s": "Die folgenden Benutzer existieren bereits: %s",
-    "User is required for User category transaction": "Benutzer ist für Benutzer-Kategorie-Transaktionen erforderlich",
     "User not found": "Benutzer nicht gefunden",
     "Wrong userId": "Falsche Benutzer-ID",
     "don't support captchaProvider: ": "Unterstütze captchaProvider nicht:",
@@ -151,9 +124,6 @@
   },
   "invitation": {
     "Invitation %s does not exist": "Einladung %s existiert nicht"
-  },
-  "ldap": {
-    "Ldap server exist": "Es gibt einen LDAP-Server"
   },
   "link": {
     "Please link first": "Bitte verlinken Sie zuerst",
@@ -168,35 +138,19 @@
     "Only admin can modify the %s.": "Nur der Administrator kann das %s ändern.",
     "The %s is immutable.": "Das %s ist unveränderlich.",
     "Unknown modify rule %s.": "Unbekannte Änderungsregel %s.",
-    "adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Masdoor. Refer to the docs: https://casdoor.org/docs/basic/core-concepts#how-does-casdoor-manage-itself. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option.": "Das Hinzufügen eines neuen Benutzers zur 'eingebauten' Organisation ist derzeit deaktiviert. Bitte beachten Sie: Alle Benutzer in der 'eingebauten' Organisation sind globale Administratoren in Masdoor. Siehe die Docs: https://casdoor.org/docs/basic/core-concepts#how  -does-casdoor-manage-sich selbst. Wenn Sie immer noch einen Benutzer für die 'eingebaute' Organisation erstellen möchten, gehen Sie auf die Einstellungsseite der Organisation und aktivieren Sie die Option 'Habt Berechtigungszustimmung'."
-  },
-  "permission": {
-    "The permission: \"%s\" doesn't exist": "Die Berechtigung: \"%s\" existiert nicht"
-  },
-  "product": {
-    "Product list cannot be empty": "Produktliste darf nicht leer sein"
+    "adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Masdoor. Refer to the docs: https://github.com/mahoo12138/masdoor. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option.": "Das Hinzufügen eines neuen Benutzers zur 'eingebauten' Organisation ist derzeit deaktiviert. Bitte beachten Sie: Alle Benutzer in der 'eingebauten' Organisation sind globale Administratoren in Masdoor. Siehe die README: https://github.com/mahoo12138/masdoor. Wenn Sie immer noch einen Benutzer für die 'eingebaute' Organisation erstellen möchten, gehen Sie auf die Einstellungsseite der Organisation und aktivieren Sie die Option 'Habt Berechtigungszustimmung'."
   },
   "provider": {
-    "Failed to initialize ID Verification provider": "ID-Verifizierungsanbieter konnte nicht initialisiert werden",
     "Invalid application id": "Ungültige Anwendungs-ID",
-    "No ID Verification provider configured": "Kein ID-Verifizierungsanbieter konfiguriert",
-    "Provider is not an ID Verification provider": "Anbieter ist kein ID-Verifizierungsanbieter",
     "the provider: %s does not exist": "Der Anbieter %s existiert nicht"
   },
   "resource": {
     "User is nil for tag: avatar": "Benutzer ist null für Tag: Avatar",
     "Username or fullFilePath is empty: username = %s, fullFilePath = %s": "Benutzername oder vollständiger Dateipfad sind leer: Benutzername = %s, vollständiger Dateipfad = %s"
   },
-  "saml": {
-    "Application %s not found": "Anwendung %s wurde nicht gefunden"
-  },
-  "saml_sp": {
-    "provider %s's category is not SAML": "Der Anbieter %s ist keine Kategorie von SAML"
-  },
   "service": {
     "Empty parameters for emailForm: %v": "Leere Parameter für Email-Formular: %v",
     "Invalid Email receivers: %s": "Ungültige E-Mail-Empfänger: %s",
-    "Invalid phone receivers: %s": "Ungültige Telefonempfänger: %s",
     "Too many requests, please try again later": "Zu viele Anfragen, bitte versuchen Sie es später erneut"
   },
   "session": {
@@ -209,9 +163,6 @@
   "subscription": {
     "Error": "Fehler"
   },
-  "ticket": {
-    "Ticket not found": "Ticket nicht gefunden"
-  },
   "token": {
     "Grant_type: %s is not supported in this application": "Grant_type: %s wird von dieser Anwendung nicht unterstützt",
     "Invalid application or wrong clientSecret": "Ungültige Anwendung oder falsches clientSecret",
@@ -223,16 +174,12 @@
   },
   "user": {
     "Display name cannot be empty": "Anzeigename darf nicht leer sein",
-    "ID card information and real name are required": "Personalausweisinformationen und vollständiger Name sind erforderlich",
-    "Identity verification failed": "Identitätsprüfung fehlgeschlagen",
     "MFA email is enabled but email is empty": "MFA-E-Mail ist aktiviert, aber E-Mail ist leer",
     "MFA phone is enabled but phone number is empty": "MFA-Telefon ist aktiviert, aber Telefonnummer ist leer",
     "New password cannot contain blank space.": "Das neue Passwort darf keine Leerzeichen enthalten.",
-    "No application found for user": "Keine Anwendung für Benutzer gefunden",
     "Please use the set-password API to change the password": "Bitte verwenden Sie die set-password-API, um das Passwort zu ändern",
     "The new password must be different from your current password": "Das neue Passwort muss sich von Ihrem aktuellen Passwort unterscheiden",
     "The new password must be different from your last %d passwords": "Das neue Passwort muss sich von Ihren letzten %d Passwörtern unterscheiden",
-    "User is already verified": "Benutzer ist bereits verifiziert",
     "the user's owner and name should not be empty": "Eigentümer und Name des Benutzers dürfen nicht leer sein"
   },
   "util": {
@@ -258,7 +205,6 @@
     "Wrong parameter": "Falscher Parameter",
     "Wrong verification code!": "Falscher Bestätigungscode!",
     "You should verify your code in %d min!": "Du solltest deinen Code in %d Minuten verifizieren!",
-    "please add a SMS provider to the \"Providers\" list for the application: %s": "Bitte fügen Sie einen SMS-Anbieter zur \"Providers\"-Liste für die Anwendung hinzu: %s",
     "please add an Email provider to the \"Providers\" list for the application: %s": "Bitte fügen Sie einen E-Mail-Anbieter zur \"Providers\"-Liste für die Anwendung hinzu: %s",
     "please set \"origin\" in conf/app.conf to send magic links": "Bitte setzen Sie \"origin\" in conf/app.conf, um Magic Links zu senden",
     "the user does not exist, please sign up first": "Der Benutzer existiert nicht, bitte zuerst anmelden",

@@ -26,10 +26,10 @@ import (
 
 var (
 	basePath          = conf.GetBasePath()
-	reRootRelativeUrl = regexp.MustCompile(`\b(src|href|data-casdoor-local)="/([^/"])`)
+	reRootRelativeUrl = regexp.MustCompile(`\b(src|href|data-masdoor-local)="/([^/"])`)
 )
 
-// BasePathMiddleware lets Masdoor run under a path like "https://example.com/casdoor": the prefix is removed before
+// BasePathMiddleware lets Masdoor run under a path like "https://example.com/sso": the prefix is removed before
 // routing, so it works both when the reverse proxy keeps the prefix and when it strips it
 func BasePathMiddleware(next http.Handler) http.Handler {
 	if basePath == "" {
@@ -65,6 +65,6 @@ func addBasePathToHtml(content string) string {
 		i := strings.Index(s, `="/`)
 		return s[:i+2] + basePath + s[i+2:]
 	})
-	meta := fmt.Sprintf(`<meta name="casdoor-base-path" content="%s" />`, html.EscapeString(basePath))
+	meta := fmt.Sprintf(`<meta name="masdoor-base-path" content="%s" />`, html.EscapeString(basePath))
 	return strings.Replace(content, "<head>", "<head>\n    "+meta, 1)
 }

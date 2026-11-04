@@ -35,6 +35,10 @@ var (
 	reManifestLink    = regexp.MustCompile(`<link rel="manifest" href="[^"]*"\s*/?>`)
 )
 
+// defaultFavicon is the fallback icon the built index.html links to; it has to match the
+// href in web/index.html byte for byte, or the branding below cannot replace it
+const defaultFavicon = "/img/favicon.png"
+
 // addBrandingToHtml puts the application's name, description, icon and manifest into index.html, so link previews
 // and the home-screen / PWA surface, which read the raw HTML without running the app, show them instead of Masdoor's
 func addBrandingToHtml(content string, organizationThemeCookie *OrganizationThemeCookie) string {
@@ -43,7 +47,7 @@ func addBrandingToHtml(content string, organizationThemeCookie *OrganizationThem
 	favicon := html.EscapeString(organizationThemeCookie.Favicon)
 
 	if favicon != "" {
-		content = strings.ReplaceAll(content, "https://cdn.casbin.org/img/favicon.png", favicon)
+		content = strings.ReplaceAll(content, defaultFavicon, favicon)
 	}
 	if title != "" {
 		content = strings.ReplaceAll(content, "<title>Masdoor</title>", fmt.Sprintf("<title>%s</title>", title))
