@@ -905,7 +905,8 @@
     "Primary color": "Color primario",
     "System": "Sistema",
     "Theme": "Tema",
-    "Theme - Tooltip": "Tema de estilo de la aplicación"
+    "Theme - Tooltip": "Tema de estilo de la aplicación",
+    "Accent": "Color de acento"
   },
   "ticket": {
     "Closed": "Cerrado",

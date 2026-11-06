@@ -905,7 +905,8 @@
     "Primary color": "主题色",
     "System": "跟随系统",
     "Theme": "主题",
-    "Theme - Tooltip": "应用的样式主题"
+    "Theme - Tooltip": "应用的样式主题",
+    "Accent": "主题色"
   },
   "ticket": {
     "Closed": "已关闭",

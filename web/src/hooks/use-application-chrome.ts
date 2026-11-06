@@ -3,6 +3,7 @@ import * as Cookie from "cookie";
 import * as Conf from "@/Conf";
 import {useTheme} from "@/hooks/use-theme";
 import {getSafeHtml} from "@/lib/custom-html";
+import {getAccentTheme, useAccentKey} from "@/lib/accent-theme";
 import * as Setting from "@/lib/setting";
 
 interface ThemeData {
@@ -18,7 +19,7 @@ interface Hsl {
   l: number;
 }
 
-/** "#262626" -> {h: 0, s: 0, l: 0.149}. */
+/** "#047857" -> {h: 162.9, s: 0.933, l: 0.243}. */
 function hexToHsl(hex: string): Hsl | null {
   const match = /^#?([\da-f]{3}|[\da-f]{6})$/i.exec(hex.trim());
   if (!match) {
@@ -65,18 +66,53 @@ function foregroundFor(lightness: number): string {
 }
 
 /**
- * A brand colour picked against a white page is usually far too dark to sit on a
- * dark one — Masdoor's own default, #262626, disappears into the panel it is
- * painted on. antd handled this in its `darkAlgorithm`, which derived a lighter
- * primary from the same hue; this keeps to the one step that matters: a colourful
- * brand is lifted to a usable lightness, and a neutral one (a black or a grey)
- * hands over to the palette's own near-white primary.
+ * The bright step of a brand colour, for dark-mode focus rings and accents: the
+ * same hue read up to a lightness that glows against the dark surfaces, the way
+ * OpenTodo's dark theme pairs its deep emerald buttons with a bright emerald
+ * focus ring. Text and rings only ever sit on the page, never on a button, so
+ * the usual contrast rules do not bind here.
+ */
+function brightVariantForDark(color: Hsl): Hsl {
+  return {...color, l: Math.max(color.l, 0.72)};
+}
+
+/**
+ * A brand colour is kept as-is on the dark palette — OpenTodo's buttons are the
+ * same emerald in both, and white text on a deep hue only ever gets more
+ * readable on a darker card. Only a neutral (a black or a grey, invisible as a
+ * button on a dark panel) hands over to the palette's own near-white primary.
  */
 function adaptPrimaryForDark(color: Hsl): Hsl {
   if (color.s < 0.15) {
     return {...color, l: 0.98};
   }
-  return {...color, l: Math.max(color.l, 0.62)};
+  return color;
+}
+
+/** "#047857" into "#ffffff" at 10% — the same mixes OpenTodo derives with color-mix. */
+function mixHex(hexA: string, pct: number, hexB: string): string {
+  const parse = (hex: string) => [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16));
+  const [r1, g1, b1] = parse(hexA);
+  const [r2, g2, b2] = parse(hexB);
+  const channel = (a: number, b: number) => Math.round(a * (pct / 100) + b * (1 - pct / 100));
+  const to2 = (c: number) => c.toString(16).padStart(2, "0");
+  return `#${to2(channel(r1, r2))}${to2(channel(g1, g2))}${to2(channel(b1, b2))}`;
+}
+
+/** The dark surfaces the soft steps mix into, mirror of index.css's .dark values. */
+const DARK_SURFACE = "#141518";
+
+/**
+ * The seed hexes of the accent the device picked, when that accent is not the
+ * stylesheet's own default.
+ */
+function useCustomAccent(): {light: string; bright: string; dark?: string} | null {
+  const accentKey = useAccentKey();
+  const accent = getAccentTheme(accentKey);
+  if (accent.key === "emerald") {
+    return null;
+  }
+  return accent;
 }
 
 /** Pushes a `themeData` object into the shadcn CSS variables for as long as it is mounted. */
@@ -84,16 +120,20 @@ export function useThemeData(themeData: ThemeData | undefined | null) {
   // the provider owns the `dark` class, so re-assert a forced dark theme whenever
   // it writes, otherwise the two would fight over the root element
   const {resolvedTheme} = useTheme();
+  const customAccent = useCustomAccent();
 
   React.useEffect(() => {
     const root = document.documentElement;
     const primary = themeData?.colorPrimary ? hexToHsl(themeData.colorPrimary) : null;
+    // an organization/application theme that only restates the default does not
+    // count as a brand: the device's accent choice applies instead
+    const orgBranded = primary !== null && themeData?.colorPrimary !== Conf.ThemeDefault.colorPrimary;
     const touched: string[] = [];
     // `themeType: "dark"` forces the dark palette on below, so the brand colour
     // has to be adapted for it even when the visitor asked for the light one
     const dark = themeData?.themeType === "dark" || resolvedTheme === "dark";
 
-    if (primary) {
+    if (orgBranded && primary) {
       // the un-adapted colour stays available to a subtree painted light inside a
       // dark page, see `.theme-scope-light` in index.css
       root.style.setProperty("--primary-base", formatHsl(primary));
@@ -103,8 +143,39 @@ export function useThemeData(themeData: ThemeData | undefined | null) {
       root.style.setProperty("--primary", formatHsl(painted));
       // keep the label readable whichever end of the scale the brand colour sits on
       root.style.setProperty("--primary-foreground", foregroundFor(painted.l));
-      root.style.setProperty("--ring", formatHsl(painted));
+      // on the dark palette the focus ring takes the bright step of the hue
+      root.style.setProperty("--ring", formatHsl(dark ? brightVariantForDark(primary) : painted));
       touched.push("--primary-base", "--primary-base-foreground", "--primary", "--primary-foreground", "--ring");
+    } else if (customAccent) {
+      // OpenTodo's accent themes: the seeds stand in for the stylesheet's
+      // emerald, and the soft steps derive from them the way its color-mix
+      // derivations do
+      const onAccent = "0 0% 100%";
+      const lightSeed = customAccent.light;
+      const buttonSeed = dark && customAccent.dark ? customAccent.dark : lightSeed;
+      root.style.setProperty("--primary", formatHsl(hexToHsl(buttonSeed)));
+      root.style.setProperty("--primary-foreground", onAccent);
+      root.style.setProperty("--ring", formatHsl(hexToHsl(dark ? customAccent.bright : lightSeed)));
+      // a subtree painted light inside a dark page keeps the un-adapted accent
+      root.style.setProperty("--primary-base", formatHsl(hexToHsl(lightSeed)));
+      root.style.setProperty("--primary-base-foreground", onAccent);
+      root.style.setProperty(
+        "--accent-soft",
+        formatHsl(hexToHsl(dark ? mixHex(customAccent.bright, 14, DARK_SURFACE) : mixHex(lightSeed, 10, "#ffffff"))),
+      );
+      root.style.setProperty(
+        "--accent-soft-foreground",
+        formatHsl(hexToHsl(dark ? mixHex(customAccent.bright, 80, "#ffffff") : mixHex(lightSeed, 80, "#000000"))),
+      );
+      touched.push(
+        "--primary",
+        "--primary-foreground",
+        "--ring",
+        "--primary-base",
+        "--primary-base-foreground",
+        "--accent-soft",
+        "--accent-soft-foreground",
+      );
     }
     if (typeof themeData?.borderRadius === "number") {
       root.style.setProperty("--radius", `${themeData.borderRadius / 16}rem`);
@@ -130,7 +201,7 @@ export function useThemeData(themeData: ThemeData | undefined | null) {
         root.classList.remove("compact");
       }
     };
-  }, [themeData, resolvedTheme]);
+  }, [themeData, resolvedTheme, customAccent]);
 }
 
 /**

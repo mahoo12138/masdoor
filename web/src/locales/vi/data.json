@@ -905,7 +905,8 @@
     "Primary color": "Màu sắc cơ bản",
     "System": "Hệ thống",
     "Theme": "Giao diện",
-    "Theme - Tooltip": "Trang trí giao diện của ứng dụng"
+    "Theme - Tooltip": "Trang trí giao diện của ứng dụng",
+    "Accent": "Màu nhấn"
   },
   "ticket": {
     "Closed": "Đã đóng",

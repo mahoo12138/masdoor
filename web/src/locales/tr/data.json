@@ -905,7 +905,8 @@
     "Primary color": "Birincil renk",
     "System": "Sistem",
     "Theme": "Tema",
-    "Theme - Tooltip": "Uygulamanın stil teması"
+    "Theme - Tooltip": "Uygulamanın stil teması",
+    "Accent": "Vurgu rengi"
   },
   "ticket": {
     "Closed": "Kapalı",
