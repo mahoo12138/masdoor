@@ -7,61 +7,78 @@
 @tailwind utilities;
 
 @layer base {
+  /* The design language follows OpenTodo's (github.com/OpenTodoApp/OpenTodo):
+     a gray-blue canvas with white panels floating on it, an emerald accent,
+     flat surfaces whose edges do the work shadows used to, and visible field
+     borders so a field reads as a field next to a divider. Values were
+     converted from OpenTodo's oklch tokens (docs/design-system.md) to HSL. */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+    --background: 210 13.2% 94.1%; /* the canvas every surface sits on */
+    --foreground: 216 9.8% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 216 9.8% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 216 9.8% 10%;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 162.9 93.3% 24.3%; /* emerald */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 0 0% 96.8%;
+    --secondary-foreground: 216 9.8% 10%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 44%;
+    --muted: 210 16.5% 95.3%;
+    --muted-foreground: 216.9 6.6% 38.6%;
 
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 0 0% 97.2%; /* the hover surface on popovers and menus */
+    --accent-foreground: 216 9.8% 10%;
 
-    --destructive: 0 72% 46%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 2 63.6% 45.3%;
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 142 71% 40%;
+    --success: 162.9 93.3% 24.3%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 32 95% 44%;
+    --warning: 35.6 99.8% 27.1%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    /* a shade darker than --border so a field reads as a field next to a divider */
-    --input: 0 0% 87%;
-    --ring: 0 0% 9%;
+    --border: 216 8.1% 87.9%;
+    /* a mid edge, far enough below --border that a field reads as a field
+       next to a divider (OpenTodo's --ot-border-input) */
+    --input: 218.4 12.2% 54.4%;
+    --ring: 162.9 93.3% 24.3%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 26%;
-    --sidebar-primary: 0 0% 9%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 0 0% 93%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 91%;
-    --sidebar-ring: 0 0% 9%;
+    /* precision surfaces: row hover, the selected nav item, the selected table
+       row, and a soft emerald wash for selected chips and active states */
+    --hover: 0 0% 97.2%;
+    --selected: 216 11.7% 91.6%;
+    --selected-row: 210 16.5% 95.3%;
+    --accent-soft: 160 31.6% 92.5%;
+    --accent-soft-foreground: 163.2 93.9% 19.4%;
+    --line-strong: 214.3 8.9% 84.5%;
 
-    /* The chrome is deliberately neutral, so charts are where colour lives. Eight
-       hues far enough apart to stay legible next to each other in a legend. */
-    --chart-1: 215 90% 52%;
-    --chart-2: 199 89% 44%;
-    --chart-3: 173 58% 37%;
-    --chart-4: 258 70% 58%;
-    --chart-5: 322 65% 53%;
-    --chart-6: 25 85% 51%;
-    --chart-7: 142 60% 36%;
-    --chart-8: 240 5% 45%;
+    /* the sidebar shares the canvas; the white content panel next to it is the
+       divider, so the rail needs no edge of its own */
+    --sidebar-background: 210 13.2% 94.1%;
+    --sidebar-foreground: 216 9.8% 10%;
+    --sidebar-primary: 162.9 93.3% 24.3%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 11.7% 91.6%;
+    --sidebar-accent-foreground: 216 9.8% 10%;
+    --sidebar-border: 216 8.1% 87.9%;
+    --sidebar-ring: 162.9 93.3% 24.3%;
+
+    /* charts carry the colour; hues picked from OpenTodo's palette, far enough
+       apart to stay legible next to each other in a legend */
+    --chart-1: 162.9 93.3% 24.3%; /* emerald  */
+    --chart-2: 221.2 83.2% 53.3%; /* blue     */
+    --chart-3: 174.7 83.6% 31.6%; /* teal     */
+    --chart-4: 262.1 83.3% 57.8%; /* violet   */
+    --chart-5: 20.5 90.2% 48.2%;  /* orange   */
+    --chart-6: 333.3 71.4% 50.6%; /* pink     */
+    --chart-7: 0 72.2% 50.6%;     /* red      */
+    --chart-8: 215.4 16.3% 46.9%; /* slate    */
 
     --radius: 0.5rem;
   }
@@ -69,60 +86,68 @@
   .dark {
     /* the page sits *below* the cards rather than level with them, so panels read
        as panels without needing a border to prove it */
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
+    --background: 220 10.3% 5.7%;
+    --foreground: 220 8.6% 93.1%;
 
-    --card: 0 0% 10.5%;
-    --card-foreground: 0 0% 96%;
+    --card: 225 9.1% 8.6%;
+    --card-foreground: 220 8.6% 93.1%;
 
     /* a menu or a dialog floats above a card, so it has to out-step the card the
-       way the card out-steps the page — at 12% it was four levels off --card and
-       read as translucent */
-    --popover: 0 0% 16.5%;
-    --popover-foreground: 0 0% 96%;
+       way the card out-steps the page */
+    --popover: 228 8.5% 11.6%;
+    --popover-foreground: 220 8.6% 93.1%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    /* buttons keep the light emerald, the way OpenTodo's dark theme does; text
+       and focus use the bright step below */
+    --primary: 162.9 93.3% 24.3%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 16%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 228 9% 10.8%;
+    --secondary-foreground: 220 8.6% 93.1%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 64%;
+    --muted: 225 10.5% 7.4%;
+    --muted-foreground: 218.2 6.4% 66.1%;
 
-    --accent: 0 0% 19%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 228 9.4% 10.4%;
+    --accent-foreground: 220 8.6% 93.1%;
 
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 1.8 81.3% 68.4%;
+    --destructive-foreground: 220 10.3% 5.7%;
 
-    --success: 142 60% 42%;
-    --success-foreground: 0 0% 100%;
+    --success: 158.1 64.4% 51.6%;
+    --success-foreground: 220 10.3% 5.7%;
 
-    --warning: 32 88% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 35.2 74.9% 59.4%;
+    --warning-foreground: 220 10.3% 5.7%;
 
-    --border: 0 0% 19%;
-    --input: 0 0% 24%;
-    --ring: 0 0% 70%;
+    --border: 220 7.9% 14.9%;
+    --input: 218.4 7.6% 51.4%;
+    --ring: 158.1 64.4% 51.6%;
 
-    --sidebar-background: 0 0% 9%;
-    --sidebar-foreground: 0 0% 78%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 17%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 17%;
-    --sidebar-ring: 0 0% 70%;
+    --hover: 228 9.4% 10.4%;
+    --selected: 222.9 8.7% 15.9%;
+    --selected-row: 220 9.4% 12.6%;
+    --accent-soft: 165 33.3% 14.1%;
+    --accent-soft-foreground: 157.8 64.5% 61.4%;
+    --line-strong: 217.5 8% 19.6%;
 
-    --chart-1: 213 85% 62%;
-    --chart-2: 199 85% 55%;
-    --chart-3: 172 55% 48%;
-    --chart-4: 258 75% 68%;
-    --chart-5: 322 70% 63%;
-    --chart-6: 25 88% 60%;
-    --chart-7: 142 55% 48%;
-    --chart-8: 240 5% 65%;
+    --sidebar-background: 220 10.3% 5.7%;
+    --sidebar-foreground: 220 8.6% 93.1%;
+    --sidebar-primary: 162.9 93.3% 24.3%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222.9 8.7% 15.9%;
+    --sidebar-accent-foreground: 220 8.6% 93.1%;
+    --sidebar-border: 220 7.9% 14.9%;
+    --sidebar-ring: 158.1 64.4% 51.6%;
+
+    --chart-1: 158.1 64.4% 51.6%; /* emerald */
+    --chart-2: 213.1 93.9% 67.8%; /* blue     */
+    --chart-3: 172.5 66% 50.4%;   /* teal     */
+    --chart-4: 255.1 91.8% 76.3%; /* violet   */
+    --chart-5: 27 96% 61%;        /* orange   */
+    --chart-6: 328.6 85.5% 70.2%; /* pink     */
+    --chart-7: 0 90.6% 70.8%;     /* red      */
+    --chart-8: 215 20.2% 65.1%;   /* slate    */
   }
 }
 

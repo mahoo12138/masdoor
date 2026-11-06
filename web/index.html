@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="/img/favicon.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#eef0f2" />
     <meta name="description" content="Masdoor - An open-source Identity and Access Management (IAM) / Single-Sign-On (SSO) platform" />
     <title>Masdoor</title>
     <style>
@@ -32,8 +32,10 @@
         min-height: 100vh;
         box-sizing: border-box;
         padding: 64px 16px;
-        background: #fff;
-        color: #171717;
+        /* the canvas and text of the design tokens in src/index.css, inline so
+           the splash never waits on the stylesheet */
+        background: #eef0f2;
+        color: #17191c;
         font-family: "Inter Variable", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
         font-size: 14px;
         line-height: 1.5;
@@ -41,22 +43,22 @@
         -webkit-font-smoothing: antialiased;
       }
       html.dark #masdoor-boot-fallback {
-        background: #121212;
-        color: #f5f5f5;
+        background: #0d0e10;
+        color: #ecedef;
       }
       html.dark #masdoor-boot-spinner,
       html.dark #masdoor-boot-hint {
-        color: #a3a3a3;
+        color: #a3a7ae;
       }
       html.dark #masdoor-boot-detail {
-        border-color: #303030;
-        background: #262626;
-        color: #a3a3a3;
+        border-color: #232529;
+        background: #191a1e;
+        color: #a3a7ae;
       }
       #masdoor-boot-spinner {
         width: 24px;
         height: 24px;
-        color: #707070;
+        color: #5c6169;
         -webkit-animation: masdoor-boot-spin 1s linear infinite;
         animation: masdoor-boot-spin 1s linear infinite;
       }
@@ -79,16 +81,16 @@
       }
       #masdoor-boot-hint {
         margin: 8px 0 0 0;
-        color: #707070;
+        color: #5c6169;
       }
       #masdoor-boot-detail {
         display: none;
         margin-top: 16px;
         padding: 8px 12px;
-        border: 1px solid #e5e5e5;
+        border: 1px solid #dee0e3;
         border-radius: 6px;
-        background: #f5f5f5;
-        color: #707070;
+        background: #f7f7f7;
+        color: #5c6169;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 12px;
         text-align: left;

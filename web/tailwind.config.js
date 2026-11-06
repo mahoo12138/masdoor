@@ -51,6 +51,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // OpenTodo precision surfaces: row hover, the selected nav item and row,
+        // a soft emerald wash, and the strong hairline
+        hover: "hsl(var(--hover))",
+        selected: "hsl(var(--selected))",
+        "selected-row": "hsl(var(--selected-row))",
+        "accent-soft": {
+          DEFAULT: "hsl(var(--accent-soft))",
+          foreground: "hsl(var(--accent-soft-foreground))",
+        },
+        "line-strong": "hsl(var(--line-strong))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -78,6 +88,30 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        // OpenTodo's precision radii: chip 6, control 7, card 8 (--radius),
+        // the inset surface 10, popover 12
+        chip: "6px",
+        control: "7px",
+        surface: "10px",
+        popover: "12px",
+      },
+      fontSize: {
+        // OpenTodo's type steps (docs/design-system.md): the list and control
+        // step is 13px, prose 15px, headings weight 600 with tighter tracking
+        // as the size grows
+        hint: ["0.71875rem", {lineHeight: "1rem", fontWeight: "500"}],
+        meta: ["0.78125rem", {lineHeight: "1.125rem"}],
+        list: ["0.8125rem", {lineHeight: "1.25rem"}],
+        prose: ["0.9375rem", {lineHeight: "1.5rem"}],
+        h3: ["0.875rem", {lineHeight: "1.25rem", fontWeight: "600"}],
+        h2: ["1.25rem", {lineHeight: "1.75rem", fontWeight: "600", letterSpacing: "-0.01em"}],
+        h1: ["1.375rem", {lineHeight: "1.75rem", fontWeight: "600", letterSpacing: "-0.015em"}],
+        display: ["1.75rem", {lineHeight: "2.125rem", fontWeight: "650", letterSpacing: "-0.025em"}],
+      },
+      boxShadow: {
+        // lists and cards are flat; only overlays keep a shadow
+        2: "0 4px 12px rgb(15 23 42 / 0.10)",
+        3: "0 12px 32px rgb(15 23 42 / 0.16)",
       },
       fontFamily: {
         sans: [

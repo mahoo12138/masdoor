@@ -24,8 +24,9 @@ export let DefaultLanguage = "en";
 
 export const ThemeDefault = {
   themeType: "default",
-  colorPrimary: "#262626",
-  borderRadius: 10,
+  // OpenTodo's emerald; organizations and applications override it at runtime
+  colorPrimary: "#047857",
+  borderRadius: 8,
   isCompact: false,
 };
 
