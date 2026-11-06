@@ -337,7 +337,7 @@ function ActiveFilter({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Badge variant="secondary" className="h-7 gap-1.5 rounded-md pl-2.5 pr-1 font-normal">
+      <Badge variant="secondary" className="h-7 gap-1.5 rounded-chip pl-2.5 pr-1 font-normal">
         <span className="text-muted-foreground">{column?.title ?? query.searchedColumn}</span>
         <span className="font-medium">{optionLabel(column?.filters) ?? query.searchText}</span>
         <button
@@ -478,13 +478,13 @@ export function DataTable<T = any>({
       <div ref={frameRef} className="overflow-hidden rounded-lg border bg-card" data-tour="table">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted/60 hover:bg-muted/60">
+            <TableRow className="bg-selected-row hover:bg-selected-row">
               {visibleColumns.map((column, columnIndex) => {
                 const sorted = query.sortField === column.dataIndex ? query.sortOrder : "";
                 // a pinned cell leaves the row's stacking context, so it needs the
                 // band painted on itself — and fully opaque, or the columns it
                 // scrolls over would show through
-                const sticky = stickyCell(stickyOffsets.get(columnIndex), "bg-muted");
+                const sticky = stickyCell(stickyOffsets.get(columnIndex), "bg-selected-row");
                 return (
                   <TableHead
                     key={column.key ?? column.dataIndex}
@@ -568,7 +568,7 @@ export function DataTable<T = any>({
                   <TableRow
                     key={keyOf(row, index)}
                     // pinned cells inherit this, so it has to stay fully opaque
-                    className="bg-card hover:bg-muted"
+                    className="bg-card hover:bg-hover"
                   >
                     {visibleColumns.map((column, columnIndex) => {
                       const value = row[column.dataIndex];
@@ -619,7 +619,7 @@ export function DataTable<T = any>({
           </TableBody>
         </Table>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t px-3 py-2 text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t px-3 py-2 text-list text-muted-foreground">
           {selection && selection.selected.size > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
               <span className="tabular-nums text-foreground">

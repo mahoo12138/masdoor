@@ -111,7 +111,7 @@ export function ProviderButtons({application, method, rule, onBeforeClick, onPro
             <button
               type="button"
               onClick={() => onClick(item)}
-              className="flex h-11 w-11 items-center justify-center rounded-lg border bg-background transition-colors hover:bg-accent"
+              className="flex h-11 w-11 items-center justify-center rounded-control border bg-card transition-colors hover:bg-hover"
             >
               <img
                 src={Setting.getProviderLogoURL(item.provider)}

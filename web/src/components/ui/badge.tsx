@@ -3,12 +3,14 @@ import {cva, type VariantProps} from "class-variance-authority";
 import {cn} from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium transition-colors focus:outline-none",
+  // OpenTodo's chip: 6px radius, an outlined pill that carries a status
+  "inline-flex items-center gap-1 rounded-chip border px-2 py-0.5 text-meta font-medium transition-colors focus:outline-none",
   {
     variants: {
       variant: {
         default: "border-transparent bg-primary text-primary-foreground",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
+        // the white, outlined chip their label pills use
+        secondary: "border-border bg-card text-foreground",
         destructive: "border-destructive/30 bg-destructive/10 text-destructive",
         success: "border-success/30 bg-success/10 text-success",
         warning: "border-warning/30 bg-warning/10 text-warning",

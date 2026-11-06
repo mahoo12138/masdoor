@@ -606,7 +606,7 @@ export default function ProviderEditPage() {
             <iframe
               title="email-content-preview"
               sandbox=""
-              className="h-[300px] w-full rounded-md border bg-background"
+              className="h-[300px] w-full rounded-md border bg-card"
               srcDoc={String(provider.content ?? "").replace("%s", "123456").replace("%{user.friendlyName}", account ? Setting.getFriendlyUserName(account) : "")}
             />
           </div>
@@ -640,7 +640,7 @@ export default function ProviderEditPage() {
             <iframe
               title="invitation-email-content-preview"
               sandbox=""
-              className="h-[300px] w-full rounded-md border bg-background"
+              className="h-[300px] w-full rounded-md border bg-card"
               srcDoc={String(provider.metadata ?? "").replace("%code", "123456").replace("%s", "123456")}
             />
           </div>

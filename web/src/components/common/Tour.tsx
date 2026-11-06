@@ -91,7 +91,7 @@ export function Tour({open, steps, getTarget, onClose, onFinish}: TourProps) {
       )}
 
       <div
-        className="absolute w-[340px] rounded-lg border bg-background p-4 shadow-xl"
+        className="absolute w-[340px] rounded-popover border bg-popover p-4 shadow-2"
         style={cardStyle}
       >
         <button

@@ -4,7 +4,7 @@ import {cn} from "@/lib/utils";
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({className, ...props}, ref) => (
     <div className="relative w-full overflow-auto scrollbar-thin">
-      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
+      <table ref={ref} className={cn("w-full caption-bottom text-list", className)} {...props} />
     </div>
   ),
 );
@@ -24,7 +24,7 @@ TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({className, ...props}, ref) => (
-    <tfoot ref={ref} className={cn("border-t bg-muted/50 font-medium", className)} {...props} />
+    <tfoot ref={ref} className={cn("border-t bg-selected-row font-medium", className)} {...props} />
   ),
 );
 TableFooter.displayName = "TableFooter";
@@ -33,7 +33,10 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
   ({className, ...props}, ref) => (
     <tr
       ref={ref}
-      className={cn("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className)}
+      className={cn(
+        "border-b border-border/70 transition-colors hover:bg-hover data-[state=selected]:bg-selected-row",
+        className,
+      )}
       {...props}
     />
   ),
@@ -45,7 +48,8 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
     <th
       ref={ref}
       className={cn(
-        "h-9 whitespace-nowrap px-3 text-left align-middle text-xs font-medium text-muted-foreground",
+        // OpenTodo's quiet column heads: small caps meta text
+        "h-10 whitespace-nowrap px-3 text-left align-middle text-meta font-medium uppercase tracking-wider text-muted-foreground",
         className,
       )}
       {...props}
@@ -63,7 +67,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
     // swallows anything that has to escape the cell. The table scrolls sideways
     // instead, with the name and action columns pinned. A column that genuinely
     // wants to wrap opts back in with `className: "whitespace-normal"`.
-    <td ref={ref} className={cn("whitespace-nowrap px-3 py-2 align-middle", className)} {...props} />
+    <td ref={ref} className={cn("whitespace-nowrap px-3 py-2.5 align-middle", className)} {...props} />
   ),
 );
 TableCell.displayName = "TableCell";

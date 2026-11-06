@@ -68,7 +68,7 @@ export function AuthDivider({label}: {label?: string}) {
   return (
     <div className="flex items-center gap-3">
       <span className="h-px flex-1 bg-border" />
-      <span className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+      <span className="text-meta font-medium uppercase tracking-wider text-muted-foreground">
         {label || i18next.t("general:Or")}
       </span>
       <span className="h-px flex-1 bg-border" />
@@ -254,9 +254,9 @@ export function AuthLayout({
     <div
       className={cn(
         "login-background relative flex min-h-screen flex-col",
-        // the tint is what lifts the card off the page; a panel that has
+        // the canvas is what lifts the card off the page; a panel that has
         // dissolved into the page has nothing to be lifted off
-        bleed ? "bg-background" : "bg-muted/40 dark:bg-background",
+        bleed ? "bg-background" : "bg-background",
         // a phone browser sizes a fixed background against the whole document,
         // not the viewport, so it only stays attached on the desktop
         backgroundUrl && cn("bg-cover bg-center", isMobile ? "bg-scroll" : "bg-fixed"),
@@ -300,7 +300,7 @@ export function AuthLayout({
             className={cn(
               "login-panel relative flex w-full items-center overflow-hidden text-card-foreground",
               panelIsLight && "theme-scope-light",
-              bleed ? "login-panel-bleed bg-transparent" : "rounded-xl border bg-card shadow-sm",
+              bleed ? "login-panel-bleed bg-transparent" : "rounded-surface border bg-card shadow-2",
               // the padding sits on the element an application restyles, so its own
               // `.login-panel { padding }` replaces this one instead of adding to it
               sidePanel ? null : bleed ? "px-1 pt-4" : "px-6 pt-6 sm:px-8 sm:pt-8",

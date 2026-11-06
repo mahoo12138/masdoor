@@ -70,7 +70,7 @@ export function EditPageShell({
           scroll area keeps it reachable on a long form without the duplicate.
           The negative insets cancel AppLayout's page padding so the bar spans the
           full width and nothing shows through above it. */}
-      <div className="sticky top-0 z-20 -mx-4 -mt-4 border-b bg-background px-4 py-3 md:-mx-6 md:-mt-6 md:px-6">
+      <div className="sticky top-0 z-20 -mx-4 -mt-4 border-b border-border/80 bg-card/95 px-4 py-3 backdrop-blur md:-mx-6 md:-mt-6 md:px-6">
         <PageHeader
           title={
             <span className="flex items-center gap-2">
