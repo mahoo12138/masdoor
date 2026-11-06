@@ -79,7 +79,10 @@ export function AppLayout() {
           footer below keeps its place */}
       <SidebarProvider defaultOpen={readSidebarCookie()} className="min-h-0 flex-1">
         <AppSidebar />
-        <SidebarInset className="min-h-0 overflow-hidden">
+        {/* the white panel floating on the canvas, OpenTodo's shell: flush
+            against the rail, inset from the top and right on a desktop,
+            full-bleed on a phone where the panel is the viewport */}
+        <SidebarInset className="min-h-0 overflow-hidden rounded-none border-0 bg-card md:my-2 md:mr-2 md:rounded-surface md:border">
           <Header onOpenPalette={() => palette.setOpen(true)} />
           <main className="min-h-0 flex-1 overflow-y-auto scrollbar-thin">
             <div className="mx-auto w-full max-w-[1600px] p-4 md:p-6">

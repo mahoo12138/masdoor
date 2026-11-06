@@ -75,7 +75,7 @@ export function BreadcrumbBar() {
 
   return (
     <nav aria-label="Breadcrumb" className="min-w-0">
-      <ol className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
+      <ol className="flex min-w-0 items-center gap-1 text-list text-muted-foreground">
         {items.map((item, index) => (
           <li key={`${item.label}-${index}`} className="flex min-w-0 items-center gap-1">
             {index > 0 ? <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-60" aria-hidden /> : null}

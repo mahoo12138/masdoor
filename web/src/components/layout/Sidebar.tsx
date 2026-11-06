@@ -219,7 +219,7 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="h-14 justify-center border-b">
+      <SidebarHeader className="h-14 justify-center">
         <Link to="/" onClick={onNavigate} className="flex items-center overflow-hidden px-1">
           {/* collapsed the organization's favicon fits where its wordmark does not */}
           <img
