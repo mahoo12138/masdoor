@@ -81,10 +81,9 @@ type JwtItem struct {
 }
 
 type ScopeItem struct {
-	Name        string   `json:"name"`
-	DisplayName string   `json:"displayName"`
-	Description string   `json:"description"`
-	Tools       []string `json:"tools"` // MCP tools allowed by this scope
+	Name        string `json:"name"`
+	DisplayName string `json:"displayName"`
+	Description string `json:"description"`
 }
 
 type Application struct {
@@ -172,13 +171,6 @@ type Application struct {
 	CodeResendTimeout      int `json:"codeResendTimeout"`
 
 	CustomScopes []*ScopeDescription `xorm:"mediumtext" json:"customScopes"`
-
-	// Reverse proxy fields
-	Domain       string   `xorm:"varchar(100)" json:"domain"`
-	OtherDomains []string `xorm:"varchar(1000)" json:"otherDomains"`
-	UpstreamHost string   `xorm:"varchar(100)" json:"upstreamHost"`
-	SslMode      string   `xorm:"varchar(100)" json:"sslMode"`
-	SslCert      string   `xorm:"varchar(100)" json:"sslCert"`
 
 	CertObj *Cert `xorm:"-"`
 
@@ -427,11 +419,9 @@ func UpdateApplication(id string, application *Application, isGlobalAdmin bool, 
 		return false, errors.New(i18n.Translate(lang, "auth:Unauthorized operation"))
 	}
 
-	if !isGlobalAdmin {
-		err = CheckApplicationCustomHtml(application, oldApplication)
-		if err != nil {
-			return false, err
-		}
+	err = CheckApplicationCustomHtml(application, oldApplication)
+	if err != nil {
+		return false, err
 	}
 
 	application.Owner = owner

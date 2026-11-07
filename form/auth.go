@@ -56,8 +56,6 @@ type AuthForm struct {
 
 	AutoSignin bool `json:"autoSignin"`
 
-	RelayState   string `json:"relayState"`
-
 	CaptchaType  string `json:"captchaType"`
 	CaptchaToken string `json:"captchaToken"`
 	ClientSecret string `json:"clientSecret"`
@@ -67,11 +65,6 @@ type AuthForm struct {
 	RecoveryCode      string `json:"recoveryCode"`
 	EnableMfaRemember bool   `json:"enableMfaRemember"`
 
-	Plan    string `json:"plan"`
-	Pricing string `json:"pricing"`
-
-	FaceId      []float64 `json:"faceId"`
-	FaceIdImage []string  `json:"faceIdImage"`
 	UserCode    string    `json:"userCode"`
 }
 

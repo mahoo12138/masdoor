@@ -36,7 +36,7 @@ const (
 )
 
 // ClientIdMetadataDocument is the document a client publishes at the URL it uses as client_id
-// (draft-ietf-oauth-client-id-metadata-document, used by MCP clients instead of registering)
+// (draft-ietf-oauth-client-id-metadata-document, used by clients instead of registering)
 type ClientIdMetadataDocument struct {
 	ClientId     string `json:"client_id"`
 	ClientSecret string `json:"client_secret,omitempty"`

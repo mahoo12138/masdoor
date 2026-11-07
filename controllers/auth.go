@@ -736,15 +736,9 @@ func (c *ApiController) Login() {
 				return
 			}
 			// Every request reaching this branch carries a password and is authenticated
-			// by it, no matter which "signinMethod" the client claims. So the check can
-			// not be limited to signinMethod == "Password", otherwise an empty or unknown
-			// signinMethod would bypass the disabled password login
-			if authForm.SigninMethod == "LDAP" {
-				if !application.IsLdapEnabled() {
-					c.ResponseError(c.T("auth:The login method: login with LDAP is not enabled for the application"))
-					return
-				}
-			} else if !application.IsPasswordEnabled() {
+			// by it, no matter which "signinMethod" the client claims, so an empty or
+			// unknown signinMethod must not bypass the disabled password login
+			if !application.IsPasswordEnabled() {
 				c.ResponseError(c.T("auth:The login method: login with password is not enabled for the application"))
 				return
 			}

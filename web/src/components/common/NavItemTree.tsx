@@ -66,11 +66,8 @@ function getNavItemNodes(): TreeNode[] {
           children: [
             {key: "/sysinfo", title: i18next.t("general:System Info")},
             {key: "/settings", title: i18next.t("general:Global Settings")},
-            {key: "/forms", title: i18next.t("general:Forms")},
             {key: "/webhooks", title: i18next.t("general:Webhooks")},
             {key: "/webhook-events", title: i18next.t("general:Webhook Events")},
-            {key: "/tickets", title: i18next.t("general:Tickets")},
-            {key: "/swagger", title: i18next.t("general:Swagger")},
           ],
         },
       ],

@@ -25,7 +25,7 @@ func TestSmtpServer(provider *Provider) error {
 	}
 
 	sslMode := getSslMode(provider)
-	smtpEmailProvider := email.NewSmtpEmailProvider(provider.ClientId, provider.ClientSecret, provider.Host, provider.Port, provider.Type, sslMode, provider.EnableProxy)
+	smtpEmailProvider := email.NewSmtpEmailProvider(provider.ClientId, provider.ClientSecret, provider.Host, provider.Port, sslMode, provider.EnableProxy)
 	sender, err := smtpEmailProvider.Dialer.Dial()
 	if err != nil {
 		return err

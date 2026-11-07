@@ -444,7 +444,6 @@ export const GetTranslatedUserItems = () => {
     {name: "Gender", label: i18next.t("user:Gender")},
     {name: "Birthday", label: i18next.t("user:Birthday")},
     {name: "Education", label: i18next.t("user:Education")},
-    {name: "UID number", label: i18next.t("general:UID number")},
     {name: "Signup application", label: i18next.t("general:Signup application")},
     {name: "Register type", label: i18next.t("user:Register type")},
     {name: "Register source", label: i18next.t("user:Register source")},
@@ -1373,7 +1372,7 @@ export function getDefaultHtmlEmailContent() {
 <body>
 <div class="email-container">
   <div class="header">
-        <h3>Casbin Organization</h3>
+        <h3>Masdoor</h3>
         <img src="${StaticBaseUrl}/img/masdoor-logo.png" alt="Masdoor Logo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
@@ -1526,7 +1525,7 @@ export function getFormTypeItems(formType) {
 
 
 export function getApiPaths() {
-  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "session", "token", "webhook", "form", "invitation"];
+  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "session", "token", "webhook", "invitation"];
   const res = [];
 
   // Auth and user session APIs
@@ -1539,15 +1538,8 @@ export function getApiPaths() {
       res.push(`${action}-${obj}`);
     });
     if (obj === "user") {
-      res.push("remove-user-from-group", "upload-users");
+      res.push("remove-user-from-group");
       res.push("check-user-password", "set-password", "reset-email-or-phone");
-      res.push("verify-identification");
-    }
-    if (obj === "group") {
-      res.push("upload-groups");
-    }
-    if (obj === "role") {
-      res.push("upload-roles");
     }
     if (obj === "resource") {
       res.push("upload-resource");
@@ -1561,7 +1553,6 @@ export function getApiPaths() {
   });
 
   // Special cases that don't follow the standard pattern
-  res.push("add-policy", "update-policy", "remove-policy");
   res.push("add-record");
   res.push("delete-mfa", "set-preferred-mfa");
 
@@ -1583,7 +1574,7 @@ export function getApiPaths() {
   res.push("health", "metrics");
 
   // Other APIs
-  res.push("callback", "device-auth", "faceid-signin-begin");
+  res.push("callback", "device-auth");
   res.push("user", "userinfo");
 
   return res;

@@ -53,7 +53,7 @@ func isValidVerificationMethod(method string) bool {
 // @Description get verifications
 // @Param   owner     query    string  true        "The owner of verifications"
 // @Success 200 {array} object.Verification The Response object
-// @router /get-payments [get]
+// @router /get-verifications [get]
 func (c *ApiController) GetVerifications() {
 	organization, ok := c.RequireAdmin()
 	if !ok {
@@ -109,7 +109,7 @@ func (c *ApiController) GetVerifications() {
 // @Param   organization    query   string  true   "The organization of the user"
 // @Param   user    query   string  true           "The username of the user"
 // @Success 200 {array} object.Verification The Response object
-// @router /get-user-payments [get]
+// @router /get-user-verifications [get]
 func (c *ApiController) GetUserVerifications() {
 	owner := c.Ctx.Input.Query("owner")
 	user := c.Ctx.Input.Query("user")
@@ -129,7 +129,7 @@ func (c *ApiController) GetUserVerifications() {
 // @Description get verification
 // @Param   id     query    string  true        "The id ( owner/name ) of the verification"
 // @Success 200 {object} object.Verification The Response object
-// @router /get-payment [get]
+// @router /get-verification [get]
 func (c *ApiController) GetVerification() {
 	id := c.Ctx.Input.Query("id")
 

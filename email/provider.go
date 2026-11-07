@@ -23,6 +23,6 @@ func GetEmailProvider(typ string, clientId string, clientSecret string, host str
 	case "Resend":
 		return NewResendEmailProvider(clientSecret)
 	default:
-		return NewSmtpEmailProvider(clientId, clientSecret, host, port, typ, sslMode, enableProxy)
+		return NewSmtpEmailProvider(clientId, clientSecret, host, port, sslMode, enableProxy)
 	}
 }

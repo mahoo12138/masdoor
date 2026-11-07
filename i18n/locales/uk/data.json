@@ -19,7 +19,6 @@
     "The application: %s does not exist": "Додаток: %s не існує",
     "The application: %s has disabled users to signin": "Додаток: %s вимкнув вхід користувачів",
     "The group: %s does not exist": "Група: %s не існує",
-    "The login method: login with LDAP is not enabled for the application": "Метод входу через LDAP не увімкнено для цього додатка",
     "The login method: login with WebAuthn is not enabled for the application": "Метод входу: вхід за допомогою WebAuthn не ввімкнено для застосунку",
     "The login method: login with email is not enabled for the application": "Метод входу через email не увімкнено для цього додатка",
     "The login method: login with magic link is not enabled for the application": "Метод входу: вхід за магічним посиланням не увімкнено для цього застосунку",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "Застосунок не може бути порожнім",
+    "Error": "Помилка",
     "Granted scopes cannot be empty": "Надані області не можуть бути порожніми",
     "Invalid application": "Недійсний застосунок",
     "Missing parameter": "Відсутній параметр",
@@ -104,7 +104,6 @@
     "Please login first": "Спочатку увійдіть",
     "Please sign in first": "Спочатку увійдіть",
     "The client ID: %s is already used by another application": "Ідентифікатор клієнта: %s уже використовується іншим застосунком",
-    "The object does not exist": "Об'єкт не існує",
     "The organization: %s should have one application at least": "Організація: %s має мати щонайменше один додаток",
     "The token: %s does not exist": "Токен: %s не існує",
     "The user doesn't exist": "Користувач не існує",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "objectKey: %s не дозволено",
     "The provider type: %s is not supported": "Тип провайдера: %s не підтримується"
-  },
-  "subscription": {
-    "Error": "Помилка"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "Grant_type: %s не підтримується в цьому додатку",

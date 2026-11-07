@@ -47,8 +47,6 @@ type Group struct {
 	Children     []*Group `json:"children,omitempty"`
 
 	IsEnabled bool `json:"isEnabled"`
-	// GidNumber is the POSIX gid published by the built-in LDAP server, 0 when unassigned.
-	GidNumber  int               `xorm:"index" json:"gidNumber"`
 	Properties map[string]string `xorm:"mediumtext" json:"properties"`
 }
 

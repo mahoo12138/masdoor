@@ -7,7 +7,7 @@ import {LanguageSelect} from "@/components/common/LanguageSelect";
 import {ThemeToggle} from "@/components/common/ThemeToggle";
 import {CustomHtml, CustomStyle} from "@/components/common/CustomHtml";
 import {Loading} from "@/components/common/Loading";
-import {getSafeHtml, isTrustedApplication} from "@/lib/custom-html";
+import {getSafeHtml} from "@/lib/custom-html";
 import {
   getOrganizationCookieChrome,
   useApplicationHelmet,
@@ -201,9 +201,8 @@ export function AuthLayout({
   const isPhone = useIsPhone();
   useApplicationHelmet(preview ? null : application);
   // headerHtml is the organization/application chrome, pageHtml is the per-page one
-  const trusted = isTrustedApplication(application);
-  useCustomHead(preview ? undefined : application?.headerHtml, "header", trusted);
-  useCustomHead(preview ? undefined : application?.pageHtml, "page", trusted);
+  useCustomHead(preview ? undefined : application?.headerHtml, "header");
+  useCustomHead(preview ? undefined : application?.pageHtml, "page");
 
   // the backend hands us the organization's branding in cookies so the first
   // paint is already branded, before /api/get-application has come back
@@ -308,7 +307,7 @@ export function AuthLayout({
           >
             {embedded ? null : corner}
             {sidePanel ? (
-              <CustomHtml html={application.formSideHtml} trusted={trusted} className="side-image hidden w-[420px] shrink-0 self-stretch lg:block" />
+              <CustomHtml html={application.formSideHtml} className="side-image hidden w-[420px] shrink-0 self-stretch lg:block" />
             ) : null}
             <div
               className={cn(
@@ -357,7 +356,7 @@ export function AuthLayout({
         <footer
           id="footer"
           className={footerClassName}
-          dangerouslySetInnerHTML={{__html: getSafeHtml(footerHtml, trusted)}}
+          dangerouslySetInnerHTML={{__html: getSafeHtml(footerHtml)}}
         />
       ) : (
         <footer id="footer" className={footerClassName}>

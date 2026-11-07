@@ -63,12 +63,6 @@ func getOrganizationThemeCookieFromUrlPath(ctx *context.Context, urlPath string)
 		if err != nil {
 			return nil, err
 		}
-	} else if strings.HasPrefix(urlPath, "/login/saml") {
-		owner, _ := strings.CutPrefix(urlPath, "/login/saml/authorize/")
-		application, err = object.GetApplication(owner)
-		if err != nil {
-			return nil, err
-		}
 	} else if strings.HasPrefix(urlPath, "/login/") {
 		owner, _ := strings.CutPrefix(urlPath, "/login/")
 		if owner == "undefined" || strings.Count(owner, "/") > 0 {

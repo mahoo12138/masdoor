@@ -326,36 +326,28 @@ export function useAccountHelmet(account: any) {
 const customHeadLoadedIds = new Set<string>();
 
 /**
- * Appends an application's custom HTML (`headerHtml` / `pageHtml`) to <head>,
- * re-creating <script> nodes of trusted applications so the browser actually
- * executes them. Port of web/src/basic/CustomHead.js — like it, each id is
- * injected only once per page load, since the injected markup is not tracked for
- * removal.
+ * Appends an application's custom HTML (`headerHtml` / `pageHtml`) to <head> after
+ * sanitizing it. Port of web/src/basic/CustomHead.js — like it, each id is injected
+ * only once per page load, since the injected markup is not tracked for removal.
  */
-export function useCustomHead(html: string | undefined | null, id = "default", trusted = false) {
+export function useCustomHead(html: string | undefined | null, id = "default") {
   React.useEffect(() => {
     if (!html || customHeadLoadedIds.has(id)) {
       return;
     }
 
     const container = document.createElement("div");
-    container.innerHTML = getSafeHtml(html, trusted);
+    container.innerHTML = getSafeHtml(html);
 
     Array.from(container.childNodes).forEach((node) => {
       if (node.nodeType !== Node.ELEMENT_NODE) {
         return;
       }
-      let element = node as Element;
-      if (trusted && element.localName === "script") {
-        const script = document.createElement("script");
-        Array.from(element.attributes).forEach((attr) => script.setAttribute(attr.name, attr.value));
-        script.text = element.textContent ?? "";
-        element = script;
-      }
+      const element = node as Element;
       element.setAttribute("app-custom-head", id);
       document.head.appendChild(element);
     });
 
     customHeadLoadedIds.add(id);
-  }, [html, id, trusted]);
+  }, [html, id]);
 }

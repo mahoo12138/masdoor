@@ -89,7 +89,7 @@ func TestDropNonUserSelfObject(t *testing.T) {
 
 	// anywhere else the object is dropped, so the self-match cannot authorize
 	// running the request against the caller's own row
-	if got := dropNonUserSelfObject("built-in", "alice", "/api/mcp", "built-in", "alice"); got != "" {
+	if got := dropNonUserSelfObject("built-in", "alice", "/api/get-application", "built-in", "alice"); got != "" {
 		t.Errorf("the object of a non-user API should be dropped, got %q", got)
 	}
 }

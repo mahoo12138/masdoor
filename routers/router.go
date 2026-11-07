@@ -16,7 +16,7 @@
 // @APIVersion 1.503.0
 // @Title Masdoor RESTful API
 // @Description Swagger Docs of Masdoor Backend API
-// @Contact casbin@googlegroups.com
+// @Contact https://github.com/mahoo12138/masdoor
 // @SecurityDefinition AccessToken apiKey Authorization header
 // @Schemes https,http
 // @ExternalDocs Find out more about Masdoor
@@ -128,7 +128,6 @@ func InitAPI() {
 	web.Router("/api/update-cert", &controllers.ApiController{}, "POST:UpdateCert")
 	web.Router("/api/add-cert", &controllers.ApiController{}, "POST:AddCert")
 	web.Router("/api/delete-cert", &controllers.ApiController{}, "POST:DeleteCert")
-	web.Router("/api/update-cert-domain-expire", &controllers.ApiController{}, "POST:UpdateCertDomainExpire")
 
 	web.Router("/api/get-keys", &controllers.ApiController{}, "GET:GetKeys")
 	web.Router("/api/get-global-keys", &controllers.ApiController{}, "GET:GetGlobalKeys")

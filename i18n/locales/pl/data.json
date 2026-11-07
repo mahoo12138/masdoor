@@ -19,7 +19,6 @@
     "The application: %s does not exist": "Aplikacja: %s nie istnieje",
     "The application: %s has disabled users to signin": "Aplikacja: %s wyłączyła logowanie użytkowników",
     "The group: %s does not exist": "Grupa: %s nie istnieje",
-    "The login method: login with LDAP is not enabled for the application": "Metoda logowania: logowanie przez LDAP nie jest włączone dla aplikacji",
     "The login method: login with WebAuthn is not enabled for the application": "Metoda logowania: logowanie za pomocą WebAuthn nie jest włączone dla aplikacji",
     "The login method: login with email is not enabled for the application": "Metoda logowania: logowanie przez email nie jest włączona dla aplikacji",
     "The login method: login with magic link is not enabled for the application": "Metoda logowania: logowanie za pomocą magicznego linku nie jest włączona dla tej aplikacji",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "Aplikacja nie może być pusta",
+    "Error": "Błąd",
     "Granted scopes cannot be empty": "Przyznane zakresy nie mogą być puste",
     "Invalid application": "Nieprawidłowa aplikacja",
     "Missing parameter": "Brakujący parametr",
@@ -104,7 +104,6 @@
     "Please login first": "Najpierw się zaloguj",
     "Please sign in first": "Najpierw się zaloguj",
     "The client ID: %s is already used by another application": "Identyfikator klienta: %s jest już używany przez inną aplikację",
-    "The object does not exist": "Obiekt nie istnieje",
     "The organization: %s should have one application at least": "Organizacja: %s powinna mieć co najmniej jedną aplikację",
     "The token: %s does not exist": "Token: %s nie istnieje",
     "The user doesn't exist": "Użytkownik nie istnieje",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "Klucz obiektu: %s jest niedozwolony",
     "The provider type: %s is not supported": "Typ dostawcy: %s nie jest obsługiwany"
-  },
-  "subscription": {
-    "Error": "Błąd"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "Grant_type: %s nie jest obsługiwany w tej aplikacji",

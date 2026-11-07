@@ -315,12 +315,10 @@ func (c *ApiController) AddApplication() {
 		application.Scopes = []*object.ScopeItem{}
 	}
 
-	if !c.IsGlobalAdmin() {
-		err = object.CheckApplicationCustomHtml(&application, nil)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
+	err = object.CheckApplicationCustomHtml(&application, nil)
+	if err != nil {
+		c.ResponseError(err.Error())
+		return
 	}
 
 	c.Data["json"] = wrapActionResponse(object.AddApplication(&application, c.GetAcceptLanguage()))

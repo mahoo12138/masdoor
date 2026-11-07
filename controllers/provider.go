@@ -185,17 +185,7 @@ func (c *ApiController) requireProviderPermission(provider *object.Provider) boo
 }
 
 func (c *ApiController) requireProviderSavePermission(provider *object.Provider) bool {
-	if !c.requireProviderPermission(provider) {
-		return false
-	}
-
-	isServerLocalLog := provider.Category == "Log" && (provider.Type == "System Log" || provider.Type == "SELinux Log" || provider.Type == "Agent")
-	if isServerLocalLog && !c.IsGlobalAdmin() {
-		c.ResponseError(c.T("auth:Unauthorized operation"))
-		return false
-	}
-
-	return true
+	return c.requireProviderPermission(provider)
 }
 
 func isProviderVisibleToUser(provider *object.Provider, user *object.User) bool {

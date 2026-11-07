@@ -104,27 +104,9 @@ func TestSigninMethodHiddenByRuleIsNotEnabled(t *testing.T) {
 			wantEnabled:   true,
 		},
 		{
-			name:          "LDAP hidden via rule is not enabled",
-			signinMethods: []*SigninMethod{{Name: "LDAP", DisplayName: "LDAP", Rule: "Hide password"}},
-			enabledMethod: (*Application).IsLdapEnabled,
-			wantEnabled:   false,
-		},
-		{
-			name:          "LDAP without hide rule is enabled",
-			signinMethods: []*SigninMethod{{Name: "LDAP", DisplayName: "LDAP", Rule: "None"}},
-			enabledMethod: (*Application).IsLdapEnabled,
-			wantEnabled:   true,
-		},
-		{
 			name:          "Password hidden via the legacy rule value is not enabled",
 			signinMethods: []*SigninMethod{{Name: "Password", DisplayName: "Password", Rule: "Hide-Password"}},
 			enabledMethod: (*Application).IsPasswordEnabled,
-			wantEnabled:   false,
-		},
-		{
-			name:          "LDAP hidden via the legacy rule value is not enabled",
-			signinMethods: []*SigninMethod{{Name: "LDAP", DisplayName: "LDAP", Rule: "Hide-Password"}},
-			enabledMethod: (*Application).IsLdapEnabled,
 			wantEnabled:   false,
 		},
 	}

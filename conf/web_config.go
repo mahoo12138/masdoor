@@ -22,7 +22,6 @@ type WebConfig struct {
 	DefaultApplication  string `json:"defaultApplication"`
 	MaxItemsForFlatMenu int64  `json:"maxItemsForFlatMenu"`
 	ThemeShowcase       bool   `json:"themeShowcase"`
-	MarketplaceUrl      string `json:"marketplaceUrl"`
 }
 
 func GetWebConfig() *WebConfig {
@@ -49,7 +48,6 @@ func GetWebConfig() *WebConfig {
 
 	config.ThemeShowcase = GetConfigBool("themeShowcase") || IsDemoMode() || IsDemoDatabase()
 	if config.ThemeShowcase {
-		config.MarketplaceUrl = GetConfigString("marketplaceUrl")
 	}
 
 	return config

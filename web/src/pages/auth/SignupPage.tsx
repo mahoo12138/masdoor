@@ -12,7 +12,6 @@ import {PasswordInput} from "@/components/common/PasswordInput";
 import {SearchableSelect} from "@/components/common/SearchableSelect";
 import {RegionSelect} from "@/components/common/RegionSelect";
 import {CustomHtml, CustomStyle} from "@/components/common/CustomHtml";
-import {isTrustedApplication} from "@/lib/custom-html";
 import {AuthDivider, AuthLayout, AuthLoading} from "@/components/auth/AuthLayout";
 import {AgreementCheckbox, hasAgreementDoc} from "@/components/auth/AgreementModal";
 import {ProviderButtons, getVisibleProviders} from "@/components/auth/ProviderButtons";
@@ -289,8 +288,6 @@ export default function SignupPage({application: applicationProp}: {application?
       ...values,
       application: application.name,
       organization: application.organization,
-      plan: searchParams.get("plan"),
-      pricing: searchParams.get("pricing"),
       agreement: agreed,
       language: userLang,
     };
@@ -328,11 +325,7 @@ export default function SignupPage({application: applicationProp}: {application?
     submitSignup(payload);
   };
 
-  const getResultPath = (payload: Record<string, any>, username: string) => {
-    if (payload.plan && payload.pricing) {
-      // the prompt page needs the user to be signed in, so a paid signup goes to buy-plan
-      return `/buy-plan/${application.organization}/${payload.pricing}?user=${username}&plan=${payload.plan}`;
-    }
+  const getResultPath = (username: string) => {
     if (authConfig.appName === application.name) {
       return "/result";
     }
@@ -368,9 +361,9 @@ export default function SignupPage({application: applicationProp}: {application?
         if (typeof res.data === "string") {
           username = res.data.split("/")[1];
         }
-        const path = getResultPath(payload, username);
+        const path = getResultPath(username);
         // the prompt page renders the signed-in account, so it has to be loaded first
-        if (Setting.hasPromptPage(application) && (!payload.plan || !payload.pricing)) {
+        if (Setting.hasPromptPage(application)) {
           reload().then(() => navigate(path, {state: {username}}));
           return;
         }
@@ -494,7 +487,7 @@ export default function SignupPage({application: applicationProp}: {application?
   const renderItem = (item: any) => {
     if (Setting.isCustomFormItem(item)) {
       // a "Text N" item is raw HTML, kept in the label by the application editor
-      return <CustomHtml key={item.name} html={item.label} trusted={isTrustedApplication(application)} className="text-center" />;
+      return <CustomHtml key={item.name} html={item.label} className="text-center" />;
     }
 
     switch (item.name) {
@@ -680,7 +673,7 @@ export default function SignupPage({application: applicationProp}: {application?
 
   // The whole page can be replaced by the application's own markup.
   if (application.signupHtml) {
-    return <CustomHtml html={application.signupHtml} trusted={isTrustedApplication(application)} />;
+    return <CustomHtml html={application.signupHtml} />;
   }
 
   // an application that lists no signup button at all still gets the default one

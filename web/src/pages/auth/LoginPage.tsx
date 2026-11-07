@@ -8,7 +8,6 @@ import {Label} from "@/components/ui/label";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Alert, AlertDescription} from "@/components/ui/alert";
 import {CustomHtml, CustomStyle} from "@/components/common/CustomHtml";
-import {isTrustedApplication} from "@/lib/custom-html";
 import {AuthDivider, AuthLayout, AuthLoading} from "@/components/auth/AuthLayout";
 import {SigninMethodTabs} from "@/components/auth/SigninMethodTabs";
 import {MfaVerify, NextMfa, RequiredMfa} from "@/components/auth/MfaVerify";
@@ -1038,7 +1037,7 @@ export default function LoginPage({type = "login", application: applicationProp,
     return (
       <AuthLayout preview={!!preview}>
         <Alert variant="destructive">
-          <AlertDescription>{`Code ${i18next.t("subscription:Expired")}`}</AlertDescription>
+          <AlertDescription>{`Code ${i18next.t("general:Expired")}`}</AlertDescription>
         </Alert>
       </AuthLayout>
     );
@@ -1178,7 +1177,7 @@ export default function LoginPage({type = "login", application: applicationProp,
 
   // The whole page can be replaced by the application's own markup.
   if (application.signinHtml) {
-    return <CustomHtml html={application.signinHtml} trusted={isTrustedApplication(application)} />;
+    return <CustomHtml html={application.signinHtml} />;
   }
 
   const signinItems = (application.signinItems ?? []) as any[];
@@ -1231,7 +1230,7 @@ export default function LoginPage({type = "login", application: applicationProp,
   const renderSigninItem = (item: any) => {
     const key = item.name;
     if (Setting.isCustomFormItem(item)) {
-      return item.visible ? <CustomHtml key={key} html={item.customCss} trusted={isTrustedApplication(application)} className="text-center" /> : null;
+      return item.visible ? <CustomHtml key={key} html={item.customCss} className="text-center" /> : null;
     }
     // the antd page keeps the auto sign-in checkbox even when the link is hidden
     if (!item.visible && item.name !== "Forgot password?") {

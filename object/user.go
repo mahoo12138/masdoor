@@ -196,8 +196,6 @@ type User struct {
 	Invitation          string                `xorm:"varchar(100) index" json:"invitation"`
 	InvitationCode      string                `xorm:"varchar(100) index" json:"invitationCode"`
 
-	// UidNumber is the POSIX uid published by the built-in LDAP server, 0 when unassigned.
-	UidNumber  int               `xorm:"index" json:"uidNumber"`
 	Properties map[string]string `json:"properties"`
 
 	ThirdPartyLinks []*ThirdPartyLink `xorm:"-" json:"thirdPartyLinks,omitempty"`
@@ -1106,7 +1104,7 @@ func AddUsers(users []*User) (bool, error) {
 
 	// organization := GetOrganizationByUser(users[0])
 	for _, user := range users {
-		// this function is only used for syncer or batch upload, so no need to encrypt the password
+		// callers bring pre-hashed passwords (data import), so nothing is encrypted here
 		// user.UpdateUserPassword(organization)
 
 		if user.CreatedTime == "" {
@@ -1155,7 +1153,7 @@ func AddUsersInBatch(users []*User) (bool, error) {
 		}
 
 		tmp := users[start:end]
-		fmt.Printf("The syncer adds users: [%d - %d]\n", start, end)
+		fmt.Printf("Adding users: [%d - %d]\n", start, end)
 		if ok, err := AddUsers(tmp); err != nil {
 			return false, err
 		} else if ok {

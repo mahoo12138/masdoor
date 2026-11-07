@@ -73,7 +73,6 @@ func GetDefaultAccountItems() []*AccountItem {
 		{Name: "Gender", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
 		{Name: "Birthday", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
 		{Name: "Education", Visible: true, ViewRule: "Public", ModifyRule: "Self"},
-		{Name: "UID number", Visible: true, ViewRule: "Admin", ModifyRule: "Admin"},
 		{Name: "Signup application", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},
 		{Name: "Register type", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},
 		{Name: "Register source", Visible: true, ViewRule: "Public", ModifyRule: "Admin"},

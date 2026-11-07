@@ -110,8 +110,6 @@
     "Order - Tooltip": "数值越小，在应用列表页面中排序越靠前",
     "Org choice mode": "组织选择模式",
     "Org choice mode - Tooltip": "采用什么方式选择要登录的组织",
-    "Other domains": "其他域名",
-    "Other domains - Tooltip": "该应用允许的其他域名，用于跨域访问控制",
     "Page HTML": "页面HTML",
     "Page HTML - Tooltip": "应用主页面的自定义HTML，可完全控制页面结构和内容",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "开启 \"保持登录会话\" 后才能开启 \"自动登录\"",
@@ -125,11 +123,8 @@
     "Refresh token expire": "Refresh Token过期",
     "Refresh token expire - Tooltip": "Refresh Token过期时间",
     "Reset to Empty": "重置为空",
-    "Reverse Proxy": "反向代理",
     "Right": "居右",
     "Rule": "规则",
-    "SSL cert": "SSL证书",
-    "SSL cert - Tooltip": "用于保护应用HTTPS连接的SSL证书",
     "Security": "安全设置",
     "Select": "选择",
     "Side panel HTML": "侧面板HTML",
@@ -163,8 +158,6 @@
     "Token signing method": "Token签名算法",
     "Token signing method - Tooltip": "JWT token的签名算法，需要与证书算法相匹配",
     "UI Customization": "界面定制",
-    "Upstream host": "上游主机",
-    "Upstream host - Tooltip": "Masdoor作为反向代理时的上游后端主机地址",
     "Used for": "用途",
     "Vertical": "垂直",
     "You are unexpected to see this prompt page": "错误：该提醒页面不应出现"
@@ -180,7 +173,6 @@
     "Copy private key": "复制私钥",
     "Crypto algorithm": "加密算法",
     "Crypto algorithm - Tooltip": "公钥证书所使用的加密算法",
-    "Domain expire": "域名到期",
     "Download certificate": "下载证书",
     "Download private key": "下载私钥",
     "Edit Cert": "编辑证书",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "该权限范围未在应用中定义",
     "wants to access your account": "请求访问您的账户"
   },
-  "coupon": {
-    "Fixed": "固定金额",
-    "Percentage": "百分比",
-    "Product specific": "指定商品",
-    "Universal": "通用",
-    "User specific": "指定用户"
-  },
   "forget": {
     "Change Password": "修改密码",
     "Next Step": "下一步",
@@ -233,19 +218,21 @@
     "Access key": "访问密钥",
     "Access key - Tooltip": "服务的访问密钥",
     "Action": "操作",
+    "Active": "活跃的",
     "Add": "添加",
     "Add custom item": "添加自定义项",
     "Admin": "管理工具",
     "Affiliation URL": "工作单位URL",
     "Affiliation URL - Tooltip": "工作单位的官网URL",
     "All": "全部",
+    "Allow": "允许",
     "Application": "应用",
     "Application - Tooltip": "可以访问的应用",
     "Applications": "应用",
     "Applications that require authentication": "需要认证和鉴权的应用",
     "Apps": "应用列表",
     "Auditing": "审计",
-    "Authorization": "Casbin权限管理",
+    "Authorization": "权限管理",
     "Auto": "自动",
     "Avatar": "头像",
     "Avatar - Tooltip": "公开展示的用户头像",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "已成功复制到剪贴板",
     "Copy": "复制",
     "Created time": "创建时间",
-    "Custom": "自定义",
     "Custom scopes": "自定义权限范围",
     "Custom scopes - Tooltip": "超出标准范围（openid、profile、email）的额外OAuth 2.0权限范围。自定义权限范围允许请求特定权限或数据访问",
     "Dashboard": "数据看板",
@@ -277,6 +263,7 @@
     "Default password": "默认密码",
     "Default password - Tooltip": "添加新用户时，如果没有指定密码，默认采用的密码",
     "Delete": "删除",
+    "Deny": "拒绝",
     "Description": "描述信息",
     "Description - Tooltip": "供人参考的详细描述信息，Masdoor平台本身不会使用",
     "Detail": "详情",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "为用户显示导引",
     "Enabled": "已开启",
     "Enabled successfully": "启用成功",
-    "Error": "错误",
     "Expire time": "过期时间",
     "Expire time - Tooltip": "该条目失效的过期时间戳",
+    "Expired": "已过期",
     "Failed to add": "添加失败",
     "Failed to cancel": "取消失败",
     "Failed to connect to server": "连接服务器失败",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "用户的名字",
     "Forget URL": "忘记密码链接",
     "Forget URL - Tooltip": "自定义忘记密码页面的链接，不设置时采用Masdoor默认的忘记密码页面，设置后Masdoor各类页面的忘记密码链接会跳转到该URL",
-    "Forms": "表单",
-    "GID number": "GID号",
-    "GID number - Tooltip": "内置LDAP服务器对外发布的POSIX组ID，保持为0时将根据组名自动推导",
     "General": "通用",
     "Global Settings": "全站设置",
     "Go to enable": "前往启用",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "抱歉，您无权访问该页面或登录状态失效",
     "State": "状态",
     "State - Tooltip": "当前状态或状态信息",
+    "Status code": "状态码",
     "Successfully added": "添加成功",
     "Successfully copied": "复制成功",
     "Successfully deleted": "删除成功",
@@ -448,14 +433,13 @@
     "Sure to delete": "确定删除",
     "Sure to disable": "确认关闭",
     "Sure to remove": "确定移除",
-    "Swagger": "API文档",
+    "Suspended": "已暂停",
     "System Info": "系统信息",
     "Tab": "选项卡",
     "Tag": "标签",
     "There was a problem signing you in..": "登录时遇到问题..",
     "This field is required": "此字段是必需的",
     "This is a read-only demo site!": "这是一个只读演示站点！",
-    "Tickets": "工单",
     "Timestamp": "时间",
     "Title": "标题",
     "Title - Tooltip": "浏览器页面标题",
@@ -466,8 +450,6 @@
     "True": "真",
     "Type": "类型",
     "Type - Tooltip": "对此条目行为或配置进行分类的类别或类型",
-    "UID number": "UID号",
-    "UID number - Tooltip": "内置LDAP服务器对外发布的POSIX用户ID，保持为0时将根据用户名自动推导",
     "URL": "链接",
     "URL - Tooltip": "URL链接",
     "Unauthorized": "未授权",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "只能选择一个实体组",
     "You must select a picture first": "您必须先选择一张图片",
     "empty": "无",
-    "remove": "移除"
+    "remove": "移除",
+    "seconds": "秒"
   },
   "group": {
     "Edit Group": "编辑群组",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "使用身份验证应用",
     "Use Email": "使用电子邮件",
     "Use Push Notification": "使用推送通知",
-    "Use Radius": "使用Radius",
     "Use a recovery code": "使用恢复代码",
     "Use recovery code": "Use recovery code",
     "Verify Code": "验证码",
     "Verify Password": "验证密码",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "您已经启用多因素认证, 请点击 '获取验证码' 继续",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "您已经启用多因素认证，请输入RADIUS密码",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "您已经启用多因素认证，请输入TOTP认证码",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "您已经启用多因素认证，请输入来自推送通知的验证码",
     "Your email is": "你的电子邮件",
@@ -651,8 +632,6 @@
     "Tags": "标签集合",
     "The Masdoor console is disabled for the regular users of this organization": "该组织的普通用户已被禁止使用 Masdoor 控制台",
     "Token retention days": "令牌保留天数",
-    "Trusted database hosts": "可信数据库主机",
-    "Trusted database hosts - Tooltip": "本组织的同步器和 Casbin 适配器可以连接的数据库主机，即使它们是内网地址或 Masdoor 自己的数据库服务器也放行。用英文逗号分隔，每项写 host 或 host:port。只有全局管理员能修改。",
     "Use Email as username": "邮箱作为用户名",
     "Use Email as username - Tooltip": "如果注册时用户名不可见，则使用邮箱作为用户名",
     "Use permanent avatar": "使用永久头像",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "组织的主页地址URL，该字段在Masdoor平台中未被使用",
     "Widget items": "功能按钮",
     "Widget items - Tooltip": "小部件中显示的项目"
-  },
-  "permission": {
-    "Allow": "允许",
-    "Approved": "审批通过",
-    "Deny": "拒绝",
-    "Read": "读权限",
-    "TreeNode": "树节点",
-    "Write": "写权限"
   },
   "provider": {
     "Advanced": "高级",
@@ -807,9 +778,6 @@
     "Sub users": "包含用户",
     "Sub users - Tooltip": "当前角色所包含的用户"
   },
-  "rule": {
-    "Status code": "状态码"
-  },
   "setting": {
     "Cannot be more than the max open connections": "不能超过最大打开连接数",
     "Connection max lifetime": "连接最长使用时间",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "您两次输入的密码不一致！",
     "sign in now": "立即登录"
   },
-  "subscription": {
-    "Active": "活跃的",
-    "Expired": "已过期",
-    "Renewal failed": "续费失败",
-    "Renewed": "已续费",
-    "Renewing": "续费中",
-    "Suspended": "已暂停",
-    "Upcoming": "即将到来的"
-  },
   "system": {
     "API Latency": "API延迟",
     "API Throughput": "API吞吐量",
@@ -895,6 +854,7 @@
     "Version": "版本"
   },
   "theme": {
+    "Accent": "主题色",
     "Blossom": "桃花缘",
     "Border radius": "圆角",
     "Customize theme": "定制主题",
@@ -905,14 +865,7 @@
     "Primary color": "主题色",
     "System": "跟随系统",
     "Theme": "主题",
-    "Theme - Tooltip": "应用的样式主题",
-    "Accent": "主题色"
-  },
-  "ticket": {
-    "Closed": "已关闭",
-    "In Progress": "进行中",
-    "Open": "已打开",
-    "Resolved": "已解决"
+    "Theme - Tooltip": "应用的样式主题"
   },
   "token": {
     "Access token": "访问令牌",
@@ -930,9 +883,6 @@
     "Refresh token": "刷新令牌",
     "Token type": "令牌类型",
     "Token type - Tooltip": "令牌类型"
-  },
-  "usage": {
-    "seconds": "秒"
   },
   "user": {
     "3rd-party logins": "第三方登录",

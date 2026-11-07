@@ -212,10 +212,10 @@ export default function ConsentPage() {
 
         <div className="flex gap-2">
           <Button variant="outline" className="flex-1" onClick={deny} disabled={granting}>
-            {i18next.t("permission:Deny")}
+            {i18next.t("general:Deny")}
           </Button>
           <Button className="flex-1" loading={granting} onClick={grant} disabled={granting || grantedScopes.length === 0}>
-            {i18next.t("permission:Allow")}
+            {i18next.t("general:Allow")}
           </Button>
         </div>
 

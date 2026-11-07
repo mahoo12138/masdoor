@@ -110,8 +110,6 @@
     "Order - Tooltip": "Değer ne kadar küçükse, Uygulamalar sayfasında o kadar yüksek sıralanır",
     "Org choice mode": "Organizasyon seçim modu",
     "Org choice mode - Tooltip": "Giriş yapmak için organizasyon seçme yöntemi - İpucu",
-    "Other domains": "Diğer alan adları",
-    "Other domains - Tooltip": "Bu uygulama için ek izin verilen etki alanları, etki alanları arası erişim denetimi için kullanılır",
     "Page HTML": "Sayfa HTML",
     "Page HTML - Tooltip": "Uygulamanın ana sayfası için özel HTML, sayfa yapısı ve içeriği üzerinde tam kontrol sağlar",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "Lütfen \"Oturum açma oturumu\"nu etkinleştirmeden önce \"Otomatik oturum açma\"yı etkinleştirin",
@@ -125,11 +123,8 @@
     "Refresh token expire": "Yenileme jetonu sona erer",
     "Refresh token expire - Tooltip": "Yenileme jetonunun son kullanma süresi",
     "Reset to Empty": "Boşalt",
-    "Reverse Proxy": "Ters proxy",
     "Right": "Sağ",
     "Rule": "Kural",
-    "SSL cert": "SSL sertifikası",
-    "SSL cert - Tooltip": "Uygulamaya HTTPS bağlantılarını güvence altına almak için SSL sertifikası",
     "Security": "Güvenlik",
     "Select": "Seç",
     "Side panel HTML": "Yan panel HTML",
@@ -163,8 +158,6 @@
     "Token signing method": "Token imzalama yöntemi",
     "Token signing method - Tooltip": "JWT token'ın imzalama yöntemi, sertifika ile aynı algoritma olmalıdır",
     "UI Customization": "Arayüz Özelleştirme",
-    "Upstream host": "Üst akış sunucusu",
-    "Upstream host - Tooltip": "Masdoor ters proxy modunda kullanıldığında yukarı akış arka uç ana bilgisayar adresi",
     "Used for": "Kullanım amacı",
     "Vertical": "Dikey",
     "You are unexpected to see this prompt page": "Bu uyarı sayfasını görmeye beklemiyordunuz"
@@ -180,7 +173,6 @@
     "Copy private key": "Özel anahtarı Kopyala",
     "Crypto algorithm": "Kripto algoritması",
     "Crypto algorithm - Tooltip": "Sertifika tarafından kullanılan şifreleme algoritması",
-    "Domain expire": "Alan adı süresi doldu",
     "Download certificate": "Sertifikayı İndir",
     "Download private key": "Özel anahtarı İndir",
     "Edit Cert": "Sertifikayı Düzenle",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "Bu kapsam uygulamada tanımlı değil",
     "wants to access your account": "hesabınıza erişmek istiyor"
   },
-  "coupon": {
-    "Fixed": "Sabit",
-    "Percentage": "Yüzde",
-    "Product specific": "Ürüne özgü",
-    "Universal": "Evrensel",
-    "User specific": "Kullanıcıya özgü"
-  },
   "forget": {
     "Change Password": "Parola Değiştir",
     "Next Step": "Sonraki adım",
@@ -233,12 +218,14 @@
     "Access key": "Erişim anahtarı",
     "Access key - Tooltip": "Hizmet için erişim anahtarı",
     "Action": "Eylem",
+    "Active": "Aktif",
     "Add": "Ekle",
     "Add custom item": "Özel öğe ekle",
     "Admin": "Yönetici",
     "Affiliation URL": "İlişki URL'si",
     "Affiliation URL - Tooltip": "İlişki için ana sayfa URL'si",
     "All": "Tümü",
+    "Allow": "İzin ver",
     "Application": "Uygulama",
     "Application - Tooltip": "Uygulama - Araç ipucu",
     "Applications": "Uygulamalar",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "Panoya başarıyla kopyalandı",
     "Copy": "Kopyala",
     "Created time": "Oluşturma zamanı",
-    "Custom": "Özel",
     "Custom scopes": "Özel kapsamlar",
     "Custom scopes - Tooltip": "Standart kapsamların (openid, profile, email) ötesindeki ek OAuth 2.0 kapsamları. Özel kapsamlar belirli izinler veya veri erişimi talep etmeyi sağlar",
     "Dashboard": "Gösterge Paneli",
@@ -277,6 +263,7 @@
     "Default password": "Varsayılan şifre",
     "Default password - Tooltip": "Varsayılan şifre",
     "Delete": "Sil",
+    "Deny": "Reddet",
     "Description": "Açıklama",
     "Description - Tooltip": "Referans için ayrıntılı açıklama bilgileri, Masdoor'un kendisi bunları kullanmayacaktır",
     "Detail": "Detaylar",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "Kullanıcılar için tur görüntüle",
     "Enabled": "Etkinleştirildi",
     "Enabled successfully": "Başarıyla etkinleştirildi",
-    "Error": "Hata",
     "Expire time": "Son kullanma zamanı",
     "Expire time - Tooltip": "Bu öğenin geçersiz hale geleceği son kullanma zaman damgası",
+    "Expired": "Süresi doldu",
     "Failed to add": "Ekleme başarısız oldu.",
     "Failed to cancel": "İptal edilemedi",
     "Failed to connect to server": "Sunucuya bağlanılamıyor",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "Kullanıcının adı",
     "Forget URL": "Unutma URL'si",
     "Forget URL - Tooltip": "\"Parolayı unuttum\" sayfası için özel URL. Ayarlanmamışsa, varsayılan Masdoor \"Parolayı unuttum\" sayfası kullanılacaktır. Ayarlanırsa, giriş sayfasındaki \"Parolayı unuttum\" bağlantısı bu URL'ye yönlendirilecektir",
-    "Forms": "Formlar",
-    "GID number": "GID numarası",
-    "GID number - Tooltip": "GID number - Tooltip",
     "General": "Genel",
     "Global Settings": "Genel ayarlar",
     "Go to enable": "Etkinleştirmek için git",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "Üzgünüz, bu sayfaya erişim izniniz yok veya giriş durumu geçersiz.",
     "State": "Durum",
     "State - Tooltip": "Durum",
+    "Status code": "Durum kodu",
     "Successfully added": "Başarıyla eklendi",
     "Successfully copied": "Başarıyla kopyalandı",
     "Successfully deleted": "Başarıyla silindi",
@@ -448,14 +433,13 @@
     "Sure to delete": "Silmek istediğinize emin misiniz?",
     "Sure to disable": "Devre dışı bırakmak istediğinizden emin misiniz?",
     "Sure to remove": "Kaldırmak istediğinizden emin misiniz?",
-    "Swagger": "Swagger arayüzü",
+    "Suspended": "Askıya alındı",
     "System Info": "Sistem Bilgisi",
     "Tab": "Sekme",
     "Tag": "Etiket",
     "There was a problem signing you in..": "Oturum açarken bir sorun oluştu...",
     "This field is required": "Bu alan zorunludur",
     "This is a read-only demo site!": "Bu site sadece görüntüleme amaçlıdır!",
-    "Tickets": "Destek Talepleri",
     "Timestamp": "Zaman damgası",
     "Title": "Başlık",
     "Title - Tooltip": "Başlık",
@@ -466,8 +450,6 @@
     "True": "Doğru",
     "Type": "Tür",
     "Type - Tooltip": "Bu öğenin davranışını veya yapılandırmasını sınıflandıran kategori veya tür",
-    "UID number": "UID numarası",
-    "UID number - Tooltip": "UID number - Tooltip",
     "URL": "URL adresi",
     "URL - Tooltip": "URL bağlantısı",
     "Unauthorized": "Yetkisiz",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "Yalnızca bir fiziksel grup seçebilirsiniz",
     "You must select a picture first": "Önce bir resim seçmelisiniz",
     "empty": "boş",
-    "remove": "kaldır"
+    "remove": "kaldır",
+    "seconds": "saniye"
   },
   "group": {
     "Edit Group": "Grubu Düzenle",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "Authenticator Uygulamasını Kullan",
     "Use Email": "E-postayı Kullan",
     "Use Push Notification": "Push Bildirim Kullan",
-    "Use Radius": "RADIUS Kullan",
     "Use a recovery code": "Kurtarma kodu kullan",
     "Use recovery code": "Use recovery code",
     "Verify Code": "Kodu Doğrula",
     "Verify Password": "Şifreyi Doğrula",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "Çok Faktörlü Kimlik Doğrulamayı etkinleştirdiniz, lütfen devam etmek için 'Kodu al' düğmesine tıklayın",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "Çok Faktörlü Kimlik Doğrulamayı etkinleştirdiniz, lütfen RADIUS şifresini girin",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "Çok Faktörlü Kimlik Doğrulamayı etkinleştirdiniz, lütfen TOTP kodunu girin",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Çok Faktörlü Kimlik Doğrulamayı etkinleştirdiniz, lütfen push bildiriminden doğrulama kodunu girin",
     "Your email is": "E-posta adresiniz",
@@ -651,8 +632,6 @@
     "Tags": "Etiketler",
     "The Masdoor console is disabled for the regular users of this organization": "Masdoor konsolu bu kuruluşun normal kullanıcıları için devre dışı",
     "Token retention days": "Belirteç saklama süresi (gün)",
-    "Trusted database hosts": "Güvenilir veritabanı sunucuları",
-    "Trusted database hosts - Tooltip": "Trusted database hosts - Tooltip",
     "Use Email as username": "Kullanıcı adı olarak E-posta kullan",
     "Use Email as username - Tooltip": "Kullanıcı adı alanı kayıtta görünür değilse kullanıcı adı olarak E-posta kullan",
     "Use permanent avatar": "Kalıcı avatar kullan",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "Organizasyonun ana sayfa URL'si. Bu alan Masdoor'da kullanılmamaktadır",
     "Widget items": "Widget öğeleri",
     "Widget items - Tooltip": "Widget öğeleri - Araç ipucu"
-  },
-  "permission": {
-    "Allow": "İzin ver",
-    "Approved": "Onaylandı",
-    "Deny": "Reddet",
-    "Read": "Oku",
-    "TreeNode": "Ağaç Düğümü",
-    "Write": "Yaz"
   },
   "provider": {
     "Advanced": "Gelişmiş",
@@ -807,9 +778,6 @@
     "Sub users": "Alt kullanıcılar",
     "Sub users - Tooltip": "Mevcut role dahil edilen kullanıcılar"
   },
-  "rule": {
-    "Status code": "Durum kodu"
-  },
   "setting": {
     "Cannot be more than the max open connections": "Maks. açık bağlantı sayısından fazla olamaz",
     "Connection max lifetime": "Bağlantı maks. ömrü",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "Onayladığınız parola parolayla uyuşmuyor!",
     "sign in now": "şimdi giriş yap"
   },
-  "subscription": {
-    "Active": "Aktif",
-    "Expired": "Süresi doldu",
-    "Renewal failed": "Yenileme başarısız",
-    "Renewed": "Yenilendi",
-    "Renewing": "Yenileniyor",
-    "Suspended": "Askıya alındı",
-    "Upcoming": "Yaklaşan"
-  },
   "system": {
     "API Latency": "API Gecikmesi",
     "API Throughput": "API Verimliliği",
@@ -895,6 +854,7 @@
     "Version": "Versiyon"
   },
   "theme": {
+    "Accent": "Vurgu rengi",
     "Blossom": "Çiçek",
     "Border radius": "Kenar yarıçapı",
     "Customize theme": "Temayı özelleştir",
@@ -905,14 +865,7 @@
     "Primary color": "Birincil renk",
     "System": "Sistem",
     "Theme": "Tema",
-    "Theme - Tooltip": "Uygulamanın stil teması",
-    "Accent": "Vurgu rengi"
-  },
-  "ticket": {
-    "Closed": "Kapalı",
-    "In Progress": "Devam ediyor",
-    "Open": "Aç",
-    "Resolved": "Çözüldü"
+    "Theme - Tooltip": "Uygulamanın stil teması"
   },
   "token": {
     "Access token": "Erişim jetonu",
@@ -930,9 +883,6 @@
     "Refresh token": "Yenileme belirteci",
     "Token type": "Jeton türü",
     "Token type - Tooltip": "Token türü - Araç ipucu"
-  },
-  "usage": {
-    "seconds": "saniye"
   },
   "user": {
     "3rd-party logins": "Üçüncü taraf girişler",

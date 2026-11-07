@@ -10,13 +10,7 @@ import {useOrganizationOptions} from "@/hooks/use-options";
 import * as CertBackend from "@/backend/CertBackend";
 import * as Setting from "@/lib/setting";
 
-const TYPES = ["SSL", "x509", "Payment"];
-
-/** SSL certs are issued by an ACME provider, so they only pick the key family */
-const SSL_ALGORITHMS = [
-  {value: "RSA", label: "RSA"},
-  {value: "ECC", label: "ECC"},
-];
+const TYPES = ["x509"];
 
 const JWT_ALGORITHMS = [
   {value: "RS256", label: "RS256 (RSA + SHA256)"},
@@ -30,15 +24,10 @@ const JWT_ALGORITHMS = [
   {value: "PS512", label: "PS512 (RSASSA-PSS using SHA512 and MGF1 with SHA512)"},
 ];
 
-/** the DNS providers Masdoor can solve the ACME challenge with */
-const SSL_PROVIDERS = ["GoDaddy", "Aliyun"];
-
 export default function CertEditPage() {
   const {organizationName = "", certName = ""} = useParams();
   const {account} = useAccount();
   const organizations = useOrganizationOptions();
-
-  const isSsl = (ctx: {record: any}) => ctx.record.type === "SSL";
 
   const fields: EditField[] = [
     {
@@ -64,33 +53,12 @@ export default function CertEditPage() {
       name: "type",
       labelKey: "general:Type",
       options: () => TYPES.map((item) => ({value: item, label: item})),
-      onChange: (value, ctx, updateFields) => {
-        if (value === "SSL") {
-          // the SSL key pair is issued by the provider, never pasted in
-          updateFields({type: value, cryptoAlgorithm: "RSA", certificate: "", privateKey: ""});
-        } else if (ctx.record.type === "SSL") {
-          // leaving SSL: drop the ACME credentials and the issued material
-          updateFields({
-            type: value,
-            provider: "",
-            account: "",
-            accessKey: "",
-            accessSecret: "",
-            certificate: "",
-            privateKey: "",
-            expireTime: "",
-            domainExpireTime: "",
-          });
-        } else {
-          updateFields({type: value});
-        }
-      },
     },
     {
       type: "select",
       name: "cryptoAlgorithm",
       labelKey: "cert:Crypto algorithm",
-      options: (ctx) => (isSsl(ctx) ? SSL_ALGORITHMS : JWT_ALGORITHMS),
+      options: () => JWT_ALGORITHMS,
       onChange: (value, ctx, updateFields) => {
         const bitSize = String(value).startsWith("ES")
           ? 0
@@ -103,7 +71,7 @@ export default function CertEditPage() {
       type: "select",
       name: "bitSize",
       labelKey: "cert:Bit size",
-      when: (ctx) => !isSsl(ctx) && !String(ctx.record.cryptoAlgorithm ?? "").startsWith("ES"),
+      when: (ctx) => !String(ctx.record.cryptoAlgorithm ?? "").startsWith("ES"),
       options: (ctx) =>
         Setting.getCryptoAlgorithmOptions(ctx.record.cryptoAlgorithm ?? "").map((item: any) => ({
           value: String(item.id),
@@ -116,32 +84,13 @@ export default function CertEditPage() {
       type: "number",
       name: "expireInYears",
       labelKey: "cert:Expire in years",
-      when: (ctx) => !isSsl(ctx),
     },
     {
       type: "custom",
       name: "expireTime",
       labelKey: "general:Expire time",
-      when: isSsl,
       render: (ctx) => <ReadOnlyDate value={ctx.record.expireTime} />,
     },
-    {
-      type: "custom",
-      name: "domainExpireTime",
-      labelKey: "cert:Domain expire",
-      when: isSsl,
-      render: (ctx) => <ReadOnlyDate value={ctx.record.domainExpireTime} />,
-    },
-    {
-      type: "select",
-      name: "provider",
-      labelKey: "general:Provider",
-      when: isSsl,
-      options: () => SSL_PROVIDERS.map((item) => ({value: item, label: item})),
-    },
-    {type: "text", name: "account", labelKey: "cert:Account", when: isSsl},
-    {type: "text", name: "accessKey", labelKey: "general:Access key", when: isSsl},
-    {type: "password", name: "accessSecret", labelKey: "cert:Access secret", when: isSsl},
     {
       type: "custom",
       name: "certificate",

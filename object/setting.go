@@ -96,7 +96,7 @@ func (setting *Setting) check() error {
 	return nil
 }
 
-// apply only touches the main database, the syncers' databases keep their own pools
+// apply only touches the main database pool
 func (setting *Setting) apply() {
 	ormer.Engine.SetMaxOpenConns(setting.DbMaxOpenConns)
 

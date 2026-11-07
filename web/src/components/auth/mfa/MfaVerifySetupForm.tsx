@@ -11,7 +11,6 @@ import {CodeInput} from "@/components/auth/CodeInput";
 import {
   EmailMfaType,
   PushMfaType,
-  RadiusMfaType,
   TotpMfaType,
   mfaSetup,
 } from "@/components/auth/mfa/constants";
@@ -46,13 +45,9 @@ export function MfaVerifySetupForm({mfaProps, application, user, onSuccess, onFa
     return null;
   }
 
-  // RADIUS and push authenticate through a provider of the application, so the
-  // secret is that provider's id rather than something the user typed.
+  // Push authenticates through a provider of the application, so the secret is
+  // that provider's id rather than something the user typed.
   const resolveSecret = () => {
-    if (mfaProps.mfaType === RadiusMfaType) {
-      const provider = application.providers?.find((el: any) => el.provider?.type === "RADIUS")?.provider;
-      return provider ? `${provider.owner}/${provider.name}` : mfaProps.secret;
-    }
     if (mfaProps.mfaType === PushMfaType) {
       const provider = application.providers?.find((el: any) => el.provider?.category === "Notification")?.provider;
       return provider ? `${provider.owner}/${provider.name}` : mfaProps.secret;
@@ -163,20 +158,6 @@ export function MfaVerifySetupForm({mfaProps, application, user, onSuccess, onFa
             <Label htmlFor="passcode">{i18next.t("mfa:Verify Code")}</Label>
             <CodeInput id="passcode" autoFocus value={passcode} onChange={setPasscode} onComplete={verifyComplete} />
           </div>
-        </>
-      );
-    }
-
-    if (mfaProps.mfaType === RadiusMfaType) {
-      return (
-        <>
-          <Input value={dest} placeholder={i18next.t("signup:Username")} onChange={(e) => setDest(e.target.value)} />
-          <Input
-            type="password"
-            value={passcode}
-            placeholder={i18next.t("general:Password")}
-            onChange={(e) => setPasscode(e.target.value)}
-          />
         </>
       );
     }

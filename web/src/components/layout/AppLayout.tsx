@@ -98,11 +98,11 @@ export function AppLayout() {
       {/* outside the scroll area and the full width of the window, so it stays at
           the bottom of the viewport the way antd's Layout.Footer does */}
       {footerHtml ? (
-        // never trusted here: the console is where admins work, so no script runs in it
+        // the console's footer is sanitized like every other HTML slot
         <footer
           id="footer"
           className="shrink-0 border-t bg-background py-3 text-center text-xs text-muted-foreground"
-          dangerouslySetInnerHTML={{__html: getSafeHtml(footerHtml, false)}}
+          dangerouslySetInnerHTML={{__html: getSafeHtml(footerHtml)}}
         />
       ) : (
         <footer

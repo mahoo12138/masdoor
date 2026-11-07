@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: casbin
+  repository: mahoo12138
   name: masdoor
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -36,7 +36,7 @@ config: |
 # if you use your own secret, leave Value.config: ""
 # configFromSecret: masdoor
 
-# -- Declarative configuration: organizations, applications, users, providers, roles, permissions, ... in the
+# -- Declarative configuration: organizations, applications, users, providers, roles, ... in the
 # init data format (see init_data.json.template). It is stored in a Secret and applied
 # by Masdoor at startup, and with watchInterval set, a change rolled out by `helm upgrade` is applied again
 # without restarting the pods.

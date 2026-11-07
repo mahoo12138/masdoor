@@ -71,7 +71,6 @@ export default function GroupEditPage() {
       },
     },
     {type: "text", name: "contactEmail", labelKey: "general:Email"},
-    {type: "number", name: "gidNumber", labelKey: "general:GID number"},
     {
       type: "custom",
       name: "properties",

@@ -144,9 +144,6 @@ func summarizeMultipartBody(contentType string, body []byte) (string, bool) {
 func NewRecord(ctx *context.Context) (*Record, error) {
 	clientIp := strings.Replace(util.GetClientIpFromRequest(ctx.Request), ": ", "", -1)
 	action := strings.Replace(ctx.Request.URL.Path, "/api/", "", -1)
-	if strings.HasPrefix(action, "notify-payment") {
-		action = "notify-payment"
-	}
 
 	// "id_token_hint" carries a JWT, so it is dropped instead of being persisted in the audit row.
 	requestUri := util.FilterQuery(ctx.Request.RequestURI, secretRecordQueries)
@@ -174,9 +171,7 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 		return nil, err
 	}
 
-	if action != "buy-product" && action != "notify-payment" {
-		resp.Data = nil
-	}
+	resp.Data = nil
 
 	dataResp := ""
 	if resp.Data != nil {

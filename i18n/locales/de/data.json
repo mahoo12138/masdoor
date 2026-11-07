@@ -19,7 +19,6 @@
     "The application: %s does not exist": "Die Anwendung: %s existiert nicht",
     "The application: %s has disabled users to signin": "Die Anwendung: %s hat die Anmeldung von Benutzern deaktiviert",
     "The group: %s does not exist": "Die Gruppe: %s existiert nicht",
-    "The login method: login with LDAP is not enabled for the application": "Die Anmeldemethode: Anmeldung mit LDAP ist für die Anwendung nicht aktiviert",
     "The login method: login with WebAuthn is not enabled for the application": "Die Anmeldemethode: Anmeldung mit WebAuthn ist für die Anwendung nicht aktiviert",
     "The login method: login with email is not enabled for the application": "Die Anmeldemethode: Anmeldung per E-Mail ist für die Anwendung nicht aktiviert",
     "The login method: login with magic link is not enabled for the application": "Die Anmeldemethode: Anmeldung per Magic Link ist für die Anwendung nicht aktiviert",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "Anwendung darf nicht leer sein",
+    "Error": "Fehler",
     "Granted scopes cannot be empty": "Gewährte Scopes dürfen nicht leer sein",
     "Invalid application": "Ungültige Anwendung",
     "Missing parameter": "Fehlender Parameter",
@@ -104,7 +104,6 @@
     "Please login first": "Bitte zuerst einloggen",
     "Please sign in first": "Bitte melden Sie sich zuerst an",
     "The client ID: %s is already used by another application": "Die Client-ID: %s wird bereits von einer anderen Anwendung verwendet",
-    "The object does not exist": "Das Objekt existiert nicht",
     "The organization: %s should have one application at least": "Die Organisation: %s sollte mindestens eine Anwendung haben",
     "The token: %s does not exist": "Das Token: %s existiert nicht",
     "The user doesn't exist": "Der Benutzer existiert nicht",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "Der Objektschlüssel %s ist nicht erlaubt",
     "The provider type: %s is not supported": "Der Anbieter-Typ %s wird nicht unterstützt"
-  },
-  "subscription": {
-    "Error": "Fehler"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "Grant_type: %s wird von dieser Anwendung nicht unterstützt",

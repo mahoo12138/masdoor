@@ -110,8 +110,6 @@
     "Order - Tooltip": "Je kleiner der Wert, desto höher rangiert er auf der Apps-Seite",
     "Org choice mode": "Organisationsauswahlmodus",
     "Org choice mode - Tooltip": "Organisationsauswahlmodus - Hinweis",
-    "Other domains": "Weitere Domains",
-    "Other domains - Tooltip": "Weitere erlaubte Domains für diese Anwendung",
     "Page HTML": "Seiten-HTML",
     "Page HTML - Tooltip": "Benutzerdefiniertes HTML für die Hauptseite der Anwendung, mit vollständiger Kontrolle über die Seitenstruktur und den Inhalt",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "Bitte aktivieren Sie zuerst \"Anmeldesitzung\", bevor Sie \"Automatische Anmeldung\" aktivieren.",
@@ -125,11 +123,8 @@
     "Refresh token expire": "Gültigkeitsdauer des Refresh-Tokens",
     "Refresh token expire - Tooltip": "Angabe der Gültigkeitsdauer des Refresh Tokens",
     "Reset to Empty": "Auf leer zurücksetzen",
-    "Reverse Proxy": "Umgekehrter Proxy",
     "Right": "Rechts",
     "Rule": "Regel",
-    "SSL cert": "SSL-Zertifikat",
-    "SSL cert - Tooltip": "SSL-Zertifikat für HTTPS-Verbindungen der Anwendung",
     "Security": "Sicherheit",
     "Select": "Auswählen",
     "Side panel HTML": "Sidepanel-HTML",
@@ -163,8 +158,6 @@
     "Token signing method": "Token-Signaturmethode",
     "Token signing method - Tooltip": "Signaturmethode des JWT-Tokens muss mit dem Zertifikat übereinstimmen",
     "UI Customization": "UI-Anpassung",
-    "Upstream host": "Upstream-Host",
-    "Upstream host - Tooltip": "Upstream-Backend-Host-Adresse im Reverse-Proxy-Modus",
     "Used for": "Verwendet für",
     "Vertical": "Vertikal",
     "You are unexpected to see this prompt page": "Sie sind unerwartet auf diese Aufforderungsseite gelangt"
@@ -180,7 +173,6 @@
     "Copy private key": "Private-Key kopieren",
     "Crypto algorithm": "Kryptoalgorithmus",
     "Crypto algorithm - Tooltip": "Verschlüsselungsalgorithmus, der vom Zertifikat verwendet wird",
-    "Domain expire": "Domain-Ablauf",
     "Download certificate": "Zertifikat herunterladen",
     "Download private key": "Private-Key herunterladen",
     "Edit Cert": "Edit Cert - Zertifikat bearbeiten",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "Dieser Bereich ist in der Anwendung nicht definiert",
     "wants to access your account": "möchte auf Ihr Konto zugreifen"
   },
-  "coupon": {
-    "Fixed": "Fest",
-    "Percentage": "Prozentsatz",
-    "Product specific": "Produktspezifisch",
-    "Universal": "Universell",
-    "User specific": "Benutzerspezifisch"
-  },
   "forget": {
     "Change Password": "Passwort ändern",
     "Next Step": "Nächster Schritt",
@@ -233,12 +218,14 @@
     "Access key": "Zugriffsschlüssel",
     "Access key - Tooltip": "Zugriffsschlüssel für den Dienst",
     "Action": "Aktion",
+    "Active": "Aktiv",
     "Add": "Hinzufügen",
     "Add custom item": "Benutzerdefiniertes Element hinzufügen",
     "Admin": "Administrator",
     "Affiliation URL": "Zugehörigkeits-URL",
     "Affiliation URL - Tooltip": "Die Homepage-URL für die Zugehörigkeit",
     "All": "Alle",
+    "Allow": "Erlauben",
     "Application": "Applikation",
     "Application - Tooltip": "Anwendung",
     "Applications": "Anwendungen",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "Erfolgreich in die Zwischenablage kopiert",
     "Copy": "Kopieren",
     "Created time": "Erstellte Zeit",
-    "Custom": "Benutzerdefiniert",
     "Custom scopes": "Benutzerdefinierte Bereiche",
     "Custom scopes - Tooltip": "Zusätzliche OAuth 2.0-Bereiche über die Standardbereiche (openid, profile, email) hinaus. Benutzerdefinierte Bereiche ermöglichen das Anfordern spezifischer Berechtigungen oder Datenzugriffe",
     "Dashboard": "Übersicht",
@@ -277,6 +263,7 @@
     "Default password": "Standardpasswort",
     "Default password - Tooltip": "Standardpasswort",
     "Delete": "Löschen",
+    "Deny": "Ablehnen",
     "Description": "Beschreibung",
     "Description - Tooltip": "Detaillierte Beschreibungsinformationen zur Referenz, Masdoor selbst wird es nicht verwenden",
     "Detail": "Details",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "Tour für Benutzer anzeigen",
     "Enabled": "Aktiviert",
     "Enabled successfully": "Erfolgreich aktiviert",
-    "Error": "Fehler",
     "Expire time": "Ablaufzeit",
     "Expire time - Tooltip": "Zeitstempel, nach dem dieses Element ungültig wird",
+    "Expired": "Abgelaufen",
     "Failed to add": "Fehler beim hinzufügen",
     "Failed to cancel": "Abbrechen fehlgeschlagen",
     "Failed to connect to server": "Die Verbindung zum Server konnte nicht hergestellt werden",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "Der Vorname des Benutzers",
     "Forget URL": "Passwort vergessen URL",
     "Forget URL - Tooltip": "Benutzerdefinierte URL für die \"Passwort vergessen\" Seite. Wenn nicht festgelegt, wird die standardmäßige Masdoor \"Passwort vergessen\" Seite verwendet. Wenn sie festgelegt ist, wird der \"Passwort vergessen\" Link auf der Login-Seite zu dieser URL umgeleitet",
-    "Forms": "Formulare",
-    "GID number": "GID-Nummer",
-    "GID number - Tooltip": "GID number - Tooltip",
     "General": "Allgemein",
     "Global Settings": "Globale Einstellungen",
     "Go to enable": "Zum Aktivieren gehen",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "Es tut uns leid, aber Sie haben keine Berechtigung, auf diese Seite zuzugreifen, oder Sie sind nicht angemeldet.",
     "State": "Bundesland / Staat",
     "State - Tooltip": "Bundesland",
+    "Status code": "Statuscode",
     "Successfully added": "Erfolgreich hinzugefügt",
     "Successfully copied": "Erfolgreich kopiert",
     "Successfully deleted": "Erfolgreich gelöscht",
@@ -448,14 +433,13 @@
     "Sure to delete": "Sicher zu löschen",
     "Sure to disable": "Wirklich deaktivieren?",
     "Sure to remove": "Wirklich entfernen?",
-    "Swagger": "Swagger-Oberfläche",
+    "Suspended": "Ausgesetzt",
     "System Info": "Systeminformationen",
     "Tab": "Registerkarte",
     "Tag": "Schlagwort",
     "There was a problem signing you in..": "Es gab ein Problem beim Anmelden...",
     "This field is required": "Dieses Feld ist erforderlich",
     "This is a read-only demo site!": "Dies ist eine schreibgeschützte Demo-Seite!",
-    "Tickets": "Support-Tickets",
     "Timestamp": "Zeitstempel",
     "Title": "Titel",
     "Title - Tooltip": "Titel der Browserseite",
@@ -466,8 +450,6 @@
     "True": "Wahr",
     "Type": "Typ",
     "Type - Tooltip": "Kategorie oder Typ, der das Verhalten dieses Elements klassifiziert",
-    "UID number": "UID-Nummer",
-    "UID number - Tooltip": "UID number - Tooltip",
     "URL": "Adresse (URL)",
     "URL - Tooltip": "URL-Link",
     "Unauthorized": "Nicht autorisiert",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "Sie können nur eine physische Gruppe auswählen",
     "You must select a picture first": "Sie müssen zuerst ein Bild auswählen",
     "empty": "leere",
-    "remove": "entfernen"
+    "remove": "entfernen",
+    "seconds": "Sekunden"
   },
   "group": {
     "Edit Group": "Gruppe bearbeiten",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "Authenticator-App verwenden",
     "Use Email": "E-Mail verwenden",
     "Use Push Notification": "Push-Benachrichtigung verwenden",
-    "Use Radius": "RADIUS verwenden",
     "Use a recovery code": "Wiederherstellungscode verwenden",
     "Use recovery code": "Use recovery code",
     "Verify Code": "Code verifizieren",
     "Verify Password": "Passwort verifizieren",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "Sie haben MFA aktiviert. Klicken Sie auf „Code anfordern”, um fortzufahren.",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "Sie haben MFA aktiviert. Bitte geben Sie das RADIUS-Passwort ein.",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "Sie haben MFA aktiviert. Bitte geben Sie den TOTP-Code ein.",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Sie haben MFA aktiviert. Bitte geben Sie den Verifizierungscode aus der Push-Benachrichtigung ein",
     "Your email is": "Ihre E-Mail ist",
@@ -651,8 +632,6 @@
     "Tags": "Schlagwörter",
     "The Masdoor console is disabled for the regular users of this organization": "Die Masdoor-Konsole ist für normale Benutzer dieser Organisation deaktiviert",
     "Token retention days": "Aufbewahrungsdauer der Tokens (Tage)",
-    "Trusted database hosts": "Vertrauenswürdige Datenbank-Hosts",
-    "Trusted database hosts - Tooltip": "Trusted database hosts - Tooltip",
     "Use Email as username": "E-Mail als Benutzername verwenden",
     "Use Email as username - Tooltip": "E-Mail als Benutzername verwenden, wenn das Feld „Benutzername“ bei der Registrierung nicht sichtbar ist.",
     "Use permanent avatar": "Permanentes Avatar verwenden",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "Die Homepage-URL der Organisation. Dieses Feld wird in Masdoor nicht verwendet",
     "Widget items": "Widget-Elemente",
     "Widget items - Tooltip": "Im Widget angezeigte Elemente"
-  },
-  "permission": {
-    "Allow": "Erlauben",
-    "Approved": "Genehmigt",
-    "Deny": "Ablehnen",
-    "Read": "Lesen",
-    "TreeNode": "Knotenpunkt",
-    "Write": "Schreib"
   },
   "provider": {
     "Advanced": "Erweitert",
@@ -807,9 +778,6 @@
     "Sub users": "Unterbenutzer",
     "Sub users - Tooltip": "Benutzer, die derzeit der Rolle zugeordnet sind"
   },
-  "rule": {
-    "Status code": "Statuscode"
-  },
   "setting": {
     "Cannot be more than the max open connections": "Darf nicht größer als die max. offenen Verbindungen sein",
     "Connection max lifetime": "Maximale Verbindungslebensdauer",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "Dein bestätigtes Passwort stimmt nicht mit dem Passwort überein!",
     "sign in now": "Jetzt anmelden"
   },
-  "subscription": {
-    "Active": "Aktiv",
-    "Expired": "Abgelaufen",
-    "Renewal failed": "Verlängerung fehlgeschlagen",
-    "Renewed": "Verlängert",
-    "Renewing": "Wird verlängert",
-    "Suspended": "Ausgesetzt",
-    "Upcoming": "Bevorstehend"
-  },
   "system": {
     "API Latency": "API Latenz",
     "API Throughput": "API-Durchsatz",
@@ -895,6 +854,7 @@
     "Version": "Versionsnummer"
   },
   "theme": {
+    "Accent": "Akzentfarbe",
     "Blossom": "Blüte",
     "Border radius": "Border Radius",
     "Customize theme": "Anpassen des Themes",
@@ -905,14 +865,7 @@
     "Primary color": "Primärfarbe",
     "System": "Systemstandard",
     "Theme": "Thema",
-    "Theme - Tooltip": "Stiltheme der Anwendung",
-    "Accent": "Akzentfarbe"
-  },
-  "ticket": {
-    "Closed": "Geschlossen",
-    "In Progress": "In Bearbeitung",
-    "Open": "Offen",
-    "Resolved": "Gelöst"
+    "Theme - Tooltip": "Stiltheme der Anwendung"
   },
   "token": {
     "Access token": "Access-Token",
@@ -930,9 +883,6 @@
     "Refresh token": "Refresh-Token",
     "Token type": "Token-Typ",
     "Token type - Tooltip": "Token-Typ"
-  },
-  "usage": {
-    "seconds": "Sekunden"
   },
   "user": {
     "3rd-party logins": "Drittanbieter-Logins",

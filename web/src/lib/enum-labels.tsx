@@ -22,85 +22,14 @@ export interface EnumEntry {
 
 export type EnumMap = Record<string, EnumEntry>;
 
-export const TICKET_STATES: EnumMap = {
-  "Open": {i18nKey: "ticket:Open", variant: "info"},
-  "In Progress": {i18nKey: "ticket:In Progress", variant: "warning"},
-  "Resolved": {i18nKey: "ticket:Resolved", variant: "success"},
-  "Closed": {i18nKey: "ticket:Closed", variant: "secondary"},
-};
-
-export const SUBSCRIPTION_STATES: EnumMap = {
-  "Pending": {i18nKey: "webhook:Pending", variant: "info"},
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
-  "Upcoming": {i18nKey: "subscription:Upcoming", variant: "warning"},
-  "Expired": {i18nKey: "subscription:Expired", variant: "warning"},
-  "Error": {i18nKey: "general:Error", variant: "destructive"},
-  "Suspended": {i18nKey: "subscription:Suspended", variant: "secondary"},
-};
-
-export const RENEWAL_STATES: EnumMap = {
-  "Renewing": {i18nKey: "subscription:Renewing", variant: "info"},
-  "Renewed": {i18nKey: "subscription:Renewed", variant: "success"},
-  "Failed": {i18nKey: "subscription:Renewal failed", variant: "destructive"},
-};
-
-/** the payment provider types whose subscriptions can be charged again without the payer */
-export const AUTO_RENEW_PAYMENT_TYPES = ["Balance", "Stripe"];
-
 export const INVITATION_STATES: EnumMap = {
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
-  "Suspended": {i18nKey: "subscription:Suspended", variant: "secondary"},
-};
-
-export const COUPON_STATES: EnumMap = {
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
-  "Inactive": {i18nKey: "key:Inactive", variant: "secondary"},
-  "Expired": {i18nKey: "subscription:Expired", variant: "destructive"},
+  "Active": {i18nKey: "general:Active", variant: "success"},
+  "Suspended": {i18nKey: "general:Suspended", variant: "secondary"},
 };
 
 export const KEY_STATES: EnumMap = {
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
+  "Active": {i18nKey: "general:Active", variant: "success"},
   "Inactive": {i18nKey: "key:Inactive", variant: "secondary"},
-};
-
-export const PERMISSION_EFFECTS: EnumMap = {
-  "Allow": {i18nKey: "permission:Allow", variant: "success"},
-  "Deny": {i18nKey: "permission:Deny", variant: "destructive"},
-};
-
-export const PERMISSION_STATES: EnumMap = {
-  "Approved": {i18nKey: "permission:Approved", variant: "success"},
-  "Pending": {i18nKey: "webhook:Pending", variant: "destructive"},
-};
-
-export const PERMISSION_ACTIONS: EnumMap = {
-  "Read": {i18nKey: "permission:Read"},
-  "Write": {i18nKey: "permission:Write"},
-  "Admin": {i18nKey: "general:Admin"},
-};
-
-/** the actions an "API" permission grants are HTTP verbs, not read/write */
-export const PERMISSION_API_ACTIONS: EnumMap = {
-  "POST": {i18nKey: "POST"},
-  "GET": {i18nKey: "GET"},
-};
-
-export const PERMISSION_RESOURCE_TYPES: EnumMap = {
-  "Application": {i18nKey: "general:Application"},
-  "TreeNode": {i18nKey: "permission:TreeNode"},
-  "Custom": {i18nKey: "general:Custom"},
-  "API": {i18nKey: "API"},
-};
-
-export const COUPON_DISCOUNT_TYPES: EnumMap = {
-  "percentage": {i18nKey: "coupon:Percentage"},
-  "fixed": {i18nKey: "coupon:Fixed"},
-};
-
-export const COUPON_SCOPES: EnumMap = {
-  "universal": {i18nKey: "coupon:Universal", variant: "info"},
-  "product": {i18nKey: "coupon:Product specific", variant: "success"},
-  "user": {i18nKey: "coupon:User specific", variant: "warning"},
 };
 
 export const KEY_TYPES: EnumMap = {

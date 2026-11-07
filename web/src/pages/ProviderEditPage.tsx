@@ -408,12 +408,6 @@ export default function ProviderEditPage() {
       patch.title = "auth";
       patch.templateCode = "RFC 5424";
       patch.state = "Enabled";
-    } else if (value === "Log") {
-      defaultType = "Masdoor Permission Log";
-      patch.host = "";
-      patch.port = 0;
-      patch.title = "";
-      patch.state = "Enabled";
     }
 
     if (defaultType) {

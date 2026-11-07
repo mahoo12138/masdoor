@@ -192,7 +192,7 @@ func DisabledMultiFactorAuth(user *User) error {
 	user.MfaPushReceiver = ""
 	user.MfaPushProvider = ""
 
-	_, err := updateUser(user.GetId(), user, []string{"preferred_mfa_type", "recovery_codes", "mfa_phone_enabled", "mfa_email_enabled", "totp_secret", "mfa_radius_enabled", "mfa_radius_username", "mfa_radius_provider", "mfa_push_enabled", "mfa_push_receiver", "mfa_push_provider"})
+	_, err := updateUser(user.GetId(), user, []string{"preferred_mfa_type", "recovery_codes", "mfa_phone_enabled", "mfa_email_enabled", "totp_secret", "mfa_push_enabled", "mfa_push_receiver", "mfa_push_provider"})
 	if err != nil {
 		return err
 	}

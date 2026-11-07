@@ -52,11 +52,7 @@ export default function ApplicationListPage({formItems}: {formItems?: any[]} = {
     textColumn({dataIndex: "displayName", title: i18next.t("general:Display name"), searchable: true, width: 180}),
     {
       ...textColumn({dataIndex: "category", title: i18next.t("general:Category"), width: 120, searchable: true}),
-      // antd greys every category but "Agent"
-      render: (value: string) => {
-        const text = value || "Default";
-        return <Badge variant={text === "Agent" ? "success" : "secondary"}>{text}</Badge>;
-      },
+      render: (value: string) => <Badge variant="secondary">{value || "Default"}</Badge>,
     },
     textColumn({dataIndex: "type", title: i18next.t("general:Type"), width: 110, searchable: true}),
     {

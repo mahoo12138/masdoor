@@ -68,7 +68,6 @@ export function newOrganization(createdTime: string) {
       {name: "Gender", visible: true, viewRule: "Public", modifyRule: "Admin"},
       {name: "Birthday", visible: true, viewRule: "Public", modifyRule: "Admin"},
       {name: "Education", visible: true, viewRule: "Public", modifyRule: "Admin"},
-      {name: "UID number", visible: true, viewRule: "Admin", modifyRule: "Admin"},
       {name: "Signup application", visible: true, viewRule: "Public", modifyRule: "Admin"},
       {name: "Register type", visible: true, viewRule: "Public", modifyRule: "Admin"},
       {name: "Register source", visible: true, viewRule: "Public", modifyRule: "Admin"},

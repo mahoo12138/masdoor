@@ -11,7 +11,6 @@ import * as Setting from "@/lib/setting";
 import {
   EmailMfaType,
   PushMfaType,
-  RadiusMfaType,
   TotpMfaType,
 } from "@/components/auth/mfa/constants";
 
@@ -20,7 +19,6 @@ export {
   RequiredMfa,
   EmailMfaType,
   TotpMfaType,
-  RadiusMfaType,
   PushMfaType,
   RecoveryMfaType,
 } from "@/components/auth/mfa/constants";
@@ -121,19 +119,12 @@ export function MfaVerify({formValues, authParams, mfaProps, application, onSucc
   };
 
   // The form branches on the factor: email gets a "Get Code" field, TOTP an
-  // authenticator code, push the code from the notification, and RADIUS the
-  // account's RADIUS password.
+  // authenticator code, push the code from the notification.
   const {prompt, placeholder} = (() => {
     if (selected?.mfaType === PushMfaType) {
       return {
         prompt: i18next.t("mfa:You have enabled Multi-Factor Authentication, please enter the verification code from push notification"),
         placeholder: i18next.t("code:Enter your code"),
-      };
-    }
-    if (selected?.mfaType === RadiusMfaType) {
-      return {
-        prompt: i18next.t("mfa:You have enabled Multi-Factor Authentication, please enter the RADIUS password"),
-        placeholder: i18next.t("general:Password"),
       };
     }
     return {
@@ -174,8 +165,7 @@ export function MfaVerify({formValues, authParams, mfaProps, application, onSucc
           <p className="text-sm text-muted-foreground">{prompt}</p>
           <Input
             autoFocus
-            // RADIUS takes a password, not digits, so only the code factors get a numeric keypad
-            inputMode={selected?.mfaType === RadiusMfaType ? "text" : "numeric"}
+            inputMode="numeric"
             value={passcode}
             placeholder={placeholder}
             onChange={(e) => setPasscode(e.target.value)}

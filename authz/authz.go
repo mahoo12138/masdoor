@@ -67,7 +67,6 @@ p, *, *, GET, /api/userinfo, *, *
 p, *, *, POST, /api/userinfo, *, *
 p, *, *, GET, /api/user, *, *
 p, *, *, GET, /api/health, *, *
-p, *, *, *, /api/webhook, *, *
 p, *, *, GET, /api/get-captcha-status, *, *
 p, *, *, *, /api/login/oauth, *, *
 p, *, *, *, /api/oauth/register, *, *
@@ -75,22 +74,8 @@ p, *, *, GET, /api/get-application, *, *
 p, *, *, GET, /api/get-organization-applications, *, *
 p, *, *, GET, /api/get-user, *, *
 p, *, *, GET, /api/get-user-application, *, *
-p, *, *, POST, /api/upload-users, *, *
 p, *, *, GET, /api/get-resources, *, *
 p, *, *, GET, /api/get-records, *, *
-p, *, *, GET, /api/get-product, *, *
-p, *, *, GET, /api/get-products, *, *
-p, *, *, POST, /api/buy-product, *, *
-p, *, *, GET, /api/get-order, *, *
-p, *, *, GET, /api/get-orders, *, *
-p, *, *, GET, /api/get-user-orders, *, *
-p, *, *, GET, /api/get-payment, *, *
-p, *, *, POST, /api/invoice-payment, *, *
-p, *, *, POST, /api/notify-payment, *, *
-p, *, *, POST, /api/place-order, *, *
-p, *, *, POST, /api/cancel-order, *, *
-p, *, *, POST, /api/pay-order, *, *
-p, *, *, POST, /api/validate-coupon, *, *
 p, *, *, POST, /api/unlink, *, *
 p, *, *, POST, /api/set-password, *, *
 p, *, *, GET, /api/get-init-admin-status, *, *
@@ -99,9 +84,6 @@ p, *, *, POST, /api/send-verification-code, *, *
 p, *, *, GET, /api/get-captcha, *, *
 p, *, *, POST, /api/verify-captcha, *, *
 p, *, *, POST, /api/verify-code, *, *
-p, *, *, POST, /api/v1/traces, *, *
-p, *, *, POST, /api/v1/metrics, *, *
-p, *, *, POST, /api/v1/logs, *, *
 p, *, *, POST, /api/reset-email-or-phone, *, *
 p, *, *, POST, /api/upload-resource, *, *
 p, *, *, GET, /.well-known/openid-configuration, *, *
@@ -114,31 +96,14 @@ p, *, *, GET, /.well-known/:application/oauth-authorization-server, *, *
 p, *, *, GET, /.well-known/:application/oauth-protected-resource, *, *
 p, *, *, GET, /.well-known/:application/webfinger, *, *
 p, *, *, *, /.well-known/:application/jwks, *, *
-p, *, *, GET, /api/get-saml-login, *, *
-p, *, *, POST, /api/acs, *, *
-p, *, *, GET, /api/saml/metadata, *, *
-p, *, *, *, /api/saml/redirect, *, *
-p, *, *, *, /api/saml/logout, *, *
-p, *, *, *, /cas, *, *
-p, *, *, *, /scim, *, *
 p, *, *, *, /api/webauthn, *, *
-p, *, *, GET, /api/get-release, *, *
 p, *, *, GET, /api/get-default-application, *, *
 p, *, *, GET, /api/get-prometheus-info, *, *
 p, *, *, *, /api/metrics, *, *
-p, *, *, GET, /api/get-pricing, *, *
-p, *, *, GET, /api/get-plan, *, *
-p, *, *, GET, /api/get-subscriptions, *, *
-p, *, *, GET, /api/get-subscription, *, *
-p, *, *, POST, /api/set-subscription-auto-renew, *, *
-p, *, *, GET, /api/get-transactions, *, *
-p, *, *, GET, /api/get-transaction, *, *
 p, *, *, GET, /api/get-provider, *, *
 p, *, *, GET, /api/get-organization-names, *, *
 p, *, *, GET, /api/get-organizations, *, *
 p, *, *, GET, /api/get-invitation-info, *, *
-p, *, *, GET, /api/faceid-signin-begin, *, *
-p, *, *, GET, /api/kerberos-login, *, *
 p, *, *, POST, /api/grant-consent, *, *
 p, *, *, POST, /api/revoke-consent, *, *
 `
@@ -231,14 +196,6 @@ func enforce(subOwner, subName, method, urlPath, objOwner, objName string) bool 
 }
 
 func IsAllowed(subOwner string, subName string, method string, urlPath string, objOwner string, objName string, extraInfo map[string]interface{}) (bool, error) {
-	if urlPath == "/api/mcp" {
-		if detailPath, ok := extraInfo["detailPathUrl"].(string); ok {
-			if detailPath == "initialize" || detailPath == "notifications/initialized" || detailPath == "ping" || detailPath == "tools/list" {
-				return true, nil
-			}
-		}
-	}
-
 	if conf.IsDemoMode() {
 		if !isAllowedInDemoMode(subOwner, subName, method, urlPath, objOwner, objName) {
 			return false, nil
@@ -296,14 +253,13 @@ func dropAnonymousSelfObject(subOwner string, subName string, objOwner string, o
 // userObjectApis lists the APIs whose object is a user (or a row keyed by the user), the
 // only ones the self-match of the API model may authorize. Any other API only reads the
 // owner and name of the request to authorize it, so a client could put its own ones there
-// and have the request run on another object, e.g. an MCP tool call or a sent email.
+// and have the request run on another object, e.g. a sent email.
 var userObjectApis = []string{
 	"/api/get-user",
 	"/api/update-user",
 	"/api/delete-user",
 	"/api/check-user-password",
 	"/api/remove-user-from-group",
-	"/api/verify-identification",
 	"/api/mfa/setup/initiate",
 	"/api/mfa/setup/verify",
 	"/api/mfa/setup/enable",
@@ -326,7 +282,7 @@ func dropNonUserSelfObject(subOwner string, subName string, urlPath string, objO
 
 func isAllowedInDemoMode(subOwner string, subName string, method string, urlPath string, objOwner string, objName string) bool {
 	if method == "POST" {
-		if strings.HasPrefix(urlPath, "/api/login") || urlPath == "/api/logout" || urlPath == "/api/sso-logout" || urlPath == "/api/signup" || urlPath == "/api/callback" || urlPath == "/api/send-verification-code" || urlPath == "/api/send-email" || urlPath == "/api/verify-captcha" || urlPath == "/api/verify-code" || urlPath == "/api/check-user-password" || strings.HasPrefix(urlPath, "/api/mfa/") || urlPath == "/api/webhook" {
+		if strings.HasPrefix(urlPath, "/api/login") || urlPath == "/api/logout" || urlPath == "/api/sso-logout" || urlPath == "/api/signup" || urlPath == "/api/callback" || urlPath == "/api/send-verification-code" || urlPath == "/api/send-email" || urlPath == "/api/verify-captcha" || urlPath == "/api/verify-code" || urlPath == "/api/check-user-password" || strings.HasPrefix(urlPath, "/api/mfa/") {
 			return true
 		} else if urlPath == "/api/update-user" {
 			// Allow ordinary users to update their own information

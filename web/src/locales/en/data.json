@@ -110,8 +110,6 @@
     "Order - Tooltip": "The smaller the value, the higher it ranks in the Apps page",
     "Org choice mode": "Org choice mode",
     "Org choice mode - Tooltip": "Method used to select the organization to log in",
-    "Other domains": "Other domains",
-    "Other domains - Tooltip": "Additional allowed domains for this application, used for cross-domain access control",
     "Page HTML": "Page HTML",
     "Page HTML - Tooltip": "Custom HTML for the application's main page, allowing complete control over the page structure and content",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "Please enable \"Signin session\" first before enabling \"Auto signin\"",
@@ -125,11 +123,8 @@
     "Refresh token expire": "Refresh token expire",
     "Refresh token expire - Tooltip": "Refresh token expiration time",
     "Reset to Empty": "Reset to Empty",
-    "Reverse Proxy": "Reverse Proxy",
     "Right": "Right",
     "Rule": "Rule",
-    "SSL cert": "SSL cert",
-    "SSL cert - Tooltip": "SSL certificate for securing HTTPS connections to the application",
     "Security": "Security",
     "Select": "Select",
     "Side panel HTML": "Side panel HTML",
@@ -163,8 +158,6 @@
     "Token signing method": "Token signing method",
     "Token signing method - Tooltip": "Signing method of JWT token, needs to be the same algorithm as the certificate",
     "UI Customization": "UI Customization",
-    "Upstream host": "Upstream host",
-    "Upstream host - Tooltip": "The upstream backend host address when Masdoor is used in reverse proxy mode",
     "Used for": "Used for",
     "Vertical": "Vertical",
     "You are unexpected to see this prompt page": "You are unexpected to see this prompt page"
@@ -180,7 +173,6 @@
     "Copy private key": "Copy private key",
     "Crypto algorithm": "Crypto algorithm",
     "Crypto algorithm - Tooltip": "Encryption algorithm used by the certificate",
-    "Domain expire": "Domain expire",
     "Download certificate": "Download certificate",
     "Download private key": "Download private key",
     "Edit Cert": "Edit Cert",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "This scope is not defined in the application",
     "wants to access your account": "wants to access your account"
   },
-  "coupon": {
-    "Fixed": "Fixed",
-    "Percentage": "Percentage",
-    "Product specific": "Product specific",
-    "Universal": "Universal",
-    "User specific": "User specific"
-  },
   "forget": {
     "Change Password": "Change Password",
     "Next Step": "Next Step",
@@ -233,12 +218,14 @@
     "Access key": "Access key",
     "Access key - Tooltip": "Access key for the service",
     "Action": "Action",
+    "Active": "Active",
     "Add": "Add",
     "Add custom item": "Add custom item",
     "Admin": "Admin",
     "Affiliation URL": "Affiliation URL",
     "Affiliation URL - Tooltip": "The homepage URL for the affiliation",
     "All": "All",
+    "Allow": "Allow",
     "Application": "Application",
     "Application - Tooltip": "Application",
     "Applications": "Applications",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "Copied to clipboard successfully",
     "Copy": "Copy",
     "Created time": "Created time",
-    "Custom": "Custom",
     "Custom scopes": "Custom scopes",
     "Custom scopes - Tooltip": "Additional OAuth 2.0 scopes beyond the standard ones (openid, profile, email). Custom scopes allow requesting specific permissions or data access",
     "Dashboard": "Dashboard",
@@ -277,6 +263,7 @@
     "Default password": "Default password",
     "Default password - Tooltip": "When adding new user, if the user's password is not specified, the default password will be used as the user's password",
     "Delete": "Delete",
+    "Deny": "Deny",
     "Description": "Description",
     "Description - Tooltip": "Detailed description information for reference, Masdoor itself will not use it",
     "Detail": "Detail",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "Display tour for users",
     "Enabled": "Enabled",
     "Enabled successfully": "Enabled successfully",
-    "Error": "Error",
     "Expire time": "Expire time",
     "Expire time - Tooltip": "The expiration timestamp after which this item becomes invalid",
+    "Expired": "Expired",
     "Failed to add": "Failed to add",
     "Failed to cancel": "Failed to cancel",
     "Failed to connect to server": "Failed to connect to server",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "The first name of user",
     "Forget URL": "Forget URL",
     "Forget URL - Tooltip": "Custom URL for the \"Forget password\" page. If not set, the default Masdoor \"Forget password\" page will be used. When set, the \"Forget password\" link on the login page will redirect to this URL",
-    "Forms": "Forms",
-    "GID number": "GID number",
-    "GID number - Tooltip": "The POSIX group ID published by the built-in LDAP server. Leave it as 0 to derive the number from the group name",
     "General": "General",
     "Global Settings": "Global Settings",
     "Go to enable": "Go to enable",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "Sorry, you do not have permission to access this page or logged in status invalid.",
     "State": "State",
     "State - Tooltip": "State",
+    "Status code": "Status code",
     "Successfully added": "Successfully added",
     "Successfully copied": "Successfully copied",
     "Successfully deleted": "Successfully deleted",
@@ -448,14 +433,13 @@
     "Sure to delete": "Sure to delete",
     "Sure to disable": "Sure to disable",
     "Sure to remove": "Sure to remove",
-    "Swagger": "Swagger",
+    "Suspended": "Suspended",
     "System Info": "System Info",
     "Tab": "Tab",
     "Tag": "Tag",
     "There was a problem signing you in..": "There was a problem signing you in..",
     "This field is required": "This field is required",
     "This is a read-only demo site!": "This is a read-only demo site!",
-    "Tickets": "Tickets",
     "Timestamp": "Timestamp",
     "Title": "Title",
     "Title - Tooltip": "Browser page title",
@@ -466,8 +450,6 @@
     "True": "True",
     "Type": "Type",
     "Type - Tooltip": "The category or type that classifies this item's behavior or configuration",
-    "UID number": "UID number",
-    "UID number - Tooltip": "The POSIX user ID published by the built-in LDAP server. Leave it as 0 to derive the number from the username",
     "URL": "URL",
     "URL - Tooltip": "URL link",
     "Unauthorized": "Unauthorized",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "You can only select one physical group",
     "You must select a picture first": "You must select a picture first",
     "empty": "empty",
-    "remove": "remove"
+    "remove": "remove",
+    "seconds": "seconds"
   },
   "group": {
     "Edit Group": "Edit Group",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "Use Authenticator App",
     "Use Email": "Use Email",
     "Use Push Notification": "Use Push Notification",
-    "Use Radius": "Use Radius",
     "Use a recovery code": "Use a recovery code",
     "Use recovery code": "Use recovery code",
     "Verify Code": "Verify Code",
     "Verify Password": "Verify Password",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "You have enabled Multi-Factor Authentication, please enter the RADIUS password",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "You have enabled Multi-Factor Authentication, please enter the TOTP code",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "You have enabled Multi-Factor Authentication, please enter the verification code from push notification",
     "Your email is": "Your email is",
@@ -651,8 +632,6 @@
     "Tags": "Tags",
     "The Masdoor console is disabled for the regular users of this organization": "The Masdoor console is disabled for the regular users of this organization",
     "Token retention days": "Token retention days",
-    "Trusted database hosts": "Trusted database hosts",
-    "Trusted database hosts - Tooltip": "Database hosts that the syncers and Casbin adapters of this organization may connect to, even when they are intranet addresses or Masdoor's own database server, as a comma separated list of host or host:port. Only a global admin can change it.",
     "Use Email as username": "Use Email as username",
     "Use Email as username - Tooltip": "Use Email as username if the username field is not visible at signup",
     "Use permanent avatar": "Use permanent avatar",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "The homepage URL of the organization. This field is not used in Masdoor",
     "Widget items": "Widget items",
     "Widget items - Tooltip": "Items displayed in the widget"
-  },
-  "permission": {
-    "Allow": "Allow",
-    "Approved": "Approved",
-    "Deny": "Deny",
-    "Read": "Read",
-    "TreeNode": "TreeNode",
-    "Write": "Write"
   },
   "provider": {
     "Advanced": "Advanced",
@@ -807,9 +778,6 @@
     "Sub users": "Sub users",
     "Sub users - Tooltip": "Users included in the current role"
   },
-  "rule": {
-    "Status code": "Status code"
-  },
   "setting": {
     "Cannot be more than the max open connections": "Cannot be more than the max open connections",
     "Connection max lifetime": "Connection max lifetime",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "Your confirmed password is inconsistent with the password!",
     "sign in now": "sign in now"
   },
-  "subscription": {
-    "Active": "Active",
-    "Expired": "Expired",
-    "Renewal failed": "Renewal failed",
-    "Renewed": "Renewed",
-    "Renewing": "Renewing",
-    "Suspended": "Suspended",
-    "Upcoming": "Upcoming"
-  },
   "system": {
     "API Latency": "API Latency",
     "API Throughput": "API Throughput",
@@ -895,6 +854,7 @@
     "Version": "Version"
   },
   "theme": {
+    "Accent": "Accent",
     "Blossom": "Blossom",
     "Border radius": "Border radius",
     "Customize theme": "Customize theme",
@@ -905,14 +865,7 @@
     "Primary color": "Primary color",
     "System": "System",
     "Theme": "Theme",
-    "Theme - Tooltip": "Style theme of the application",
-    "Accent": "Accent"
-  },
-  "ticket": {
-    "Closed": "Closed",
-    "In Progress": "In Progress",
-    "Open": "Open",
-    "Resolved": "Resolved"
+    "Theme - Tooltip": "Style theme of the application"
   },
   "token": {
     "Access token": "Access token",
@@ -930,9 +883,6 @@
     "Refresh token": "Refresh token",
     "Token type": "Token type",
     "Token type - Tooltip": "Type of the token"
-  },
-  "usage": {
-    "seconds": "seconds"
   },
   "user": {
     "3rd-party logins": "3rd-party logins",

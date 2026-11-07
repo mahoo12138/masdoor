@@ -67,7 +67,7 @@ function RecordDetailSheet({record, onClose}: {record: any; onClose: () => void}
     {label: i18next.t("general:Method"), children: field("method")},
     {label: i18next.t("general:Request URI"), children: field("requestUri")},
     {label: i18next.t("user:Language"), children: field("language")},
-    {label: i18next.t("rule:Status code"), children: field("statusCode")},
+    {label: i18next.t("general:Status code"), children: field("statusCode")},
     {label: i18next.t("general:Action"), children: field("action")},
     {
       label: i18next.t("record:Response"),
@@ -141,7 +141,7 @@ export default function RecordListPage() {
     {
       dataIndex: "statusCode",
       searchable: true,
-      title: i18next.t("rule:Status code"),
+      title: i18next.t("general:Status code"),
       width: 110,
       sortable: true,
       render: (value) =>

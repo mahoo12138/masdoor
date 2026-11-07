@@ -162,7 +162,7 @@ func AddRolesInBatch(roles []*Role) bool {
 		}
 
 		tmp := roles[start:end]
-		fmt.Printf("The syncer adds roles: [%d - %d]\n", start, end)
+		fmt.Printf("Adding roles: [%d - %d]\n", start, end)
 		if AddRoles(tmp) {
 			affected = true
 		}

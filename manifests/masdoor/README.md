@@ -1,6 +1,6 @@
 # Masdoor
 
-Masdoor is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This is the official Helm chart, published with every Masdoor release.
+Masdoor is a lightweight self-hosted identity provider with a web UI, supporting OAuth 2.0, OIDC, WebAuthn / Passkeys, TOTP and MFA. This is the official Helm chart of the Masdoor fork.
 
 - Source: <https://github.com/mahoo12138/masdoor>
 - Source: <https://github.com/mahoo12138/masdoor/tree/master/manifests/masdoor>
@@ -32,7 +32,6 @@ The chart does not expose Masdoor outside the cluster by default. Use `kubectl p
 helm upgrade masdoor oci://ghcr.io/masdoor/helm-charts/masdoor --version <version>
 ```
 
-Charts up to 4.15.0 were published as `oci://registry-1.docker.io/casbin/masdoor-helm-charts`, which still receives every release. Running the `helm upgrade` command above moves an existing release to this chart; resource names stay the same.
 
 ## Uninstalling
 
@@ -68,14 +67,9 @@ Override any value from [values.yaml](https://github.com/mahoo12138/masdoor/blob
 | `database.databaseName` | Database name | `masdoor` |
 | `database.sslMode` | SSL mode for the connection | `disable` |
 
-### LDAP
-
-| Parameter | Description | Default |
-|---|---|---|
-
 ### Declarative configuration (init data)
 
-Organizations, applications, users, providers, roles, permissions and the other Masdoor objects can be kept in the values file, in the init data file format. The chart stores them in a Secret, Masdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
+Organizations, applications, users, providers, roles and the other Masdoor objects can be kept in the values file, in the init data file format. The chart stores them in a Secret, Masdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
 
 ```yaml
 initData:

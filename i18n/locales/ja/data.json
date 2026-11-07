@@ -19,7 +19,6 @@
     "The application: %s does not exist": "アプリケーション: %sは存在しません",
     "The application: %s has disabled users to signin": "アプリケーション: %s はユーザーのサインインを無効にしました",
     "The group: %s does not exist": "グループ: %sは存在しません",
-    "The login method: login with LDAP is not enabled for the application": "このアプリケーションでは LDAP ログインは有効になっていません",
     "The login method: login with WebAuthn is not enabled for the application": "このアプリケーションでは WebAuthn によるログインは有効になっていません",
     "The login method: login with email is not enabled for the application": "このアプリケーションではメールログインは有効になっていません",
     "The login method: login with magic link is not enabled for the application": "このアプリケーションではマジックリンクによるログインが有効になっていません",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "アプリケーションは空にできません",
+    "Error": "エラー",
     "Granted scopes cannot be empty": "付与されたスコープは空にできません",
     "Invalid application": "無効なアプリケーションです",
     "Missing parameter": "不足しているパラメーター",
@@ -104,7 +104,6 @@
     "Please login first": "最初にログインしてください",
     "Please sign in first": "先にサインインしてください",
     "The client ID: %s is already used by another application": "クライアント ID：%s は既に別のアプリケーションで使用されています",
-    "The object does not exist": "オブジェクトが存在しません",
     "The organization: %s should have one application at least": "組織「%s」は少なくとも1つのアプリケーションを持っている必要があります",
     "The token: %s does not exist": "トークン：%s は存在しません",
     "The user doesn't exist": "ユーザーが存在しません",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "オブジェクトキー %s は許可されていません",
     "The provider type: %s is not supported": "プロバイダータイプ：%sはサポートされていません"
-  },
-  "subscription": {
-    "Error": "エラー"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "grant_type：%sはこのアプリケーションでサポートされていません",

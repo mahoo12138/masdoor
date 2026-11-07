@@ -110,8 +110,6 @@
     "Order - Tooltip": "値が小さいほど、アプリページで上位にランク付けされます",
     "Org choice mode": "組織選択モード",
     "Org choice mode - Tooltip": "ログインする組織を選択する方法 - ヒント",
-    "Other domains": "その他のドメイン",
-    "Other domains - Tooltip": "このアプリケーションで許可される追加ドメイン",
     "Page HTML": "ページHTML",
     "Page HTML - Tooltip": "アプリケーションのメインページのカスタムHTMLで、ページの構造とコンテンツを完全に制御できます",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "\"自動サインイン\"を有効にする前に、まず\"サインインセッション\"を有効にしてください",
@@ -125,11 +123,8 @@
     "Refresh token expire": "リフレッシュトークンの有効期限が切れました",
     "Refresh token expire - Tooltip": "リフレッシュトークンの有効期限時間",
     "Reset to Empty": "空にリセット",
-    "Reverse Proxy": "リバースプロキシ",
     "Right": "右",
     "Rule": "ルール",
-    "SSL cert": "SSL証明書",
-    "SSL cert - Tooltip": "HTTPSコネクション保護用SSL証明書",
     "Security": "セキュリティ",
     "Select": "選択",
     "Side panel HTML": "サイドパネルのHTML",
@@ -163,8 +158,6 @@
     "Token signing method": "トークン署名方法",
     "Token signing method - Tooltip": "JWTトークンの署名方法。証明書と同じアルゴリズムである必要があります。",
     "UI Customization": "UIのカスタマイズ",
-    "Upstream host": "アップストリームホスト",
-    "Upstream host - Tooltip": "リバースプロキシモードでのアップストリームバックエンドホストアドレス",
     "Used for": "用途",
     "Vertical": "垂直",
     "You are unexpected to see this prompt page": "このプロンプトページを見ることは予期せぬことである"
@@ -180,7 +173,6 @@
     "Copy private key": "秘密鍵をコピーする",
     "Crypto algorithm": "暗号アルゴリズム",
     "Crypto algorithm - Tooltip": "認証書で使用される暗号化アルゴリズム",
-    "Domain expire": "ドメイン有効期限",
     "Download certificate": "証明書をダウンロードする",
     "Download private key": "プライベートキーをダウンロードする",
     "Edit Cert": "編集認証書",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "このスコープはアプリケーションで定義されていません",
     "wants to access your account": "があなたのアカウントへのアクセスを要求しています"
   },
-  "coupon": {
-    "Fixed": "固定",
-    "Percentage": "パーセンテージ",
-    "Product specific": "製品限定",
-    "Universal": "ユニバーサル",
-    "User specific": "ユーザー限定"
-  },
   "forget": {
     "Change Password": "パスワードを変更",
     "Next Step": "次のステップ",
@@ -233,12 +218,14 @@
     "Access key": "アクセスキー",
     "Access key - Tooltip": "サービスのアクセスキー",
     "Action": "アクション",
+    "Active": "アクティブ",
     "Add": "追加",
     "Add custom item": "カスタム項目を追加",
     "Admin": "管理者",
     "Affiliation URL": "所属するURL",
     "Affiliation URL - Tooltip": "所属先のホームページURL",
     "All": "すべて",
+    "Allow": "許可",
     "Application": "アプリケーション",
     "Application - Tooltip": "アプリケーション - ツールチップ",
     "Applications": "アプリケーション",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "クリップボードにコピーしました",
     "Copy": "コピー",
     "Created time": "作成された時間",
-    "Custom": "カスタム",
     "Custom scopes": "カスタムスコープ",
     "Custom scopes - Tooltip": "標準スコープ（openid、profile、email）を超えた追加のOAuth 2.0スコープ。カスタムスコープにより、特定の権限やデータアクセスを要求できます",
     "Dashboard": "ダッシュボード",
@@ -277,6 +263,7 @@
     "Default password": "デフォルトパスワード",
     "Default password - Tooltip": "デフォルトパスワード",
     "Delete": "削除",
+    "Deny": "否定する",
     "Description": "説明",
     "Description - Tooltip": "参照用の詳細な説明情報です。Masdoor自体はそれを使用しません",
     "Detail": "詳細",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "ユーザーにツアーを表示する",
     "Enabled": "有効化されました",
     "Enabled successfully": "正常に有効化されました",
-    "Error": "エラー",
     "Expire time": "有効期限",
     "Expire time - Tooltip": "このアイテムが無効になるタイムスタンプ",
+    "Expired": "期限切れ",
     "Failed to add": "追加できませんでした",
     "Failed to cancel": "キャンセルに失敗しました",
     "Failed to connect to server": "サーバーに接続できませんでした",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "ユーザーの名",
     "Forget URL": "URLを忘れてください",
     "Forget URL - Tooltip": "「パスワードをお忘れの場合」ページのカスタムURL。未設定の場合、デフォルトのMasdoor「パスワードをお忘れの場合」ページが使用されます。設定された場合、ログインページの「パスワードをお忘れの場合」リンクはこのURLにリダイレクトされます",
-    "Forms": "フォーム",
-    "GID number": "GID 番号",
-    "GID number - Tooltip": "GID number - Tooltip",
     "General": "一般",
     "Global Settings": "グローバル設定",
     "Go to enable": "有効にする",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "申し訳ありませんが、このページにアクセスする権限がありません、またはログイン状態が無効です。",
     "State": "州",
     "State - Tooltip": "状態",
+    "Status code": "ステータスコード",
     "Successfully added": "正常に追加されました",
     "Successfully copied": "正常にコピーされました",
     "Successfully deleted": "正常に削除されました",
@@ -448,14 +433,13 @@
     "Sure to delete": "削除することが確実です",
     "Sure to disable": "無効にしてもよろしいですか？",
     "Sure to remove": "削除してもよろしいですか？",
-    "Swagger": "スワガー",
+    "Suspended": "一時停止",
     "System Info": "システム情報",
     "Tab": "タブ",
     "Tag": "タグ",
     "There was a problem signing you in..": "サインインに問題が発生しました...",
     "This field is required": "このフィールドは必須です",
     "This is a read-only demo site!": "これは読み取り専用のデモサイトです！",
-    "Tickets": "チケット",
     "Timestamp": "タイムスタンプ",
     "Title": "タイトル",
     "Title - Tooltip": "タイトル",
@@ -466,8 +450,6 @@
     "True": "真",
     "Type": "タイプ",
     "Type - Tooltip": "このアイテムの動作や設定を分類するカテゴリまたはタイプ",
-    "UID number": "UID 番号",
-    "UID number - Tooltip": "UID number - Tooltip",
     "URL": "URL アドレス",
     "URL - Tooltip": "URLリンク",
     "Unauthorized": "未承認",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "物理グループは1つしか選択できません",
     "You must select a picture first": "まず画像を選択してください",
     "empty": "空",
-    "remove": "削除"
+    "remove": "削除",
+    "seconds": "秒"
   },
   "group": {
     "Edit Group": "グループを編集",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "認証アプリを使用",
     "Use Email": "メールを使用",
     "Use Push Notification": "プッシュ通知を使用",
-    "Use Radius": "RADIUSを使用",
     "Use a recovery code": "リカバリーコードを使用",
     "Use recovery code": "Use recovery code",
     "Verify Code": "検証コード",
     "Verify Password": "パスワードを検証",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "多要素認証が有効になっています。「コードを取得」をクリックして続行してください",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "多要素認証が有効になっています。RADIUSパスワードを入力してください",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "多要素認証が有効になっています。TOTPコードを入力してください",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "多要素認証が有効になっています。プッシュ通知の確認コードを入力してください",
     "Your email is": "あなたのメールは",
@@ -651,8 +632,6 @@
     "Tags": "タグ",
     "The Masdoor console is disabled for the regular users of this organization": "この組織の一般ユーザーは Masdoor コンソールを利用できません",
     "Token retention days": "トークンの保存日数",
-    "Trusted database hosts": "信頼済みデータベースホスト",
-    "Trusted database hosts - Tooltip": "Trusted database hosts - Tooltip",
     "Use Email as username": "メールアドレスをユーザー名として使用",
     "Use Email as username - Tooltip": "ユーザー名フィールドがサインアップ時に表示されない場合、メールアドレスをユーザー名として使用します",
     "Use permanent avatar": "永続アバターを使用",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "組織のホームページのURL。このフィールドはMasdoorでは使用されません",
     "Widget items": "ウィジェット項目",
     "Widget items - Tooltip": "ウィジェット項目 - ツールチップ"
-  },
-  "permission": {
-    "Allow": "許可",
-    "Approved": "承認済み",
-    "Deny": "否定する",
-    "Read": "読む",
-    "TreeNode": "ツリーノード",
-    "Write": "書く"
   },
   "provider": {
     "Advanced": "詳細設定",
@@ -807,9 +778,6 @@
     "Sub users": "サブユーザー",
     "Sub users - Tooltip": "現在の役割に含まれるユーザー"
   },
-  "rule": {
-    "Status code": "ステータスコード"
-  },
   "setting": {
     "Cannot be more than the max open connections": "最大オープン接続数を超えることはできません",
     "Connection max lifetime": "接続の最大有効期間",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "確認されたパスワードは、パスワードと矛盾しています！",
     "sign in now": "今すぐサインインしてください"
   },
-  "subscription": {
-    "Active": "アクティブ",
-    "Expired": "期限切れ",
-    "Renewal failed": "更新に失敗しました",
-    "Renewed": "更新済み",
-    "Renewing": "更新中",
-    "Suspended": "一時停止",
-    "Upcoming": "近日"
-  },
   "system": {
     "API Latency": "API遅延",
     "API Throughput": "APIスループット",
@@ -895,6 +854,7 @@
     "Version": "バージョン"
   },
   "theme": {
+    "Accent": "アクセントカラー",
     "Blossom": "花開く",
     "Border radius": "ボーダーラジウス",
     "Customize theme": "テーマのカスタマイズ",
@@ -905,14 +865,7 @@
     "Primary color": "主色",
     "System": "システム",
     "Theme": "テーマ",
-    "Theme - Tooltip": "アプリケーションのスタイルテーマ",
-    "Accent": "アクセントカラー"
-  },
-  "ticket": {
-    "Closed": "クローズ",
-    "In Progress": "進行中",
-    "Open": "オープン",
-    "Resolved": "解決済み"
+    "Theme - Tooltip": "アプリケーションのスタイルテーマ"
   },
   "token": {
     "Access token": "アクセストークン",
@@ -930,9 +883,6 @@
     "Refresh token": "リフレッシュトークン",
     "Token type": "トークンタイプ",
     "Token type - Tooltip": "トークンタイプ - ツールチップ"
-  },
-  "usage": {
-    "seconds": "秒"
   },
   "user": {
     "3rd-party logins": "サードパーティログイン",

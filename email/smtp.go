@@ -15,8 +15,6 @@
 package email
 
 import (
-	"crypto/tls"
-
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/casdoor/gomail/v2"
 )
@@ -25,11 +23,8 @@ type SmtpEmailProvider struct {
 	Dialer *gomail.Dialer
 }
 
-func NewSmtpEmailProvider(userName string, password string, host string, port int, typ string, sslMode string, enableProxy bool) *SmtpEmailProvider {
+func NewSmtpEmailProvider(userName string, password string, host string, port int, sslMode string, enableProxy bool) *SmtpEmailProvider {
 	dialer := gomail.NewDialer(host, port, userName, password)
-	if typ == "SUBMAIL" {
-		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
-	}
 
 	// Handle SSL mode: "Auto" (or empty) means don't override gomail's default behavior
 	// "Enable" means force SSL on, "Disable" means force SSL off

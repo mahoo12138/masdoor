@@ -343,13 +343,6 @@ func GetMaskedApplication(application *Application, userId string) *Application 
 	application.FailedSigninLimit = -1
 	application.FailedSigninFrozenTime = -1
 
-	// the reverse proxy fields expose the internal deployment topology
-	application.Domain = "***"
-	application.OtherDomains = []string{}
-	application.UpstreamHost = "***"
-	application.SslMode = "***"
-	application.SslCert = "***"
-
 	if application.OrganizationObj != nil {
 		application.OrganizationObj.MasterPassword = "***"
 		application.OrganizationObj.DefaultPassword = "***"
@@ -456,10 +449,10 @@ func checkMultipleCaptchaProviders(application *Application, lang string) error 
 	return nil
 }
 
-// CheckApplicationCustomHtml keeps what an organization admin may put on the sign-in pages to layout
+// CheckApplicationCustomHtml keeps what may be put on the sign-in pages to layout
 // and branding: custom HTML or CSS that could collect or send out what users type is refused unless
-// it is the one oldApplication (nil for a new application) already has. A global admin is not held
-// to this.
+// it is the one oldApplication (nil for a new application) already has. Global admins are held to this
+// too, so no application can plant a script on the Masdoor origin.
 func CheckApplicationCustomHtml(application *Application, oldApplication *Application) error {
 	if oldApplication == nil {
 		oldApplication = &Application{}
@@ -535,7 +528,7 @@ func CheckApplicationCustomHtml(application *Application, oldApplication *Applic
 	}
 
 	if len(unsafeFields) > 0 {
-		return fmt.Errorf("the %s of the application uses HTML or loads files that this Masdoor only lets a global admin set: scripts, forms and event handlers are not allowed, and images and fonts must come from this Masdoor, its storage providers or a URL in formCssAllowedUrls", strings.Join(unsafeFields, ", "))
+		return fmt.Errorf("the %s of the application uses HTML or loads files that Masdoor does not allow on the sign-in pages: scripts, forms and event handlers are not allowed, and images and fonts must come from this Masdoor, its storage providers or a URL in formCssAllowedUrls", strings.Join(unsafeFields, ", "))
 	}
 	return nil
 }
@@ -756,19 +749,6 @@ func (application *Application) IsPasswordEnabled() bool {
 	return application.HasSigninMethod("Password")
 }
 
-func (application *Application) IsPasswordWithLdapEnabled() bool {
-	if len(application.SigninMethods) == 0 {
-		return application.EnablePassword
-	} else {
-		for _, signinMethod := range application.SigninMethods {
-			if signinMethod.Name == "Password" && signinMethod.Rule == "All" {
-				return true
-			}
-		}
-		return false
-	}
-}
-
 func (application *Application) IsCodeSigninViaEmailEnabled() bool {
 	if len(application.SigninMethods) == 0 {
 		return application.EnableCodeSignin
@@ -835,10 +815,6 @@ func (application *Application) IsSignupAllowedFor(organization string) bool {
 		return true
 	}
 	return organization == application.Organization
-}
-
-func (application *Application) IsLdapEnabled() bool {
-	return application.HasSigninMethod("LDAP")
 }
 
 func (application *Application) IsWebAuthnEnabled() bool {

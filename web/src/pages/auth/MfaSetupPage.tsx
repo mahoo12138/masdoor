@@ -13,7 +13,6 @@ import {MfaVerifySetupForm} from "@/components/auth/mfa/MfaVerifySetupForm";
 import {
   EmailMfaType,
   PushMfaType,
-  RadiusMfaType,
   TotpMfaType,
 } from "@/components/auth/mfa/constants";
 import {useAccount} from "@/hooks/use-account";
@@ -24,7 +23,6 @@ import * as Setting from "@/lib/setting";
 const MFA_TYPE_LABELS: {type: string; labelKey: string}[] = [
   {type: EmailMfaType, labelKey: "mfa:Use Email"},
   {type: TotpMfaType, labelKey: "mfa:Use Authenticator App"},
-  {type: RadiusMfaType, labelKey: "mfa:Use Radius"},
   {type: PushMfaType, labelKey: "mfa:Use Push Notification"},
 ];
 

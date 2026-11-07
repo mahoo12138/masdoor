@@ -1,7 +1,6 @@
 // MFA type identifiers as the Masdoor backend uses them.
 export const EmailMfaType = "email";
 export const TotpMfaType = "app";
-export const RadiusMfaType = "radius";
 export const PushMfaType = "push";
 export const RecoveryMfaType = "recovery";
 

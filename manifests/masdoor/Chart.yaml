@@ -1,6 +1,6 @@
 apiVersion: v2
 name: masdoor
-description: An open-source Agent-first Identity and Access Management (IAM) /LLM MCP & agent gateway and auth server with web UI supporting OpenClaw, MCP, OAuth, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP, MFA, Face ID, Google Workspace, Azure AD
+description: A lightweight self-hosted identity provider (OAuth 2.0 / OIDC) with user management and full login-page theming, for personal and family deployments
 type: application
 # version and appVersion are set from the release tag by the Docker Release job
 version: 0.0.0

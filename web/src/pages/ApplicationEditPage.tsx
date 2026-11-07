@@ -10,7 +10,6 @@ import {ApplicationAuthenticationTab} from "@/components/application/Application
 import {ApplicationBasicTab} from "@/components/application/ApplicationBasicTab";
 import {ApplicationOidcOauthTab} from "@/components/application/ApplicationOidcOauthTab";
 import {ApplicationProvidersTab} from "@/components/application/ApplicationProvidersTab";
-import {ApplicationReverseProxyTab} from "@/components/application/ApplicationReverseProxyTab";
 import {ApplicationSecurityTab} from "@/components/application/ApplicationSecurityTab";
 import {ApplicationUiCustomizationTab} from "@/components/application/ApplicationUiCustomizationTab";
 import type {MenuMode} from "@/components/application/types";
@@ -32,7 +31,6 @@ const TAB_KEYS = [
   "providers",
   "ui-customization",
   "security",
-  "reverse-proxy",
 ];
 
 export default function ApplicationEditPage() {
@@ -169,7 +167,6 @@ export default function ApplicationEditPage() {
           <TabsTrigger value="providers">{i18next.t("application:Providers")}</TabsTrigger>
           <TabsTrigger value="ui-customization">{i18next.t("application:UI Customization")}</TabsTrigger>
           <TabsTrigger value="security">{i18next.t("application:Security")}</TabsTrigger>
-          <TabsTrigger value="reverse-proxy">{i18next.t("application:Reverse Proxy")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="basic" className={tabClassName}>
@@ -213,10 +210,6 @@ export default function ApplicationEditPage() {
             account={account}
             certs={certs}
           />
-        </TabsContent>
-
-        <TabsContent value="reverse-proxy" className={tabClassName}>
-          <ApplicationReverseProxyTab application={application} updateField={updateField} certs={certs} />
         </TabsContent>
       </Tabs>
     </EditPageShell>

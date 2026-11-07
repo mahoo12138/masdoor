@@ -20,7 +20,7 @@ export default function SettingEditPage() {
       name: "dbConnMaxLifetime",
       labelKey: "setting:Connection max lifetime",
       min: 0,
-      suffix: i18next.t("usage:seconds"),
+      suffix: i18next.t("general:seconds"),
     },
     {type: "number", name: "recordRetentionDays", labelKey: "setting:Default record retention days", min: 0},
   ];

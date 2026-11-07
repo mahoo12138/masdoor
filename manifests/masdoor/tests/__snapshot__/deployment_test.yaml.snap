@@ -28,7 +28,7 @@ has extraVolume and extraVolumeMounts:
             - env:
                 - name: RUNNING_IN_DOCKER
                   value: "true"
-              image: casbin/masdoor:1.2.3
+              image: mahoo12138/masdoor:1.2.3
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -110,7 +110,7 @@ manifest should match snapshot:
             - env:
                 - name: RUNNING_IN_DOCKER
                   value: "true"
-              image: casbin/masdoor:1.2.3
+              image: mahoo12138/masdoor:1.2.3
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3

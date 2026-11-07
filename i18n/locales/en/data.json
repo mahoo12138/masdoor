@@ -19,7 +19,6 @@
     "The application: %s does not exist": "The application: %s does not exist",
     "The application: %s has disabled users to signin": "The application: %s has disabled users to signin",
     "The group: %s does not exist": "The group: %s does not exist",
-    "The login method: login with LDAP is not enabled for the application": "The login method: login with LDAP is not enabled for the application",
     "The login method: login with WebAuthn is not enabled for the application": "The login method: login with WebAuthn is not enabled for the application",
     "The login method: login with email is not enabled for the application": "The login method: login with email is not enabled for the application",
     "The login method: login with magic link is not enabled for the application": "The login method: login with magic link is not enabled for the application",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "Application cannot be empty",
+    "Error": "Error",
     "Granted scopes cannot be empty": "Granted scopes cannot be empty",
     "Invalid application": "Invalid application",
     "Missing parameter": "Missing parameter",
@@ -104,7 +104,6 @@
     "Please login first": "Please login first",
     "Please sign in first": "Please sign in first",
     "The client ID: %s is already used by another application": "The client ID: %s is already used by another application",
-    "The object does not exist": "The object does not exist",
     "The organization: %s should have one application at least": "The organization: %s should have one application at least",
     "The token: %s does not exist": "The token: %s does not exist",
     "The user doesn't exist": "The user doesn't exist",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "The objectKey: %s is not allowed",
     "The provider type: %s is not supported": "The provider type: %s is not supported"
-  },
-  "subscription": {
-    "Error": "Error"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "Grant_type: %s is not supported in this application",

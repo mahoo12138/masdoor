@@ -144,7 +144,6 @@ type UserWithoutThirdIdp struct {
 	MfaEmailEnabled  bool     `json:"mfaEmailEnabled"`
 	// MultiFactorAuths    []*MfaProps           `xorm:"-" json:"multiFactorAuths,omitempty"`
 
-	Ldap       string            `xorm:"ldap varchar(100)" json:"ldap"`
 	Properties map[string]string `json:"properties"`
 
 	Roles  []*Role  `json:"roles"`

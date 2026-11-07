@@ -110,8 +110,6 @@
     "Order - Tooltip": "Giá trị càng nhỏ, xếp hạng càng cao trong trang Ứng dụng",
     "Org choice mode": "Chế độ chọn tổ chức",
     "Org choice mode - Tooltip": "Phương thức chọn tổ chức để đăng nhập - Gợi ý",
-    "Other domains": "Tên miền khác",
-    "Other domains - Tooltip": "Các miền được phép bổ sung cho ứng dụng này, được sử dụng để kiểm soát truy cập liên miền",
     "Page HTML": "HTML trang",
     "Page HTML - Tooltip": "HTML tùy chỉnh cho trang chính của ứng dụng, cho phép kiểm soát hoàn toàn cấu trúc và nội dung trang",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "Vui lòng kích hoạt \"Phiên đăng nhập\" trước khi kích hoạt \"Đăng nhập tự động\"",
@@ -125,11 +123,8 @@
     "Refresh token expire": "Làm mới mã thông báo hết hạn",
     "Refresh token expire - Tooltip": "Thời gian hết hạn của mã thông báo làm mới",
     "Reset to Empty": "Đặt lại thành trống",
-    "Reverse Proxy": "Proxy ngược",
     "Right": "Đúng",
     "Rule": "Quy tắc",
-    "SSL cert": "Chứng chỉ SSL",
-    "SSL cert - Tooltip": "Chứng chỉ SSL để bảo mật kết nối HTTPS với ứng dụng",
     "Security": "Bảo mật",
     "Select": "Chọn",
     "Side panel HTML": "Bảng điều khiển HTML bên lề",
@@ -163,8 +158,6 @@
     "Token signing method": "Phương thức ký token",
     "Token signing method - Tooltip": "Phương thức ký token JWT, cần cùng thuật toán với chứng chỉ",
     "UI Customization": "Tùy chỉnh giao diện",
-    "Upstream host": "Máy chủ upstream",
-    "Upstream host - Tooltip": "Địa chỉ máy chủ backend upstream khi Masdoor được sử dụng ở chế độ proxy ngược",
     "Used for": "Dùng cho",
     "Vertical": "Dọc",
     "You are unexpected to see this prompt page": "Bạn không mong đợi thấy trang này hiện lên"
@@ -180,7 +173,6 @@
     "Copy private key": "Sao chép khóa riêng tư",
     "Crypto algorithm": "Thuật toán mã hóa",
     "Crypto algorithm - Tooltip": "Thuật toán mã hóa được sử dụng bởi chứng chỉ",
-    "Domain expire": "Hết hạn tên miền",
     "Download certificate": "Tải xuống chứng chỉ",
     "Download private key": "Tải xuống khóa riêng tư",
     "Edit Cert": "Chỉnh sửa chứng chỉ",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "Phạm vi này chưa được định nghĩa trong ứng dụng",
     "wants to access your account": "muốn truy cập tài khoản của bạn"
   },
-  "coupon": {
-    "Fixed": "Cố định",
-    "Percentage": "Tỷ lệ phần trăm",
-    "Product specific": "Dành riêng cho sản phẩm",
-    "Universal": "Phổ quát",
-    "User specific": "Dành riêng cho người dùng"
-  },
   "forget": {
     "Change Password": "Đổi mật khẩu",
     "Next Step": "Bước tiếp theo",
@@ -233,12 +218,14 @@
     "Access key": "Khóa truy cập",
     "Access key - Tooltip": "Khóa truy cập cho dịch vụ",
     "Action": "Hành động",
+    "Active": "Hoạt động",
     "Add": "Tạo mới",
     "Add custom item": "Thêm mục tùy chỉnh",
     "Admin": "Quản trị viên",
     "Affiliation URL": "Đường dẫn liên kết liên kết",
     "Affiliation URL - Tooltip": "Đường dẫn URL trang chủ của liên kết",
     "All": "Tất cả",
+    "Allow": "Cho phép",
     "Application": "Ứng dụng",
     "Application - Tooltip": "Gợi ý ứng dụng",
     "Applications": "Ứng dụng",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "Sao chép vào bộ nhớ tạm thành công",
     "Copy": "Sao chép",
     "Created time": "Thời gian tạo",
-    "Custom": "Tùy chỉnh",
     "Custom scopes": "Phạm vi tùy chỉnh",
     "Custom scopes - Tooltip": "Các phạm vi OAuth 2.0 bổ sung ngoài các phạm vi chuẩn (openid, profile, email). Phạm vi tùy chỉnh cho phép yêu cầu các quyền cụ thể hoặc quyền truy cập dữ liệu",
     "Dashboard": "Bảng điều khiển",
@@ -277,6 +263,7 @@
     "Default password": "Mật khẩu mặc định",
     "Default password - Tooltip": "Mật khẩu mặc định",
     "Delete": "Xóa",
+    "Deny": "Từ chối",
     "Description": "Mô tả",
     "Description - Tooltip": "Thông tin chi tiết mô tả cho tham khảo, Masdoor chính nó sẽ không sử dụng nó",
     "Detail": "Chi tiết",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "Hiển thị hướng dẫn cho người dùng",
     "Enabled": "Đã bật",
     "Enabled successfully": "Bật thành công",
-    "Error": "Lỗi",
     "Expire time": "Thời gian hết hạn",
     "Expire time - Tooltip": "Dấu thời gian hết hạn sau đó mục này trở nên không hợp lệ",
+    "Expired": "Đã hết hạn",
     "Failed to add": "Không thể thêm được",
     "Failed to cancel": "Không thể hủy",
     "Failed to connect to server": "Không thể kết nối đến máy chủ",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "Tên của người dùng",
     "Forget URL": "Quên URL",
     "Forget URL - Tooltip": "Đường dẫn tùy chỉnh cho trang \"Quên mật khẩu\". Nếu không được thiết lập, trang \"Quên mật khẩu\" mặc định của Masdoor sẽ được sử dụng. Khi cài đặt, liên kết \"Quên mật khẩu\" trên trang đăng nhập sẽ chuyển hướng đến URL này",
-    "Forms": "Biểu mẫu",
-    "GID number": "Số GID",
-    "GID number - Tooltip": "GID number - Tooltip",
     "General": "Chung",
     "Global Settings": "Cài đặt toàn cục",
     "Go to enable": "Đi để bật",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "Xin lỗi, bạn không có quyền truy cập trang này hoặc trạng thái đăng nhập không hợp lệ.",
     "State": "Nhà nước",
     "State - Tooltip": "Trạng thái",
+    "Status code": "Mã trạng thái",
     "Successfully added": "Đã thêm thành công",
     "Successfully copied": "Đã sao chép thành công",
     "Successfully deleted": "Đã xóa thành công",
@@ -448,14 +433,13 @@
     "Sure to delete": "Chắc chắn muốn xóa",
     "Sure to disable": "Chắc chắn tắt?",
     "Sure to remove": "Chắc chắn xóa?",
-    "Swagger": "Giao diện Swagger",
+    "Suspended": "Tạm dừng",
     "System Info": "Thông tin hệ thống",
     "Tab": "Thẻ",
     "Tag": "Thẻ",
     "There was a problem signing you in..": "Đã xảy ra lỗi khi đăng nhập..",
     "This field is required": "Trường này là bắt buộc",
     "This is a read-only demo site!": "Đây là trang web giới thiệu chỉ có chức năng đọc!",
-    "Tickets": "Ticket",
     "Timestamp": "Dấu thời gian",
     "Title": "Tiêu đề",
     "Title - Tooltip": "Tiêu đề",
@@ -466,8 +450,6 @@
     "True": "Đúng",
     "Type": "Loại",
     "Type - Tooltip": "Danh mục hoặc loại phân loại hành vi hoặc cấu hình của mục này",
-    "UID number": "Số UID",
-    "UID number - Tooltip": "UID number - Tooltip",
     "URL": "Địa chỉ URL",
     "URL - Tooltip": "Đường dẫn URL",
     "Unauthorized": "Không được phép",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "Bạn chỉ có thể chọn một nhóm vật lý",
     "You must select a picture first": "Bạn phải chọn một hình ảnh trước",
     "empty": "trống",
-    "remove": "xóa"
+    "remove": "xóa",
+    "seconds": "giây"
   },
   "group": {
     "Edit Group": "Chỉnh sửa nhóm",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "Sử dụng ứng dụng xác thực",
     "Use Email": "Sử dụng Email",
     "Use Push Notification": "Sử dụng thông báo đẩy",
-    "Use Radius": "Sử dụng Radius",
     "Use a recovery code": "Sử dụng mã khôi phục",
     "Use recovery code": "Use recovery code",
     "Verify Code": "Mã xác minh",
     "Verify Password": "Xác minh mật khẩu",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "Bạn đã bật xác thực đa yếu tố, vui lòng nhấp 'Lấy mã' để tiếp tục",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "Bạn đã bật xác thực đa yếu tố, vui lòng nhập mật khẩu RADIUS",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "Bạn đã bật xác thực đa yếu tố, vui lòng nhập mã TOTP",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Bạn đã bật xác thực đa yếu tố, vui lòng nhập mã xác minh từ thông báo đẩy",
     "Your email is": "Email của bạn là",
@@ -651,8 +632,6 @@
     "Tags": "Thẻ",
     "The Masdoor console is disabled for the regular users of this organization": "Bảng điều khiển Masdoor đã bị tắt đối với người dùng thông thường của tổ chức này",
     "Token retention days": "Số ngày lưu token",
-    "Trusted database hosts": "Máy chủ cơ sở dữ liệu tin cậy",
-    "Trusted database hosts - Tooltip": "Trusted database hosts - Tooltip",
     "Use Email as username": "Sử dụng Email làm tên người dùng",
     "Use Email as username - Tooltip": "Sử dụng Email làm tên người dùng nếu trường tên người dùng không hiển thị khi đăng ký",
     "Use permanent avatar": "Dùng ảnh đại diện cố định",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "Địa chỉ trang chủ của tổ chức. Trường này không được sử dụng trong Masdoor",
     "Widget items": "Các mục tiện ích",
     "Widget items - Tooltip": "Gợi ý các mục tiện ích"
-  },
-  "permission": {
-    "Allow": "Cho phép",
-    "Approved": "Đã được phê duyệt",
-    "Deny": "Từ chối",
-    "Read": "Đọc",
-    "TreeNode": "Nút cây",
-    "Write": "Viết"
   },
   "provider": {
     "Advanced": "Nâng cao",
@@ -807,9 +778,6 @@
     "Sub users": "Người dùng trong phụ",
     "Sub users - Tooltip": "Người dùng được bao gồm trong vai trò hiện tại"
   },
-  "rule": {
-    "Status code": "Mã trạng thái"
-  },
   "setting": {
     "Cannot be more than the max open connections": "Không được lớn hơn số kết nối mở tối đa",
     "Connection max lifetime": "Thời gian sống tối đa của kết nối",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "Mật khẩu xác nhận của bạn không khớp với mật khẩu đã nhập!",
     "sign in now": "Đăng nhập ngay bây giờ"
   },
-  "subscription": {
-    "Active": "Hoạt động",
-    "Expired": "Đã hết hạn",
-    "Renewal failed": "Gia hạn thất bại",
-    "Renewed": "Đã gia hạn",
-    "Renewing": "Đang gia hạn",
-    "Suspended": "Tạm dừng",
-    "Upcoming": "Sắp tới"
-  },
   "system": {
     "API Latency": "Độ trễ API",
     "API Throughput": "Thông lượng API",
@@ -895,6 +854,7 @@
     "Version": "Phiên bản"
   },
   "theme": {
+    "Accent": "Màu nhấn",
     "Blossom": "hoa nở",
     "Border radius": "Bán kính đường viền",
     "Customize theme": "Tùy chỉnh giao diện",
@@ -905,14 +865,7 @@
     "Primary color": "Màu sắc cơ bản",
     "System": "Hệ thống",
     "Theme": "Giao diện",
-    "Theme - Tooltip": "Trang trí giao diện của ứng dụng",
-    "Accent": "Màu nhấn"
-  },
-  "ticket": {
-    "Closed": "Đã đóng",
-    "In Progress": "Đang tiến hành",
-    "Open": "Mở",
-    "Resolved": "Đã giải quyết"
+    "Theme - Tooltip": "Trang trí giao diện của ứng dụng"
   },
   "token": {
     "Access token": "Mã thông báo truy cập",
@@ -930,9 +883,6 @@
     "Refresh token": "Token làm mới",
     "Token type": "Loại mã thông báo",
     "Token type - Tooltip": "Gợi ý loại token"
-  },
-  "usage": {
-    "seconds": "giây"
   },
   "user": {
     "3rd-party logins": "Đăng nhập bên thứ ba",

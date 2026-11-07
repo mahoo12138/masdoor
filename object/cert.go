@@ -36,12 +36,7 @@ type Cert struct {
 	BitSize         int    `json:"bitSize"`
 	ExpireInYears   int    `json:"expireInYears"`
 
-	ExpireTime       string `xorm:"varchar(100)" json:"expireTime"`
-	DomainExpireTime string `xorm:"varchar(100)" json:"domainExpireTime"`
-	Provider         string `xorm:"varchar(100)" json:"provider"`
-	Account          string `xorm:"varchar(100)" json:"account"`
-	AccessKey        string `xorm:"varchar(100)" json:"accessKey"`
-	AccessSecret     string `xorm:"varchar(100)" json:"accessSecret"`
+	ExpireTime string `xorm:"varchar(100)" json:"expireTime"`
 
 	Certificate string `xorm:"mediumtext" json:"certificate"`
 	PrivateKey  string `xorm:"mediumtext" json:"privateKey"`
@@ -54,9 +49,6 @@ func GetMaskedCert(cert *Cert) *Cert {
 
 	if cert.PrivateKey != "" {
 		cert.PrivateKey = "***"
-	}
-	if cert.AccessSecret != "" {
-		cert.AccessSecret = "***"
 	}
 	return cert
 }
@@ -239,20 +231,6 @@ func (p *Cert) GetId() string {
 
 func (p *Cert) populateContent() error {
 	if p.Certificate != "" && p.PrivateKey != "" {
-		return nil
-	}
-
-	if p.Type == "SSL" {
-		if p.Certificate != "" {
-			expireTime, err := util.GetCertExpireTime(p.Certificate)
-			if err != nil {
-				return err
-			}
-
-			p.ExpireTime = expireTime
-		} else {
-			p.ExpireTime = ""
-		}
 		return nil
 	}
 

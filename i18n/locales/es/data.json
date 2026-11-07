@@ -19,7 +19,6 @@
     "The application: %s does not exist": "La aplicación: %s no existe",
     "The application: %s has disabled users to signin": "La aplicación: %s ha desactivado el inicio de sesión de usuarios",
     "The group: %s does not exist": "El grupo: %s no existe",
-    "The login method: login with LDAP is not enabled for the application": "El método de inicio de sesión: inicio de sesión con LDAP no está habilitado para la aplicación",
     "The login method: login with WebAuthn is not enabled for the application": "El método de inicio de sesión: el inicio de sesión con WebAuthn no está habilitado para la aplicación",
     "The login method: login with email is not enabled for the application": "El método de inicio de sesión: inicio de sesión con correo electrónico no está habilitado para la aplicación",
     "The login method: login with magic link is not enabled for the application": "El método de inicio de sesión: inicio de sesión con enlace mágico no está habilitado para la aplicación",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "La aplicación no puede estar vacía",
+    "Error": "Error",
     "Granted scopes cannot be empty": "Los alcances concedidos no pueden estar vacíos",
     "Invalid application": "Aplicación no válida",
     "Missing parameter": "Parámetro faltante",
@@ -104,7 +104,6 @@
     "Please login first": "Por favor, inicia sesión primero",
     "Please sign in first": "Inicie sesión primero",
     "The client ID: %s is already used by another application": "El ID de cliente: %s ya está siendo usado por otra aplicación",
-    "The object does not exist": "El objeto no existe",
     "The organization: %s should have one application at least": "La organización: %s debe tener al menos una aplicación",
     "The token: %s does not exist": "El token: %s no existe",
     "The user doesn't exist": "El usuario no existe",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "El objectKey: %s no está permitido",
     "The provider type: %s is not supported": "El tipo de proveedor: %s no es compatible"
-  },
-  "subscription": {
-    "Error": "Error"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "El tipo de subvención: %s no es compatible con esta aplicación",

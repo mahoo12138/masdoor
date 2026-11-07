@@ -28,10 +28,8 @@ const RESOURCE_LABELS: Record<string, string> = {
   "verifications": "general:Verifications",
   "sysinfo": "general:System Info",
   "settings": "general:Global Settings",
-  "forms": "general:Forms",
   "webhooks": "general:Webhooks",
   "webhook-events": "general:Webhook Events",
-  "tickets": "general:Tickets",
   "mfa": "general:MFA",
 };
 

@@ -138,13 +138,14 @@ Measured on the STANDARD image after the trim (arm64, SQLite, idle):
 
 - **Data first:** the database is a single SQLite file (`data/masdoor.db` by default, or the `masdoor-data` volume in compose). Stop the container and copy that file before upgrading.
 - **Schema:** XORM's `Sync2` only adds missing columns/tables on startup; it never drops anything. Tables and columns left behind by removed modules are inert — drop them manually if you want a tidy schema.
+- **Stale seed rows:** an instance created by an older build can keep values that no release writes any more — `application.homepage_url = 'https://casdoor.org'`, a `Face ID` / `LDAP` entry in `application.signin_items`, and user avatars pointing at `https://cdn.casbin.org/...`. They are data, not code, so only a manual update clears them.
 - **No upstream merges:** Masdoor no longer tracks Casdoor. Security fixes are backported manually; run the regression checklist and `go test ./...` after every pull.
 - **Config drift:** new releases may add `app.conf` keys; existing keys keep their values. Check the release notes for renamed or removed keys.
 
 ## Security notes
 
 - CSRF protection for cookie-authenticated API calls, PKCE for public clients and `nonce` verification in the OIDC flow are all preserved — they were part of the kept core, not the trim.
-- Custom login-page HTML/CSS goes through the upstream sanitising logic; do not weaken it, it is the XSS boundary for the theming feature.
+- Custom login-page HTML/CSS is validated on save and sanitized again at render, for every author including global admins. That is the XSS boundary of the theming feature: layout markup, images, links and styles are kept, executable script is not. Do not weaken either side.
 - The admin account created by `init_data` ships with a well-known password — change it on first sign-in.
 
 ## License

@@ -19,7 +19,6 @@
     "The application: %s does not exist": "Ứng dụng: %s không tồn tại",
     "The application: %s has disabled users to signin": "Ứng dụng: %s đã vô hiệu hóa đăng nhập của người dùng",
     "The group: %s does not exist": "Nhóm: %s không tồn tại",
-    "The login method: login with LDAP is not enabled for the application": "Phương thức đăng nhập bằng LDAP chưa được bật cho ứng dụng",
     "The login method: login with WebAuthn is not enabled for the application": "Phương thức đăng nhập: đăng nhập bằng WebAuthn không được bật cho ứng dụng",
     "The login method: login with email is not enabled for the application": "Phương thức đăng nhập bằng email chưa được bật cho ứng dụng",
     "The login method: login with magic link is not enabled for the application": "Phương thức đăng nhập: đăng nhập bằng liên kết ma thuật chưa được bật cho ứng dụng",
@@ -97,6 +96,7 @@
   },
   "general": {
     "Application cannot be empty": "Ứng dụng không được để trống",
+    "Error": "Lỗi",
     "Granted scopes cannot be empty": "Phạm vi được cấp không được để trống",
     "Invalid application": "Ứng dụng không hợp lệ",
     "Missing parameter": "Thiếu tham số",
@@ -104,7 +104,6 @@
     "Please login first": "Vui lòng đăng nhập trước",
     "Please sign in first": "Vui lòng đăng nhập trước",
     "The client ID: %s is already used by another application": "ID ứng dụng khách: %s đã được một ứng dụng khác sử dụng",
-    "The object does not exist": "Đối tượng không tồn tại",
     "The organization: %s should have one application at least": "Tổ chức: %s cần có ít nhất một ứng dụng",
     "The token: %s does not exist": "Token: %s không tồn tại",
     "The user doesn't exist": "Người dùng không tồn tại",
@@ -152,9 +151,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "Khóa đối tượng: %s không được phép",
     "The provider type: %s is not supported": "Loại nhà cung cấp: %s không được hỗ trợ"
-  },
-  "subscription": {
-    "Error": "Lỗi"
   },
   "token": {
     "Grant_type: %s is not supported in this application": "Loại cấp phép: %s không được hỗ trợ trong ứng dụng này",

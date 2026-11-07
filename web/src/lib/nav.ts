@@ -111,19 +111,12 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     {key: "/webhooks", label: i18next.t("general:Webhooks")},
     {key: "/webhook-events", label: i18next.t("general:Webhook Events")},
   );
-  if (Setting.isAdminUser(account)) {
-    adminItems.push({
-      key: "/swagger",
-      label: i18next.t("general:Swagger"),
-      href: Setting.isLocalhost() ? `${Setting.getFullServerUrl()}/swagger` : Setting.withBasePath("/swagger"),
-    });
-  }
 
   groups.push({
     key: "/admin",
     label: i18next.t("general:Admin"),
     icon: Settings,
-    to: Setting.isAdminUser(account) ? "/sysinfo" : "/forms",
+    to: Setting.isAdminUser(account) ? "/sysinfo" : "/apps",
     items: adminItems,
   });
 

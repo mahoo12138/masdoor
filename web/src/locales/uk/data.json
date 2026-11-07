@@ -110,8 +110,6 @@
     "Order - Tooltip": "Чим менше значення, тим вище воно ранжується на сторінці застосунків",
     "Org choice mode": "Режим вибору організації",
     "Org choice mode - Tooltip": "Режим вибору організації – підказка",
-    "Other domains": "Інші домени",
-    "Other domains - Tooltip": "Додаткові дозволені домени для цього застосунку, що використовуються для крос-доменного контролю доступу",
     "Page HTML": "HTML сторінки",
     "Page HTML - Tooltip": "Спеціальний HTML для головної сторінки застосунку, що дозволяє повний контроль над структурою та вмістом сторінки",
     "Please enable \"Signin session\" first before enabling \"Auto signin\"": "Спочатку увімкніть \"Сесію входу\", перш ніж увімкнути \"Автоматичний вхід\"",
@@ -125,11 +123,8 @@
     "Refresh token expire": "Термін дії refresh-токена",
     "Refresh token expire - Tooltip": "Термін дії refresh-токена",
     "Reset to Empty": "Скинути до порожнього",
-    "Reverse Proxy": "Зворотний проксі",
     "Right": "Праворуч",
     "Rule": "Правило",
-    "SSL cert": "Сертифікат SSL",
-    "SSL cert - Tooltip": "Сертифікат SSL для захисту HTTPS-з'єднань із застосунком",
     "Security": "Безпека",
     "Select": "Виберіть",
     "Side panel HTML": "HTML бічної панелі",
@@ -163,8 +158,6 @@
     "Token signing method": "Метод підпису токена",
     "Token signing method - Tooltip": "Метод підпису JWT-токена, повинен бути тим же алгоритмом, що і сертифікат",
     "UI Customization": "Налаштування інтерфейсу",
-    "Upstream host": "Вихідний хост",
-    "Upstream host - Tooltip": "Адреса вихідного бекенд-хоста, коли Masdoor використовується в режимі зворотного проксі",
     "Used for": "Використовується для",
     "Vertical": "Вертикальний",
     "You are unexpected to see this prompt page": "Ви неочікувано побачите цю сторінку запиту"
@@ -180,7 +173,6 @@
     "Copy private key": "Скопіюйте закритий ключ",
     "Crypto algorithm": "Криптоалгоритм",
     "Crypto algorithm - Tooltip": "Алгоритм шифрування, який використовується сертифікатом",
-    "Domain expire": "Закінчення домену",
     "Download certificate": "Завантажити сертифікат",
     "Download private key": "Завантажте закритий ключ",
     "Edit Cert": "Редагувати сертифікат",
@@ -213,13 +205,6 @@
     "This scope is not defined in the application": "Ця область не визначена в застосунку",
     "wants to access your account": "хоче отримати доступ до вашого облікового запису"
   },
-  "coupon": {
-    "Fixed": "Фіксована",
-    "Percentage": "Відсоткова",
-    "Product specific": "Для конкретного продукту",
-    "Universal": "Універсальний",
-    "User specific": "Для конкретного користувача"
-  },
   "forget": {
     "Change Password": "Змінити пароль",
     "Next Step": "Наступний крок",
@@ -233,12 +218,14 @@
     "Access key": "Ключ доступу",
     "Access key - Tooltip": "Ключ доступу для сервісу",
     "Action": "Дія",
+    "Active": "Активний",
     "Add": "Додати",
     "Add custom item": "Додати нестандартний елемент",
     "Admin": "Адміністратор",
     "Affiliation URL": "URL-адреса приналежності",
     "Affiliation URL - Tooltip": "URL-адреса домашньої сторінки для приєднання",
     "All": "Всі",
+    "Allow": "Дозволити",
     "Application": "Застосунок",
     "Application - Tooltip": "Застосунок – підказка",
     "Applications": "Застосунки",
@@ -265,7 +252,6 @@
     "Copied to clipboard successfully": "Успішно скопійовано в буфер обміну",
     "Copy": "Копіювати",
     "Created time": "Час створення",
-    "Custom": "Користувацький",
     "Custom scopes": "Власні області",
     "Custom scopes - Tooltip": "Додаткові області OAuth 2.0 поза стандартними (openid, profile, email). Власні області дозволяють запитувати конкретні дозволи або доступ до даних",
     "Dashboard": "Панель керування",
@@ -277,6 +263,7 @@
     "Default password": "Пароль за замовчуванням",
     "Default password - Tooltip": "Пароль за замовчуванням",
     "Delete": "Видалити",
+    "Deny": "Заборонити",
     "Description": "Опис",
     "Description - Tooltip": "Детальний опис інформації для довідки, сам Masdoor не використовуватиме його",
     "Detail": "Деталі",
@@ -298,9 +285,9 @@
     "Enable tour - Tooltip": "Відобразити тур для користувачів",
     "Enabled": "Увімкнено",
     "Enabled successfully": "Успішно ввімкнено",
-    "Error": "Помилка",
     "Expire time": "Час закінчення",
     "Expire time - Tooltip": "Мітка часу закінчення, після якого цей елемент стає недійсним",
+    "Expired": "Термін дії минув",
     "Failed to add": "Не вдалося додати",
     "Failed to cancel": "Не вдалося скасувати",
     "Failed to connect to server": "Не вдалося підключитися до сервера",
@@ -321,9 +308,6 @@
     "First name - Tooltip": "Ім'я користувача",
     "Forget URL": "Забути URL",
     "Forget URL - Tooltip": "Користувацька URL-адреса для сторінки \"Забути пароль\". ",
-    "Forms": "Форми",
-    "GID number": "Номер GID",
-    "GID number - Tooltip": "GID number - Tooltip",
     "General": "Загальне",
     "Global Settings": "Глобальні налаштування",
     "Go to enable": "Перейти до увімкнення",
@@ -435,6 +419,7 @@
     "Sorry, you do not have permission to access this page or logged in status invalid.": "Вибачте, у вас немає дозволу на доступ до цієї сторінки або статус входу недійсний.",
     "State": "Стан",
     "State - Tooltip": "Стан",
+    "Status code": "Код стану",
     "Successfully added": "Успішно додано",
     "Successfully copied": "Успішно скопійовано",
     "Successfully deleted": "Успішно видалено",
@@ -448,14 +433,13 @@
     "Sure to delete": "Точно видалити",
     "Sure to disable": "Точно вимкнути",
     "Sure to remove": "Точно видалити",
-    "Swagger": "Інтерфейс Swagger",
+    "Suspended": "Призупинено",
     "System Info": "Інформація про систему",
     "Tab": "Вкладка",
     "Tag": "Тег",
     "There was a problem signing you in..": "Під час входу виникла проблема.",
     "This field is required": "Це поле є обов'язковим",
     "This is a read-only demo site!": "Це демо-сайт лише для читання!",
-    "Tickets": "Тікети",
     "Timestamp": "Мітка часу",
     "Title": "Заголовок",
     "Title - Tooltip": "Заголовок",
@@ -466,8 +450,6 @@
     "True": "Так",
     "Type": "Тип",
     "Type - Tooltip": "Категорія або тип, що класифікує поведінку або конфігурацію цього елемента",
-    "UID number": "Номер UID",
-    "UID number - Tooltip": "UID number - Tooltip",
     "URL": "URL-адреса",
     "URL - Tooltip": "URL-посилання",
     "Unauthorized": "Не авторизовано",
@@ -491,7 +473,8 @@
     "You can only select one physical group": "Ви можете вибрати лише одну фізичну групу",
     "You must select a picture first": "Спочатку ви повинні вибрати зображення",
     "empty": "порожній",
-    "remove": "видалити"
+    "remove": "видалити",
+    "seconds": "секунд"
   },
   "group": {
     "Edit Group": "Редагувати групу",
@@ -603,13 +586,11 @@
     "Use Authenticator App": "Використати застосунок-автентифікатор",
     "Use Email": "Використати електронну пошту",
     "Use Push Notification": "Використовувати Push-сповіщення",
-    "Use Radius": "Використовувати Radius",
     "Use a recovery code": "Використовуйте код відновлення",
     "Use recovery code": "Use recovery code",
     "Verify Code": "Підтвердити код",
     "Verify Password": "Підтвердіть пароль",
     "You have enabled Multi-Factor Authentication, Please click 'Get Code' to continue": "Ви ввімкнули багатофакторну автентифікацію. Натисніть «Отримати код», щоб продовжити",
-    "You have enabled Multi-Factor Authentication, please enter the RADIUS password": "Ви ввімкнули багатофакторну автентифікацію, введіть пароль RADIUS",
     "You have enabled Multi-Factor Authentication, please enter the TOTP code": "Ви ввімкнули багатофакторну автентифікацію, введіть TOTP-код",
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Ви ввімкнули багатофакторну автентифікацію, введіть код підтвердження з push-сповіщення",
     "Your email is": "Ваша електронна адреса",
@@ -651,8 +632,6 @@
     "Tags": "Теги",
     "The Masdoor console is disabled for the regular users of this organization": "Консоль Masdoor вимкнено для звичайних користувачів цієї організації",
     "Token retention days": "Термін зберігання токенів (днів)",
-    "Trusted database hosts": "Довірені хости баз даних",
-    "Trusted database hosts - Tooltip": "Trusted database hosts - Tooltip",
     "Use Email as username": "Використовувати email як ім'я користувача",
     "Use Email as username - Tooltip": "Використовувати email як ім'я користувача, якщо поле імені користувача не відображається при реєстрації",
     "Use permanent avatar": "Використовувати постійний аватар",
@@ -667,14 +646,6 @@
     "Website URL - Tooltip": "URL домашньої сторінки організації. Це поле не використовується в Masdoor",
     "Widget items": "Елементи віджета",
     "Widget items - Tooltip": "Елементи, що відображаються у віджеті"
-  },
-  "permission": {
-    "Allow": "Дозволити",
-    "Approved": "Затверджено",
-    "Deny": "Заборонити",
-    "Read": "Читання",
-    "TreeNode": "Вузол дерева",
-    "Write": "Запис"
   },
   "provider": {
     "Advanced": "Розширені",
@@ -807,9 +778,6 @@
     "Sub users": "Підкористувачі",
     "Sub users - Tooltip": "Користувачі, включені до поточної ролі"
   },
-  "rule": {
-    "Status code": "Код стану"
-  },
   "setting": {
     "Cannot be more than the max open connections": "Не може перевищувати макс. кількість відкритих з'єднань",
     "Connection max lifetime": "Макс. час життя з'єднання",
@@ -867,15 +835,6 @@
     "Your confirmed password is inconsistent with the password!": "Ваш підтверджений пароль не відповідає паролю!",
     "sign in now": "увійти зараз"
   },
-  "subscription": {
-    "Active": "Активний",
-    "Expired": "Термін дії минув",
-    "Renewal failed": "Не вдалося поновити",
-    "Renewed": "Поновлено",
-    "Renewing": "Поновлюється",
-    "Suspended": "Призупинено",
-    "Upcoming": "Майбутні"
-  },
   "system": {
     "API Latency": "Затримка API",
     "API Throughput": "Пропускна здатність API",
@@ -895,6 +854,7 @@
     "Version": "Версія"
   },
   "theme": {
+    "Accent": "Акцентний колір",
     "Blossom": "Цвітіння",
     "Border radius": "Радіус межі",
     "Customize theme": "Налаштувати тему",
@@ -905,14 +865,7 @@
     "Primary color": "Основний колір",
     "System": "Системна",
     "Theme": "Тема",
-    "Theme - Tooltip": "Тема стилю застосунку",
-    "Accent": "Акцентний колір"
-  },
-  "ticket": {
-    "Closed": "Закрито",
-    "In Progress": "Виконується",
-    "Open": "Відкрити",
-    "Resolved": "Вирішено"
+    "Theme - Tooltip": "Тема стилю застосунку"
   },
   "token": {
     "Access token": "Токен доступу",
@@ -930,9 +883,6 @@
     "Refresh token": "Токен оновлення",
     "Token type": "Тип токена",
     "Token type - Tooltip": "Тип токена - підказка"
-  },
-  "usage": {
-    "seconds": "секунд"
   },
   "user": {
     "3rd-party logins": "Логіни третіх сторін",

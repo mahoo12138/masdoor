@@ -212,10 +212,28 @@ gantt
 | 权限中台改造 | 已删除 Casbin 全套（Permission/Model/Adapter/Enforcer/`/api/enforce`），API 层守卫改为 `authz/authz.go` 常量规则表 + 自实现 keyMatch2，含单元测试 |
 | 第三方适配器精简 | 按使用决策裁剪：社交登录 58→4（GitHub/GitLab/Gitea/Google）；存储 11→3（本地/MinIO/S3）；邮件 5→2（SMTP/Resend）；通知 20→4（Bark/Telegram/企业微信/自定义 HTTP） |
 | 数据库 | 默认 SQLite（modernc 纯 Go 驱动，CGO_ENABLED=0）；Sync2 只加不删，废弃表可手工清理 |
-| 安全保留清单 | CSRF（HttpOnly + SameSite Lax + authz 归属校验）、PKCE/nonce/state、令牌签发/刷新/撤销、HTML/CSS 注入防护均验证在位 |
+| 安全保留清单 | CSRF（HttpOnly + SameSite Lax + authz 归属校验）、PKCE/nonce/state、令牌签发/刷新/撤销在位；HTML/CSS 注入防护在 0.1 RC 复核中改为对全局管理员同样生效 |
 | 资源目标 | 实测优于计划：镜像 **105MB**（计划估 200-300MB）；256MB 内存限制下常驻 **~19MB**（计划估 150-220MB） |
-| 自动化回归 | 新增 `routers/route_matrix_test.go`（移除端点 44 个 + 核心端点 30 个断言）；CI 跑 build/vet/test + 前端 typecheck/build |
+| 自动化回归 | 新增 `routers/route_matrix_test.go`（0.1 RC 复核后扩到 **171** 个已移除端点 + 核心端点断言，按模块分组）；CI 跑 build/vet/test + 前端 typecheck/build |
 | 发布准备 | Dockerfile 硬化（prod runmode、单架构编译、无 sudo）；`.goreleaser.yaml` 补前端构建 hook 与版本号注入；README 含升级指南，CONTRIBUTING.md 就绪 |
 | 未采用项 | 通知通道完整保留的选项未采纳（按决策裁至 4 种）；WeChat OAuth 在计划外已被更早的裁剪移除，仅保留企业微信通知通道 |
 
 > **信息来源：** 本方案参考 Masdoor 官方源码与文档（主题配置与订阅逻辑说明），结合对 Masdoor 架构的分析和类似项目经验编写。外部工具如 Auténtico、Tinyauth、Keycloakify 等仅作为对比，不影响本方案基于 Masdoor 的实施细节。
+
+## 0.1 RC 复核与修复（2026-11-08）
+
+以 `v0.1.0-rc1` 标签的镜像做了一次本地 Docker 部署实测 + 前后端删减审计，结论与处置：
+
+| 类别 | 发现 | 处置 |
+| --- | --- | --- |
+| 安全 | 主题 HTML 槽位（formSideHtml/headerHtml/signinHtml 等）对 built-in 组织应用原样注入，登录页可执行任意脚本；后端 `CheckApplicationCustomHtml` 又豁免全局管理员 | 前后端一律过滤：去掉 `isTrustedApplication` 例外（DOMPurify 全量生效），保存校验不再豁免全局管理员 |
+| 功能 | 非管理员登录后落到已删除的 `/forms`（404 页） | 落地页改为 `/apps` |
+| 功能 | 组织设置里的"可信数据库主机"仍可调，但它只服务于已删除的 Syncer/Adapter，后端校验函数全部无引用 | 删除 `object/data_source.go`、`Organization.TrustedDbHosts` 与对应界面行 |
+| 功能 | 管理工具仍挂 "API 文档"入口，prod 镜像不挂 swagger 静态路径，点进去是应用内 404 | 移除该菜单项与组织可见性树条目 |
+| 删减不到位 | 应用编辑页"反向代理"标签与 `domain/otherDomains/upstreamHost/sslMode/sslCert` 字段、证书页 SSL/ACME（GoDaddy、Aliyun）与 `Payment` 类型 + `/api/update-cert-domain-expire` + whois 依赖、应用 Category `Agent`(MCP/A2A)、MFA "Use Radius"、注册页 plan/pricing 跳 `/buy-plan`、DCR 注册成 MCP 客户端、菜单标题 "Casbin权限管理" | 全部移除；DCR 客户端类型改回 OIDC |
+| 死代码 | `object/viaSSHDialer.go`、Casbin ABAC 助手与 `StringToInterfaceArray*`、`GetUploadXlsxPath`、`BuildType` 自升级残留、`form/auth.go` 的 RelayState/Plan/Pricing/FaceId、`IsLdapEnabled`/`IsPasswordWithLdapEnabled`、登录主路径的 LDAP 分支、`uidNumber/gidNumber` POSIX 列、`claims_supported` 里的 ldap/score/ranking、filters 中 /cas /scim /login/saml /api/webhook 死分支、`SUBMAIL` 邮件分支 | 全部删除，相关单测与注解同步 |
+| 删减不到位 | `authz.go` 仍为计费/saml/cas/scim/radius/faceid/kerberos 等已删端点保留规则，其中计费端点是**公开放行**，导致这些端点返回 404 而其它已删端点返回 200+拒绝 | 删除全部 35 条死规则，已删端点行为统一为拒绝 |
+| 前端杂项 | `enum-labels.tsx` 12 个无引用映射、`defaults.ts` 三个工厂、6 个已删模块 i18n 命名空间（其中 Expired/Active/Allow/Deny/Status code/seconds 被在用页面复用） | 删除死代码；被复用的键迁入 `general`（Go 侧 `subscription:Error` → `general:Error`），再删空命名空间 |
+| 发布 | Helm `values.yaml` 默认仓库 `casbin`（裸 `helm install` 会部署上游全功能镜像）、`Chart.yaml` 描述仍宣传 MCP/SAML/LDAP/Face ID、chart README 留空 LDAP 参数表与上游 chart 迁移说明 | 仓库改 `mahoo12138`，快照测试与文档同步 |
+
+验收复核（`v0.1.0-rc1` 镜像 + SQLite）：OIDC 授权码 + PKCE(S256)、state/nonce、令牌签发/刷新轮换/撤销、`/api/userinfo` 401 于撤销后、JWKS RS256、主题槽位渲染与 CSS 生效、首装设置管理员密码流程均通过；镜像 105MB，容器常驻 30MB。

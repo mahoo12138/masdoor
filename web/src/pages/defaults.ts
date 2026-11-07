@@ -108,17 +108,6 @@ export function newCert(account: Account, ownerOverride?: string) {
   };
 }
 
-export function newEnforcer(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `enforcer_${randomName}`,
-    createdTime: now(),
-    displayName: `New Enforcer - ${randomName}`,
-  };
-}
-
 export function newForm(account: Account) {
   const randomName = Setting.getRandomName();
   return {
@@ -202,30 +191,6 @@ export function newModel(account: Account) {
   };
 }
 
-export function newPermission(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `permission_${randomName}`,
-    createdTime: now(),
-    displayName: `New Permission - ${randomName}`,
-    users: [`${account.owner}/${account.name}`],
-    groups: [],
-    roles: [],
-    domains: [],
-    resourceType: "Application",
-    resources: [Conf.DefaultApplication],
-    actions: ["Read"],
-    effect: "Allow",
-    isEnabled: true,
-    submitter: account.name,
-    approver: "",
-    approveTime: "",
-    state: Setting.isLocalAdminUser(account) ? "Approved" : "Pending",
-  };
-}
-
 export function newProvider(account: Account, ownerOverride?: string) {
   const randomName = Setting.getRandomName();
   const owner = Setting.isDefaultOrganizationSelected(account) ? ownerOverride ?? "admin" : Setting.getRequestOrganization(account);
@@ -273,23 +238,6 @@ export function newRule(account: Account) {
     expressions: [],
     action: "Block",
     reason: "Your request is blocked.",
-  };
-}
-
-export function newTicket(account: Account) {
-  const randomName = Setting.getRandomName();
-  const owner = Setting.getRequestOrganization(account);
-  return {
-    owner,
-    name: `ticket_${randomName}`,
-    createdTime: now(),
-    updatedTime: now(),
-    displayName: `New Ticket - ${randomName}`,
-    user: account.name,
-    title: "",
-    content: "",
-    state: "Open",
-    messages: [],
   };
 }
 

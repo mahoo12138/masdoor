@@ -614,17 +614,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         <Input value={user.language ?? ""} onChange={(e) => updateField("language", e.target.value)} />
       </AccountItemRow>
     ),
-    "UID number": (
-      <AccountItemRow name="UID number" labelKey="general:UID number">
-        <Input
-          type="number"
-          min={0}
-          step={1}
-          value={user.uidNumber ?? 0}
-          onChange={(e) => updateField("uidNumber", Setting.myParseInt(e.target.value))}
-        />
-      </AccountItemRow>
-    ),
     "Properties": (
       <AccountItemRow name="Properties" labelKey="user:Properties" block>
         <MapTable

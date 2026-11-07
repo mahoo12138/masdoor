@@ -12,9 +12,8 @@ import {FormRow} from "@/components/crud/FormRow";
 import type {ApplicationTabProps, MenuMode} from "@/components/application/types";
 import * as Setting from "@/lib/setting";
 
-const APPLICATION_CATEGORIES = ["Default", "Agent"];
+const APPLICATION_CATEGORIES = ["Default"];
 const APPLICATION_TYPES = ["All", "OIDC", "OAuth"];
-const AGENT_APPLICATION_TYPES = ["MCP", "A2A"];
 
 interface ApplicationBasicTabProps extends ApplicationTabProps {
   mode: string;
@@ -103,8 +102,7 @@ export function ApplicationBasicTab({
           value={application.category || "Default"}
           onChange={(v) => {
             updateField("category", v);
-            // the two categories have no type in common, so the old one cannot be kept
-            updateField("type", v === "Agent" ? "MCP" : "All");
+            updateField("type", "All");
           }}
           options={APPLICATION_CATEGORIES.map((item) => ({id: item, name: item}))}
         />
@@ -113,7 +111,7 @@ export function ApplicationBasicTab({
         <SelectField
           value={application.type || "All"}
           onChange={(v) => updateField("type", v)}
-          options={(application.category === "Agent" ? AGENT_APPLICATION_TYPES : APPLICATION_TYPES).map((item) => ({id: item, name: item}))}
+          options={APPLICATION_TYPES.map((item) => ({id: item, name: item}))}
         />
       </FormRow>
       <FormRow labelKey="general:Is shared">
