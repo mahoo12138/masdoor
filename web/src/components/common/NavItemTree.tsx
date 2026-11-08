@@ -26,10 +26,11 @@ function getNavItemNodes(): TreeNode[] {
           key: "/orgs-top",
           title: i18next.t("general:User Management"),
           children: [
-            {key: "/organizations", title: i18next.t("general:Organizations")},
-            {key: "/groups", title: i18next.t("general:Groups")},
             {key: "/users", title: i18next.t("general:Users")},
+            {key: "/groups", title: i18next.t("general:Groups")},
+            {key: "/organizations", title: i18next.t("general:Organizations")},
             {key: "/invitations", title: i18next.t("general:Invitations")},
+            {key: "/roles", title: i18next.t("general:Roles")},
           ],
         },
         {
@@ -44,19 +45,18 @@ function getNavItemNodes(): TreeNode[] {
           ],
         },
         {
-          key: "/roles-top",
-          title: i18next.t("general:Authorization"),
+          key: "/sessions-top",
+          title: i18next.t("general:Sessions & Tokens"),
           children: [
-            {key: "/roles", title: i18next.t("general:Roles")},
+            {key: "/sessions", title: i18next.t("general:Sessions")},
+            {key: "/tokens", title: i18next.t("general:Tokens")},
           ],
         },
         {
-          key: "/sessions-top",
+          key: "/records-top",
           title: i18next.t("general:Auditing"),
           children: [
-            {key: "/sessions", title: i18next.t("general:Sessions")},
             {key: "/records", title: i18next.t("general:Records")},
-            {key: "/tokens", title: i18next.t("general:Tokens")},
             {key: "/verifications", title: i18next.t("general:Verifications")},
           ],
         },

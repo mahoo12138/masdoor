@@ -32,9 +32,6 @@ export const ThemeDefault = {
 
 export const CustomFooter = null;
 
-// Maximum number of navbar items before switching from flat to grouped menu
-export let MaxItemsForFlatMenu = 7;
-
 // setConfig updates the frontend configuration from backend
 export function setConfig(config: Record<string, any>) {
   if (!config) {
@@ -54,9 +51,6 @@ export function setConfig(config: Record<string, any>) {
   }
   if (config.defaultApplication !== undefined) {
     DefaultApplication = config.defaultApplication;
-  }
-  if (config.maxItemsForFlatMenu !== undefined) {
-    MaxItemsForFlatMenu = config.maxItemsForFlatMenu;
   }
 }
 

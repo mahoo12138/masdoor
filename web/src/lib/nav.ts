@@ -1,20 +1,37 @@
 import i18next from "i18next";
 import {
+  Activity,
+  AppWindow,
+  BadgeCheck,
+  Bell,
+  Building2,
+  FileKey,
+  FolderOpen,
   Home,
+  KeyRound,
+  LayoutDashboard,
   LayoutGrid,
   Lock,
+  MailPlus,
+  MonitorSmartphone,
+  Plug,
+  ScrollText,
   Settings,
   ShieldCheck,
-  Wallet,
+  Ticket,
+  UserRound,
+  Users,
+  Webhook,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
-import * as Conf from "@/Conf";
 import * as Setting from "@/lib/setting";
 import type {Account} from "@/hooks/use-account";
 
 export interface NavItem {
   key: string;
   label: string;
+  icon: LucideIcon;
   /** rendered as an external link instead of a router link */
   href?: string;
 }
@@ -28,7 +45,10 @@ export interface NavGroup {
   items: NavItem[];
 }
 
-/** The console navigation, mirroring the antd ManagementPage menu. */
+/**
+ * The console navigation: flat sections the sidebar always shows in full,
+ * ordered by how often a deployment touches them — people first, plumbing last.
+ */
 export function getNavGroups(account: Account | null | undefined): NavGroup[] {
   if (!account) {
     return [];
@@ -42,22 +62,23 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     icon: Home,
     to: "/",
     items: [
-      {key: "/", label: i18next.t("general:Dashboard")},
-      {key: "/shortcuts", label: i18next.t("general:Shortcuts")},
-      {key: "/apps", label: i18next.t("general:Apps")},
+      {key: "/", label: i18next.t("general:Dashboard"), icon: LayoutDashboard},
+      {key: "/apps", label: i18next.t("general:Apps"), icon: LayoutGrid},
+      {key: "/shortcuts", label: i18next.t("general:Shortcuts"), icon: Zap},
     ],
   });
 
   groups.push({
     key: "/orgs",
     label: i18next.t("general:User Management"),
-    icon: LayoutGrid,
-    to: "/organizations",
+    icon: Users,
+    to: "/users",
     items: [
-      {key: "/organizations", label: i18next.t("general:Organizations")},
-      {key: "/groups", label: i18next.t("general:Groups")},
-      {key: "/users", label: i18next.t("general:Users")},
-      {key: "/invitations", label: i18next.t("general:Invitations")},
+      {key: "/users", label: i18next.t("general:Users"), icon: UserRound},
+      {key: "/groups", label: i18next.t("general:Groups"), icon: Users},
+      {key: "/organizations", label: i18next.t("general:Organizations"), icon: Building2},
+      {key: "/invitations", label: i18next.t("general:Invitations"), icon: MailPlus},
+      {key: "/roles", label: i18next.t("general:Roles"), icon: ShieldCheck},
     ],
   });
 
@@ -67,49 +88,46 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     icon: Lock,
     to: "/applications",
     items: [
-      {key: "/applications", label: i18next.t("general:Applications")},
-      {key: "/providers", label: i18next.t("application:Providers")},
-      {key: "/resources", label: i18next.t("general:Resources")},
-      {key: "/certs", label: i18next.t("general:Certs")},
-      {key: "/keys", label: i18next.t("general:Keys")},
+      {key: "/applications", label: i18next.t("general:Applications"), icon: AppWindow},
+      {key: "/providers", label: i18next.t("application:Providers"), icon: Plug},
+      {key: "/resources", label: i18next.t("general:Resources"), icon: FolderOpen},
+      {key: "/certs", label: i18next.t("general:Certs"), icon: FileKey},
+      {key: "/keys", label: i18next.t("general:Keys"), icon: KeyRound},
     ],
   });
 
   groups.push({
-    key: "/auth",
-    label: i18next.t("general:Authorization"),
-    icon: ShieldCheck,
-    to: "/roles",
+    key: "/credentials",
+    label: i18next.t("general:Sessions & Tokens"),
+    icon: KeyRound,
+    to: "/sessions",
     items: [
-      {key: "/roles", label: i18next.t("general:Roles")},
+      {key: "/sessions", label: i18next.t("general:Sessions"), icon: MonitorSmartphone},
+      {key: "/tokens", label: i18next.t("general:Tokens"), icon: Ticket},
     ],
   });
-
 
   groups.push({
     key: "/logs",
     label: i18next.t("general:Auditing"),
-    icon: Wallet,
-    to: "/sessions",
+    icon: ScrollText,
+    to: "/records",
     items: [
-      {key: "/sessions", label: i18next.t("general:Sessions")},
-      {key: "/records", label: i18next.t("general:Records")},
-      {key: "/tokens", label: i18next.t("general:Tokens")},
-      {key: "/verifications", label: i18next.t("general:Verifications")},
+      {key: "/records", label: i18next.t("general:Records"), icon: ScrollText},
+      {key: "/verifications", label: i18next.t("general:Verifications"), icon: BadgeCheck},
     ],
   });
-
 
   const adminItems: NavItem[] = [];
   if (Setting.isAdminUser(account)) {
     adminItems.push(
-      {key: "/sysinfo", label: i18next.t("general:System Info")},
-      {key: "/settings", label: i18next.t("general:Global Settings")},
+      {key: "/sysinfo", label: i18next.t("general:System Info"), icon: Activity},
+      {key: "/settings", label: i18next.t("general:Global Settings"), icon: Settings},
     );
   }
   adminItems.push(
-    {key: "/webhooks", label: i18next.t("general:Webhooks")},
-    {key: "/webhook-events", label: i18next.t("general:Webhook Events")},
+    {key: "/webhooks", label: i18next.t("general:Webhooks"), icon: Webhook},
+    {key: "/webhook-events", label: i18next.t("general:Webhook Events"), icon: Bell},
   );
 
   groups.push({
@@ -155,18 +173,6 @@ function applyNavItems(groups: NavGroup[], account: Account): NavGroup[] {
       const target = group.items.find((item) => !item.href);
       return target ? {...group, to: target.key} : group;
     });
-}
-
-/**
- * With only a handful of entries left after filtering, the antd frontend drops
- * the group headers and shows one flat list. Mirrored here so a trimmed-down
- * organization gets the same shape of menu.
- */
-export function shouldFlattenNav(groups: NavGroup[], account: Account | null | undefined): boolean {
-  if (!account || getNavItemFilter(account) === null) {
-    return false;
-  }
-  return groups.reduce((count, group) => count + group.items.length, 0) <= Conf.MaxItemsForFlatMenu;
 }
 
 /**

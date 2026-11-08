@@ -1,7 +1,5 @@
 import * as React from "react";
 import {Link, useLocation} from "react-router-dom";
-import {ChevronDown} from "lucide-react";
-import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,36 +17,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
+  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {getNavGroups, shouldFlattenNav, type NavGroup, type NavItem} from "@/lib/nav";
+import {getNavGroups, type NavGroup, type NavItem} from "@/lib/nav";
 import * as Setting from "@/lib/setting";
 import {useAccount} from "@/hooks/use-account";
 import {useIsDark} from "@/hooks/use-theme";
 import {cn} from "@/lib/utils";
-
-const OPEN_GROUPS_KEY = "masdoor.openNavGroups";
-
-function readOpenGroups(): string[] | null {
-  try {
-    const raw = localStorage.getItem(OPEN_GROUPS_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeOpenGroups(keys: string[]) {
-  try {
-    localStorage.setItem(OPEN_GROUPS_KEY, JSON.stringify(keys));
-  } catch {
-    // a blocked store just means the groups reopen on the active one next visit
-  }
-}
 
 /**
  * An external nav entry opens in a new tab; everything else is a router link.
@@ -66,27 +43,36 @@ const NavLink = React.forwardRef<
         onNavigate?.();
       };
 
+      // Vercel-style rows: a 16px icon leads every entry, in the row's own color
+      const Icon = item.icon;
+      const content = (
+        <>
+          <Icon />
+          <span>{item.label}</span>
+        </>
+      );
+
       if (item.href) {
         return (
           <a ref={ref} href={item.href} target="_blank" rel="noreferrer" onClick={handleClick} {...props}>
-            {item.label}
+            {content}
           </a>
         );
       }
       return (
         <Link ref={ref} to={item.key} onClick={handleClick} {...props}>
-          {item.label}
+          {content}
         </Link>
       );
     });
 NavLink.displayName = "NavLink";
 
 /**
- * A group rendered as an icon while the rail is collapsed. Collapsing used to
- * drop the second level entirely and leave the group icon pointing at one
+ * A section rendered as an icon while the rail is collapsed. Collapsing used to
+ * drop the second level entirely and leave the section icon pointing at one
  * arbitrary page; the menu keeps every destination reachable at 3rem wide.
  */
-function CollapsedGroup({
+function CollapsedSection({
   group,
   active,
   isItemActive,
@@ -121,51 +107,6 @@ function CollapsedGroup({
   );
 }
 
-function ExpandedGroup({
-  group,
-  open,
-  onOpenChange,
-  active,
-  isItemActive,
-  onNavigate,
-}: {
-  group: NavGroup;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  active: boolean;
-  isItemActive: (key: string) => boolean;
-  onNavigate?: () => void;
-}) {
-  const Icon = group.icon;
-  // a shut group still has to show that something inside it is the page you are on
-  const hasActiveChild = !open && group.items.some((item) => isItemActive(item.key));
-
-  return (
-    <Collapsible asChild open={open} onOpenChange={onOpenChange} className="group/collapsible">
-      <SidebarMenuItem>
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={group.label} isActive={hasActiveChild} className={cn(active && "font-medium")}>
-            <Icon />
-            <span>{group.label}</span>
-            <ChevronDown className="ml-auto opacity-50 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {group.items.map((item) => (
-              <SidebarMenuSubItem key={item.key}>
-                <SidebarMenuSubButton asChild isActive={isItemActive(item.key)}>
-                  <NavLink item={item} onNavigate={onNavigate} />
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            ))}
-          </SidebarMenuSub>
-        </CollapsibleContent>
-      </SidebarMenuItem>
-    </Collapsible>
-  );
-}
-
 export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
   const {account} = useAccount();
   const location = useLocation();
@@ -180,13 +121,11 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
   // recomputed every render on purpose: the labels come from i18next, which
   // changes language without re-rendering this component's inputs
   const groups = getNavGroups(account);
-  // an organization trimmed down to a handful of entries gets a flat list
-  const flatten = shouldFlattenNav(groups, account);
 
   const isItemActive = (key: string) =>
     key === "/" ? location.pathname === "/" : location.pathname === key || location.pathname.startsWith(key + "/");
 
-  const activeGroupKey = React.useMemo(() => {
+  const activeSectionKey = React.useMemo(() => {
     const match = groups.find((group) =>
       group.items.some((item) => item.key !== "/" && location.pathname.startsWith(item.key)),
     );
@@ -195,27 +134,6 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
     }
     return location.pathname === "/" ? "/home" : groups[0]?.key;
   }, [groups, location.pathname]);
-
-  const [openGroups, setOpenGroups] = React.useState<string[]>(() => readOpenGroups() ?? []);
-
-  React.useEffect(() => {
-    if (activeGroupKey && !openGroups.includes(activeGroupKey)) {
-      setOpenGroups((previous) => {
-        const next = [...previous, activeGroupKey];
-        writeOpenGroups(next);
-        return next;
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeGroupKey]);
-
-  const setGroupOpen = (key: string, open: boolean) => {
-    setOpenGroups((previous) => {
-      const next = open ? [...new Set([...previous, key])] : previous.filter((k) => k !== key);
-      writeOpenGroups(next);
-      return next;
-    });
-  };
 
   return (
     <Sidebar collapsible="icon">
@@ -231,43 +149,50 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
       </SidebarHeader>
 
       <SidebarContent className="scrollbar-thin">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {flatten && !collapsed
-                ? groups.flatMap((group) =>
-                  group.items.map((item) => (
-                    <SidebarMenuItem key={item.key}>
-                      <SidebarMenuButton asChild isActive={isItemActive(item.key)}>
-                        <NavLink item={item} onNavigate={onNavigate} />
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  )),
-                )
-                : groups.map((group) =>
-                  collapsed ? (
-                    <CollapsedGroup
-                      key={group.key}
-                      group={group}
-                      active={activeGroupKey === group.key}
-                      isItemActive={isItemActive}
-                      onNavigate={onNavigate}
-                    />
-                  ) : (
-                    <ExpandedGroup
-                      key={group.key}
-                      group={group}
-                      open={openGroups.includes(group.key)}
-                      onOpenChange={(open) => setGroupOpen(group.key, open)}
-                      active={activeGroupKey === group.key}
-                      isItemActive={isItemActive}
-                      onNavigate={onNavigate}
-                    />
-                  ),
-                )}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {collapsed ? (
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {groups.map((group) => (
+                  <CollapsedSection
+                    key={group.key}
+                    group={group}
+                    active={activeSectionKey === group.key}
+                    isItemActive={isItemActive}
+                    onNavigate={onNavigate}
+                  />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ) : (
+          groups.map((group, index) => (
+            // sections have no names: a hairline carries the grouping, the
+            // washed row carries the location
+            <React.Fragment key={group.key}>
+              {index > 0 && <SidebarSeparator className="mx-2.5" />}
+              <SidebarGroup className="py-0.5">
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {group.items.map((item) => (
+                      <SidebarMenuItem key={item.key}>
+                        {/* inactive entries sit a step dimmer so the filled current row leads;
+                          hover and the active state restore the full foreground */}
+                        <SidebarMenuButton
+                          asChild
+                          isActive={isItemActive(item.key)}
+                          className="text-sidebar-foreground/65 hover:text-sidebar-foreground data-[active=true]:text-accent-soft-foreground"
+                        >
+                          <NavLink item={item} onNavigate={onNavigate} />
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </React.Fragment>
+          ))
+        )}
       </SidebarContent>
 
       {/* the thin strip along the border: click or drag it to collapse the rail */}

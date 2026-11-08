@@ -429,7 +429,7 @@ const SidebarGroup = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="group"
-      className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
+      className={cn("relative flex w-full min-w-0 flex-col px-2 pb-1 pt-2 first:pt-1", className)}
       {...props}
     />
   );
@@ -447,8 +447,9 @@ const SidebarGroupLabel = React.forwardRef<
       ref={ref}
       data-sidebar="group-label"
       className={cn(
-        // OpenTodo's section headers: small caps, quiet, letter-spaced
-        "flex h-8 shrink-0 items-center gap-2 rounded-md px-2 text-meta font-medium uppercase tracking-wider text-muted-foreground outline-none ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        // OpenTodo's section sign: sentence case, hint step, the icon carries
+        // the wayfinding; no tracked caps, no rules
+        "flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-hint text-muted-foreground outline-none ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:text-current",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className,
       )}
@@ -521,17 +522,17 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-control p-2 text-left text-list outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-selected/50 hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-control px-2 py-1 text-left text-list outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-hover hover:text-sidebar-foreground focus-visible:ring-2 active:bg-hover active:text-sidebar-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-accent-soft data-[active=true]:font-medium data-[active=true]:text-accent-soft-foreground data-[state=open]:hover:bg-hover group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "hover:bg-selected/50 hover:text-sidebar-accent-foreground",
+        default: "hover:bg-hover hover:text-sidebar-foreground",
         outline:
-          "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
+          "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-hover hover:text-sidebar-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
       size: {
-        // 36px rows, OpenTodo's desktop step
-        default: "h-9 text-list",
+        // Vercel's nav rows: 32px with the leading icon
+        default: "h-8 text-list",
         sm: "h-8 text-meta",
         lg: "h-12 text-list group-data-[collapsible=icon]:!p-0",
       },
