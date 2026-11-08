@@ -48,7 +48,7 @@ Override any value from [values.yaml](https://github.com/mahoo12138/masdoor/blob
 | Parameter | Description | Default |
 |---|---|---|
 | `replicaCount` | Number of Masdoor pods | `1` |
-| `image.repository` | Docker image repository | `casbin` |
+| `image.repository` | Docker image repository | `mahoo12138` |
 | `image.name` | Docker image name | `masdoor` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `image.tag` | Image tag (defaults to chart appVersion) | `""` |
@@ -57,15 +57,7 @@ Override any value from [values.yaml](https://github.com/mahoo12138/masdoor/blob
 
 ### Database
 
-| Parameter | Description | Default |
-|---|---|---|
-| `database.driver` | Database driver: `mysql`, `postgres`, `cockroachdb`, `sqlite` | `sqlite` |
-| `database.user` | Database username | `""` |
-| `database.password` | Database password | `""` |
-| `database.host` | Database host | `""` |
-| `database.port` | Database port (empty = driver default) | `""` |
-| `database.databaseName` | Database name | `masdoor` |
-| `database.sslMode` | SSL mode for the connection | `disable` |
+Masdoor stores everything in a single SQLite file. The chart's default `config` template points at `file:masdoor.db` in the container filesystem, which does not survive a pod restart — mount a PersistentVolume through `extraVolumes` / `extraVolumeMounts` and override the `config` value so `dataSourceName` lands on it.
 
 ### Declarative configuration (init data)
 

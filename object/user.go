@@ -494,15 +494,8 @@ func GetUserByWebauthID(webauthId string) (*User, error) {
 	existed := false
 	var err error
 
-	if ormer.driverName == "postgres" {
-		existed, err = ormer.Engine.Where(builder.Like{"\"webauthnCredentials\"", webauthId}).Get(&user)
-	} else if ormer.driverName == "mssql" {
-		existed, err = ormer.Engine.Where("CAST(webauthnCredentials AS VARCHAR(MAX)) like ?", "%"+webauthId+"%").Get(&user)
-	} else if ormer.driverName == "sqlite" {
-		existed, err = ormer.Engine.Where("CAST(webauthnCredentials AS text) like ?", "%"+webauthId+"%").Get(&user)
-	} else {
-		existed, err = ormer.Engine.Where("webauthnCredentials like ?", "%"+webauthId+"%").Get(&user)
-	}
+	// webauthnCredentials is a JSON column, so the match goes through a CAST
+	existed, err = ormer.Engine.Where("CAST(webauthnCredentials AS text) like ?", "%"+webauthId+"%").Get(&user)
 	if err != nil {
 		return nil, err
 	}

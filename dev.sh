@@ -4,18 +4,20 @@
 #
 # 用法:
 #   ./dev.sh dev        本地开发：SQLite 后端(go run) + Vite 前端热更新，零外部依赖
-#   ./dev.sh test       Docker 测试环境：STANDARD 镜像 + SQLite（默认），构建期内置冒烟验证
-#   ./dev.sh test mysql Docker 测试环境：STANDARD 镜像 + MySQL 8（docker-compose.mysql.yml 覆盖层）
+#   ./dev.sh test       Docker 测试环境：STANDARD 镜像 + SQLite，构建期内置冒烟验证
 #   ./dev.sh smoke      快速冒烟：ALLINONE 镜像(内置 SQLite)单容器验证
 #   ./dev.sh down       停止 test/smoke 环境
 #   ./dev.sh logs       跟踪 test 环境日志 (Ctrl-C 退出)
 #   ./dev.sh clean      清理容器、数据卷、镜像与本地构建产物
 #
 # 环境变量:
-#   BACKEND_PORT   后端/测试环境端口 (默认 8000)
-#   SMOKE_PORT     smoke 容器端口   (默认 8010)
-#   FRONTEND_PORT  Vite 开发端口    (默认 7001)
-#   DB_PORT        MySQL 宿主端口   (默认 3306, 仅 test mysql)
+#   BACKEND_PORT          后端/测试环境端口 (默认 8000)
+#   SMOKE_PORT            smoke 容器端口   (默认 8010)
+#   FRONTEND_PORT         Vite 开发端口    (默认 7001)
+#   MASDOOR_DEV_PASSWORD  dev 管理员密码   (默认 123, 仅作用于新建的开发库)
+#
+# 开发账号固定为 built-in / admin：全新数据库用 MASDOOR_DEV_PASSWORD 播种；
+# 已初始化过的库不回写密码，忘记密码就删库重启或用 ./dev.sh clean。
 #
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -23,6 +25,7 @@ cd "$(dirname "$0")"
 BACKEND_PORT="${BACKEND_PORT:-8000}"
 SMOKE_PORT="${SMOKE_PORT:-8010}"
 FRONTEND_PORT="${FRONTEND_PORT:-7001}"
+DEV_PASSWORD="${MASDOOR_DEV_PASSWORD:-123}"
 SMOKE_NAME="masdoor-smoke"
 SMOKE_IMAGE="masdoor:smoke"
 DEV_LOG="logs/dev-backend.log"
@@ -46,11 +49,6 @@ compose() {
   else
     fail "缺少 docker compose / docker-compose"
   fi
-}
-
-# down/logs/clean 恒加载两份 compose 文件，保证 test mysql 的 db 服务/数据卷也能收尾
-compose_all() {
-  compose -f docker-compose.yml -f docker-compose.mysql.yml "$@"
 }
 
 # 轮询等待 HTTP 端点就绪
@@ -93,10 +91,11 @@ cmd_dev() {
 
   mkdir -p logs
 
-  # 零数据库配置：conf/app.conf 默认 SQLite (data/masdoor.db)，无需任何环境变量
+  # 零数据库配置：conf/app.conf 默认 SQLite (data/masdoor.db)，无需任何环境变量；
+  # 固定 dev 管理员密码，只影响新建库，已初始化的库不回写
   info "启动后端 (SQLite, 端口 $BACKEND_PORT, 日志 $DEV_LOG)"
-  socks5Proxy= \
   httpport="$BACKEND_PORT" \
+  initAdminPassword="$DEV_PASSWORD" \
   go run main.go >"$DEV_LOG" 2>&1 &
   local backend_pid=$!
 
@@ -113,49 +112,31 @@ cmd_dev() {
   }
 
   info "启动前端 (Vite 热更新, http://localhost:${FRONTEND_PORT})"
+  info "开发账号: built-in / admin, 密码 ${DEV_PASSWORD} (MASDOOR_DEV_PASSWORD 可改)"
   info "开发入口: http://localhost:${FRONTEND_PORT}   (API 代理 -> http://localhost:${BACKEND_PORT})"
   info "Ctrl-C 停止前后端"
   (cd web && MASDOOR_BACKEND="http://localhost:${BACKEND_PORT}" yarn dev --port "$FRONTEND_PORT")
 }
 
 cmd_test() {
-  local db="${1:-sqlite}"
-  case "$db" in
-    sqlite|mysql) ;;
-    *) fail "用法: ./dev.sh test [sqlite|mysql]" ;;
-  esac
-
   need docker
   compose version >/dev/null 2>&1 || fail "缺少 docker compose"
 
-  local files=(-f docker-compose.yml)
-  if [ "$db" = "mysql" ]; then
-    files+=(-f docker-compose.mysql.yml)
-  fi
-
   info "构建测试镜像 (STANDARD, 构建期内置 go test)"
-  compose "${files[@]}" build
+  compose build
 
-  if [ "$db" = "mysql" ]; then
-    info "启动测试环境 (masdoor + MySQL 8)"
-  else
-    info "启动测试环境 (masdoor + SQLite)"
-  fi
-  compose "${files[@]}" up -d
+  info "启动测试环境 (masdoor + SQLite)"
+  compose up -d
 
   wait_healthy "http://localhost:${BACKEND_PORT}/api/health" "masdoor" 90 || {
     warn "启动失败，最近日志："
-    compose "${files[@]}" logs --tail 30 masdoor || true
+    compose logs --tail 30 masdoor || true
     exit 1
   }
   verify_endpoints "http://localhost:${BACKEND_PORT}"
 
   info "测试环境就绪: http://localhost:${BACKEND_PORT}"
-  if [ "$db" = "mysql" ]; then
-    info "MySQL:        127.0.0.1:${DB_PORT:-3306} (root/123456)"
-  else
-    info "SQLite 数据:  masdoor-data 卷 (容器内 /data/masdoor.db)"
-  fi
+  info "SQLite 数据:  masdoor-data 卷 (容器内 /data/masdoor.db)"
   info "停止:         ./dev.sh down    日志: ./dev.sh logs"
 }
 
@@ -177,24 +158,25 @@ cmd_smoke() {
   verify_endpoints "http://localhost:${SMOKE_PORT}"
 
   info "冒烟通过: http://localhost:${SMOKE_PORT}"
+  info "首次访问在欢迎页设置 admin 密码"
   info "停止: ./dev.sh down    查看日志: docker logs -f $SMOKE_NAME"
 }
 
 cmd_down() {
   need docker
-  compose_all down --remove-orphans 2>/dev/null || true
+  compose down --remove-orphans 2>/dev/null || true
   docker rm -f "$SMOKE_NAME" >/dev/null 2>&1 || true
   info "已停止 test/smoke 环境"
 }
 
 cmd_logs() {
   need docker
-  compose_all logs -f masdoor
+  compose logs -f masdoor
 }
 
 cmd_clean() {
   need docker
-  compose_all down -v --remove-orphans 2>/dev/null || true
+  compose down -v --remove-orphans 2>/dev/null || true
   docker rm -f "$SMOKE_NAME" >/dev/null 2>&1 || true
   docker rmi "$SMOKE_IMAGE" >/dev/null 2>&1 || true
   rm -rf web/build web/build-temp data "$DEV_LOG"
@@ -204,13 +186,13 @@ cmd_clean() {
 
 case "${1:-}" in
   dev)   cmd_dev ;;
-  test)  cmd_test "${2:-sqlite}" ;;
+  test)  cmd_test ;;
   smoke) cmd_smoke ;;
   down)  cmd_down ;;
   logs)  cmd_logs ;;
   clean) cmd_clean ;;
   *)
-    sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
     exit 1
     ;;
 esac

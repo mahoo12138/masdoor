@@ -65,30 +65,7 @@ Create the name of the service account to use
 Create dataSourceName used in the configmap
 */}}
 {{- define "masdoor.dataSourceName" -}}
-{{- if eq .Values.database.driver "mysql" -}}
-{{ .Values.database.user }}:{{ .Values.database.password }}@tcp({{ .Values.database.host }}:{{ default "3306" .Values.database.port }})/
-{{- else if eq .Values.database.driver "postgres" -}}
-"user={{ .Values.database.user }} password={{ .Values.database.password }} host={{ .Values.database.host }} port={{ default "5432" .Values.database.port }} dbname={{ .Values.database.databaseName }} sslmode={{ .Values.database.sslMode }}"
-{{- else if eq .Values.database.driver "cockroachdb" -}}
-"user={{ .Values.database.user }} password={{ .Values.database.password }} host={{ .Values.database.host }} port={{ default "26257" .Values.database.port }} dbname={{ .Values.database.databaseName }} sslmode={{ .Values.database.sslMode }} serial_normalization=virtual_sequence"
-{{- else -}}
 file:masdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
-{{- end }}
-{{- end }}
-
-{{/*
-Create dbName used in the configmap
-*/}}
-{{- define "masdoor.dbName" -}}
-{{- if eq .Values.database.driver "mysql" -}}
-{{ .Values.database.databaseName }}
-{{- else if eq .Values.database.driver "postgres" -}}
-{{ .Values.database.databaseName }}
-{{- else if eq .Values.database.driver "cockroachdb" -}}
-{{ .Values.database.databaseName }}
-{{- else -}}
-{{ .Values.database.databaseName }}
-{{- end }}
 {{- end }}
 
 {{/*

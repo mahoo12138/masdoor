@@ -5,7 +5,6 @@ services:
       context: ./
       dockerfile: Dockerfile
       target: STANDARD
-    entrypoint: /bin/sh -c './server --createDatabase=true'
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     environment:

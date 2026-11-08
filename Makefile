@@ -86,9 +86,6 @@ docker-build: ## Build docker image with the manager.
 docker-push: ## Push docker image with the manager.
 	docker push ${REGISTRY}/${IMG}:${IMG_TAG}
 
-deps: ## Run dependencies for local development
-	docker compose up -d db
-
 lint-install: ## Install golangci-lint
 	@# Keep the local golangci-lint version aligned with CI. Both local and CI lint run the gofumpt-only ruleset from .golangci.yml.
 	GOTOOLCHAIN=go1.26.10 go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.4

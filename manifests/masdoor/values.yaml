@@ -18,9 +18,7 @@ config: |
   runmode = dev
   SessionOn = true
   copyrequestbody = true
-  driverName = {{ .Values.database.driver }}
   dataSourceName = {{ include "masdoor.dataSourceName" . }}
-  dbName = {{ include "masdoor.dbName" . }}
   redisEndpoint =
   defaultStorageProvider =
   isCloudIntranet = false
@@ -64,20 +62,6 @@ initData:
   #      displayName: Acme Portal
   #      redirectUris:
   #        - https://portal.acme.example.com/callback
-
-database:
-  # Supports mysql, postgres, cockroachdb, sqlite
-  driver: sqlite
-
-  user: ""
-  password: ""
-  host: ""
-  # If port is empty, default port will be used.
-  # mysql: 3306, postgres: 5432, cockroachdb: 26257
-  port: ""
-  databaseName: masdoor
-
-  sslMode: disable
 
 imagePullSecrets: []
 nameOverride: masdoor

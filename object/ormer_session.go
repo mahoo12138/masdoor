@@ -23,8 +23,8 @@ import (
 )
 
 // quoteColumn quotes a column name with the current database dialect. It is needed
-// for reserved words like "user": left unquoted, PostgreSQL resolves them to the
-// session user instead of the table column, so the condition silently matches nothing.
+// for table names like "user": left unquoted, some backends resolve them to a
+// reserved word instead of the table column, so the condition silently matches nothing.
 func quoteColumn(name string) string {
 	return ormer.Engine.Quote(name)
 }

@@ -15,13 +15,12 @@
 package conf
 
 type WebConfig struct {
-	ShowGithubCorner    bool   `json:"showGithubCorner"`
-	ForceLanguage       string `json:"forceLanguage"`
-	DefaultLanguage     string `json:"defaultLanguage"`
-	IsDemoMode          bool   `json:"isDemoMode"`
-	DefaultApplication  string `json:"defaultApplication"`
-	MaxItemsForFlatMenu int64  `json:"maxItemsForFlatMenu"`
-	ThemeShowcase       bool   `json:"themeShowcase"`
+	ShowGithubCorner   bool   `json:"showGithubCorner"`
+	ForceLanguage      string `json:"forceLanguage"`
+	DefaultLanguage    string `json:"defaultLanguage"`
+	IsDemoMode         bool   `json:"isDemoMode"`
+	DefaultApplication string `json:"defaultApplication"`
+	ThemeShowcase      bool   `json:"themeShowcase"`
 }
 
 func GetWebConfig() *WebConfig {
@@ -40,13 +39,7 @@ func GetWebConfig() *WebConfig {
 		config.DefaultApplication = "app-built-in"
 	}
 
-	maxItemsForFlatMenu, err := GetConfigInt64("maxItemsForFlatMenu")
-	if err != nil {
-		maxItemsForFlatMenu = 7
-	}
-	config.MaxItemsForFlatMenu = maxItemsForFlatMenu
-
-	config.ThemeShowcase = GetConfigBool("themeShowcase") || IsDemoMode() || IsDemoDatabase()
+	config.ThemeShowcase = GetConfigBool("themeShowcase") || IsDemoMode()
 	if config.ThemeShowcase {
 	}
 
