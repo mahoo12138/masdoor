@@ -235,7 +235,7 @@ func (c *ApiController) UpdateProvider() {
 		return
 	}
 
-	if conf.IsDemoDatabase() {
+	if conf.IsDemoMode() {
 		oldProvider, err := object.GetProvider(id)
 		if err != nil {
 			c.ResponseError(err.Error())

@@ -124,7 +124,7 @@ func (c *ApiController) SendEmail() {
 
 	if emailForm.ProviderObject.Name != "" {
 		if emailForm.ProviderObject.ClientSecret == "***" || object.IsHttpHeadersMasked(emailForm.ProviderObject.HttpHeaders) {
-			if conf.IsDemoMode() || conf.IsDemoDatabase() {
+			if conf.IsDemoMode() {
 				c.ResponseError(c.T("general:this operation is not allowed in demo mode"))
 				return
 			}
