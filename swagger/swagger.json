@@ -3,10 +3,7 @@
     "info": {
         "title": "Masdoor RESTful API",
         "description": "Swagger Docs of Masdoor Backend API",
-        "version": "1.503.0",
-        "contact": {
-            "email": "casbin@googlegroups.com"
-        }
+        "version": "1.503.0"
     },
     "basePath": "/",
     "schemes": [
@@ -960,81 +957,6 @@
                 ],
                 "description": "get the details of the current account",
                 "operationId": "ApiController.GetAccount",
-                "responses": {
-                    "200": {
-                        "description": "The Response object",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/get-all-actions": {
-            "get": {
-                "tags": [
-                    "Enforcer API"
-                ],
-                "description": "Get all actions for a user (Casbin API)",
-                "operationId": "ApiController.GetAllActions",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "userId",
-                        "description": "user id like built-in/admin",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The Response object",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/get-all-objects": {
-            "get": {
-                "tags": [
-                    "Enforcer API"
-                ],
-                "description": "Get all objects for a user (Casbin API)",
-                "operationId": "ApiController.GetAllObjects",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "userId",
-                        "description": "user id like built-in/admin",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "The Response object",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/get-all-roles": {
-            "get": {
-                "tags": [
-                    "Enforcer API"
-                ],
-                "description": "Get all roles for a user (Casbin API)",
-                "operationId": "ApiController.GetAllRoles",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "userId",
-                        "description": "user id like built-in/admin",
-                        "type": "string"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "The Response object",

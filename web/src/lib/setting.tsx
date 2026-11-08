@@ -1410,7 +1410,7 @@ export function getDefaultInvitationHtmlEmailContent() {
 <body>
 <div class="email-container">
   <div class="header">
-        <h3>Casbin Organization</h3>
+        <h3>Masdoor Organization</h3>
         <img src="${StaticBaseUrl}/img/masdoor-logo.png" alt="Masdoor Logo" width="300">
     </div>
     <p>You have been invited into Masdoor</p>
@@ -1582,43 +1582,6 @@ export function getApiPaths() {
 
 export function getItemId(item) {
   return item.owner + "/" + item.name;
-}
-
-export function getVersionInfo(text, siteName) {
-  if (text === "") {
-    return null;
-  }
-
-  try {
-    const versionInfo = JSON.parse(text);
-    const link = versionInfo?.version !== "" ? `${getRepoUrl(siteName)}/releases/tag/${versionInfo?.version}` : "";
-    let versionText = versionInfo?.version !== "" ? versionInfo?.version : "Unknown version";
-    if (versionInfo?.commitOffset > 0) {
-      versionText += ` (ahead+${versionInfo?.commitOffset})`;
-    }
-
-    return {text: versionText, link: link};
-  } catch (e) {
-    return {text: "", link: ""};
-  }
-}
-
-function getOriginalName(name) {
-  const tokens = name.split("_");
-  if (tokens.length > 0) {
-    return tokens[0];
-  } else {
-    return name;
-  }
-}
-
-export function getRepoUrl(name) {
-  name = getOriginalName(name);
-  if (name === "masdoor") {
-    return "https://github.com/mahoo12138/masdoor";
-  } else {
-    return `https://github.com/casbin/${name}`;
-  }
 }
 
 export function createFormAndSubmit(url, params) {

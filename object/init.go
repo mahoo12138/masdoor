@@ -22,11 +22,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/mahoo12138/masdoor/conf"
 	"github.com/mahoo12138/masdoor/i18n"
 	"github.com/mahoo12138/masdoor/util"
 	"github.com/xorm-io/core"
+	"github.com/xorm-io/xorm"
 )
 
 func InitDb() {
@@ -38,8 +40,50 @@ func InitDb() {
 		initBuiltInCert()
 	}
 
+	repairLegacyUpstreamUrls()
 	warnPublicBuiltInCert()
 	initWebAuthn()
+}
+
+// legacyUpstreamUrlPatterns match the host names the upstream project's seeds
+// pointed at. Older builds copied those values into fresh databases, and they
+// are data, not code, so upgrading alone never cleared them. A row is only
+// rewritten when its stored value still contains one of these hosts, so
+// user-entered URLs are never touched.
+var legacyUpstreamUrlPatterns = []string{"%casdoor.org%", "%casdoor.com%", "%casbin.org%"}
+
+// repairLegacyUpstreamUrls replaces the seed values an older build could have
+// filled with an upstream URL by the ones the current build seeds. It runs on
+// every start and is a no-op once the rows are clean.
+func repairLegacyUpstreamUrls() {
+	repairLegacyUpstreamUrlsOn(ormer.Engine, conf.GetConfigString("tableNamePrefix"))
+}
+
+func repairLegacyUpstreamUrlsOn(engine *xorm.Engine, tableNamePrefix string) {
+	patterns := legacyUpstreamUrlPatterns
+	repair := func(table, column, replacement string) {
+		cond := fmt.Sprintf("%s LIKE ? OR %s LIKE ? OR %s LIKE ?", column, column, column)
+		affected, err := engine.
+			Table(tableNamePrefix+table).
+			Where(cond, patterns[0], patterns[1], patterns[2]).
+			Update(map[string]interface{}{column: replacement})
+		if err != nil {
+			logs.Warn("repairLegacyUpstreamUrls: failed to repair %s.%s: %v", table, column, err)
+			return
+		}
+		if affected > 0 {
+			logs.Info("repairLegacyUpstreamUrls: replaced the legacy upstream URL in %s.%s of %d row(s)", table, column, affected)
+		}
+	}
+
+	repair("organization", "website_url", "https://example.com")
+	repair("organization", "favicon", "/img/favicon.png")
+	repair("organization", "default_avatar", "/img/avatar-default.svg")
+	repair("application", "homepage_url", "")
+	repair("application", "logo", "/img/masdoor-logo.png")
+	repair("application", "logo_dark", "/img/masdoor-logo-dark.png")
+	repair("application", "favicon", "/img/favicon.png")
+	repair("user", "avatar", "/img/avatar-default.svg")
 }
 
 func GetDefaultAccountItems() []*AccountItem {
@@ -187,7 +231,7 @@ func initBuiltInUser() {
 // password is left empty and set on the welcome page, the demo site keeps the well-known "123".
 func getInitAdminPassword() string {
 	password := conf.GetConfigString("initAdminPassword")
-	if password == "" && (conf.IsDemoMode() || conf.IsDemoDatabase()) {
+	if password == "" && conf.IsDemoMode() {
 		return "123"
 	}
 	return password

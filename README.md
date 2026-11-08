@@ -33,15 +33,15 @@ Everything above is configured in the web console — no config-file edits or re
 ```bash
 ./dev.sh dev         # local development: SQLite backend (go run) + Vite hot reload, zero deps
 ./dev.sh test        # Docker test env: STANDARD image + SQLite, smoke-verified
-./dev.sh test mysql  # same, but with MySQL 8 (docker-compose.mysql.yml overlay)
 ./dev.sh smoke       # quick smoke test: ALLINONE image (SQLite) in a single container
 ./dev.sh down        # stop test/smoke
 ./dev.sh clean       # remove containers, volumes, images and local build artifacts
 ```
 
-`./dev.sh dev` serves the frontend at <http://localhost:7001> (API proxied to the backend on `:8000`).
-`./dev.sh test` and `./dev.sh smoke` verify `/api/health` and the login page before printing the URL.
-Ports are overridable via `BACKEND_PORT` / `SMOKE_PORT` / `FRONTEND_PORT` / `DB_PORT` environment variables.
+`./dev.sh dev` serves the frontend at <http://localhost:7001> (API proxied to the backend on `:8000`)
+and signs in as `built-in` / `admin` with the password `123` (`MASDOOR_DEV_PASSWORD` overrides it for
+fresh databases). `./dev.sh test` and `./dev.sh smoke` verify `/api/health` and the login page before
+printing the URL. Ports are overridable via `BACKEND_PORT` / `SMOKE_PORT` / `FRONTEND_PORT`.
 
 ### All-in-one (evaluation)
 
@@ -52,29 +52,21 @@ docker build --target ALLINONE -t masdoor-all-in-one .
 docker run -p 8000:8000 masdoor-all-in-one
 ```
 
-Open <http://localhost:8000> and sign in with organization `built-in`, username `admin`, password `123`. **Change this password immediately.** Data lives inside the container — fine for a look, not for real use.
+Open <http://localhost:8000> — the first visit lands on a welcome page where you set the `built-in` / `admin` password. Data lives inside the container — fine for a look, not for real use.
 
 ### Docker Compose (recommended)
 
-[`docker-compose.yml`](docker-compose.yml) starts Masdoor with SQLite by default — no database
-server needed. The SQLite file lives in the `masdoor-data` volume (mounted at `/data`):
+[`docker-compose.yml`](docker-compose.yml) starts Masdoor with SQLite — no database server needed.
+The SQLite file lives in the `masdoor-data` volume (mounted at `/data`):
 
 ```bash
 docker compose up --build
 ```
 
-Prefer MySQL 8? Add the [`docker-compose.mysql.yml`](docker-compose.mysql.yml) overlay:
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.mysql.yml up --build
-```
-
-The compose entrypoint passes `--createDatabase=true`, so the MySQL database is created for you
-(MySQL data lives in the `mysql-data` volume; root password `123456`). To run without Docker,
-[`conf/app.conf`](conf/app.conf) already defaults to SQLite at `data/masdoor.db`:
+The first visit lands on a welcome page where you set the `built-in` / `admin` password. To run
+without Docker, [`conf/app.conf`](conf/app.conf) already defaults to SQLite at `data/masdoor.db`:
 
 ```ini
-driverName = sqlite
 dataSourceName = file:data/masdoor.db?cache=shared&_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
 ```
 
@@ -86,7 +78,7 @@ The chart in [`manifests/masdoor/`](manifests/masdoor) deploys to a cluster (Hel
 helm install masdoor ./manifests/masdoor
 ```
 
-Expose it through an Ingress (or `kubectl port-forward svc/<service> 8000:8000` for a quick test) and point it at an external database via the chart values. [`k8s.yaml`](k8s.yaml) is a minimal plain-manifest alternative.
+Expose it through an Ingress (or `kubectl port-forward svc/<service> 8000:8000` for a quick test) and mount a volume for the SQLite file via the chart values. [`k8s.yaml`](k8s.yaml) is a minimal plain-manifest alternative.
 
 ### From source
 
@@ -107,7 +99,7 @@ All keys live in [`conf/app.conf`](conf/app.conf). The ones you are most likely 
 
 | Key | Meaning |
 |-----|---------|
-| `driverName` / `dataSourceName` / `dbName` | Database connection (MySQL, PostgreSQL, SQLite, …) |
+| `dataSourceName` | SQLite connection (the only database; file DSN by default) |
 | `origin` / `originFrontend` | Public URLs of the server and the console |
 | `initDataFile` | Optional JSON applied at startup (declarative org/app/user setup) |
 | `redisEndpoint` | Optional Redis for the OAuth device-authorization flow |
@@ -138,7 +130,7 @@ Measured on the STANDARD image after the trim (arm64, SQLite, idle):
 
 - **Data first:** the database is a single SQLite file (`data/masdoor.db` by default, or the `masdoor-data` volume in compose). Stop the container and copy that file before upgrading.
 - **Schema:** XORM's `Sync2` only adds missing columns/tables on startup; it never drops anything. Tables and columns left behind by removed modules are inert — drop them manually if you want a tidy schema.
-- **Stale seed rows:** an instance created by an older build can keep values that no release writes any more — `application.homepage_url = 'https://casdoor.org'`, a `Face ID` / `LDAP` entry in `application.signin_items`, and user avatars pointing at `https://cdn.casbin.org/...`. They are data, not code, so only a manual update clears them.
+- **Stale seed rows:** an instance created by an older build can keep values that no release writes any more — `application.homepage_url = 'https://casdoor.org'`, a `Face ID` / `LDAP` entry in `application.signin_items`, and user avatars pointing at `https://cdn.casbin.org/...`. The legacy upstream URLs (organization website/favicon/default avatar, application homepage/logo, user avatar) are rewritten to the current defaults on startup; a stale `signin_items` entry only needs a manual update.
 - **No upstream merges:** Masdoor no longer tracks Casdoor. Security fixes are backported manually; run the regression checklist and `go test ./...` after every pull.
 - **Config drift:** new releases may add `app.conf` keys; existing keys keep their values. Check the release notes for renamed or removed keys.
 

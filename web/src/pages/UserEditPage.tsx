@@ -341,7 +341,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           onChange={(v) => updateField("type", v)}
           options={(userOrganization.userTypes?.length > 0
             ? userOrganization.userTypes
-            : ["normal-user", "paid-user"]
+            : ["normal-user"]
           ).map((item: string) => ({value: item, label: item}))}
         />
       </AccountItemRow>

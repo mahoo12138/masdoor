@@ -210,14 +210,12 @@ func (c *ApiController) Signup() {
 		}
 	}
 
-	userType := "normal-user"
-
 	user := &object.User{
 		Owner:             authForm.Organization,
 		Name:              username,
 		CreatedTime:       util.GetCurrentTime(),
 		Id:                id,
-		Type:              userType,
+		Type:              "normal-user",
 		Password:          authForm.Password,
 		DisplayName:       authForm.Name,
 		Gender:            authForm.Gender,
@@ -292,12 +290,8 @@ func (c *ApiController) Signup() {
 		}
 	}
 
-	if user.Type == "normal-user" {
-		c.renewSessionIdForUser(user.GetId())
-		c.SetSessionUsername(user.GetId())
-	} else if user.Type == "paid-user" {
-		c.SetSession("paidUsername", user.GetId())
-	}
+	c.renewSessionIdForUser(user.GetId())
+	c.SetSessionUsername(user.GetId())
 
 	if authForm.Email != "" {
 		err = object.DisableVerificationCode(authForm.Email)
