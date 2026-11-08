@@ -26,8 +26,6 @@ import * as Setting from "@/lib/setting";
 // ---- console pages -----------------------------------------------------------
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const NotFoundPage = React.lazy(() => import("@/pages/NotFoundPage"));
-const AppListPage = React.lazy(() => import("@/pages/AppListPage"));
-const ShortcutsPage = React.lazy(() => import("@/pages/ShortcutsPage"));
 const AccountPage = React.lazy(() => import("@/pages/AccountPage"));
 const MfaSetupPage = React.lazy(() => import("@/pages/auth/MfaSetupPage"));
 const SystemInfoPage = React.lazy(() => import("@/pages/SystemInfoPage"));
@@ -194,8 +192,6 @@ export default function App() {
           }
         >
           <Route path="/" element={<Dashboard />} />
-          <Route path="/apps" element={<AppListPage />} />
-          <Route path="/shortcuts" element={<ShortcutsPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/mfa/setup" element={<MfaSetupPage />} />
           <Route path="/sysinfo" element={<SystemInfoPage />} />

@@ -8,8 +8,6 @@ import {Link, useLocation} from "react-router-dom";
  * antd version does.
  */
 const RESOURCE_LABELS: Record<string, string> = {
-  "apps": "general:Apps",
-  "shortcuts": "general:Shortcuts",
   "account": "account:My Account",
   "organizations": "general:Organizations",
   "users": "general:Users",

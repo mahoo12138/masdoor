@@ -10,7 +10,6 @@ import {
   Home,
   KeyRound,
   LayoutDashboard,
-  LayoutGrid,
   Lock,
   MailPlus,
   MonitorSmartphone,
@@ -22,7 +21,6 @@ import {
   UserRound,
   Users,
   Webhook,
-  Zap,
   type LucideIcon,
 } from "lucide-react";
 import * as Setting from "@/lib/setting";
@@ -63,8 +61,6 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     to: "/",
     items: [
       {key: "/", label: i18next.t("general:Dashboard"), icon: LayoutDashboard},
-      {key: "/apps", label: i18next.t("general:Apps"), icon: LayoutGrid},
-      {key: "/shortcuts", label: i18next.t("general:Shortcuts"), icon: Zap},
     ],
   });
 
@@ -134,7 +130,7 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     key: "/admin",
     label: i18next.t("general:Admin"),
     icon: Settings,
-    to: Setting.isAdminUser(account) ? "/sysinfo" : "/apps",
+    to: Setting.isAdminUser(account) ? "/sysinfo" : "/",
     items: adminItems,
   });
 

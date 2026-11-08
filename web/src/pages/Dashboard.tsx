@@ -145,15 +145,7 @@ export default function Dashboard() {
       load();
       return;
     }
-    const navItems = account.organization?.userNavItems;
-    const isAllEnabled = !Array.isArray(navItems) || navItems.includes("all");
-    if (isAllEnabled || navItems.includes("/apps")) {
-      navigate("/apps", {replace: true});
-    } else if (navItems.includes("/shortcuts")) {
-      navigate("/shortcuts", {replace: true});
-    } else {
-      navigate("/account", {replace: true});
-    }
+    navigate("/account", {replace: true});
   }, [account, isConsoleAdmin, load, navigate]);
 
   React.useEffect(() => {

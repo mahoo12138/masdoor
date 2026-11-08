@@ -18,8 +18,6 @@ function getNavItemNodes(): TreeNode[] {
           title: i18next.t("general:Home"),
           children: [
             {key: "/", title: i18next.t("general:Dashboard")},
-            {key: "/shortcuts", title: i18next.t("general:Shortcuts")},
-            {key: "/apps", title: i18next.t("general:Apps")},
           ],
         },
         {
