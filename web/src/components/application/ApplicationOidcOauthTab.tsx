@@ -62,7 +62,7 @@ const DEFAULT_CUSTOM_SCOPES = [
 export function ApplicationOidcOauthTab({application, updateField}: ApplicationTabProps) {
   // an empty token format means "whatever the organization defaults to", which is
   // what the tokens will actually carry, so that is what the page shows
-  const tokenFormat = application.tokenFormat || application.organizationObj?.defaultTokenFormat || "JWT";
+  const tokenFormat = application.tokenFormat || application.organizationObj?.defaultTokenFormat || "JWT-Standard";
 
   return (
     <>

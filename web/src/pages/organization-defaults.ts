@@ -24,7 +24,7 @@ export function newOrganization(createdTime: string) {
     countryCodes: ["US"],
     defaultAvatar: `${Setting.StaticBaseUrl}/img/avatar-default.svg`,
     defaultApplication: "",
-    defaultTokenFormat: "JWT",
+    defaultTokenFormat: "JWT-Standard",
     defaultTokenFields: [],
     tags: [],
     languages: Setting.Countries.map(item => item.key),

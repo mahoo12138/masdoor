@@ -667,7 +667,7 @@ func generateJwtTokenWithOptions(application *Application, user *User, provider 
 	var newIdToken func() *jwt.Token
 
 	if application.TokenFormat == "" {
-		application.TokenFormat = "JWT"
+		application.TokenFormat = "JWT-Standard"
 	}
 
 	jwtMethod := getJwtSigningMethod(application)

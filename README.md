@@ -106,6 +106,21 @@ All keys live in [`conf/app.conf`](conf/app.conf). The ones you are most likely 
 
 Kubernetes deployments can mount `app.conf` from a Secret instead of the values file (see the chart README).
 
+### Token formats
+
+Each application picks how its ID token is shaped via `tokenFormat`, defaulting to the organization's `defaultTokenFormat` (`JWT-Standard` for the built-in organization and for any organization without an explicit setting). Applications created before this default existed keep their persisted value.
+
+| Format | Login name claim | Display name claims | Notes |
+|--------|------------------|---------------------|-------|
+| `JWT-Standard` | `preferred_username` | `name` | OIDC-spec claim layout; the default |
+| `JWT` (legacy) | `name` | `displayName` | Casdoor-compatible layout, plus a full user profile dump |
+| `JWT-Empty` | `name` | `displayName` | Same claim mapping as legacy, trimmed to a short user summary |
+| `JWT-Custom` | configurable | configurable | Claim set from the application's `tokenFields` |
+
+All formats share the registered claims (`iss`, `sub`, `aud`, `exp`, `iat`, `nbf`, `jti`, plus `nonce`, `azp`, `at_hash`/`c_hash` where applicable). `/.well-known/openid-configuration` advertises the union in `claims_supported`.
+
+Relying parties that need the login name should read `preferred_username` when present. A token with no `preferred_username` but a `displayName` claim is a legacy layout — there `name` carries the login name, not the display name.
+
 ## Regression checklist
 
 After an upgrade or an upstream merge, verify at minimum:

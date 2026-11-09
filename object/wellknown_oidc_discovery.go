@@ -150,6 +150,19 @@ func GetOidcDiscovery(host string, applicationName string) OidcDiscovery {
 	// Default OIDC scopes
 	scopes := []string{"openid", "email", "profile", "address", "phone", "offline_access"}
 
+	// Claims the OP MAY be able to supply values for (OIDC Discovery 5): the registered and
+	// standard OIDC claims, plus the masdoor-specific user claims emitted by the token formats
+	claimsSupported := []string{
+		// registered claims
+		"iss", "sub", "aud", "exp", "iat", "nbf", "jti", "auth_time", "at_hash", "c_hash", "azp", "nonce",
+		// standard OIDC claims (JWT-Standard format)
+		"name", "preferred_username", "picture", "email", "email_verified", "phone", "address",
+		// masdoor-specific user claims (legacy JWT / JWT-Empty formats)
+		"owner", "id", "displayName", "avatar", "roles", "groups", "tag", "region", "language",
+		"gender", "birthday", "location", "affiliation", "title", "homepage", "bio", "isAdmin",
+		"isForbidden", "isOnline", "signupApplication",
+	}
+
 	registrationEndpoint := fmt.Sprintf("%s/api/oauth/register", originBackend)
 	authorizationEndpoint := fmt.Sprintf("%s/login/oauth/authorize", originFrontend)
 	cimdOrg := ""
@@ -200,7 +213,7 @@ func GetOidcDiscovery(host string, applicationName string) OidcDiscovery {
 		IdTokenSigningAlgValuesSupported:           []string{"RS256", "RS512", "ES256", "ES384", "ES512"},
 		ScopesSupported:                            scopes,
 		CodeChallengeMethodsSupported:              []string{"S256"},
-		ClaimsSupported:                            []string{"iss", "ver", "sub", "aud", "iat", "exp", "id", "type", "displayName", "avatar", "permanentAvatar", "email", "phone", "location", "affiliation", "title", "homepage", "bio", "tag", "region", "language", "isOnline", "isAdmin", "isForbidden", "signupApplication"},
+		ClaimsSupported:                            claimsSupported,
 		RequestParameterSupported:                  true,
 		RequestObjectSigningAlgValuesSupported:     []string{"HS256", "HS384", "HS512"},
 		EndSessionEndpoint:                         fmt.Sprintf("%s/api/logout", originBackend),

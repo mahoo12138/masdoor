@@ -386,8 +386,8 @@ func GetOrganizationByUser(user *User) (*Organization, error) {
 }
 
 // GetDefaultTokenFormat returns the token format that newly created applications of the
-// organization should use. It falls back to "JWT" when the organization does not exist or
-// has no default token format configured yet.
+// organization should use. It falls back to "JWT-Standard" when the organization does not
+// exist or has no default token format configured yet.
 func GetDefaultTokenFormat(organizationName string) (string, error) {
 	organization, err := getOrganization("admin", organizationName)
 	if err != nil {
@@ -395,7 +395,7 @@ func GetDefaultTokenFormat(organizationName string) (string, error) {
 	}
 
 	if organization == nil || organization.DefaultTokenFormat == "" {
-		return "JWT", nil
+		return "JWT-Standard", nil
 	}
 
 	return organization.DefaultTokenFormat, nil

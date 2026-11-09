@@ -470,7 +470,7 @@ export default function OrganizationEditPage() {
         <TabsContent value="advanced" className={formGridClass}>
           <FormRow labelKey="organization:Default token format">
             <SelectField
-              value={organization.defaultTokenFormat || "JWT"}
+              value={organization.defaultTokenFormat || "JWT-Standard"}
               onChange={(value) => update("defaultTokenFormat", value)}
               options={TOKEN_FORMATS.map((item) => ({id: item, name: item}))}
             />
