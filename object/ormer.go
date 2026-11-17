@@ -146,6 +146,11 @@ func (a *Ormer) open(dataSourceName string) error {
 		return err
 	}
 
+	// SQLite serializes writes; keeping a single pooled connection avoids SQLITE_BUSY
+	// across concurrent goroutines.
+	engine.SetMaxOpenConns(1)
+	engine.SetMaxIdleConns(1)
+
 	a.Engine = engine
 	return nil
 }
@@ -236,10 +241,6 @@ func (a *Ormer) createTable() {
 		panic(err)
 	}
 
-	if err != nil {
-		panic(err)
-	}
-
 	err = a.Engine.Sync2(new(Record))
 	if err != nil {
 		panic(err)
@@ -261,26 +262,6 @@ func (a *Ormer) createTable() {
 	}
 
 	err = a.Engine.Sync2(new(MagicLink))
-	if err != nil {
-		panic(err)
-	}
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err != nil {
-		panic(err)
-	}
-
 	if err != nil {
 		panic(err)
 	}

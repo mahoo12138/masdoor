@@ -98,12 +98,16 @@ func (setting *Setting) check() error {
 
 // apply only touches the main database pool
 func (setting *Setting) apply() {
-	ormer.Engine.SetMaxOpenConns(setting.DbMaxOpenConns)
+	maxOpenConns := setting.DbMaxOpenConns
+	if maxOpenConns == 0 {
+		// Default to 1 for SQLite so concurrent goroutines serialize writes cleanly.
+		maxOpenConns = 1
+	}
+	ormer.Engine.SetMaxOpenConns(maxOpenConns)
 
 	maxIdleConns := setting.DbMaxIdleConns
 	if maxIdleConns == 0 {
-		// 0 would keep no idle connection at all, while database/sql keeps 2 by default
-		maxIdleConns = 2
+		maxIdleConns = min(2, maxOpenConns)
 	}
 	ormer.Engine.SetMaxIdleConns(maxIdleConns)
 
