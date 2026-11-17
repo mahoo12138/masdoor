@@ -1,27 +1,39 @@
 import * as React from "react";
 import CodeMirror from "@uiw/react-codemirror";
-import {loadLanguage} from "@uiw/codemirror-extensions-langs";
+import {css} from "@codemirror/lang-css";
+import {html} from "@codemirror/lang-html";
+import {json} from "@codemirror/lang-json";
 import {material} from "@uiw/codemirror-theme-material";
 import {useTheme} from "@/hooks/use-theme";
 
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
-  /** "javascript" | "json" | "html" | "css" | "sql" | "go" ... */
+  /** "html" | "css" | "json" */
   language?: string;
   height?: number;
   readOnly?: boolean;
   className?: string;
 }
 
+function getLanguageExtension(language?: string) {
+  switch (language) {
+  case "html":
+    return html();
+  case "css":
+    return css();
+  case "json":
+    return json();
+  default:
+    return null;
+  }
+}
+
 /** CodeMirror 6 editor, replacing the antd-flavoured `common/Editor.js`. */
 export function CodeEditor({value, onChange, language, height = 240, readOnly, className}: CodeEditorProps) {
   const {resolvedTheme} = useTheme();
   const extensions = React.useMemo(() => {
-    if (!language) {
-      return [];
-    }
-    const ext = loadLanguage(language as any);
+    const ext = getLanguageExtension(language);
     return ext ? [ext] : [];
   }, [language]);
 

@@ -28,7 +28,7 @@ export const SupportedLanguages = [
 // Languages that actually ship a translation bundle in src/locales.
 const bundledLanguages = ["de", "en", "es", "fr", "ja", "pl", "pt", "tr", "uk", "vi", "zh"];
 
-const localeLoaders = import.meta.glob("./locales/*/data.json");
+const localeLoaders = import.meta.glob(["./locales/*/data.json", "!./locales/en/data.json"]);
 
 function initLanguage(): string {
   let language = localStorage.getItem("language");
@@ -48,6 +48,10 @@ const resourcesToBackend = () => ({
   init() {/* no options needed */},
   read(language: string, namespace: string, callback: (err: any, data?: any) => void) {
     const lang = bundledLanguages.includes(language) ? language : "en";
+    if (lang === "en") {
+      callback(null, (en as any)[namespace]);
+      return;
+    }
     const loader = localeLoaders[`./locales/${lang}/data.json`];
     if (!loader) {
       callback(null, (en as any)[namespace]);
