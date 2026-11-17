@@ -21,10 +21,12 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/mahoo12138/masdoor/conf"
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/disk"
 	"github.com/shirou/gopsutil/v4/mem"
@@ -77,11 +79,27 @@ func getMemoryUsage() (uint64, uint64, error) {
 	return memInfo.RSS, virtualMem.Total, nil
 }
 
+// resolveDataPath finds the SQLite data directory at runtime without relying on
+// compile-time source paths (which -trimpath strips).
+func resolveDataPath() string {
+	dsn := conf.GetConfigDataSourceName()
+	dbPath, _ := strings.CutPrefix(dsn, "file:")
+	dbPath, _, _ = strings.Cut(dbPath, "?")
+	if dbPath != "" && dbPath != ":memory:" {
+		if dir := filepath.Dir(dbPath); dir != "" && dir != "." {
+			return dir
+		}
+	}
+
+	if info, err := os.Stat("data"); err == nil && info.IsDir() {
+		return "data"
+	}
+	return "."
+}
+
 // getDiskUsage gets disk usage for Masdoor's data directory
 func getDiskUsage() (uint64, uint64, error) {
-	_, filename, _, _ := runtime.Caller(0)
-	rootPath := path.Dir(path.Dir(filename))
-	dataPath := filepath.Join(rootPath, "data")
+	dataPath := resolveDataPath()
 
 	var size uint64
 	err := filepath.Walk(dataPath, func(_ string, info os.FileInfo, err error) error {
