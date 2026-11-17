@@ -481,16 +481,6 @@ func GetVerifications(owner string) ([]*VerificationRecord, error) {
 	return verifications, nil
 }
 
-func GetUserVerifications(owner, user string) ([]*VerificationRecord, error) {
-	verifications := []*VerificationRecord{}
-	err := ormer.Engine.Desc("created_time").Find(&verifications, &VerificationRecord{Owner: owner, User: user})
-	if err != nil {
-		return nil, err
-	}
-
-	return verifications, nil
-}
-
 func GetPaginationVerifications(owner string, offset, limit int, field, value, sortField, sortOrder string) ([]*VerificationRecord, error) {
 	verifications := []*VerificationRecord{}
 	session := GetSession(owner, offset, limit, field, value, sortField, sortOrder)
@@ -500,30 +490,4 @@ func GetPaginationVerifications(owner string, offset, limit int, field, value, s
 	}
 
 	return verifications, nil
-}
-
-func getVerification(owner string, name string) (*VerificationRecord, error) {
-	if owner == "" || name == "" {
-		return nil, nil
-	}
-
-	verification := VerificationRecord{Owner: owner, Name: name}
-	existed, err := ormer.Engine.Get(&verification)
-	if err != nil {
-		return nil, err
-	}
-
-	if existed {
-		return &verification, nil
-	} else {
-		return nil, nil
-	}
-}
-
-func GetVerification(id string) (*VerificationRecord, error) {
-	owner, name, err := util.GetOwnerAndNameFromIdWithError(id)
-	if err != nil {
-		return nil, err
-	}
-	return getVerification(owner, name)
 }

@@ -115,8 +115,10 @@ func isOriginAllowedWithoutCredentials(ctx *context.Context, origin string, isVa
 		return true, nil
 	}
 
-	if ctx.Request.Method == "POST" && (ctx.Request.RequestURI == "/api/login/oauth/access_token" || ctx.Request.RequestURI == "/api/login/oauth/revoke" || ctx.Request.RequestURI == "/api/acs") {
-		return true, nil
+	if ctx.Request.RequestURI == "/api/login/oauth/access_token" || ctx.Request.RequestURI == "/api/login/oauth/revoke" {
+		if ctx.Request.Method == "POST" {
+			return true, nil
+		}
 	}
 
 	return object.IsOriginAllowed(origin)

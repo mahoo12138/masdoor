@@ -344,11 +344,6 @@ func (c *ApiController) UpdateUser() {
 		return
 	}
 
-	if user.MfaEmailEnabled && user.Email == "" {
-		c.ResponseError(c.T("user:MFA phone is enabled but phone number is empty"))
-		return
-	}
-
 	if msg := object.CheckUpdateUser(oldUser, &user, c.GetAcceptLanguage()); msg != "" {
 		c.ResponseError(msg)
 		return
