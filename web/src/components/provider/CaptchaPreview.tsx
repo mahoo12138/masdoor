@@ -9,11 +9,8 @@ interface CaptchaPreviewProps {
   name: string;
   provider: any;
   captchaType: string;
-  subType?: string;
   clientId?: string;
   clientSecret?: string;
-  clientId2?: string;
-  clientSecret2?: string;
   providerUrl?: string;
 }
 
@@ -27,11 +24,8 @@ export function CaptchaPreview({
   name,
   provider,
   captchaType,
-  subType,
   clientId,
   clientSecret,
-  clientId2,
-  clientSecret2,
   providerUrl,
 }: CaptchaPreviewProps) {
   const [visible, setVisible] = React.useState(false);
@@ -51,11 +45,6 @@ export function CaptchaPreview({
     if (captchaType !== "Default") {
       if (!clientId || !clientSecret) {
         return true;
-      }
-      if (captchaType === "Aliyun Captcha") {
-        if (!subType || !clientId2 || !clientSecret2) {
-          return true;
-        }
       }
     }
     return false;

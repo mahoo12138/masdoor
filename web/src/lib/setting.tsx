@@ -347,10 +347,6 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/social_hcaptcha.png`,
       url: "https://www.hcaptcha.com",
     },
-    "Aliyun Captcha": {
-      logo: `${StaticBaseUrl}/img/social_aliyun.png`,
-      url: "https://help.aliyun.com/product/28308.html",
-    },
     "GEETEST": {
       logo: `${StaticBaseUrl}/img/social_geetest.png`,
       url: "https://www.geetest.com",
@@ -1064,7 +1060,6 @@ export function getProviderTypeOptions(category) {
       {id: "reCAPTCHA v2", name: "reCAPTCHA v2"},
       {id: "reCAPTCHA v3", name: "reCAPTCHA v3"},
       {id: "hCaptcha", name: "hCaptcha"},
-      {id: "Aliyun Captcha", name: "Aliyun Captcha"},
       {id: "GEETEST", name: "GEETEST"},
       {id: "Cloudflare Turnstile", name: "Cloudflare Turnstile"},
     ]);

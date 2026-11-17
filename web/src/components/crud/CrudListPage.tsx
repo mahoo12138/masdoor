@@ -90,7 +90,7 @@ export function CrudListPage<T extends Record<string, any>>({
   rowKey,
   initialQuery,
   rowActions,
-  formType,
+  formType: _formType,
   formItems: formItemsProp,
   showActionColumn = true,
   actionColumnWidth = 180,

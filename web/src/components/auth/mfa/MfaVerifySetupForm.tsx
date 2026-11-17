@@ -5,7 +5,6 @@ import {QRCodeSVG} from "qrcode.react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
 import {SendCodeInput} from "@/components/auth/SendCodeInput";
 import {CodeInput} from "@/components/auth/CodeInput";
 import {

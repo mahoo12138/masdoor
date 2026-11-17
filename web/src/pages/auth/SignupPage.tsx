@@ -325,7 +325,7 @@ export default function SignupPage({application: applicationProp}: {application?
     submitSignup(payload);
   };
 
-  const getResultPath = (username: string) => {
+  const getResultPath = (_username: string) => {
     if (authConfig.appName === application.name) {
       return "/result";
     }

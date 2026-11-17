@@ -1385,10 +1385,10 @@ export default function LoginPage({type = "login", application: applicationProp,
               : loginMethod === "webAuthn"
                 ? i18next.t("login:Sign in with WebAuthn")
                 : loginMethod === "magicLink"
-                    ? i18next.t("login:Send sign-in link")
-                    : type === "device"
-                      ? i18next.t("login:Approve and sign in")
-                      : item.label || i18next.t("login:Sign In")}
+                  ? i18next.t("login:Send sign-in link")
+                  : type === "device"
+                    ? i18next.t("login:Approve and sign in")
+                    : item.label || i18next.t("login:Sign In")}
           </Button>
           {type === "device" ? (
             <Button type="button" variant="outline" className="w-full" onClick={cancelDeviceLogin}>

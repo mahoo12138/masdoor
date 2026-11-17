@@ -12,8 +12,6 @@ interface CaptchaWidgetProps {
   onCancel?: () => void;
 }
 
-const aliyunPopupButtonId = "aliyun-captcha-button";
-
 function loadScript(src: string) {
   const tag = document.createElement("script");
   tag.async = false;
@@ -45,9 +43,6 @@ export function CaptchaWidget({
   React.useEffect(() => {
     const emit = (token: string) => onChangeRef.current(token);
     let timer: number | undefined;
-    let clickTimer: number | undefined;
-    let unmounted = false;
-    let destroyCaptcha: (() => void) | undefined;
 
     switch (captchaType) {
     case "reCAPTCHA":
@@ -110,70 +105,6 @@ export function CaptchaWidget({
       }, 300);
       break;
     }
-    case "Aliyun Captcha": {
-      (window as any).AliyunCaptchaConfig = {region: "cn", prefix: clientSecret2};
-      const isPopup = subType === "Popup";
-      timer = window.setInterval(() => {
-        if (!(window as any).initAliyunCaptcha) {
-          loadScript("https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js");
-        }
-        if ((window as any).initAliyunCaptcha) {
-          if (clientSecret2 && clientSecret2 !== "***") {
-            const options: Record<string, any> = {
-              SceneId: clientId2,
-              mode: isPopup ? "popup" : "embed",
-              element: "#captcha",
-              slideStyle: {width: 320, height: 40},
-              language: "cn",
-            };
-
-            if (isPopup) {
-              let settled = false;
-              let instanceReady = false;
-              const settle = (done: () => void) => {
-                if (!settled) {
-                  settled = true;
-                  done();
-                }
-              };
-
-              options.button = `#${aliyunPopupButtonId}`;
-              options.success = (data: any) => settle(() => emit(data.toString()));
-              // a failed attempt keeps the popup open, so let the user try again
-              options.fail = () => undefined;
-              // the popup is the whole UI here: once it is gone without a token,
-              // the caller has to be released or its flow hangs forever
-              options.onClose = () => settle(() => onCancelRef.current?.());
-              options.onError = () => settle(() => onCancelRef.current?.());
-              options.getInstance = (instance: any) => {
-                if (!instance || instanceReady) {
-                  return;
-                }
-                if (unmounted) {
-                  instance.destroyCaptcha?.();
-                  return;
-                }
-                instanceReady = true;
-                destroyCaptcha = () => instance.destroyCaptcha?.();
-                if (typeof instance.startTracelessVerification === "function") {
-                  instance.startTracelessVerification();
-                } else {
-                  // non-traceless scenes only open from a click on `button`
-                  clickTimer = window.setTimeout(() => document.getElementById(aliyunPopupButtonId)?.click(), 0);
-                }
-              };
-            } else {
-              options.captchaVerifyCallback = (data: any) => emit(data.toString());
-              options.immediate = true;
-            }
-
-            (window as any).initAliyunCaptcha(options);
-          }
-          window.clearInterval(timer);
-        }
-      }, 300);
-      break;
-    }
     case "GEETEST": {
       let getLock = false;
       timer = window.setInterval(() => {
@@ -215,24 +146,11 @@ export function CaptchaWidget({
     }
 
     return () => {
-      unmounted = true;
       if (timer !== undefined) {
         window.clearInterval(timer);
       }
-      if (clickTimer !== undefined) {
-        window.clearTimeout(clickTimer);
-      }
-      destroyCaptcha?.();
     };
   }, [captchaType, subType, siteKey, clientSecret, clientId2, clientSecret2]);
 
-  return (
-    <React.Fragment>
-      <div id="captcha" />
-      {/* Alibaba Cloud requires the trigger to sit outside the render container */}
-      {captchaType === "Aliyun Captcha" && subType === "Popup" ? (
-        <button id={aliyunPopupButtonId} type="button" hidden />
-      ) : null}
-    </React.Fragment>
-  );
+  return <div id="captcha" />;
 }

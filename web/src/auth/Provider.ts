@@ -16,7 +16,6 @@
 // ported from web/src/auth/Provider.js (the antd logo widget lives in the UI now).
 
 import CryptoJS from "crypto-js";
-import i18next from "i18next";
 import * as Util from "@/auth/Util";
 import * as Setting from "@/lib/setting";
 
@@ -103,14 +102,14 @@ export function getProviderUrl(provider) {
   }
 }
 
-export function getAuthUrl(application: any, provider: any, method: string, code?: string) {
+export function getAuthUrl(application: any, provider: any, method: string, _code?: string) {
   if (application === null || provider === null) {
     return "";
   }
   const type = Setting.isCustomOAuthType(provider.type) ? "Custom" : provider.type;
-  let endpoint = authInfo[type].endpoint;
+  const endpoint = authInfo[type].endpoint;
   const redirectOrigin = application.forcedRedirectOrigin ? application.forcedRedirectOrigin : Setting.getOriginUrl();
-  let redirectUri = `${redirectOrigin}/callback`;
+  const redirectUri = `${redirectOrigin}/callback`;
   let scope = authInfo[type].scope;
   // Allow provider.scopes to override default scope if specified
   if (provider.scopes && provider.scopes.trim() !== "") {

@@ -7,25 +7,19 @@ import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
 import {Textarea} from "@/components/ui/textarea";
 import {Loading} from "@/components/common/Loading";
-import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
 import {CodeEditor} from "@/components/common/CodeEditor";
-import {MultiSelect} from "@/components/common/MultiSelect";
 import {SearchableSelect} from "@/components/common/SearchableSelect";
 import {SelectField} from "@/components/common/SelectField";
-import {MapTable} from "@/components/crud/MapTable";
 import {EditPageShell} from "@/components/crud/EditPageShell";
 import {FormRow} from "@/components/crud/FormRow";
 import {CaptchaPreview} from "@/components/provider/CaptchaPreview";
 import {useAccount} from "@/hooks/use-account";
 import {useEditRecord} from "@/hooks/use-edit-record";
 import {useOrganizationOptions} from "@/hooks/use-options";
-import * as CertBackend from "@/backend/CertBackend";
 import * as ProviderBackend from "@/backend/ProviderBackend";
 import {submitEdit} from "@/lib/crud";
 import * as ProviderTest from "@/lib/provider-test";
 import * as Setting from "@/lib/setting";
-import {authConfig} from "@/auth/Auth";
-import copy from "copy-to-clipboard";
 
 const defaultUserMapping: Record<string, string> = {
   id: "sub",
@@ -87,33 +81,13 @@ function label(text: string, tooltip?: string): Label {
   return {label: text, tooltip};
 }
 
-function toList(rawValue: any) {
-  return `${rawValue || ""}`.split(",").map(item => item.trim()).filter(item => item !== "");
-}
-
-function normalizeAndJoin(values: string[]) {
-  return (values || []).map(item => `${item}`.trim()).filter(item => item !== "").join(",");
-}
-
-function getProviderSubTypeOptions(type: string) {
-  if (type === "Aliyun Captcha") {
-    return [
-      {id: "Embed", name: "Embed"},
-      {id: "Popup", name: "Popup"},
-    ];
-  }
-  return [];
-}
-
 function getClientIdLabel(provider: any): Label {
   if (provider.category === "OAuth") {
     return label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("signup:Username"), i18next.t("signup:Username - Tooltip"));
   } else if (provider.category === "Captcha") {
-    return provider.type === "Aliyun Captcha"
-      ? label(i18next.t("general:Access key"), i18next.t("general:Access key - Tooltip"))
-      : label(i18next.t("provider:Site key"), i18next.t("provider:Site key - Tooltip"));
+    return label(i18next.t("provider:Site key"), i18next.t("provider:Site key - Tooltip"));
   } else if (provider.category === "Notification") {
     return label(i18next.t("provider:Client ID"), i18next.t("provider:Client ID - Tooltip"));
   }
@@ -130,9 +104,7 @@ function getClientSecretLabel(provider: any): Label {
       ? label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"))
       : label(i18next.t("general:Password"), i18next.t("general:Password - Tooltip"));
   } else if (provider.category === "Captcha") {
-    return provider.type === "Aliyun Captcha"
-      ? label(i18next.t("provider:Secret access key"), i18next.t("provider:Secret access key - Tooltip"))
-      : label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"));
+    return label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"));
   } else if (provider.category === "Notification") {
     if (["Telegram", "Bark"].includes(provider.type)) {
       return label(i18next.t("provider:Secret key"), i18next.t("provider:Secret key - Tooltip"));
@@ -147,8 +119,6 @@ function getClientId2Label(provider: any): Label {
     return label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("provider:From address"), i18next.t("provider:From address - Tooltip"));
-  } else if (provider.type === "Aliyun Captcha") {
-    return label(i18next.t("provider:Scene"), i18next.t("provider:Scene - Tooltip"));
   }
   return label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
 }
@@ -158,15 +128,8 @@ function getClientSecret2Label(provider: any): Label {
     return label(i18next.t("provider:Client secret 2"), i18next.t("provider:Client secret 2 - Tooltip"));
   } else if (provider.category === "Email") {
     return label(i18next.t("provider:From name"), i18next.t("provider:From name - Tooltip"));
-  } else if (provider.type === "Aliyun Captcha") {
-    return label(i18next.t("provider:App key"), i18next.t("provider:App key - Tooltip"));
   }
   return label(i18next.t("provider:Client secret 2"), i18next.t("provider:Client secret 2 - Tooltip"));
-}
-
-/** the extra "appId" row, whose meaning depends on the provider — null hides it */
-function getAppIdLabel(provider: any): Label | null {
-  return null;
 }
 
 /** the notification "receiver" row — null when the provider needs no receiver */
@@ -199,8 +162,7 @@ function hasCredentialRows(provider: any) {
 }
 
 function hasCredential2Rows(provider: any) {
-  return provider.category === "Email" ||
-    provider.type === "Aliyun Captcha";
+  return provider.category === "Email";
 }
 
 export default function ProviderEditPage() {
@@ -211,8 +173,6 @@ export default function ProviderEditPage() {
   const [owner, setOwner] = React.useState(organizationName);
   const [name, setName] = React.useState(providerName);
   const organizations = useOrganizationOptions();
-  const [providers, setProviders] = React.useState<any[]>([]);
-  const [certs, setCerts] = React.useState<any[]>([]);
   const [saving, setSaving] = React.useState(false);
 
   const [nameNotUserEdited, setNameNotUserEdited] = React.useState(false);
@@ -230,27 +190,6 @@ export default function ProviderEditPage() {
     transform,
     deps: [organizationName, providerName],
   });
-
-  const getProviders = React.useCallback((forOwner: string) => {
-    ProviderBackend.getProviders(forOwner).then((res: any) => {
-      if (res.status === "ok") {
-        setProviders(res.data ?? []);
-      }
-    });
-  }, []);
-
-  const getCerts = React.useCallback((forOwner: string) => {
-    CertBackend.getCerts(forOwner).then((res: any) => {
-      if (res.status === "ok") {
-        setCerts(res.data ?? []);
-      }
-    });
-  }, []);
-
-  React.useEffect(() => {
-    getProviders(owner);
-    getCerts(owner);
-  }, [owner, getProviders, getCerts]);
 
   // the name/display name keep following category+type until the user types their own
   const initializedRef = React.useRef(false);
@@ -283,12 +222,10 @@ export default function ProviderEditPage() {
     if (key === "owner" && provider !== null && provider.owner !== value) {
       // the provider changed owner, the cert no longer applies
       patchProvider({owner: value, cert: ""});
-      getProviders(value);
-      getCerts(value);
       return;
     }
     patchProvider({[key]: value});
-  }, [provider, patchProvider, getProviders, getCerts]);
+  }, [provider, patchProvider]);
 
   const updateUserMappingField = (key: string, value: string) => {
     if (provider === null) {
@@ -377,9 +314,6 @@ export default function ProviderEditPage() {
     return <Loading />;
   }
 
-  const certOptions = certs.map((cert: any) => ({value: cert.name, label: cert.name}));
-  const subTypeOptions = getProviderSubTypeOptions(provider.type);
-
   const onChangeCategory = (value: string) => {
     const patch: Record<string, any> = {category: value};
     let defaultType = "";
@@ -433,9 +367,6 @@ export default function ProviderEditPage() {
     } else if (value === "Custom HTTP") {
       patch.method = "GET";
       patch.title = "";
-    } else if (value === "Aliyun Captcha") {
-      // Popup stays opt-in: only Alibaba Cloud's traceless scenes require it
-      patch.subType = "Embed";
     }
     if (nameNotUserEdited) {
       patch.name = getAutoProviderName(provider.category, value, "");
@@ -806,14 +737,6 @@ export default function ProviderEditPage() {
     </React.Fragment>
   );
 
-  const renderEndpointOnlyField = () => (
-    <FormRow label={i18next.t("provider:Endpoint")} tooltip={i18next.t("provider:Region endpoint for Internet")}>
-      <Input value={provider.endpoint ?? ""} onChange={(e) => updateProviderField("endpoint", e.target.value)} />
-    </FormRow>
-  );
-
-  const appIdLabel = getAppIdLabel(provider);
-
   return (
     <EditPageShell
       grid
@@ -882,26 +805,6 @@ export default function ProviderEditPage() {
             }))}
         />
       </FormRow>
-      {subTypeOptions.length > 0 ? (
-        <React.Fragment>
-          <FormRow labelKey="provider:Sub type">
-            <SelectField
-              value={provider.subType}
-              onChange={(v) => {
-                const patch: Record<string, any> = {subType: v};
-                if (nameNotUserEdited) {
-                  patch.name = getAutoProviderName(provider.category, provider.type, v);
-                }
-                if (displayNameNotUserEdited) {
-                  patch.displayName = getAutoProviderDisplayName(provider.category, provider.type, v);
-                }
-                patchProvider(patch);
-              }}
-              options={subTypeOptions}
-            />
-          </FormRow>
-        </React.Fragment>
-      ) : null}
 
       {provider.category === "OAuth" ? renderOAuthFields() : null}
 
@@ -931,12 +834,6 @@ export default function ProviderEditPage() {
         </React.Fragment>
       ) : null}
 
-      {appIdLabel ? (
-        <FormRow label={appIdLabel.label} tooltip={appIdLabel.tooltip}>
-          <Input value={provider.appId ?? ""} onChange={(e) => updateProviderField("appId", e.target.value)} />
-        </FormRow>
-      ) : null}
-
       {provider.category === "Notification" ? renderNotificationFields() : null}
       {provider.category === "Email" ? renderEmailFields() : null}
       {provider.category === "Audit" ? renderAuditFields() : null}
@@ -956,11 +853,8 @@ export default function ProviderEditPage() {
             name={name}
             provider={provider}
             captchaType={provider.type}
-            subType={provider.subType}
             clientId={provider.clientId}
             clientSecret={provider.clientSecret}
-            clientId2={provider.clientId2}
-            clientSecret2={provider.clientSecret2}
             providerUrl={provider.providerUrl}
           />
         </FormRow>

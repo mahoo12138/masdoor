@@ -86,9 +86,7 @@ export function CaptchaModal({
             defaultInputRef.current?.focus();
           }
         } else {
-          // the Aliyun popup brings its own full-screen overlay, so our dialog
-          // would only wrap it in an empty box
-          setOpen(!(res.type === "Aliyun Captcha" && res.subType === "Popup"));
+          setOpen(true);
           setCaptchaType(res.type);
           setClientId(res.clientId);
           setClientSecret(res.clientSecret);
@@ -202,34 +200,28 @@ export function CaptchaModal({
   }
 
   const okDisabled = captchaType === "Default" && !/^\d{5}$/.test(captchaToken);
-  const isAliyunPopup = captchaType === "Aliyun Captcha" && subType === "Popup";
 
   return (
-    <>
-      {/* the popup positions itself against the viewport, so it only needs an
-          anchor that takes no space in the caller's layout */}
-      {visible && isAliyunPopup ? <div className="absolute h-0 w-0">{renderCaptcha()}</div> : null}
-      <Dialog
-        open={open}
-        onOpenChange={(next) => {
-          if (!next) {
-            handleCancel();
-          }
-          setOpen(next);
-        }}
-      >
-        <DialogContent className="sm:max-w-[350px]">
-          <DialogHeader>
-            <DialogTitle>{i18next.t("general:Captcha")}</DialogTitle>
-          </DialogHeader>
-          <div className="py-2">{renderCaptcha()}</div>
-          {captchaType === "Default" ? (
-            <Button disabled={okDisabled} onClick={() => handleOk()}>
-              {i18next.t("general:OK")}
-            </Button>
-          ) : null}
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) {
+          handleCancel();
+        }
+        setOpen(next);
+      }}
+    >
+      <DialogContent className="sm:max-w-[350px]">
+        <DialogHeader>
+          <DialogTitle>{i18next.t("general:Captcha")}</DialogTitle>
+        </DialogHeader>
+        <div className="py-2">{renderCaptcha()}</div>
+        {captchaType === "Default" ? (
+          <Button disabled={okDisabled} onClick={() => handleOk()}>
+            {i18next.t("general:OK")}
+          </Button>
+        ) : null}
+      </DialogContent>
+    </Dialog>
   );
 }

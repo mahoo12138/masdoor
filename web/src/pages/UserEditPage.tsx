@@ -1,7 +1,7 @@
 import * as React from "react";
 import i18next from "i18next";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import {ShieldCheck, Users} from "lucide-react";
+import {Users} from "lucide-react";
 import {UnauthorizedPage} from "@/components/common/UnauthorizedPage";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -9,7 +9,6 @@ import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 import {CountryCodeSelect} from "@/components/common/CountryCodeSelect";
@@ -1010,22 +1009,5 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         )}
       </AccountItemsProvider>
     </EditPageShell>
-  );
-}
-
-/** the well-known logo of an MFA issuer, falling back to a generic one */
-function IssuerLogo({issuer}: {issuer?: string}) {
-  const src = issuer
-    ? `${Setting.StaticBaseUrl}/img/social_${issuer.toLowerCase()}.png`
-    : `${Setting.StaticBaseUrl}/img/social_default.png`;
-  return (
-    <img
-      className="h-9 w-9 rounded"
-      src={src}
-      alt={issuer ?? "default"}
-      onError={(e) => {
-        (e.currentTarget as HTMLImageElement).src = `${Setting.StaticBaseUrl}/img/social_default.png`;
-      }}
-    />
   );
 }

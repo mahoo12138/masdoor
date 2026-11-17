@@ -26,7 +26,7 @@ export function getVisibleProviders(application: any, method: "signup" | "signin
 }
 
 
-export function ProviderButtons({application, method, rule, onBeforeClick, onProvider}: ProviderButtonsProps) {
+export function ProviderButtons({application, method, rule, onBeforeClick, onProvider: _onProvider}: ProviderButtonsProps) {
   const location = useLocation();
   const items = getVisibleProviders(application, method);
 

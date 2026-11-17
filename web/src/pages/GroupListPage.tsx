@@ -7,7 +7,6 @@ import type {ColumnDef} from "@/components/crud/types";
 import {useAccount} from "@/hooks/use-account";
 import {useOrganizationFilter, useRequestOrganization} from "@/hooks/use-organization";
 import * as GroupBackend from "@/backend/GroupBackend";
-import * as Setting from "@/lib/setting";
 import {newGroup} from "@/pages/defaults";
 
 export default function GroupListPage() {

@@ -15,8 +15,6 @@
 // Query-string helpers for the sign-in flows (OAuth / OIDC), ported
 // verbatim from web/src/auth/Util.js minus its antd renderers.
 
-import * as AuthBackend from "@/backend/AuthBackend";
-import * as Provider from "@/auth/Provider";
 import * as Setting from "@/lib/setting";
 
 function getRefinedValue(value) {

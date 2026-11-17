@@ -23,7 +23,6 @@ import {useAccount} from "@/hooks/use-account";
 import {useLogout} from "@/hooks/use-logout";
 import {useHoverMenu} from "@/hooks/use-hover-menu";
 import {isWidgetVisible} from "@/lib/nav";
-import * as Conf from "@/Conf";
 import * as UserBackend from "@/backend/UserBackend";
 import * as Setting from "@/lib/setting";
 
