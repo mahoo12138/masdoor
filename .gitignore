@@ -49,11 +49,8 @@ masdoor-dev.db*
 !manifests/masdoor
 *.tgz
 
-# the console has its own .gitignore for these; web-old does not
 web/cypress/videos/
 web/cypress/screenshots/
-web-old/cypress/videos/
-web-old/cypress/screenshots/
 
 # ZCode session workspace
 .zcode/

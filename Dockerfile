@@ -32,8 +32,7 @@ ARG TARGETOS
 ARG TARGETARCH
 ENV BUILDX_ARCH="${TARGETOS:-linux}_${TARGETARCH:-amd64}"
 
-RUN sed -i 's/https/http/' /etc/apk/repositories \
-    && apk add --update tzdata curl ca-certificates \
+RUN apk add --update tzdata curl ca-certificates \
     && update-ca-certificates
 
 # The image ships a production config (runmode switched to prod below)

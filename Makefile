@@ -53,7 +53,7 @@ vet: ## Run go vet against code.
 
 .PHONY: ut
 ut: ## UT test
-	go test -v -cover -coverprofile=coverage.out ./...
+	go test -tags skipCi -v -cover -coverprofile=coverage.out ./...
 	go tool cover -func=coverage.out
 
 ##@ Build

@@ -3,19 +3,11 @@
 - Do not add Go tests (`_test.go`) unless explicitly asked.
 - Keep comments sparse: only for genuinely non-obvious mechanics, not one per block.
 
-# Frontend migration (`web-old` → `web`)
+# Frontend (`web`)
 
-`web` is the shadcn/Tailwind rewrite of the antd frontend in `web-old`. Apart from
-the UI layer, `web` should behave exactly like `web-old` — same validations, same
-field formats, same conditions. When the two differ, `web-old` is the reference.
-
-`web-old` is deprecated and read-only: never modify it (code or locales). New
-features and fixes go into `web` only.
-
-Not migrated on purpose:
+`web` is the shadcn/Tailwind frontend. Intentionally omitted features:
 
 - **AI assistant.** The `aiAssistantUrl` config, its header button and the iframe
-  drawer (`Conf.AiAssistantUrl` / `renderAiAssistant()` in `web-old/src/App.js`,
-  the `ai-assistant` entry of `WidgetItemTree`) are dropped. Do not port them.
+  drawer (`ai-assistant` entry) are dropped. Do not add them.
 - **Web3 providers.** The `Web3` category (MetaMask, Web3-Onboard) was removed
-  from the backend and `web`. Do not port `web-old`'s wallet sign-in code.
+  from the backend and `web`. Do not add wallet sign-in code.

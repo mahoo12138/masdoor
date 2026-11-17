@@ -10,7 +10,8 @@ services:
     environment:
       RUNNING_IN_DOCKER: "true"
     volumes:
-      - ./conf:/conf/
+      # Uncomment to override the image's production conf/app.conf:
+      # - ./conf/app.conf:/conf/app.conf:ro
       - masdoor-data:/data
 
 volumes:
